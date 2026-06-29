@@ -1,15 +1,33 @@
 pluginManagement {
-    val flutterSdkPath =
-        run {
-            val properties = java.util.Properties()
-            file("local.properties").inputStream().use { properties.load(it) }
-            val flutterSdkPath = properties.getProperty("flutter.sdk")
-            require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
-            flutterSdkPath
+    def flutterSdkPath = {
+        def properties = new Properties()
+        file("local.properties").withInputStream { properties.load(it) }
+        def flutterSdkPath = properties.getProperty("flutter.sdk")
+        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        return flutterSdkPath
+    }()
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "dev.flutter.flutter-gradle-plugin") {
+                useModule("dev.flutter:flutter-gradle-plugin:3.44.4")
+            }
+            if (requested.id.id == "dev.flutter.flutter-plugin-loader") {
+                useModule("dev.flutter:flutter-plugin-loader:1.0.0")
+            }
         }
+    }
+}
 
-    includeBuild("/packages/flutter_tools/gradle")
-
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -17,12 +35,5 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    id("com.android.application") version "9.0.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.3.20" apply false
-}
-
+rootProject.name = "profileforge"
 include(":app")
-// Exclude jni module to avoid CMake issues
-// include(":jni")
