@@ -2,7 +2,7 @@ name: Build ProfileForge APK
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
   workflow_dispatch:
 
 jobs:
@@ -29,6 +29,12 @@ jobs:
 
       - name: Run analysis
         run: flutter analyze
+
+      - name: Regenerate Android platform
+        run: |
+          rm -rf android/
+          flutter create --project-name profileforge --platforms android .
+          flutter pub get
 
       - name: Build APK
         run: flutter build apk --debug
