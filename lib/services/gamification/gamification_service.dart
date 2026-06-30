@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 import '../../models/student_profile.dart';
 import '../../models/gamification/skins.dart';
 import '../../models/gamification/streak.dart';

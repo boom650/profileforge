@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:meta/meta.dart';
+
 import 'package:http/http.dart' as http;
 import '../models/opportunity/ngo_opportunity.dart';
 import '../models/opportunity/competition.dart';
