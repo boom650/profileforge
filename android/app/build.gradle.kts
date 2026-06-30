@@ -1,11 +1,11 @@
 plugins {
+    id("dev.flutter.flutter-gradle-plugin") version "3.24.3"
     id("com.android.application") version "9.0.0"
-    id("dev.flutter.flutter-gradle-plugin") version "1.0.0"
 }
 
 android {
     namespace = "com.example.profileforge"
-    compileSdk = 36
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "com.example.profileforge"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
         multiDexEnabled = true

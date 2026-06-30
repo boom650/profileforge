@@ -1,9 +1,13 @@
+plugins {
+    id("dev.flutter.flutter-gradle-plugin") version "3.24.3" apply false
+    id("com.android.application") version "9.0.0" apply false
+}
+
 buildscript {
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:9.0.0")
@@ -15,10 +19,5 @@ allprojects {
         google()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal()
     }
-}
-
-plugins {
-    id("com.android.application") version "9.0.0" apply false
 }
