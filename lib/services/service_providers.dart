@@ -2,6 +2,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 
 import 'opportunity_discovery.dart';
 
@@ -96,7 +97,7 @@ Future<List<PlaceOpportunity>> nearbyPlaces(NearbyPlacesRef ref, {
   List<String>? types,
 }) async {
   final result = await ref.read(googlePlacesServiceProvider).searchNearbyPlaces(
-    location: LatLng(latitude, longitude),
+    location: latlong.LatLng(latitude, longitude),
     radius: radiusKm * 1000,
     types: types,
   );
@@ -158,11 +159,12 @@ Future<PersonalizedRecommendations> personalizedRecommendations(
   required double latitude,
   required double longitude,
 }) async {
-  return ref.read(opportunityDiscoveryEngineProvider).runFullScan(
+  final result = await ref.read(opportunityDiscoveryEngineProvider).runFullScan(
     userProfile: userProfile,
     latitude: latitude,
     longitude: longitude,
-  ).then((result) => result.results?['recommendations'] as PersonalizedRecommendations);
+  );
+  return result.results!['recommendations'] as PersonalizedRecommendations;
 }
 
 // Scan progress stream
@@ -215,10 +217,3 @@ class BackgroundScanController extends _$BackgroundScanController {
     ref.read(opportunityDiscoveryEngineProvider).stopPeriodicScans();
   }
 }
-
-import 'package:latlong2/latlong.dart' as latlong;
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'service_providers.freezed.dart';
-part 'service_providers.g.dart';
