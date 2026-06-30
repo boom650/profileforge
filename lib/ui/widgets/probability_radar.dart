@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../theme/app_theme.dart';
 import '../../providers/app_providers.dart';
 
 class ProbabilityRadarChart extends StatelessWidget {
@@ -50,11 +50,6 @@ class ProbabilityRadarChart extends StatelessWidget {
                   return RadarChartTitle(
                     text: pillar.$1,
                     angle: angle,
-                    textStyle: GoogleFonts.inter(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: AppTheme.textSecondary,
-                    ),
                   );
                 },
                 radarBackgroundColor: AppTheme.surfaceLight,
@@ -68,7 +63,7 @@ class ProbabilityRadarChart extends StatelessWidget {
                   ),
                 ],
               ),
-              swapAnimationDuration: const Duration(millis: 800),
+              swapAnimationDuration: const Duration(milliseconds: 800),
               swapAnimationCurve: Curves.easeOutCubic,
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../theme/app_theme.dart';
 import '../../models/student_profile.dart';
 
 class OpportunityCardHorizontal extends StatelessWidget {
@@ -171,7 +171,7 @@ class OpportunityCardVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tierColor = ActivityTier.values[tier - 1].color;
-    final categoryColor = AppColors.categoryColors[type.toLowerCase().split(' ')[0]] ?? tierColor;
+    final categoryColor = AppTheme.categoryColors[type.toLowerCase().split(' ')[0]] ?? tierColor;
 
     return Container(
       padding: const EdgeInsets.all(20),

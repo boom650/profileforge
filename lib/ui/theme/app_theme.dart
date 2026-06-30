@@ -16,6 +16,19 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF64748B);
   static const Color textMuted = Color(0xFF94A3B8);
 
+  static const Map<String, Color> categoryColors = {
+    'clubs': Color(0xFF3B82F6),
+    'sports': Color(0xFF10B981),
+    'arts': Color(0xFFF59E0B),
+    'competitions': Color(0xFFEF4444),
+    'research': Color(0xFF8B5CF6),
+    'volunteering': Color(0xFFEC4899),
+    'leadership': Color(0xFFF97316),
+    'work': Color(0xFF6366F1),
+    'courses': Color(0xFF14B8A6),
+    'unique': Color(0xFFEAB308),
+  };
+
   static ThemeData get lightTheme {
     final base = ThemeData.light();
     return base.copyWith(
