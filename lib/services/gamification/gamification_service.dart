@@ -346,7 +346,7 @@ class GamificationService {
           current: streak.current + daysMissed,
           longest: max(streak.current + daysMissed > streak.longest 
               ? streak.current + daysMissed 
-              : streak.longest,
+              : streak.longest),
           lastActiveDate: today,
           freezeTokensUsed: streak.freezeTokensUsed + daysMissed,
         );
