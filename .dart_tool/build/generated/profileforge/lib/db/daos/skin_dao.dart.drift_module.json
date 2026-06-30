@@ -1,0 +1,60 @@
+{
+  "elements": {
+    "SkinDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/skin_dao.dart",
+        "name": "SkinDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/skin_dao.dart",
+        "offset": 180,
+        "name": "SkinDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "skins"
+        },
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "skin_collections"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "skins"
+        },
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "skin_collections"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "SkinDao",
+            "import_uri": "package:profileforge/db/daos/skin_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "elements": {
+    "StreakDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/streak_dao.dart",
+        "name": "StreakDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/streak_dao.dart",
+        "offset": 167,
+        "name": "StreakDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "streaks"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "streaks"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "StreakDao",
+            "import_uri": "package:profileforge/db/daos/streak_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}

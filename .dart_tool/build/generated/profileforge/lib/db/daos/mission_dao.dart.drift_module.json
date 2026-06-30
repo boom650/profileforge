@@ -1,0 +1,60 @@
+{
+  "elements": {
+    "MissionDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/mission_dao.dart",
+        "name": "MissionDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/mission_dao.dart",
+        "offset": 188,
+        "name": "MissionDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "missions"
+        },
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "mission_progresses"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "missions"
+        },
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "mission_progresses"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "MissionDao",
+            "import_uri": "package:profileforge/db/daos/mission_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}

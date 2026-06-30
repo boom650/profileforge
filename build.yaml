@@ -1,0 +1,21 @@
+# Build configuration for Hive type adapters
+# Run: flutter pub run build_runner build --delete-conflicting-outputs
+
+targets:
+  $default:
+    builders:
+      hive_generator:hive_generator:
+        enabled: true
+        options:
+          adapter_name: "{model_class}Adapter"
+          type_id: "{hash}"
+          generate_from: "freezed"
+          
+builders:
+  hive_generator:
+    import: "package:hive_generator/hive_generator.dart"
+    builder_factories: ["hiveGeneratorBuilder"]
+    build_extensions:
+      ".dart": [".g.dart"]
+    auto_apply: dependents
+    build_to: cache

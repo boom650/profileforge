@@ -1,0 +1,52 @@
+{
+  "elements": {
+    "EvidenceDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/evidence_dao.dart",
+        "name": "EvidenceDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/evidence_dao.dart",
+        "offset": 170,
+        "name": "EvidenceDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "evidence"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "evidence"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "EvidenceDao",
+            "import_uri": "package:profileforge/db/daos/evidence_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}

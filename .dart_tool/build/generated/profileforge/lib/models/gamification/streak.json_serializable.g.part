@@ -1,0 +1,276 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$StreakImpl _$$StreakImplFromJson(Map<String, dynamic> json) => _$StreakImpl(
+      currentStreak: (json['currentStreak'] as num).toInt(),
+      longestStreak: (json['longestStreak'] as num).toInt(),
+      totalActiveDays: (json['totalActiveDays'] as num).toInt(),
+      freezeTokens: (json['freezeTokens'] as num).toInt(),
+      graceDaysRemaining: (json['graceDaysRemaining'] as num).toInt(),
+      graceDaysUsedThisWeek: (json['graceDaysUsedThisWeek'] as num).toInt(),
+      lastActiveDate: json['lastActiveDate'] == null
+          ? null
+          : DateTime.parse(json['lastActiveDate'] as String),
+      streakStartDate: json['streakStartDate'] == null
+          ? null
+          : DateTime.parse(json['streakStartDate'] as String),
+      milestonesAchieved: (json['milestonesAchieved'] as List<dynamic>)
+          .map((e) => StreakMilestone.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      graceDayHistory: (json['graceDayHistory'] as List<dynamic>)
+          .map((e) => GraceDayUsage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      lastFreezeTokenEarned: json['lastFreezeTokenEarned'] == null
+          ? null
+          : DateTime.parse(json['lastFreezeTokenEarned'] as String),
+      weeklyCheckInTarget: (json['weeklyCheckInTarget'] as num).toInt(),
+      weeklyCheckInsCompleted: (json['weeklyCheckInsCompleted'] as num).toInt(),
+      lastWeekReset: DateTime.parse(json['lastWeekReset'] as String),
+    );
+
+Map<String, dynamic> _$$StreakImplToJson(_$StreakImpl instance) =>
+    <String, dynamic>{
+      'currentStreak': instance.currentStreak,
+      'longestStreak': instance.longestStreak,
+      'totalActiveDays': instance.totalActiveDays,
+      'freezeTokens': instance.freezeTokens,
+      'graceDaysRemaining': instance.graceDaysRemaining,
+      'graceDaysUsedThisWeek': instance.graceDaysUsedThisWeek,
+      'lastActiveDate': instance.lastActiveDate?.toIso8601String(),
+      'streakStartDate': instance.streakStartDate?.toIso8601String(),
+      'milestonesAchieved': instance.milestonesAchieved,
+      'graceDayHistory': instance.graceDayHistory,
+      'lastFreezeTokenEarned':
+          instance.lastFreezeTokenEarned?.toIso8601String(),
+      'weeklyCheckInTarget': instance.weeklyCheckInTarget,
+      'weeklyCheckInsCompleted': instance.weeklyCheckInsCompleted,
+      'lastWeekReset': instance.lastWeekReset.toIso8601String(),
+    };
+
+_$StreakMilestoneImpl _$$StreakMilestoneImplFromJson(
+        Map<String, dynamic> json) =>
+    _$StreakMilestoneImpl(
+      id: json['id'] as String,
+      type: $enumDecode(_$StreakMilestoneTypeEnumMap, json['type']),
+      daysRequired: (json['daysRequired'] as num).toInt(),
+      title: json['title'] as String,
+      description: json['description'] as String,
+      xpReward: (json['xpReward'] as num).toInt(),
+      freezeTokenReward: (json['freezeTokenReward'] as num).toInt(),
+      graceDayReward: (json['graceDayReward'] as num).toInt(),
+      achievedAt: DateTime.parse(json['achievedAt'] as String),
+      isClaimed: json['isClaimed'] as bool,
+    );
+
+Map<String, dynamic> _$$StreakMilestoneImplToJson(
+        _$StreakMilestoneImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': _$StreakMilestoneTypeEnumMap[instance.type]!,
+      'daysRequired': instance.daysRequired,
+      'title': instance.title,
+      'description': instance.description,
+      'xpReward': instance.xpReward,
+      'freezeTokenReward': instance.freezeTokenReward,
+      'graceDayReward': instance.graceDayReward,
+      'achievedAt': instance.achievedAt.toIso8601String(),
+      'isClaimed': instance.isClaimed,
+    };
+
+const _$StreakMilestoneTypeEnumMap = {
+  StreakMilestoneType.threeDay: 'threeDay',
+  StreakMilestoneType.sevenDay: 'sevenDay',
+  StreakMilestoneType.fourteenDay: 'fourteenDay',
+  StreakMilestoneType.twentyOneDay: 'twentyOneDay',
+  StreakMilestoneType.thirtyDay: 'thirtyDay',
+  StreakMilestoneType.sixtyDay: 'sixtyDay',
+  StreakMilestoneType.ninetyDay: 'ninetyDay',
+  StreakMilestoneType.oneEightyDay: 'oneEightyDay',
+  StreakMilestoneType.threeSixtyFiveDay: 'threeSixtyFiveDay',
+};
+
+_$GraceDayUsageImpl _$$GraceDayUsageImplFromJson(Map<String, dynamic> json) =>
+    _$GraceDayUsageImpl(
+      id: json['id'] as String,
+      dateUsed: DateTime.parse(json['dateUsed'] as String),
+      reason: $enumDecode(_$GraceDayReasonEnumMap, json['reason']),
+      note: json['note'] as String?,
+      wasAutoApplied: json['wasAutoApplied'] as bool,
+    );
+
+Map<String, dynamic> _$$GraceDayUsageImplToJson(_$GraceDayUsageImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'dateUsed': instance.dateUsed.toIso8601String(),
+      'reason': _$GraceDayReasonEnumMap[instance.reason]!,
+      'note': instance.note,
+      'wasAutoApplied': instance.wasAutoApplied,
+    };
+
+const _$GraceDayReasonEnumMap = {
+  GraceDayReason.sick: 'sick',
+  GraceDayReason.familyEmergency: 'familyEmergency',
+  GraceDayReason.travel: 'travel',
+  GraceDayReason.exams: 'exams',
+  GraceDayReason.mentalHealth: 'mentalHealth',
+  GraceDayReason.technicalIssue: 'technicalIssue',
+  GraceDayReason.other: 'other',
+};
+
+_$StreakConfigImpl _$$StreakConfigImplFromJson(Map<String, dynamic> json) =>
+    _$StreakConfigImpl(
+      startingFreezeTokens: (json['startingFreezeTokens'] as num).toInt(),
+      maxFreezeTokens: (json['maxFreezeTokens'] as num).toInt(),
+      weeklyGraceDays: (json['weeklyGraceDays'] as num).toInt(),
+      maxGraceDaysPerMonth: (json['maxGraceDaysPerMonth'] as num).toInt(),
+      freezeTokenEarnIntervalDays:
+          (json['freezeTokenEarnIntervalDays'] as num).toInt(),
+      milestones: (json['milestones'] as List<dynamic>)
+          .map((e) => StreakMilestoneConfig.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      graceDayCosts: (json['graceDayCosts'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            $enumDecode(_$GraceDayReasonEnumMap, k), (e as num).toInt()),
+      ),
+      allowRetroactiveGraceDays: json['allowRetroactiveGraceDays'] as bool,
+      retroactiveWindowDays: (json['retroactiveWindowDays'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$StreakConfigImplToJson(_$StreakConfigImpl instance) =>
+    <String, dynamic>{
+      'startingFreezeTokens': instance.startingFreezeTokens,
+      'maxFreezeTokens': instance.maxFreezeTokens,
+      'weeklyGraceDays': instance.weeklyGraceDays,
+      'maxGraceDaysPerMonth': instance.maxGraceDaysPerMonth,
+      'freezeTokenEarnIntervalDays': instance.freezeTokenEarnIntervalDays,
+      'milestones': instance.milestones,
+      'graceDayCosts': instance.graceDayCosts
+          .map((k, e) => MapEntry(_$GraceDayReasonEnumMap[k]!, e)),
+      'allowRetroactiveGraceDays': instance.allowRetroactiveGraceDays,
+      'retroactiveWindowDays': instance.retroactiveWindowDays,
+    };
+
+_$StreakMilestoneConfigImpl _$$StreakMilestoneConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$StreakMilestoneConfigImpl(
+      type: $enumDecode(_$StreakMilestoneTypeEnumMap, json['type']),
+      daysRequired: (json['daysRequired'] as num).toInt(),
+      title: json['title'] as String,
+      description: json['description'] as String,
+      xpReward: (json['xpReward'] as num).toInt(),
+      freezeTokenReward: (json['freezeTokenReward'] as num).toInt(),
+      graceDayReward: (json['graceDayReward'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$StreakMilestoneConfigImplToJson(
+        _$StreakMilestoneConfigImpl instance) =>
+    <String, dynamic>{
+      'type': _$StreakMilestoneTypeEnumMap[instance.type]!,
+      'daysRequired': instance.daysRequired,
+      'title': instance.title,
+      'description': instance.description,
+      'xpReward': instance.xpReward,
+      'freezeTokenReward': instance.freezeTokenReward,
+      'graceDayReward': instance.graceDayReward,
+    };
+
+_$StreakActionResultSuccessImpl _$$StreakActionResultSuccessImplFromJson(
+        Map<String, dynamic> json) =>
+    _$StreakActionResultSuccessImpl(
+      newStreak: Streak.fromJson(json['newStreak'] as Map<String, dynamic>),
+      newMilestones: (json['newMilestones'] as List<dynamic>)
+          .map((e) => StreakMilestone.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      xpEarned: (json['xpEarned'] as num).toInt(),
+      freezeTokensEarned: (json['freezeTokensEarned'] as num).toInt(),
+      graceDaysEarned: (json['graceDaysEarned'] as num).toInt(),
+      message: json['message'] as String,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$StreakActionResultSuccessImplToJson(
+        _$StreakActionResultSuccessImpl instance) =>
+    <String, dynamic>{
+      'newStreak': instance.newStreak,
+      'newMilestones': instance.newMilestones,
+      'xpEarned': instance.xpEarned,
+      'freezeTokensEarned': instance.freezeTokensEarned,
+      'graceDaysEarned': instance.graceDaysEarned,
+      'message': instance.message,
+      'runtimeType': instance.$type,
+    };
+
+_$StreakActionResultGraceDayUsedImpl
+    _$$StreakActionResultGraceDayUsedImplFromJson(Map<String, dynamic> json) =>
+        _$StreakActionResultGraceDayUsedImpl(
+          newStreak: Streak.fromJson(json['newStreak'] as Map<String, dynamic>),
+          graceDayUsage: GraceDayUsage.fromJson(
+              json['graceDayUsage'] as Map<String, dynamic>),
+          message: json['message'] as String,
+          $type: json['runtimeType'] as String?,
+        );
+
+Map<String, dynamic> _$$StreakActionResultGraceDayUsedImplToJson(
+        _$StreakActionResultGraceDayUsedImpl instance) =>
+    <String, dynamic>{
+      'newStreak': instance.newStreak,
+      'graceDayUsage': instance.graceDayUsage,
+      'message': instance.message,
+      'runtimeType': instance.$type,
+    };
+
+_$StreakActionResultFreezeTokenUsedImpl
+    _$$StreakActionResultFreezeTokenUsedImplFromJson(
+            Map<String, dynamic> json) =>
+        _$StreakActionResultFreezeTokenUsedImpl(
+          newStreak: Streak.fromJson(json['newStreak'] as Map<String, dynamic>),
+          tokensUsed: (json['tokensUsed'] as num).toInt(),
+          message: json['message'] as String,
+          $type: json['runtimeType'] as String?,
+        );
+
+Map<String, dynamic> _$$StreakActionResultFreezeTokenUsedImplToJson(
+        _$StreakActionResultFreezeTokenUsedImpl instance) =>
+    <String, dynamic>{
+      'newStreak': instance.newStreak,
+      'tokensUsed': instance.tokensUsed,
+      'message': instance.message,
+      'runtimeType': instance.$type,
+    };
+
+_$StreakActionResultStreakBrokenImpl
+    _$$StreakActionResultStreakBrokenImplFromJson(Map<String, dynamic> json) =>
+        _$StreakActionResultStreakBrokenImpl(
+          newStreak: Streak.fromJson(json['newStreak'] as Map<String, dynamic>),
+          previousStreak: (json['previousStreak'] as num).toInt(),
+          message: json['message'] as String,
+          encouragementMessage: json['encouragementMessage'] as String,
+          $type: json['runtimeType'] as String?,
+        );
+
+Map<String, dynamic> _$$StreakActionResultStreakBrokenImplToJson(
+        _$StreakActionResultStreakBrokenImpl instance) =>
+    <String, dynamic>{
+      'newStreak': instance.newStreak,
+      'previousStreak': instance.previousStreak,
+      'message': instance.message,
+      'encouragementMessage': instance.encouragementMessage,
+      'runtimeType': instance.$type,
+    };
+
+_$StreakActionResultAlreadyMarkedImpl
+    _$$StreakActionResultAlreadyMarkedImplFromJson(Map<String, dynamic> json) =>
+        _$StreakActionResultAlreadyMarkedImpl(
+          streak: Streak.fromJson(json['streak'] as Map<String, dynamic>),
+          message: json['message'] as String,
+          $type: json['runtimeType'] as String?,
+        );
+
+Map<String, dynamic> _$$StreakActionResultAlreadyMarkedImplToJson(
+        _$StreakActionResultAlreadyMarkedImpl instance) =>
+    <String, dynamic>{
+      'streak': instance.streak,
+      'message': instance.message,
+      'runtimeType': instance.$type,
+    };

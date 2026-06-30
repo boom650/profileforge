@@ -1,0 +1,52 @@
+{
+  "elements": {
+    "ActivityDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/activity_dao.dart",
+        "name": "ActivityDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/activity_dao.dart",
+        "offset": 172,
+        "name": "ActivityDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "activities"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "activities"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "ActivityDao",
+            "import_uri": "package:profileforge/db/daos/activity_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}

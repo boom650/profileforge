@@ -1,0 +1,52 @@
+{
+  "elements": {
+    "AdmissionsProbabilityDao": {
+      "id": {
+        "library_uri": "package:profileforge/db/daos/admissions_probability_dao.dart",
+        "name": "AdmissionsProbabilityDao"
+      },
+      "declaration": {
+        "source_uri": "package:profileforge/db/daos/admissions_probability_dao.dart",
+        "offset": 199,
+        "name": "AdmissionsProbabilityDao"
+      },
+      "references": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "admissions_probabilities"
+        }
+      ],
+      "type": "dao",
+      "tables": [
+        {
+          "library_uri": "package:profileforge/db/tables/all_tables.dart",
+          "name": "admissions_probabilities"
+        }
+      ],
+      "views": [],
+      "includes": [],
+      "queries": [],
+      "dart_type": {
+        "elements": [
+          {
+            "lexeme": "AdmissionsProbabilityDao",
+            "import_uri": "package:profileforge/db/daos/admissions_probability_dao.dart"
+          }
+        ]
+      },
+      "database": {
+        "elements": [
+          {
+            "lexeme": "AppDatabase",
+            "import_uri": "package:profileforge/db/database.dart"
+          }
+        ]
+      }
+    }
+  },
+  "imports": [
+    "package:drift/drift.dart",
+    "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/database.dart"
+  ]
+}
