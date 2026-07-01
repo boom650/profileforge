@@ -1,44 +1,95 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../student_profile.dart';
-import 'skins.dart';
+import 'admissions_pillar.dart';
 
 part 'missions.freezed.dart';
 part 'missions.g.dart';
 
 /// Mission types
-@freezed
-@JsonSerializable()
-abstract class MissionType with _$MissionType {
-  const factory MissionType.daily() = _Daily;
-  const factory MissionType.weekly() = _Weekly;
-  const factory MissionType.milestone() = _Milestone;
-  const factory MissionType.inSchool() = _InSchool;
-  const factory MissionType.research() = _Research;
-  const factory MissionType.leadership() = _Leadership;
-  const factory MissionType.volunteering() = _Volunteering;
-  const factory MissionType.special() = _Special; // Seasonal, event-based
+enum MissionType {
+  daily,
+  weekly,
+  milestone,
+  inSchool,
+  research,
+  leadership,
+  volunteering,
+  special,
+}
 
-  factory MissionType.fromJson(Map<String, dynamic> json) => _$MissionTypeFromJson(json);
+extension MissionTypeExtension on MissionType {
+  String get name => toString().split('.').last;
+}
+
+class MissionTypeConverter implements JsonConverter<MissionType, String> {
+  const MissionTypeConverter();
+
+  @override
+  MissionType fromJson(String json) {
+    return MissionType.values.firstWhere(
+      (e) => e.name.toLowerCase() == json.toLowerCase(),
+      orElse: () => MissionType.daily,
+    );
+  }
+
+  @override
+  String toJson(MissionType object) => object.name;
 }
 
 /// Mission category for filtering
-@freezed
-abstract class MissionCategory with _$MissionCategory {
-  const factory MissionCategory.academics() = _Academics;
-  const factory MissionCategory.activities() = _Activities;
-  const factory MissionCategory.profile() = _Profile;
-  const factory MissionCategory.wellbeing() = _Wellbeing;
-  const factory MissionCategory.exploration() = _Exploration;
-  const factory MissionCategory.social() = _Social;
+enum MissionCategory {
+  academics,
+  activities,
+  profile,
+  wellbeing,
+  exploration,
+  social,
+}
+
+extension MissionCategoryExtension on MissionCategory {
+  String get name => toString().split('.').last;
+}
+
+class MissionCategoryConverter implements JsonConverter<MissionCategory, String> {
+  const MissionCategoryConverter();
+
+  @override
+  MissionCategory fromJson(String json) {
+    return MissionCategory.values.firstWhere(
+      (e) => e.name.toLowerCase() == json.toLowerCase(),
+      orElse: () => MissionCategory.academics,
+    );
+  }
+
+  @override
+  String toJson(MissionCategory object) => object.name;
 }
 
 /// Mission difficulty
-@freezed
-abstract class MissionDifficulty with _$MissionDifficulty {
-  const factory MissionDifficulty.easy() = _Easy;      // 50-100 XP
-  const factory MissionDifficulty.medium() = _Medium;  // 100-250 XP
-  const factory MissionDifficulty.hard() = _Hard;      // 250-500 XP
-  const factory MissionDifficulty.expert() = _Expert;  // 500+ XP
+enum MissionDifficulty {
+  easy,      // 50-100 XP
+  medium,    // 100-250 XP
+  hard,      // 250-500 XP
+  expert,    // 500+ XP
+}
+
+extension MissionDifficultyExtension on MissionDifficulty {
+  String get name => toString().split('.').last;
+}
+
+class MissionDifficultyConverter implements JsonConverter<MissionDifficulty, String> {
+  const MissionDifficultyConverter();
+
+  @override
+  MissionDifficulty fromJson(String json) {
+    return MissionDifficulty.values.firstWhere(
+      (e) => e.name.toLowerCase() == json.toLowerCase(),
+      orElse: () => MissionDifficulty.easy,
+    );
+  }
+
+  @override
+  String toJson(MissionDifficulty object) => object.name;
 }
 
 /// Mission model
@@ -48,9 +99,9 @@ abstract class Mission with _$Mission {
     required String id,
     required String title,
     required String description,
-    required MissionType type,
-    required MissionCategory category,
-    required MissionDifficulty difficulty,
+    @MissionTypeConverter() required MissionType type,
+    @MissionCategoryConverter() required MissionCategory category,
+    @MissionDifficultyConverter() required MissionDifficulty difficulty,
     required int xpReward,
     required AdmissionsPillar pillar,
     required Map<String, dynamic> completionCriteria,
@@ -517,9 +568,9 @@ abstract class MissionTemplate with _$MissionTemplate {
     required String id,
     required String title,
     required String description,
-    required MissionType type,
-    required MissionCategory category,
-    required MissionDifficulty difficulty,
+    @MissionTypeConverter() required MissionType type,
+    @MissionCategoryConverter() required MissionCategory category,
+    @MissionDifficultyConverter() required MissionDifficulty difficulty,
     required int xpReward,
     required AdmissionsPillar pillar,
     required Map<String, dynamic> completionCriteria,

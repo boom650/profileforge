@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'admissions_pillar.dart';
 
 part 'skins.freezed.dart';
 part 'skins.g.dart';
