@@ -1,11 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../student_profile.dart';
+import 'skins.dart';
 
 part 'missions.freezed.dart';
 part 'missions.g.dart';
 
 /// Mission types
 @freezed
+@JsonSerializable()
 abstract class MissionType with _$MissionType {
   const factory MissionType.daily() = _Daily;
   const factory MissionType.weekly() = _Weekly;
@@ -15,6 +17,8 @@ abstract class MissionType with _$MissionType {
   const factory MissionType.leadership() = _Leadership;
   const factory MissionType.volunteering() = _Volunteering;
   const factory MissionType.special() = _Special; // Seasonal, event-based
+
+  factory MissionType.fromJson(Map<String, dynamic> json) => _$MissionTypeFromJson(json);
 }
 
 /// Mission category for filtering

@@ -57,19 +57,7 @@ abstract class Skin with _$Skin {
   factory Skin.fromJson(Map<String, dynamic> json) => _$SkinFromJson(json);
 }
 
-/// Admissions pillar that each skin tier maps to
-enum AdmissionsPillar {
-  academics,      // Explorer, Scholar
-  evidence,       // Evidence Keeper
-  consistency,    // Marathon Runner
-  research,       // Researcher
-  leadership,     // Leader
-  creativity,     // Creator
-  communityImpact, // Changemaker
-  trailblazer,    // Trailblazer (Legendary - encompasses all)
-}
-
-/// XP requirements per pillar for each skin tier
+/// Skin model with all visual and metadata properties
 @freezed
 abstract class PillarXPRequirements with _$PillarXPRequirements {
   const factory PillarXPRequirements({

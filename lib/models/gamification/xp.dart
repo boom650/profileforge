@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../student_profile.dart';
+import 'skins.dart';
 
 part 'xp.freezed.dart';
 part 'xp.g.dart';
