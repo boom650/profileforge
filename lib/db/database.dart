@@ -831,7 +831,6 @@ class AppDatabase extends _$AppDatabase {
         type: OpportunityType.competition.name,
         organizer: 'Society for Science',
         location: const Value('Virtual/International'),
-        '),
         isVirtual: const Value(true),
         country: const Value('International'),
         city: const Value(null),

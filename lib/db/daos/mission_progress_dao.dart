@@ -20,7 +20,7 @@ class MissionProgressDao extends DatabaseAccessor<AppDatabase> with _$MissionPro
         .watchSingleOrNull();
 
   Future<List<MissionProgressData>> getAllProgress(String studentId) => 
-      (select(missionProgresses)..where((mp) ((mp) => mp.studentId.equals(studentId))).get();
+      (select(missionProgresses)..where((mp) => mp.studentId.equals(studentId))).get();
 
   Future<int> upsertProgress(MissionProgressesCompanion progress) => 
       into(missionProgresses).insertOnConflictUpdate(progress);
