@@ -683,7 +683,6 @@ class ATLLabData {
       matchScore: 0,
       schedule: operatingHours,
       tags: ['ATL', 'in-school', 'technology', equipment.join(',')],
-    ],
     );
   }
 }

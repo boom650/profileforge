@@ -1,0 +1,328 @@
+﻿2026-07-01T18:18:43.0446879Z ##[group]Run dart run build_runner build --delete-conflicting-outputs
+2026-07-01T18:18:43.0447821Z [36;1mdart run build_runner build --delete-conflicting-outputs[0m
+2026-07-01T18:18:43.0495558Z shell: /usr/bin/bash -e {0}
+2026-07-01T18:18:43.0495988Z env:
+2026-07-01T18:18:43.0496508Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.44.4-x64/flutter
+2026-07-01T18:18:43.0497200Z   PUB_CACHE: /home/runner/.pub-cache
+2026-07-01T18:18:43.0497739Z ##[endgroup]
+2026-07-01T18:18:48.9223791Z [INFO] Generating build script...
+2026-07-01T18:18:49.2917581Z [INFO] Generating build script completed, took 379ms
+2026-07-01T18:18:49.2918341Z 
+2026-07-01T18:18:49.3113646Z [WARNING] Invalidated precompiled build script due to core package update
+2026-07-01T18:18:49.3372407Z [INFO] Precompiling build script......
+2026-07-01T18:18:56.2667273Z [INFO] Precompiling build script... completed, took 6.9s
+2026-07-01T18:18:56.2668221Z 
+2026-07-01T18:18:56.9756869Z [INFO] Initializing inputs
+2026-07-01T18:18:56.9839735Z [INFO] Reading cached asset graph...
+2026-07-01T18:18:57.2504995Z [WARNING] Throwing away cached asset graph due to Dart SDK update.
+2026-07-01T18:18:57.2521955Z [INFO] Cleaning up outputs from previous builds....
+2026-07-01T18:18:57.2851773Z [INFO] Cleaning up outputs from previous builds. completed, took 32ms
+2026-07-01T18:18:57.2852689Z 
+2026-07-01T18:18:57.2914497Z [INFO] Generating build script...
+2026-07-01T18:18:57.4363499Z [INFO] Generating build script completed, took 144ms
+2026-07-01T18:18:57.4364560Z 
+2026-07-01T18:18:57.4369118Z [WARNING] Invalidated precompiled build script due to missing asset graph.
+2026-07-01T18:18:57.4433955Z [INFO] Precompiling build script......
+2026-07-01T18:18:58.3020435Z [INFO] Precompiling build script... completed, took 858ms
+2026-07-01T18:18:58.3021537Z 
+2026-07-01T18:18:59.0812256Z [INFO] Initializing inputs
+2026-07-01T18:18:59.7856484Z [INFO] Building new asset graph...
+2026-07-01T18:19:01.5737125Z [INFO] Building new asset graph completed, took 1.8s
+2026-07-01T18:19:01.5738181Z 
+2026-07-01T18:19:01.5738878Z [INFO] Checking for unexpected pre-existing outputs....
+2026-07-01T18:19:01.5747691Z [INFO] Checking for unexpected pre-existing outputs. completed, took 1ms
+2026-07-01T18:19:01.5748471Z 
+2026-07-01T18:19:01.5833048Z [INFO] Running build...
+2026-07-01T18:19:01.6320415Z [INFO] Generating SDK summary...
+2026-07-01T18:19:04.4305522Z [INFO] 2.8s elapsed, 0/16 actions completed.
+2026-07-01T18:19:07.9572639Z [INFO] 6.4s elapsed, 0/16 actions completed.
+2026-07-01T18:19:08.7062641Z [WARNING] riverpod_generator on lib/db/tables/student_profile_table.dart:
+2026-07-01T18:19:08.7065234Z Your current `analyzer` version may not fully support your current SDK version.
+2026-07-01T18:19:08.7066043Z 
+2026-07-01T18:19:08.7067751Z Analyzer language version: 3.4.0
+2026-07-01T18:19:08.7068447Z SDK language version: 3.12.0
+2026-07-01T18:19:08.7069235Z 
+2026-07-01T18:19:08.7069693Z Please update to the latest `analyzer` version (14.0.0) by running
+2026-07-01T18:19:08.7071372Z `flutter packages upgrade`.
+2026-07-01T18:19:08.7077887Z 
+2026-07-01T18:19:08.7079285Z If you are not getting the latest version by running the above command, you
+2026-07-01T18:19:08.7081386Z can try adding a constraint like the following to your pubspec to start
+2026-07-01T18:19:08.7082904Z diagnosing why you can't get the latest version:
+2026-07-01T18:19:08.7083464Z 
+2026-07-01T18:19:08.7101675Z dev_dependencies:
+2026-07-01T18:19:08.7113490Z   analyzer: ^14.0.0
+2026-07-01T18:19:08.7121063Z 
+2026-07-01T18:19:09.4975207Z [INFO] Generating SDK summary completed, took 7.9s
+2026-07-01T18:19:09.4991893Z 
+2026-07-01T18:19:09.6938617Z [SEVERE] riverpod_generator on lib/db/migrations/migrations.dart:
+2026-07-01T18:19:09.6939438Z 
+2026-07-01T18:19:09.6940018Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:09.6941116Z However, package:profileforge/db/migrations/migrations.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:09.6942689Z migrations.dart:216:1: Directives must appear before any declarations.
+2026-07-01T18:19:09.6944018Z 
+2026-07-01T18:19:09.6944440Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:09.6945029Z 
+2026-07-01T18:19:09.8762682Z [SEVERE] riverpod_generator on lib/db/daos/student_profile_dao.dart:
+2026-07-01T18:19:09.8812935Z 
+2026-07-01T18:19:09.8813540Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:09.8814636Z However, package:profileforge/db/daos/student_profile_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:09.8815485Z 
+2026-07-01T18:19:09.8815716Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:09.8816127Z 
+2026-07-01T18:19:09.8816437Z [SEVERE] riverpod_generator on lib/db/daos/opportunity_dao.dart:
+2026-07-01T18:19:09.8816917Z 
+2026-07-01T18:19:09.8817180Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:09.8818193Z However, package:profileforge/db/daos/opportunity_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:09.8818997Z 
+2026-07-01T18:19:09.8819204Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:09.8819578Z 
+2026-07-01T18:19:11.2221487Z [INFO] 9.6s elapsed, 38/66 actions completed.
+2026-07-01T18:19:12.2822421Z [INFO] 10.7s elapsed, 55/76 actions completed.
+2026-07-01T18:19:13.3329966Z [SEVERE] riverpod_generator on lib/services/opportunity_discovery/competition_calendar_service.dart:
+2026-07-01T18:19:13.3332844Z 
+2026-07-01T18:19:13.3333418Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:13.3335003Z However, package:profileforge/services/opportunity_discovery/competition_calendar_service.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:13.3336765Z competition_calendar_service.dart:78:17: Missing selector such as '.identifier' or '[0]'.
+2026-07-01T18:19:13.3337636Z 
+2026-07-01T18:19:13.3338012Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:13.3338588Z 
+2026-07-01T18:19:16.3848547Z [INFO] 14.8s elapsed, 87/113 actions completed.
+2026-07-01T18:19:17.1865808Z [SEVERE] riverpod_generator on lib/services/opportunity_discovery/opportunity_discovery_engine.dart:
+2026-07-01T18:19:17.1866859Z 
+2026-07-01T18:19:17.1867359Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:17.1868829Z However, package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:17.1870460Z opportunity_discovery_engine.dart:686:5: Expected an identifier.
+2026-07-01T18:19:17.1871768Z opportunity_discovery_engine.dart:686:5: Expected to find ')'.
+2026-07-01T18:19:17.1872466Z 
+2026-07-01T18:19:17.1872884Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:17.1873494Z 
+2026-07-01T18:19:18.1919668Z [INFO] 16.6s elapsed, 116/123 actions completed.
+2026-07-01T18:19:26.2713773Z [INFO] 24.7s elapsed, 118/125 actions completed.
+2026-07-01T18:19:27.3045878Z [INFO] 25.7s elapsed, 124/126 actions completed.
+2026-07-01T18:19:27.7413072Z [SEVERE] freezed on lib/db/daos/opportunity_dao.dart:
+2026-07-01T18:19:27.7413874Z 
+2026-07-01T18:19:27.7414241Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:27.7415375Z However, package:profileforge/db/daos/opportunity_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:27.7416281Z 
+2026-07-01T18:19:27.7416640Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:27.7417199Z 
+2026-07-01T18:19:27.7429512Z [SEVERE] freezed on lib/db/daos/student_profile_dao.dart:
+2026-07-01T18:19:27.7430128Z 
+2026-07-01T18:19:27.7430525Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:27.7431993Z However, package:profileforge/db/daos/student_profile_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:27.7432945Z 
+2026-07-01T18:19:27.7433287Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:27.7433809Z 
+2026-07-01T18:19:27.7507523Z [SEVERE] freezed on lib/db/migrations/migrations.dart:
+2026-07-01T18:19:27.7508690Z 
+2026-07-01T18:19:27.7509076Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:27.7510233Z However, package:profileforge/db/migrations/migrations.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:27.7511700Z migrations.dart:216:1: Directives must appear before any declarations.
+2026-07-01T18:19:27.7512409Z 
+2026-07-01T18:19:27.7512757Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:27.7513317Z 
+2026-07-01T18:19:34.5802789Z [INFO] 33.0s elapsed, 162/176 actions completed.
+2026-07-01T18:19:37.7343614Z [INFO] 36.2s elapsed, 176/183 actions completed.
+2026-07-01T18:19:37.7850059Z [SEVERE] freezed on lib/services/opportunity_discovery/competition_calendar_service.dart:
+2026-07-01T18:19:37.7850980Z 
+2026-07-01T18:19:37.7851753Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:37.7853072Z However, package:profileforge/services/opportunity_discovery/competition_calendar_service.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:37.7854745Z competition_calendar_service.dart:78:17: Missing selector such as '.identifier' or '[0]'.
+2026-07-01T18:19:37.7855517Z 
+2026-07-01T18:19:37.7855856Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:37.7856382Z 
+2026-07-01T18:19:37.7960917Z [SEVERE] freezed on lib/services/opportunity_discovery/opportunity_discovery_engine.dart:
+2026-07-01T18:19:37.7962617Z 
+2026-07-01T18:19:37.7962992Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:37.7964393Z However, package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:37.7965860Z opportunity_discovery_engine.dart:686:5: Expected an identifier.
+2026-07-01T18:19:37.7966780Z opportunity_discovery_engine.dart:686:5: Expected to find ')'.
+2026-07-01T18:19:37.7967364Z 
+2026-07-01T18:19:37.7967689Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:37.7968180Z 
+2026-07-01T18:19:37.8571115Z [SEVERE] freezed on lib/services/opportunity_discovery/google_places_service.dart:
+2026-07-01T18:19:37.8572144Z 
+2026-07-01T18:19:37.8576508Z The parameter `maxResults` of `PlaceSearchParams` is non-nullable but is neither required nor marked with @Default
+2026-07-01T18:19:37.8580001Z package:profileforge/services/opportunity_discovery/google_places_service.dart:148:9
+2026-07-01T18:19:37.8585355Z     ╷
+2026-07-01T18:19:37.8585881Z 148 │     int maxResults,
+2026-07-01T18:19:37.8586573Z     │         ^^^^^^^^^^
+2026-07-01T18:19:37.8587174Z     ╵
+2026-07-01T18:19:38.5788776Z [SEVERE] json_serializable on lib/db/migrations/migrations.dart:
+2026-07-01T18:19:38.5803286Z 
+2026-07-01T18:19:38.5820698Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:38.5829020Z However, package:profileforge/db/migrations/migrations.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:38.5831641Z migrations.dart:216:1: Directives must appear before any declarations.
+2026-07-01T18:19:38.5833951Z 
+2026-07-01T18:19:38.5834252Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:38.5862023Z 
+2026-07-01T18:19:39.1890336Z [SEVERE] json_serializable on lib/models/gamification/skins.dart:
+2026-07-01T18:19:39.1891454Z 
+2026-07-01T18:19:39.1892159Z Could not generate `fromJson` code for `tier`.
+2026-07-01T18:19:39.1893045Z To support the type `SkinTier` you can:
+2026-07-01T18:19:39.1893762Z * Use `JsonConverter`
+2026-07-01T18:19:39.1894663Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonConverter-class.html
+2026-07-01T18:19:39.1895729Z * Use `JsonKey` fields `fromJson` and `toJson`
+2026-07-01T18:19:39.1896728Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/fromJson.html
+2026-07-01T18:19:39.1898558Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/toJson.html
+2026-07-01T18:19:39.1899789Z package:profileforge/models/gamification/skins.freezed.dart:2354:18
+2026-07-01T18:19:39.1900919Z      ╷
+2026-07-01T18:19:39.1902464Z 2354 │   final SkinTier tier;
+2026-07-01T18:19:39.1903186Z      │                  ^^^^
+2026-07-01T18:19:39.1903844Z      ╵
+2026-07-01T18:19:40.2285129Z [INFO] 38.6s elapsed, 239/259 actions completed.
+2026-07-01T18:19:40.3565549Z [SEVERE] json_serializable on lib/models/gamification/missions.dart:
+2026-07-01T18:19:40.3587918Z 
+2026-07-01T18:19:40.3588317Z Could not generate `fromJson` code for `type`.
+2026-07-01T18:19:40.3593695Z To support the type `MissionType` you can:
+2026-07-01T18:19:40.3594061Z * Use `JsonConverter`
+2026-07-01T18:19:40.3594533Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonConverter-class.html
+2026-07-01T18:19:40.3595038Z * Use `JsonKey` fields `fromJson` and `toJson`
+2026-07-01T18:19:40.3595500Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/fromJson.html
+2026-07-01T18:19:40.3596095Z   https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/toJson.html
+2026-07-01T18:19:40.3596670Z package:profileforge/models/gamification/missions.freezed.dart:3026:21
+2026-07-01T18:19:40.3597249Z      ╷
+2026-07-01T18:19:40.3597513Z 3026 │   final MissionType type;
+2026-07-01T18:19:40.3597788Z      │                     ^^^^
+2026-07-01T18:19:40.3598014Z      ╵
+2026-07-01T18:19:40.4753859Z [SEVERE] json_serializable on lib/models/gamification/xp.dart:
+2026-07-01T18:19:40.4771670Z 
+2026-07-01T18:19:40.4787947Z UnimplementedError: (InvalidTypeImpl) InvalidType
+2026-07-01T18:19:40.4809645Z package:json_serializable/src/utils.dart 221:3              typeToCode
+2026-07-01T18:19:40.4822220Z package:json_serializable/src/helper_core.dart 78:44        createInvalidGenerationError
+2026-07-01T18:19:40.4835944Z package:json_serializable/src/decode_helper.dart 238:13     DecodeHelper._deserializeForField
+2026-07-01T18:19:40.4861785Z package:json_serializable/src/decode_helper.dart 56:9       DecodeHelper.createFactory.deserializeFun
+2026-07-01T18:19:40.4863282Z package:json_serializable/src/decode_helper.dart 332:32     _writeConstructorInvocation.<fn>
+2026-07-01T18:19:40.4869628Z dart:core                                                   StringBuffer.writeAll
+2026-07-01T18:19:40.4870870Z package:json_serializable/src/decode_helper.dart 330:9      _writeConstructorInvocation
+2026-07-01T18:19:40.4879911Z package:json_serializable/src/decode_helper.dart 59:18      DecodeHelper.createFactory
+2026-07-01T18:19:40.4881794Z package:json_serializable/src/generator_helper.dart 86:28   GeneratorHelper.generate
+2026-07-01T18:19:40.4894366Z dart:_internal                                              WhereIterator.moveNext
+2026-07-01T18:19:40.4907732Z package:json_serializable/src/json_part_builder.dart 64:27  _UnifiedGenerator.generate
+2026-07-01T18:19:40.4923663Z package:source_gen/src/builder.dart 342:23                  _generate
+2026-07-01T18:19:40.4941952Z dart:async                                                  Stream.toList.<fn>
+2026-07-01T18:19:40.4942932Z package:source_gen/src/builder.dart 107:9                   _Builder._generateForLibrary
+2026-07-01T18:19:40.4961998Z package:source_gen/src/builder.dart 99:5                    _Builder.build
+2026-07-01T18:19:40.4966110Z 
+2026-07-01T18:19:42.9222218Z [INFO] 41.3s elapsed, 251/269 actions completed.
+2026-07-01T18:19:43.3318359Z [SEVERE] json_serializable on lib/services/opportunity_discovery/competition_calendar_service.dart:
+2026-07-01T18:19:43.3318962Z 
+2026-07-01T18:19:43.3319164Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:43.3319899Z However, package:profileforge/services/opportunity_discovery/competition_calendar_service.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:43.3320707Z competition_calendar_service.dart:78:17: Missing selector such as '.identifier' or '[0]'.
+2026-07-01T18:19:43.3321053Z 
+2026-07-01T18:19:43.3321496Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:43.3321871Z 
+2026-07-01T18:19:43.4828829Z [SEVERE] json_serializable on lib/services/opportunity_discovery/opportunity_discovery_engine.dart:
+2026-07-01T18:19:43.4831097Z 
+2026-07-01T18:19:43.4832265Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:43.4834240Z However, package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:43.4836335Z opportunity_discovery_engine.dart:686:5: Expected an identifier.
+2026-07-01T18:19:43.4837394Z opportunity_discovery_engine.dart:686:5: Expected to find ')'.
+2026-07-01T18:19:43.4838362Z 
+2026-07-01T18:19:43.4838817Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:43.4839660Z 
+2026-07-01T18:19:44.4942975Z [INFO] 42.9s elapsed, 297/297 actions completed.
+2026-07-01T18:19:44.5893993Z [WARNING] drift_dev on lib/db/migrations/migrations.dart:
+2026-07-01T18:19:44.5895156Z Could not resolve Dart library package:profileforge/db/migrations/migrations.dart
+2026-07-01T18:19:44.5896502Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:44.5897724Z However, package:profileforge/db/migrations/migrations.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:44.5899022Z migrations.dart:216:1: Directives must appear before any declarations.
+2026-07-01T18:19:44.5899678Z 
+2026-07-01T18:19:44.5900011Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:44.5900529Z 
+2026-07-01T18:19:44.6736242Z [WARNING] drift_dev on lib/services/opportunity_discovery/competition_calendar_service.dart:
+2026-07-01T18:19:44.6738203Z Could not resolve Dart library package:profileforge/services/opportunity_discovery/competition_calendar_service.dart
+2026-07-01T18:19:44.6739699Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:44.6741018Z However, package:profileforge/services/opportunity_discovery/competition_calendar_service.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:44.6742877Z competition_calendar_service.dart:78:17: Missing selector such as '.identifier' or '[0]'.
+2026-07-01T18:19:44.6743656Z 
+2026-07-01T18:19:44.6743986Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:44.6744494Z 
+2026-07-01T18:19:44.7032627Z [WARNING] drift_dev on lib/services/opportunity_discovery/opportunity_discovery_engine.dart:
+2026-07-01T18:19:44.7052562Z Could not resolve Dart library package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart
+2026-07-01T18:19:44.7072003Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:44.7073593Z However, package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:44.7092124Z opportunity_discovery_engine.dart:686:5: Expected an identifier.
+2026-07-01T18:19:44.7112114Z opportunity_discovery_engine.dart:686:5: Expected to find ')'.
+2026-07-01T18:19:44.7113840Z 
+2026-07-01T18:19:44.7114294Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:44.7139481Z 
+2026-07-01T18:19:45.7096242Z [INFO] 44.1s elapsed, 396/412 actions completed.
+2026-07-01T18:19:46.8175940Z [INFO] 45.2s elapsed, 396/412 actions completed.
+2026-07-01T18:19:47.8886769Z [INFO] 46.3s elapsed, 398/412 actions completed.
+2026-07-01T18:19:48.9405474Z [INFO] 47.4s elapsed, 398/414 actions completed.
+2026-07-01T18:19:49.7944701Z [WARNING] drift_dev on lib/db/migrations/migrations.dart:
+2026-07-01T18:19:49.7945844Z Could not resolve Dart library package:profileforge/db/migrations/migrations.dart
+2026-07-01T18:19:49.7946982Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:19:49.7948286Z However, package:profileforge/db/migrations/migrations.dart (or an existing part) contains the following errors.
+2026-07-01T18:19:49.7949600Z migrations.dart:216:1: Directives must appear before any declarations.
+2026-07-01T18:19:49.7950245Z 
+2026-07-01T18:19:49.7950624Z Try fixing the errors and re-running the build.
+2026-07-01T18:19:49.7951513Z 
+2026-07-01T18:19:50.8997443Z [INFO] 49.3s elapsed, 399/415 actions completed.
+2026-07-01T18:19:52.0042274Z [INFO] 50.4s elapsed, 400/416 actions completed.
+2026-07-01T18:19:53.0942887Z [INFO] 51.5s elapsed, 401/417 actions completed.
+2026-07-01T18:19:54.1060783Z [INFO] 52.5s elapsed, 401/417 actions completed.
+2026-07-01T18:19:55.1862674Z [INFO] 53.6s elapsed, 402/418 actions completed.
+2026-07-01T18:19:56.1928529Z [INFO] 54.6s elapsed, 402/418 actions completed.
+2026-07-01T18:19:57.1942637Z [INFO] 55.6s elapsed, 403/419 actions completed.
+2026-07-01T18:19:58.2992478Z [INFO] 56.7s elapsed, 407/423 actions completed.
+2026-07-01T18:19:59.4032325Z [INFO] 57.8s elapsed, 409/425 actions completed.
+2026-07-01T18:20:00.4103499Z [INFO] 58.8s elapsed, 409/425 actions completed.
+2026-07-01T18:20:01.5027840Z [INFO] 59.9s elapsed, 412/428 actions completed.
+2026-07-01T18:20:02.5895412Z [INFO] 1m 1s elapsed, 414/430 actions completed.
+2026-07-01T18:20:03.6958454Z [INFO] 1m 2s elapsed, 416/432 actions completed.
+2026-07-01T18:20:04.7989191Z [INFO] 1m 3s elapsed, 419/435 actions completed.
+2026-07-01T18:20:05.8922249Z [INFO] 1m 4s elapsed, 421/437 actions completed.
+2026-07-01T18:20:06.9492209Z [INFO] 1m 5s elapsed, 421/437 actions completed.
+2026-07-01T18:20:07.9992069Z [INFO] 1m 6s elapsed, 426/442 actions completed.
+2026-07-01T18:20:09.1003124Z [INFO] 1m 7s elapsed, 428/444 actions completed.
+2026-07-01T18:20:10.2001047Z [INFO] 1m 8s elapsed, 433/449 actions completed.
+2026-07-01T18:20:11.2011765Z [INFO] 1m 9s elapsed, 438/454 actions completed.
+2026-07-01T18:20:11.6267407Z [WARNING] drift_dev on lib/services/opportunity_discovery/competition_calendar_service.dart:
+2026-07-01T18:20:11.6269122Z Could not resolve Dart library package:profileforge/services/opportunity_discovery/competition_calendar_service.dart
+2026-07-01T18:20:11.6270635Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:20:11.6272406Z However, package:profileforge/services/opportunity_discovery/competition_calendar_service.dart (or an existing part) contains the following errors.
+2026-07-01T18:20:11.6274024Z competition_calendar_service.dart:78:17: Missing selector such as '.identifier' or '[0]'.
+2026-07-01T18:20:11.6274840Z 
+2026-07-01T18:20:11.6275223Z Try fixing the errors and re-running the build.
+2026-07-01T18:20:11.6275781Z 
+2026-07-01T18:20:12.1682839Z [WARNING] drift_dev on lib/services/opportunity_discovery/opportunity_discovery_engine.dart:
+2026-07-01T18:20:12.1693026Z Could not resolve Dart library package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart
+2026-07-01T18:20:12.1702517Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:20:12.1704004Z However, package:profileforge/services/opportunity_discovery/opportunity_discovery_engine.dart (or an existing part) contains the following errors.
+2026-07-01T18:20:12.1705646Z opportunity_discovery_engine.dart:686:5: Expected an identifier.
+2026-07-01T18:20:12.1706842Z opportunity_discovery_engine.dart:686:5: Expected to find ')'.
+2026-07-01T18:20:12.1707618Z 
+2026-07-01T18:20:12.1708053Z Try fixing the errors and re-running the build.
+2026-07-01T18:20:12.1708681Z 
+2026-07-01T18:20:13.1934230Z [INFO] 1m 11s elapsed, 468/470 actions completed.
+2026-07-01T18:20:14.2953549Z [INFO] 1m 12s elapsed, 468/470 actions completed.
+2026-07-01T18:20:15.3472906Z [INFO] 1m 13s elapsed, 468/470 actions completed.
+2026-07-01T18:20:16.4008102Z [INFO] 1m 14s elapsed, 468/470 actions completed.
+2026-07-01T18:20:17.5047865Z [INFO] 1m 15s elapsed, 468/470 actions completed.
+2026-07-01T18:20:18.5944760Z [INFO] 1m 17s elapsed, 468/470 actions completed.
+2026-07-01T18:20:19.6067864Z [INFO] 1m 18s elapsed, 468/470 actions completed.
+2026-07-01T18:20:20.6071636Z [INFO] 1m 19s elapsed, 469/470 actions completed.
+2026-07-01T18:20:21.6648030Z [SEVERE] source_gen:combining_builder on lib/db/daos/opportunity_dao.dart:
+2026-07-01T18:20:21.6649099Z 
+2026-07-01T18:20:21.6649914Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:20:21.6666195Z However, package:profileforge/db/daos/opportunity_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:20:21.6667901Z 
+2026-07-01T18:20:21.6668408Z Try fixing the errors and re-running the build.
+2026-07-01T18:20:21.6669018Z 
+2026-07-01T18:20:21.6687290Z [SEVERE] source_gen:combining_builder on lib/db/daos/student_profile_dao.dart:
+2026-07-01T18:20:21.6688072Z 
+2026-07-01T18:20:21.6688509Z This builder requires Dart inputs without syntax errors.
+2026-07-01T18:20:21.6689822Z However, package:profileforge/db/daos/student_profile_dao.dart (or an existing part) contains the following errors.
+2026-07-01T18:20:21.6690849Z 
+2026-07-01T18:20:21.6691519Z Try fixing the errors and re-running the build.
+2026-07-01T18:20:21.6692139Z 
+2026-07-01T18:20:21.7629968Z [INFO] Running build completed, took 1m 20s
+2026-07-01T18:20:21.7630846Z 
+2026-07-01T18:20:21.7633407Z [INFO] Caching finalized dependency graph...
+2026-07-01T18:20:21.9056518Z [INFO] Caching finalized dependency graph completed, took 142ms
+2026-07-01T18:20:21.9057705Z 
+2026-07-01T18:20:21.9155819Z [SEVERE] Failed after 1m 20s
+2026-07-01T18:20:22.1719226Z ##[error]Process completed with exit code 1.

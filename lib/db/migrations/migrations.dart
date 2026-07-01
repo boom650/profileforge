@@ -211,6 +211,3 @@ Future<void> migrationSteps(Migrator m, int from, int to) async {
     await migrationV6ToV7(m, from, to);
   }
 }
-
-/// Export all migration utilities
-export 'migrations.dart';

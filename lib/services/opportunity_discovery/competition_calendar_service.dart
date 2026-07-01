@@ -75,7 +75,7 @@ class CompetitionCalendarService {
   }
 
   Future<List<Competition>> getUpcomingCompetitions({
-    int limit = 20 = 50,
+    int limit = 50,
     CompetitionCategory? category,
     CompetitionLevel? level,
     DateTime? fromDate,

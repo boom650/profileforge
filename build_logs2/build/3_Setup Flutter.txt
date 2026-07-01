@@ -1,0 +1,78 @@
+﻿2026-07-01T18:17:55.4179091Z ##[group]Run subosito/flutter-action@v2
+2026-07-01T18:17:55.4179455Z with:
+2026-07-01T18:17:55.4179664Z   flutter-version: 3.44.4
+2026-07-01T18:17:55.4179899Z   channel: stable
+2026-07-01T18:17:55.4180100Z   cache: true
+2026-07-01T18:17:55.4180295Z   architecture: X64
+2026-07-01T18:17:55.4180512Z   pub-cache-path: default
+2026-07-01T18:17:55.4180739Z   dry-run: false
+2026-07-01T18:17:55.4181016Z   git-source: https://github.com/flutter/flutter.git
+2026-07-01T18:17:55.4181579Z ##[endgroup]
+2026-07-01T18:17:55.4290769Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+2026-07-01T18:17:55.4291533Z [36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"[0m
+2026-07-01T18:17:55.4498509Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-07-01T18:17:55.4498925Z ##[endgroup]
+2026-07-01T18:17:55.4640095Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+2026-07-01T18:17:55.4640536Z [36;1m$GITHUB_ACTION_PATH/setup.sh -p \[0m
+2026-07-01T18:17:55.4640870Z [36;1m  -n '3.44.4' \[0m
+2026-07-01T18:17:55.4641102Z [36;1m  -f '' \[0m
+2026-07-01T18:17:55.4641747Z [36;1m  -a 'X64' \[0m
+2026-07-01T18:17:55.4641971Z [36;1m  -k '' \[0m
+2026-07-01T18:17:55.4642181Z [36;1m  -c '' \[0m
+2026-07-01T18:17:55.4642388Z [36;1m  -l '' \[0m
+2026-07-01T18:17:55.4642597Z [36;1m  -d 'default' \[0m
+2026-07-01T18:17:55.4642918Z [36;1m  -g 'https://github.com/flutter/flutter.git' \[0m
+2026-07-01T18:17:55.4643260Z [36;1m  stable[0m
+2026-07-01T18:17:55.4671551Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-07-01T18:17:55.4671936Z ##[endgroup]
+2026-07-01T18:17:55.7275196Z ##[group]Run actions/cache@v5
+2026-07-01T18:17:55.7275494Z with:
+2026-07-01T18:17:55.7275764Z   path: /opt/hostedtoolcache/flutter/stable-3.44.4-x64
+2026-07-01T18:17:55.7276273Z   key: flutter-linux-stable-3.44.4-x64-ad70ec4617166f1c38e5d2bfd388af71fda14f06
+2026-07-01T18:17:55.7276708Z   enableCrossOsArchive: false
+2026-07-01T18:17:55.7276962Z   fail-on-cache-miss: false
+2026-07-01T18:17:55.7277195Z   lookup-only: false
+2026-07-01T18:17:55.7277417Z   save-always: false
+2026-07-01T18:17:55.7277616Z ##[endgroup]
+2026-07-01T18:17:56.1407295Z Cache hit for: flutter-linux-stable-3.44.4-x64-ad70ec4617166f1c38e5d2bfd388af71fda14f06
+2026-07-01T18:17:57.4358535Z Received 0 of 1690018798 (0.0%), 0.0 MBs/sec
+2026-07-01T18:17:58.4422145Z Received 113246208 of 1690018798 (6.7%), 53.9 MBs/sec
+2026-07-01T18:17:59.4383238Z Received 209715200 of 1690018798 (12.4%), 66.6 MBs/sec
+2026-07-01T18:18:00.4392602Z Received 322961408 of 1690018798 (19.1%), 76.9 MBs/sec
+2026-07-01T18:18:01.4413403Z Received 436207616 of 1690018798 (25.8%), 83.1 MBs/sec
+2026-07-01T18:18:02.4492541Z Received 541065216 of 1690018798 (32.0%), 85.9 MBs/sec
+2026-07-01T18:18:03.4418241Z Received 666894336 of 1690018798 (39.5%), 90.8 MBs/sec
+2026-07-01T18:18:04.4427982Z Received 775946240 of 1690018798 (45.9%), 92.4 MBs/sec
+2026-07-01T18:18:05.4434209Z Received 868220928 of 1690018798 (51.4%), 91.9 MBs/sec
+2026-07-01T18:18:06.4445269Z Received 977272832 of 1690018798 (57.8%), 93.1 MBs/sec
+2026-07-01T18:18:07.4492954Z Received 1073741824 of 1690018798 (63.5%), 93.0 MBs/sec
+2026-07-01T18:18:08.4478399Z Received 1191182336 of 1690018798 (70.5%), 94.6 MBs/sec
+2026-07-01T18:18:09.4478488Z Received 1283457024 of 1690018798 (75.9%), 94.1 MBs/sec
+2026-07-01T18:18:10.4468970Z Received 1375731712 of 1690018798 (81.4%), 93.6 MBs/sec
+2026-07-01T18:18:11.4474694Z Received 1476395008 of 1690018798 (87.4%), 93.8 MBs/sec
+2026-07-01T18:18:12.4482809Z Received 1585446912 of 1690018798 (93.8%), 94.4 MBs/sec
+2026-07-01T18:18:13.4494937Z Received 1669332992 of 1690018798 (98.8%), 93.6 MBs/sec
+2026-07-01T18:18:13.7438999Z Received 1690018798 of 1690018798 (100.0%), 93.1 MBs/sec
+2026-07-01T18:18:13.7456376Z Cache Size: ~1612 MB (1690018798 B)
+2026-07-01T18:18:13.7642676Z [command]/usr/bin/tar -xf /home/runner/work/_temp/047bebba-8261-4cd4-8a11-e93215950bef/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
+2026-07-01T18:18:24.7716791Z Cache restored successfully
+2026-07-01T18:18:24.8540391Z Cache restored from key: flutter-linux-stable-3.44.4-x64-ad70ec4617166f1c38e5d2bfd388af71fda14f06
+2026-07-01T18:18:25.1314503Z ##[group]Run actions/cache@v5
+2026-07-01T18:18:25.1314775Z with:
+2026-07-01T18:18:25.1314986Z   path: /home/runner/.pub-cache
+2026-07-01T18:18:25.1315711Z   key: flutter-pub-linux-stable-3.44.4-x64-ad70ec4617166f1c38e5d2bfd388af71fda14f06-6376a81cc893df7f488e3e9c886eb9a49d25e2a605ee924ba7b71ec3a9260cb5
+2026-07-01T18:18:25.1316462Z   enableCrossOsArchive: false
+2026-07-01T18:18:25.1316717Z   fail-on-cache-miss: false
+2026-07-01T18:18:25.1316956Z   lookup-only: false
+2026-07-01T18:18:25.1317172Z   save-always: false
+2026-07-01T18:18:25.1317379Z ##[endgroup]
+2026-07-01T18:18:25.5502251Z Cache not found for input keys: flutter-pub-linux-stable-3.44.4-x64-ad70ec4617166f1c38e5d2bfd388af71fda14f06-6376a81cc893df7f488e3e9c886eb9a49d25e2a605ee924ba7b71ec3a9260cb5
+2026-07-01T18:18:26.3778088Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+2026-07-01T18:18:26.3778665Z [36;1m$GITHUB_ACTION_PATH/setup.sh \[0m
+2026-07-01T18:18:26.3779134Z [36;1m  -n '3.44.4' \[0m
+2026-07-01T18:18:26.3779504Z [36;1m  -a 'x64' \[0m
+2026-07-01T18:18:26.3779867Z [36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.44.4-x64' \[0m
+2026-07-01T18:18:26.3780250Z [36;1m  -d '/home/runner/.pub-cache' \[0m
+2026-07-01T18:18:26.3780524Z [36;1m  stable[0m
+2026-07-01T18:18:26.3846588Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-07-01T18:18:26.3847219Z ##[endgroup]

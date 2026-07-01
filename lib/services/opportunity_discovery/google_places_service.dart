@@ -145,7 +145,7 @@ abstract class PlaceSearchParams with _$PlaceSearchParams {
     int? maxPrice,
     bool? openNow,
     String? pageToken,
-    int maxResults,
+    @Default(60) int maxResults,
   }) = _PlaceSearchParams;
 }
 
