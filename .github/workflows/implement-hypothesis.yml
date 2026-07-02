@@ -1,0 +1,181 @@
+name: Implement Hypothesis
+
+on:
+  workflow_dispatch:
+    inputs:
+      hypothesis_id:
+        description: 'Hypothesis ID (e.g., H1, H2)'
+        required: true
+        type: string
+      hypothesis_title:
+        description: 'Hypothesis title'
+        required: true
+        type: string
+      category:
+        description: 'Category'
+        required: true
+        type: choice
+        options: ['gamification', 'ui_ux', 'core_feature', 'growth']
+
+jobs:
+  implement:
+    name: Implement Hypothesis
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Create implementation branch
+        run: |
+          BRANCH="impl/${{ github.event.inputs.hypothesis_id | lower }}-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Generate implementation plan
+        id: plan
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          
+          hypothesis_id = "${{ github.event.inputs.hypothesis_id }}"
+          hypothesis_title = "${{ github.event.inputs.hypothesis_title }}"
+          category = "${{ github.event.inputs.category }}"
+          
+          # Generate detailed implementation plan based on hypothesis
+          plans = {
+              "H1": {
+                  "title": "Duolingo-style Streak System",
+                  "files_to_modify": [
+                      "lib/models/gamification/streak.dart",
+                      "lib/db/tables/all_tables.dart (Streaks table)",
+                      "lib/services/gamification/gamification_service.dart",
+                      "lib/providers/app_providers.dart",
+                      "lib/ui/widgets/streak_ring.dart",
+                      "lib/ui/screens/home/home_screen.dart"
+                  ],
+                  "tasks": [
+                      "Add streak_freeze_count column to Streaks table",
+                      "Add weekend_amulet_active boolean",
+                      "Add streak_freeze_item to inventory",
+                      "Implement streak freeze logic in GamificationService",
+                      "Add streak freeze purchase with XP",
+                      "Update StreakRing widget with freeze indicator",
+                      "Add weekend amulet auto-activation",
+                      "Create StreakFreeze widget for shop",
+                      "Add streak calendar heatmap visualization",
+                      "Write unit tests for streak logic"
+                  ],
+                  "tests": [
+                      "test_streak_freeze_purchase.dart",
+                      "test_streak_freeze_activation.dart",
+                      "test_weekend_amulet.dart",
+                      "test_streak_calendar.dart"
+                  ]
+              },
+              "H2": {
+                  "title": "Skin-based Visual Rewards System",
+                  "files_to_modify": [
+                      "lib/models/gamification/skins.dart",
+                      "lib/db/tables/all_tables.dart (Skins, SkinCollections tables)",
+                      "lib/services/gamification/gamification_service.dart",
+                      "lib/providers/app_providers.dart",
+                      "lib/ui/screens/skins/skins_screen.dart",
+                      "lib/ui/widgets/skin_card.dart",
+                      "lib/ui/screens/profile/profile_screen.dart"
+                  ],
+                  "tasks": [
+                      "Define 9 skin tiers with XP requirements",
+                      "Create SkinConfig with particle effects, colors, frames",
+                      "Implement skin unlock logic in GamificationService",
+                      "Build skins collection screen with animations",
+                      "Add skin preview with particle system",
+                      "Implement equipped skin visual application",
+                      "Add skin rarity glow effects",
+                      "Create trailblazer legendary skin with full theme",
+                      "Write integration tests"
+                  ],
+                  "tests": [
+                      "test_skin_unlock_criteria.dart",
+                      "test_skin_visual_application.dart",
+                      "test_particle_system.dart"
+                  ]
+              },
+              "H3": {
+                  "title": "Weekly Mission Leagues",
+                  "files_to_modify": [
+                      "lib/models/gamification/missions.dart",
+                      "lib/db/tables/all_tables.dart (Missions, MissionProgresses)",
+                      "lib/services/gamification/gamification_service.dart",
+                      "lib/providers/app_providers.dart",
+                      "lib/ui/screens/missions/missions_screen.dart",
+                      "lib/ui/screens/leaderboard/leaderboard_screen.dart"
+                  ],
+                  "tasks": [
+                      "Add league column to MissionProgresses (Bronze..Diamond)",
+                      "Implement weekly XP calculation",
+                      "Create league promotion/demotion logic",
+                      "Build league leaderboard screen",
+                      "Add league-exclusive skin rewards",
+                      "Implement weekly reset logic",
+                      "Add league badge to profile",
+                      "Create league animation/transition",
+                      "Write tests for league mechanics"
+                  ],
+                  "tests": [
+                      "test_league_calculation.dart",
+                      "test_promotion_demotion.dart",
+                      "test_weekly_reset.dart"
+                  ]
+              }
+          }
+          
+          plan = plans.get(hypothesis_id, {
+              "title": hypothesis_title,
+              "files_to_modify": [],
+              "tasks": ["Analyze requirements", "Design implementation", "Write code", "Test", "Document"],
+              "tests": []
+          })
+          
+          # Save plan
+          os.makedirs("implementation_plan", exist_ok=True)
+          with open(f"implementation_plan/{hypothesis_id}_plan.json", "w") as f:
+              json.dump({
+                  "hypothesis_id": hypothesis_id,
+                  "title": hypothesis_title,
+                  "category": category,
+                  **plan
+              }, f, indent=2)
+          
+          print(f"Plan generated for {hypothesis_id}: {plan['title']}")
+          print(f"Files to modify: {len(plan['files_to_modify'])}")
+          print(f"Tasks: {len(plan['tasks'])}")
+          for i, task in enumerate(plan['tasks'], 1):
+              print(f"  {i}. {task}")
+
+      - name: Upload implementation plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: implementation-plan-${{ github.event.inputs.hypothesis_id }}
+          path: implementation_plan/
+          retention-days: 30
+
+      - name: Dispatch coding agent
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // This would trigger a coding agent (Claude Code, Codex, etc.)
+            // to implement the hypothesis based on the plan
+            console.log('Implementation plan ready for coding agent');
+            console.log('Files to modify:', JSON.parse(require('fs').readFileSync('implementation_plan/${{ github.event.inputs.hypothesis_id }}_plan.json', 'utf8')).files_to_modify);

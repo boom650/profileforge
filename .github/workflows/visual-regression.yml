@@ -1,0 +1,106 @@
+name: Visual Regression & UI Testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_branch:
+        description: 'Baseline branch for comparison'
+        required: false
+        default: 'main'
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'full'
+        type: choice
+        options: ['critical', 'full', 'onboarding', 'gamification', 'admissions']
+
+jobs:
+  visual_regression:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install -g playwright
+          npx playwright install --with-deps chromium firefox webkit
+
+      - name: Build Flutter Web
+        run: |
+          flutter config --enable-web
+          flutter pub get
+          dart run build_runner build --delete-conflicting-outputs
+          flutter build web --release --web-renderer canvaskit
+
+      - name: Start Preview Server
+        run: |
+          cd build/web
+          python3 -m http.server 8080 &
+          sleep 3
+          curl -f http://localhost:8080 || exit 1
+
+      - name: Run Visual Regression Tests
+        run: python3 .github/scripts/visual_tests.py
+
+      - name: Upload visual test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: |
+            visual_tests/
+            visual_test_results.json
+          retention-days: 30
+
+      - name: Compare with baseline (if exists)
+        if: github.event.inputs.baseline_branch != 'main'
+        run: |
+          echo "Baseline comparison would run here using pixelmatch or similar"
+
+  accessibility_audit:
+    name: Accessibility Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter & Build Web
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+        run: |
+          flutter config --enable-web
+          flutter pub get
+          dart run build_runner build --delete-conflicting-outputs
+          flutter build web --release --web-renderer canvaskit
+
+      - name: Run axe-core accessibility tests
+        run: |
+          npm install -g @axe-core/cli
+          npx axe http://localhost:8080 --save --dir a11y_results
+        env:
+          CI: true
+
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-audit
+          path: a11y_results/
+          retention-days: 30
