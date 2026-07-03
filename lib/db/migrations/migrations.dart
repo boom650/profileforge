@@ -11,26 +11,26 @@ Future<void> migrationV1ToV2(Migrator m, int from, int to) async {
   await m.createTable(notifications);
   
   // Add indexes for better query performance
-  await m.createIndex('idx_student_profiles_email', studentProfiles, columns: [studentProfiles.email]);
-  await m.createIndex('idx_activities_student_id', activities, columns: [activities.studentId]);
-  await m.createIndex('idx_mission_progresses_student_id', missionProgresses, columns: [missionProgresses.studentId]);
-  await m.createIndex('idx_opportunity_applications_student_id', opportunityApplications, columns: [opportunityApplications.studentId]);
-  await m.createIndex('idx_skin_collections_student_id', skinCollections, columns: [skinCollections.studentId]);
-  await m.createIndex('idx_streaks_student_id', streaks, columns: [streaks.studentId]);
-  await m.createIndex('idx_evidence_student_id', evidence, columns: [evidence.studentId]);
-  await m.createIndex('idx_admissions_probabilities_student_id', admissionsProbabilities, columns: [admissionsProbabilities.studentId]);
-  await m.createIndex('idx_notifications_student_id', notifications, columns: [notifications.studentId]);
+  await m.createIndex(Index.byDialect('idx_student_profiles_email', {SqlDialect.sqlite: 'CREATE INDEX idx_student_profiles_email ON student_profiles (email)'}));
+  await m.createIndex(Index.byDialect('idx_activities_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_activities_student_id ON activities (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_mission_progresses_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_mission_progresses_student_id ON mission_progresses (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_opportunity_applications_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_opportunity_applications_student_id ON opportunity_applications (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_skin_collections_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_skin_collections_student_id ON skin_collections (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_streaks_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_streaks_student_id ON streaks (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_evidence_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_evidence_student_id ON evidence (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_admissions_probabilities_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_admissions_probabilities_student_id ON admissions_probabilities (studentId)'}));
+  await m.createIndex(Index.byDialect('idx_notifications_student_id', {SqlDialect.sqlite: 'CREATE INDEX idx_notifications_student_id ON notifications (studentId)'}));
   
   // Add composite indexes for common queries
-  await m.createIndex('idx_mission_progresses_student_mission', missionProgresses, columns: [missionProgresses.studentId, missionProgresses.missionId]);
-  await m.createIndex('idx_skin_collections_student_skin', skinCollections, columns: [skinCollections.studentId, skinCollections.skinId]);
-  await m.createIndex('idx_opportunity_applications_student_opportunity', opportunityApplications, columns: [opportunityApplications.studentId, opportunityApplications.opportunityId]);
+  await m.createIndex(Index.byDialect('idx_mission_progresses_student_mission', {SqlDialect.sqlite: 'CREATE INDEX idx_mission_progresses_student_mission ON mission_progresses (studentId, missionId)'}));
+  await m.createIndex(Index.byDialect('idx_skin_collections_student_skin', {SqlDialect.sqlite: 'CREATE INDEX idx_skin_collections_student_skin ON skin_collections (studentId, skinId)'}));
+  await m.createIndex(Index.byDialect('idx_opportunity_applications_student_opportunity', {SqlDialect.sqlite: 'CREATE INDEX idx_opportunity_applications_student_opportunity ON opportunity_applications (studentId, opportunityId)'}));
   
   // Add indexes for filtering
-  await m.createIndex('idx_opportunities_deadline', opportunities, columns: [opportunities.applicationDeadline]);
-  await m.createIndex('idx_opportunities_category_active', opportunities, columns: [opportunities.category, opportunities.isActive]);
-  await m.createIndex('idx_admissions_probabilities_category', admissionsProbabilities, columns: [admissionsProbabilities.category]);
-  await m.createIndex('idx_activities_category_tier', activities, columns: [activities.category, activities.tier]);
+  await m.createIndex(Index.byDialect('idx_opportunities_deadline', {SqlDialect.sqlite: 'CREATE INDEX idx_opportunities_deadline ON opportunities (applicationDeadline)'}));
+  await m.createIndex(Index.byDialect('idx_opportunities_category_active', {SqlDialect.sqlite: 'CREATE INDEX idx_opportunities_category_active ON opportunities (category, isActive)'}));
+  await m.createIndex(Index.byDialect('idx_admissions_probabilities_category', {SqlDialect.sqlite: 'CREATE INDEX idx_admissions_probabilities_category ON admissions_probabilities (category)'}));
+  await m.createIndex(Index.byDialect('idx_activities_category_tier', {SqlDialect.sqlite: 'CREATE INDEX idx_activities_category_tier ON activities (category, tier)'}));
 }
 
 /// Migration from v2 to v3 - Add streak milestones and activity verification fields
@@ -50,7 +50,7 @@ Future<void> migrationV2ToV3(Migrator m, int from, int to) async {
 }
 
 Future<void> _createUpdatedAtTriggers(Migrator m) async {
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_student_profiles_timestamp
     AFTER UPDATE ON student_profiles
     BEGIN
@@ -58,7 +58,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_activities_timestamp
     AFTER UPDATE ON activities
     BEGIN
@@ -66,7 +66,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_opportunities_timestamp
     AFTER UPDATE ON opportunities
     BEGIN
@@ -74,7 +74,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_skins_timestamp
     AFTER UPDATE ON skins
     BEGIN
@@ -82,7 +82,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_streaks_timestamp
     AFTER UPDATE ON streaks
     BEGIN
@@ -90,7 +90,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_evidence_timestamp
     AFTER UPDATE ON evidence
     BEGIN
@@ -98,7 +98,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_admissions_probabilities_timestamp
     AFTER UPDATE ON admissions_probabilities
     BEGIN
@@ -106,7 +106,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_mission_progresses_timestamp
     AFTER UPDATE ON mission_progresses
     BEGIN
@@ -114,7 +114,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_opportunity_applications_timestamp
     AFTER UPDATE ON opportunity_applications
     BEGIN
@@ -122,7 +122,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_skin_collections_timestamp
     AFTER UPDATE ON skin_collections
     BEGIN
@@ -130,7 +130,7 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
     END;
   ''');
   
-  await m.runCustomStatement('''
+  await m.database.customStatement('''
     CREATE TRIGGER IF NOT EXISTS update_notifications_timestamp
     AFTER UPDATE ON notifications
     BEGIN
@@ -174,18 +174,6 @@ final List<MigrationStrategy> migrationStrategies = [
     onCreate: (Migrator m) async {
       await m.createAll();
       await _createUpdatedAtTriggers(m);
-    },
-    beforeOpen: (details) async {
-      await details.connection.execute('PRAGMA foreign_keys = ON');
-      await details.connection.execute('PRAGMA journal_mode = WAL');
-      await details.connection.execute('PRAGMA synchronous = NORMAL');
-      await details.connection.execute('PRAGMA cache_size = -32768'); // 32MB
-      await details.connection.execute('PRAGMA temp_store = MEMORY');
-    },
-  ),
-  MigrationStrategy(
-    beforeOpen: (details) async {
-      await details.connection.execute('PRAGMA foreign_keys = ON');
     },
   ),
 ];

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../models/student_profile.dart';
 import '../tables/all_tables.dart';
 
 class StringListConverter extends TypeConverter<List<String>, String> {

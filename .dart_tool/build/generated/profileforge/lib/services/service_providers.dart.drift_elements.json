@@ -1,1 +1,1 @@
-{"valid_import":false,"imports":[],"elements":[]}
+{"valid_import":true,"imports":[{"uri":"package:flutter_riverpod/flutter_riverpod.dart","transitive":false},{"uri":"package:riverpod_annotation/riverpod_annotation.dart","transitive":false},{"uri":"package:latlong2/latlong.dart","transitive":false},{"uri":"package:profileforge/services/opportunity_discovery.dart","transitive":false}],"elements":[]}

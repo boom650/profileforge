@@ -382,7 +382,7 @@ class _$XPTransactionCopyWithImpl<$Res, $Val extends XPTransaction>
   $Res call({
     Object? id = null,
     Object? amount = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? type = null,
     Object? source = null,
     Object? description = null,
@@ -398,7 +398,7 @@ class _$XPTransactionCopyWithImpl<$Res, $Val extends XPTransaction>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -458,7 +458,7 @@ class __$$XPTransactionImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? amount = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? type = null,
     Object? source = null,
     Object? description = null,
@@ -474,7 +474,7 @@ class __$$XPTransactionImplCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -555,7 +555,7 @@ class _$XPTransactionImpl implements _XPTransaction {
             other is _$XPTransactionImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            const DeepCollectionEquality().equals(other.pillar, pillar) &&
+            (identical(other.pillar, pillar) || other.pillar == pillar) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.source, source) || other.source == source) &&
             (identical(other.description, description) ||
@@ -567,16 +567,8 @@ class _$XPTransactionImpl implements _XPTransaction {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      amount,
-      const DeepCollectionEquality().hash(pillar),
-      type,
-      source,
-      description,
-      timestamp,
-      const DeepCollectionEquality().hash(_metadata));
+  int get hashCode => Object.hash(runtimeType, id, amount, pillar, type, source,
+      description, timestamp, const DeepCollectionEquality().hash(_metadata));
 
   @JsonKey(ignore: true)
   @override
@@ -682,7 +674,7 @@ class _$XPSourceCopyWithImpl<$Res, $Val extends XPSource>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? baseXP = null,
     Object? description = null,
     Object? isRepeatable = null,
@@ -699,7 +691,7 @@ class _$XPSourceCopyWithImpl<$Res, $Val extends XPSource>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -764,7 +756,7 @@ class __$$XPSourceImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? baseXP = null,
     Object? description = null,
     Object? isRepeatable = null,
@@ -781,7 +773,7 @@ class __$$XPSourceImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -867,7 +859,7 @@ class _$XPSourceImpl implements _XPSource {
             other is _$XPSourceImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other.pillar, pillar) &&
+            (identical(other.pillar, pillar) || other.pillar == pillar) &&
             (identical(other.baseXP, baseXP) || other.baseXP == baseXP) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -887,7 +879,7 @@ class _$XPSourceImpl implements _XPSource {
       runtimeType,
       id,
       name,
-      const DeepCollectionEquality().hash(pillar),
+      pillar,
       baseXP,
       description,
       isRepeatable,
@@ -1255,7 +1247,7 @@ class _$XPActivityCopyWithImpl<$Res, $Val extends XPActivity>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? baseXP = null,
     Object? description = null,
     Object? type = null,
@@ -1276,7 +1268,7 @@ class _$XPActivityCopyWithImpl<$Res, $Val extends XPActivity>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -1361,7 +1353,7 @@ class __$$XPActivityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? baseXP = null,
     Object? description = null,
     Object? type = null,
@@ -1382,7 +1374,7 @@ class __$$XPActivityImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -1490,7 +1482,7 @@ class _$XPActivityImpl implements _XPActivity {
             other is _$XPActivityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other.pillar, pillar) &&
+            (identical(other.pillar, pillar) || other.pillar == pillar) &&
             (identical(other.baseXP, baseXP) || other.baseXP == baseXP) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -1517,7 +1509,7 @@ class _$XPActivityImpl implements _XPActivity {
       runtimeType,
       id,
       name,
-      const DeepCollectionEquality().hash(pillar),
+      pillar,
       baseXP,
       description,
       type,

@@ -14,2572 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-/// @nodoc
-mixin _$MissionType {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $MissionTypeCopyWith<$Res> {
-  factory $MissionTypeCopyWith(
-          MissionType value, $Res Function(MissionType) then) =
-      _$MissionTypeCopyWithImpl<$Res, MissionType>;
-}
-
-/// @nodoc
-class _$MissionTypeCopyWithImpl<$Res, $Val extends MissionType>
-    implements $MissionTypeCopyWith<$Res> {
-  _$MissionTypeCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-}
-
-/// @nodoc
-abstract class _$$DailyImplCopyWith<$Res> {
-  factory _$$DailyImplCopyWith(
-          _$DailyImpl value, $Res Function(_$DailyImpl) then) =
-      __$$DailyImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$DailyImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$DailyImpl>
-    implements _$$DailyImplCopyWith<$Res> {
-  __$$DailyImplCopyWithImpl(
-      _$DailyImpl _value, $Res Function(_$DailyImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$DailyImpl implements _Daily {
-  const _$DailyImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.daily()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$DailyImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return daily();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return daily?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (daily != null) {
-      return daily();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return daily(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return daily?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (daily != null) {
-      return daily(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Daily implements MissionType {
-  const factory _Daily() = _$DailyImpl;
-}
-
-/// @nodoc
-abstract class _$$WeeklyImplCopyWith<$Res> {
-  factory _$$WeeklyImplCopyWith(
-          _$WeeklyImpl value, $Res Function(_$WeeklyImpl) then) =
-      __$$WeeklyImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$WeeklyImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$WeeklyImpl>
-    implements _$$WeeklyImplCopyWith<$Res> {
-  __$$WeeklyImplCopyWithImpl(
-      _$WeeklyImpl _value, $Res Function(_$WeeklyImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$WeeklyImpl implements _Weekly {
-  const _$WeeklyImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.weekly()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$WeeklyImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return weekly();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return weekly?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (weekly != null) {
-      return weekly();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return weekly(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return weekly?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (weekly != null) {
-      return weekly(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Weekly implements MissionType {
-  const factory _Weekly() = _$WeeklyImpl;
-}
-
-/// @nodoc
-abstract class _$$MilestoneImplCopyWith<$Res> {
-  factory _$$MilestoneImplCopyWith(
-          _$MilestoneImpl value, $Res Function(_$MilestoneImpl) then) =
-      __$$MilestoneImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$MilestoneImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$MilestoneImpl>
-    implements _$$MilestoneImplCopyWith<$Res> {
-  __$$MilestoneImplCopyWithImpl(
-      _$MilestoneImpl _value, $Res Function(_$MilestoneImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$MilestoneImpl implements _Milestone {
-  const _$MilestoneImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.milestone()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MilestoneImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return milestone();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return milestone?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (milestone != null) {
-      return milestone();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return milestone(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return milestone?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (milestone != null) {
-      return milestone(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Milestone implements MissionType {
-  const factory _Milestone() = _$MilestoneImpl;
-}
-
-/// @nodoc
-abstract class _$$InSchoolImplCopyWith<$Res> {
-  factory _$$InSchoolImplCopyWith(
-          _$InSchoolImpl value, $Res Function(_$InSchoolImpl) then) =
-      __$$InSchoolImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InSchoolImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$InSchoolImpl>
-    implements _$$InSchoolImplCopyWith<$Res> {
-  __$$InSchoolImplCopyWithImpl(
-      _$InSchoolImpl _value, $Res Function(_$InSchoolImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$InSchoolImpl implements _InSchool {
-  const _$InSchoolImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.inSchool()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InSchoolImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return inSchool();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return inSchool?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (inSchool != null) {
-      return inSchool();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return inSchool(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return inSchool?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (inSchool != null) {
-      return inSchool(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _InSchool implements MissionType {
-  const factory _InSchool() = _$InSchoolImpl;
-}
-
-/// @nodoc
-abstract class _$$ResearchImplCopyWith<$Res> {
-  factory _$$ResearchImplCopyWith(
-          _$ResearchImpl value, $Res Function(_$ResearchImpl) then) =
-      __$$ResearchImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ResearchImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$ResearchImpl>
-    implements _$$ResearchImplCopyWith<$Res> {
-  __$$ResearchImplCopyWithImpl(
-      _$ResearchImpl _value, $Res Function(_$ResearchImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ResearchImpl implements _Research {
-  const _$ResearchImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.research()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ResearchImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return research();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return research?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (research != null) {
-      return research();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return research(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return research?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (research != null) {
-      return research(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Research implements MissionType {
-  const factory _Research() = _$ResearchImpl;
-}
-
-/// @nodoc
-abstract class _$$LeadershipImplCopyWith<$Res> {
-  factory _$$LeadershipImplCopyWith(
-          _$LeadershipImpl value, $Res Function(_$LeadershipImpl) then) =
-      __$$LeadershipImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LeadershipImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$LeadershipImpl>
-    implements _$$LeadershipImplCopyWith<$Res> {
-  __$$LeadershipImplCopyWithImpl(
-      _$LeadershipImpl _value, $Res Function(_$LeadershipImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$LeadershipImpl implements _Leadership {
-  const _$LeadershipImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.leadership()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LeadershipImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return leadership();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return leadership?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (leadership != null) {
-      return leadership();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return leadership(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return leadership?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (leadership != null) {
-      return leadership(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Leadership implements MissionType {
-  const factory _Leadership() = _$LeadershipImpl;
-}
-
-/// @nodoc
-abstract class _$$VolunteeringImplCopyWith<$Res> {
-  factory _$$VolunteeringImplCopyWith(
-          _$VolunteeringImpl value, $Res Function(_$VolunteeringImpl) then) =
-      __$$VolunteeringImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$VolunteeringImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$VolunteeringImpl>
-    implements _$$VolunteeringImplCopyWith<$Res> {
-  __$$VolunteeringImplCopyWithImpl(
-      _$VolunteeringImpl _value, $Res Function(_$VolunteeringImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$VolunteeringImpl implements _Volunteering {
-  const _$VolunteeringImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.volunteering()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$VolunteeringImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return volunteering();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return volunteering?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (volunteering != null) {
-      return volunteering();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return volunteering(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return volunteering?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (volunteering != null) {
-      return volunteering(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Volunteering implements MissionType {
-  const factory _Volunteering() = _$VolunteeringImpl;
-}
-
-/// @nodoc
-abstract class _$$SpecialImplCopyWith<$Res> {
-  factory _$$SpecialImplCopyWith(
-          _$SpecialImpl value, $Res Function(_$SpecialImpl) then) =
-      __$$SpecialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$SpecialImplCopyWithImpl<$Res>
-    extends _$MissionTypeCopyWithImpl<$Res, _$SpecialImpl>
-    implements _$$SpecialImplCopyWith<$Res> {
-  __$$SpecialImplCopyWithImpl(
-      _$SpecialImpl _value, $Res Function(_$SpecialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$SpecialImpl implements _Special {
-  const _$SpecialImpl();
-
-  @override
-  String toString() {
-    return 'MissionType.special()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SpecialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() daily,
-    required TResult Function() weekly,
-    required TResult Function() milestone,
-    required TResult Function() inSchool,
-    required TResult Function() research,
-    required TResult Function() leadership,
-    required TResult Function() volunteering,
-    required TResult Function() special,
-  }) {
-    return special();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? daily,
-    TResult? Function()? weekly,
-    TResult? Function()? milestone,
-    TResult? Function()? inSchool,
-    TResult? Function()? research,
-    TResult? Function()? leadership,
-    TResult? Function()? volunteering,
-    TResult? Function()? special,
-  }) {
-    return special?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? daily,
-    TResult Function()? weekly,
-    TResult Function()? milestone,
-    TResult Function()? inSchool,
-    TResult Function()? research,
-    TResult Function()? leadership,
-    TResult Function()? volunteering,
-    TResult Function()? special,
-    required TResult orElse(),
-  }) {
-    if (special != null) {
-      return special();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Daily value) daily,
-    required TResult Function(_Weekly value) weekly,
-    required TResult Function(_Milestone value) milestone,
-    required TResult Function(_InSchool value) inSchool,
-    required TResult Function(_Research value) research,
-    required TResult Function(_Leadership value) leadership,
-    required TResult Function(_Volunteering value) volunteering,
-    required TResult Function(_Special value) special,
-  }) {
-    return special(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Daily value)? daily,
-    TResult? Function(_Weekly value)? weekly,
-    TResult? Function(_Milestone value)? milestone,
-    TResult? Function(_InSchool value)? inSchool,
-    TResult? Function(_Research value)? research,
-    TResult? Function(_Leadership value)? leadership,
-    TResult? Function(_Volunteering value)? volunteering,
-    TResult? Function(_Special value)? special,
-  }) {
-    return special?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Daily value)? daily,
-    TResult Function(_Weekly value)? weekly,
-    TResult Function(_Milestone value)? milestone,
-    TResult Function(_InSchool value)? inSchool,
-    TResult Function(_Research value)? research,
-    TResult Function(_Leadership value)? leadership,
-    TResult Function(_Volunteering value)? volunteering,
-    TResult Function(_Special value)? special,
-    required TResult orElse(),
-  }) {
-    if (special != null) {
-      return special(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Special implements MissionType {
-  const factory _Special() = _$SpecialImpl;
-}
-
-/// @nodoc
-mixin _$MissionCategory {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $MissionCategoryCopyWith<$Res> {
-  factory $MissionCategoryCopyWith(
-          MissionCategory value, $Res Function(MissionCategory) then) =
-      _$MissionCategoryCopyWithImpl<$Res, MissionCategory>;
-}
-
-/// @nodoc
-class _$MissionCategoryCopyWithImpl<$Res, $Val extends MissionCategory>
-    implements $MissionCategoryCopyWith<$Res> {
-  _$MissionCategoryCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-}
-
-/// @nodoc
-abstract class _$$AcademicsImplCopyWith<$Res> {
-  factory _$$AcademicsImplCopyWith(
-          _$AcademicsImpl value, $Res Function(_$AcademicsImpl) then) =
-      __$$AcademicsImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$AcademicsImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$AcademicsImpl>
-    implements _$$AcademicsImplCopyWith<$Res> {
-  __$$AcademicsImplCopyWithImpl(
-      _$AcademicsImpl _value, $Res Function(_$AcademicsImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$AcademicsImpl implements _Academics {
-  const _$AcademicsImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.academics()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AcademicsImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return academics();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return academics?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (academics != null) {
-      return academics();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return academics(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return academics?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (academics != null) {
-      return academics(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Academics implements MissionCategory {
-  const factory _Academics() = _$AcademicsImpl;
-}
-
-/// @nodoc
-abstract class _$$ActivitiesImplCopyWith<$Res> {
-  factory _$$ActivitiesImplCopyWith(
-          _$ActivitiesImpl value, $Res Function(_$ActivitiesImpl) then) =
-      __$$ActivitiesImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ActivitiesImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$ActivitiesImpl>
-    implements _$$ActivitiesImplCopyWith<$Res> {
-  __$$ActivitiesImplCopyWithImpl(
-      _$ActivitiesImpl _value, $Res Function(_$ActivitiesImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ActivitiesImpl implements _Activities {
-  const _$ActivitiesImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.activities()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ActivitiesImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return activities();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return activities?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (activities != null) {
-      return activities();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return activities(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return activities?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (activities != null) {
-      return activities(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Activities implements MissionCategory {
-  const factory _Activities() = _$ActivitiesImpl;
-}
-
-/// @nodoc
-abstract class _$$ProfileImplCopyWith<$Res> {
-  factory _$$ProfileImplCopyWith(
-          _$ProfileImpl value, $Res Function(_$ProfileImpl) then) =
-      __$$ProfileImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ProfileImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$ProfileImpl>
-    implements _$$ProfileImplCopyWith<$Res> {
-  __$$ProfileImplCopyWithImpl(
-      _$ProfileImpl _value, $Res Function(_$ProfileImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ProfileImpl implements _Profile {
-  const _$ProfileImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.profile()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ProfileImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return profile();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return profile?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (profile != null) {
-      return profile();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return profile(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return profile?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (profile != null) {
-      return profile(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Profile implements MissionCategory {
-  const factory _Profile() = _$ProfileImpl;
-}
-
-/// @nodoc
-abstract class _$$WellbeingImplCopyWith<$Res> {
-  factory _$$WellbeingImplCopyWith(
-          _$WellbeingImpl value, $Res Function(_$WellbeingImpl) then) =
-      __$$WellbeingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$WellbeingImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$WellbeingImpl>
-    implements _$$WellbeingImplCopyWith<$Res> {
-  __$$WellbeingImplCopyWithImpl(
-      _$WellbeingImpl _value, $Res Function(_$WellbeingImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$WellbeingImpl implements _Wellbeing {
-  const _$WellbeingImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.wellbeing()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$WellbeingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return wellbeing();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return wellbeing?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (wellbeing != null) {
-      return wellbeing();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return wellbeing(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return wellbeing?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (wellbeing != null) {
-      return wellbeing(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Wellbeing implements MissionCategory {
-  const factory _Wellbeing() = _$WellbeingImpl;
-}
-
-/// @nodoc
-abstract class _$$ExplorationImplCopyWith<$Res> {
-  factory _$$ExplorationImplCopyWith(
-          _$ExplorationImpl value, $Res Function(_$ExplorationImpl) then) =
-      __$$ExplorationImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ExplorationImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$ExplorationImpl>
-    implements _$$ExplorationImplCopyWith<$Res> {
-  __$$ExplorationImplCopyWithImpl(
-      _$ExplorationImpl _value, $Res Function(_$ExplorationImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ExplorationImpl implements _Exploration {
-  const _$ExplorationImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.exploration()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ExplorationImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return exploration();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return exploration?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (exploration != null) {
-      return exploration();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return exploration(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return exploration?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (exploration != null) {
-      return exploration(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Exploration implements MissionCategory {
-  const factory _Exploration() = _$ExplorationImpl;
-}
-
-/// @nodoc
-abstract class _$$SocialImplCopyWith<$Res> {
-  factory _$$SocialImplCopyWith(
-          _$SocialImpl value, $Res Function(_$SocialImpl) then) =
-      __$$SocialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$SocialImplCopyWithImpl<$Res>
-    extends _$MissionCategoryCopyWithImpl<$Res, _$SocialImpl>
-    implements _$$SocialImplCopyWith<$Res> {
-  __$$SocialImplCopyWithImpl(
-      _$SocialImpl _value, $Res Function(_$SocialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$SocialImpl implements _Social {
-  const _$SocialImpl();
-
-  @override
-  String toString() {
-    return 'MissionCategory.social()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SocialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() academics,
-    required TResult Function() activities,
-    required TResult Function() profile,
-    required TResult Function() wellbeing,
-    required TResult Function() exploration,
-    required TResult Function() social,
-  }) {
-    return social();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? academics,
-    TResult? Function()? activities,
-    TResult? Function()? profile,
-    TResult? Function()? wellbeing,
-    TResult? Function()? exploration,
-    TResult? Function()? social,
-  }) {
-    return social?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? academics,
-    TResult Function()? activities,
-    TResult Function()? profile,
-    TResult Function()? wellbeing,
-    TResult Function()? exploration,
-    TResult Function()? social,
-    required TResult orElse(),
-  }) {
-    if (social != null) {
-      return social();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Academics value) academics,
-    required TResult Function(_Activities value) activities,
-    required TResult Function(_Profile value) profile,
-    required TResult Function(_Wellbeing value) wellbeing,
-    required TResult Function(_Exploration value) exploration,
-    required TResult Function(_Social value) social,
-  }) {
-    return social(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Academics value)? academics,
-    TResult? Function(_Activities value)? activities,
-    TResult? Function(_Profile value)? profile,
-    TResult? Function(_Wellbeing value)? wellbeing,
-    TResult? Function(_Exploration value)? exploration,
-    TResult? Function(_Social value)? social,
-  }) {
-    return social?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Academics value)? academics,
-    TResult Function(_Activities value)? activities,
-    TResult Function(_Profile value)? profile,
-    TResult Function(_Wellbeing value)? wellbeing,
-    TResult Function(_Exploration value)? exploration,
-    TResult Function(_Social value)? social,
-    required TResult orElse(),
-  }) {
-    if (social != null) {
-      return social(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Social implements MissionCategory {
-  const factory _Social() = _$SocialImpl;
-}
-
-/// @nodoc
-mixin _$MissionDifficulty {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() easy,
-    required TResult Function() medium,
-    required TResult Function() hard,
-    required TResult Function() expert,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? easy,
-    TResult? Function()? medium,
-    TResult? Function()? hard,
-    TResult? Function()? expert,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? easy,
-    TResult Function()? medium,
-    TResult Function()? hard,
-    TResult Function()? expert,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Easy value) easy,
-    required TResult Function(_Medium value) medium,
-    required TResult Function(_Hard value) hard,
-    required TResult Function(_Expert value) expert,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Easy value)? easy,
-    TResult? Function(_Medium value)? medium,
-    TResult? Function(_Hard value)? hard,
-    TResult? Function(_Expert value)? expert,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Easy value)? easy,
-    TResult Function(_Medium value)? medium,
-    TResult Function(_Hard value)? hard,
-    TResult Function(_Expert value)? expert,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $MissionDifficultyCopyWith<$Res> {
-  factory $MissionDifficultyCopyWith(
-          MissionDifficulty value, $Res Function(MissionDifficulty) then) =
-      _$MissionDifficultyCopyWithImpl<$Res, MissionDifficulty>;
-}
-
-/// @nodoc
-class _$MissionDifficultyCopyWithImpl<$Res, $Val extends MissionDifficulty>
-    implements $MissionDifficultyCopyWith<$Res> {
-  _$MissionDifficultyCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-}
-
-/// @nodoc
-abstract class _$$EasyImplCopyWith<$Res> {
-  factory _$$EasyImplCopyWith(
-          _$EasyImpl value, $Res Function(_$EasyImpl) then) =
-      __$$EasyImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$EasyImplCopyWithImpl<$Res>
-    extends _$MissionDifficultyCopyWithImpl<$Res, _$EasyImpl>
-    implements _$$EasyImplCopyWith<$Res> {
-  __$$EasyImplCopyWithImpl(_$EasyImpl _value, $Res Function(_$EasyImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$EasyImpl implements _Easy {
-  const _$EasyImpl();
-
-  @override
-  String toString() {
-    return 'MissionDifficulty.easy()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$EasyImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() easy,
-    required TResult Function() medium,
-    required TResult Function() hard,
-    required TResult Function() expert,
-  }) {
-    return easy();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? easy,
-    TResult? Function()? medium,
-    TResult? Function()? hard,
-    TResult? Function()? expert,
-  }) {
-    return easy?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? easy,
-    TResult Function()? medium,
-    TResult Function()? hard,
-    TResult Function()? expert,
-    required TResult orElse(),
-  }) {
-    if (easy != null) {
-      return easy();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Easy value) easy,
-    required TResult Function(_Medium value) medium,
-    required TResult Function(_Hard value) hard,
-    required TResult Function(_Expert value) expert,
-  }) {
-    return easy(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Easy value)? easy,
-    TResult? Function(_Medium value)? medium,
-    TResult? Function(_Hard value)? hard,
-    TResult? Function(_Expert value)? expert,
-  }) {
-    return easy?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Easy value)? easy,
-    TResult Function(_Medium value)? medium,
-    TResult Function(_Hard value)? hard,
-    TResult Function(_Expert value)? expert,
-    required TResult orElse(),
-  }) {
-    if (easy != null) {
-      return easy(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Easy implements MissionDifficulty {
-  const factory _Easy() = _$EasyImpl;
-}
-
-/// @nodoc
-abstract class _$$MediumImplCopyWith<$Res> {
-  factory _$$MediumImplCopyWith(
-          _$MediumImpl value, $Res Function(_$MediumImpl) then) =
-      __$$MediumImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$MediumImplCopyWithImpl<$Res>
-    extends _$MissionDifficultyCopyWithImpl<$Res, _$MediumImpl>
-    implements _$$MediumImplCopyWith<$Res> {
-  __$$MediumImplCopyWithImpl(
-      _$MediumImpl _value, $Res Function(_$MediumImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$MediumImpl implements _Medium {
-  const _$MediumImpl();
-
-  @override
-  String toString() {
-    return 'MissionDifficulty.medium()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MediumImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() easy,
-    required TResult Function() medium,
-    required TResult Function() hard,
-    required TResult Function() expert,
-  }) {
-    return medium();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? easy,
-    TResult? Function()? medium,
-    TResult? Function()? hard,
-    TResult? Function()? expert,
-  }) {
-    return medium?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? easy,
-    TResult Function()? medium,
-    TResult Function()? hard,
-    TResult Function()? expert,
-    required TResult orElse(),
-  }) {
-    if (medium != null) {
-      return medium();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Easy value) easy,
-    required TResult Function(_Medium value) medium,
-    required TResult Function(_Hard value) hard,
-    required TResult Function(_Expert value) expert,
-  }) {
-    return medium(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Easy value)? easy,
-    TResult? Function(_Medium value)? medium,
-    TResult? Function(_Hard value)? hard,
-    TResult? Function(_Expert value)? expert,
-  }) {
-    return medium?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Easy value)? easy,
-    TResult Function(_Medium value)? medium,
-    TResult Function(_Hard value)? hard,
-    TResult Function(_Expert value)? expert,
-    required TResult orElse(),
-  }) {
-    if (medium != null) {
-      return medium(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Medium implements MissionDifficulty {
-  const factory _Medium() = _$MediumImpl;
-}
-
-/// @nodoc
-abstract class _$$HardImplCopyWith<$Res> {
-  factory _$$HardImplCopyWith(
-          _$HardImpl value, $Res Function(_$HardImpl) then) =
-      __$$HardImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$HardImplCopyWithImpl<$Res>
-    extends _$MissionDifficultyCopyWithImpl<$Res, _$HardImpl>
-    implements _$$HardImplCopyWith<$Res> {
-  __$$HardImplCopyWithImpl(_$HardImpl _value, $Res Function(_$HardImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$HardImpl implements _Hard {
-  const _$HardImpl();
-
-  @override
-  String toString() {
-    return 'MissionDifficulty.hard()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$HardImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() easy,
-    required TResult Function() medium,
-    required TResult Function() hard,
-    required TResult Function() expert,
-  }) {
-    return hard();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? easy,
-    TResult? Function()? medium,
-    TResult? Function()? hard,
-    TResult? Function()? expert,
-  }) {
-    return hard?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? easy,
-    TResult Function()? medium,
-    TResult Function()? hard,
-    TResult Function()? expert,
-    required TResult orElse(),
-  }) {
-    if (hard != null) {
-      return hard();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Easy value) easy,
-    required TResult Function(_Medium value) medium,
-    required TResult Function(_Hard value) hard,
-    required TResult Function(_Expert value) expert,
-  }) {
-    return hard(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Easy value)? easy,
-    TResult? Function(_Medium value)? medium,
-    TResult? Function(_Hard value)? hard,
-    TResult? Function(_Expert value)? expert,
-  }) {
-    return hard?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Easy value)? easy,
-    TResult Function(_Medium value)? medium,
-    TResult Function(_Hard value)? hard,
-    TResult Function(_Expert value)? expert,
-    required TResult orElse(),
-  }) {
-    if (hard != null) {
-      return hard(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Hard implements MissionDifficulty {
-  const factory _Hard() = _$HardImpl;
-}
-
-/// @nodoc
-abstract class _$$ExpertImplCopyWith<$Res> {
-  factory _$$ExpertImplCopyWith(
-          _$ExpertImpl value, $Res Function(_$ExpertImpl) then) =
-      __$$ExpertImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ExpertImplCopyWithImpl<$Res>
-    extends _$MissionDifficultyCopyWithImpl<$Res, _$ExpertImpl>
-    implements _$$ExpertImplCopyWith<$Res> {
-  __$$ExpertImplCopyWithImpl(
-      _$ExpertImpl _value, $Res Function(_$ExpertImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ExpertImpl implements _Expert {
-  const _$ExpertImpl();
-
-  @override
-  String toString() {
-    return 'MissionDifficulty.expert()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ExpertImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() easy,
-    required TResult Function() medium,
-    required TResult Function() hard,
-    required TResult Function() expert,
-  }) {
-    return expert();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? easy,
-    TResult? Function()? medium,
-    TResult? Function()? hard,
-    TResult? Function()? expert,
-  }) {
-    return expert?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? easy,
-    TResult Function()? medium,
-    TResult Function()? hard,
-    TResult Function()? expert,
-    required TResult orElse(),
-  }) {
-    if (expert != null) {
-      return expert();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Easy value) easy,
-    required TResult Function(_Medium value) medium,
-    required TResult Function(_Hard value) hard,
-    required TResult Function(_Expert value) expert,
-  }) {
-    return expert(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Easy value)? easy,
-    TResult? Function(_Medium value)? medium,
-    TResult? Function(_Hard value)? hard,
-    TResult? Function(_Expert value)? expert,
-  }) {
-    return expert?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Easy value)? easy,
-    TResult Function(_Medium value)? medium,
-    TResult Function(_Hard value)? hard,
-    TResult Function(_Expert value)? expert,
-    required TResult orElse(),
-  }) {
-    if (expert != null) {
-      return expert(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Expert implements MissionDifficulty {
-  const factory _Expert() = _$ExpertImpl;
-}
-
 Mission _$MissionFromJson(Map<String, dynamic> json) {
   return _Mission.fromJson(json);
 }
@@ -2589,8 +23,11 @@ mixin _$Mission {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  @MissionTypeConverter()
   MissionType get type => throw _privateConstructorUsedError;
+  @MissionCategoryConverter()
   MissionCategory get category => throw _privateConstructorUsedError;
+  @MissionDifficultyConverter()
   MissionDifficulty get difficulty => throw _privateConstructorUsedError;
   int get xpReward => throw _privateConstructorUsedError;
   AdmissionsPillar get pillar => throw _privateConstructorUsedError;
@@ -2625,9 +62,9 @@ abstract class $MissionCopyWith<$Res> {
       {String id,
       String title,
       String description,
-      MissionType type,
-      MissionCategory category,
-      MissionDifficulty difficulty,
+      @MissionTypeConverter() MissionType type,
+      @MissionCategoryConverter() MissionCategory category,
+      @MissionDifficultyConverter() MissionDifficulty difficulty,
       int xpReward,
       AdmissionsPillar pillar,
       Map<String, dynamic> completionCriteria,
@@ -2645,10 +82,6 @@ abstract class $MissionCopyWith<$Res> {
       bool isRepeatable,
       int repeatCooldownDays,
       List<String> tags});
-
-  $MissionTypeCopyWith<$Res> get type;
-  $MissionCategoryCopyWith<$Res> get category;
-  $MissionDifficultyCopyWith<$Res> get difficulty;
 }
 
 /// @nodoc
@@ -2671,7 +104,7 @@ class _$MissionCopyWithImpl<$Res, $Val extends Mission>
     Object? category = null,
     Object? difficulty = null,
     Object? xpReward = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? completionCriteria = null,
     Object? prerequisites = null,
     Object? isCompleted = null,
@@ -2717,7 +150,7 @@ class _$MissionCopyWithImpl<$Res, $Val extends Mission>
           ? _value.xpReward
           : xpReward // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -2783,30 +216,6 @@ class _$MissionCopyWithImpl<$Res, $Val extends Mission>
               as List<String>,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionTypeCopyWith<$Res> get type {
-    return $MissionTypeCopyWith<$Res>(_value.type, (value) {
-      return _then(_value.copyWith(type: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionCategoryCopyWith<$Res> get category {
-    return $MissionCategoryCopyWith<$Res>(_value.category, (value) {
-      return _then(_value.copyWith(category: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionDifficultyCopyWith<$Res> get difficulty {
-    return $MissionDifficultyCopyWith<$Res>(_value.difficulty, (value) {
-      return _then(_value.copyWith(difficulty: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -2820,9 +229,9 @@ abstract class _$$MissionImplCopyWith<$Res> implements $MissionCopyWith<$Res> {
       {String id,
       String title,
       String description,
-      MissionType type,
-      MissionCategory category,
-      MissionDifficulty difficulty,
+      @MissionTypeConverter() MissionType type,
+      @MissionCategoryConverter() MissionCategory category,
+      @MissionDifficultyConverter() MissionDifficulty difficulty,
       int xpReward,
       AdmissionsPillar pillar,
       Map<String, dynamic> completionCriteria,
@@ -2840,13 +249,6 @@ abstract class _$$MissionImplCopyWith<$Res> implements $MissionCopyWith<$Res> {
       bool isRepeatable,
       int repeatCooldownDays,
       List<String> tags});
-
-  @override
-  $MissionTypeCopyWith<$Res> get type;
-  @override
-  $MissionCategoryCopyWith<$Res> get category;
-  @override
-  $MissionDifficultyCopyWith<$Res> get difficulty;
 }
 
 /// @nodoc
@@ -2867,7 +269,7 @@ class __$$MissionImplCopyWithImpl<$Res>
     Object? category = null,
     Object? difficulty = null,
     Object? xpReward = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? completionCriteria = null,
     Object? prerequisites = null,
     Object? isCompleted = null,
@@ -2913,7 +315,7 @@ class __$$MissionImplCopyWithImpl<$Res>
           ? _value.xpReward
           : xpReward // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -2988,9 +390,9 @@ class _$MissionImpl implements _Mission {
       {required this.id,
       required this.title,
       required this.description,
-      required this.type,
-      required this.category,
-      required this.difficulty,
+      @MissionTypeConverter() required this.type,
+      @MissionCategoryConverter() required this.category,
+      @MissionDifficultyConverter() required this.difficulty,
       required this.xpReward,
       required this.pillar,
       required final Map<String, dynamic> completionCriteria,
@@ -3023,10 +425,13 @@ class _$MissionImpl implements _Mission {
   @override
   final String description;
   @override
+  @MissionTypeConverter()
   final MissionType type;
   @override
+  @MissionCategoryConverter()
   final MissionCategory category;
   @override
+  @MissionDifficultyConverter()
   final MissionDifficulty difficulty;
   @override
   final int xpReward;
@@ -3110,7 +515,7 @@ class _$MissionImpl implements _Mission {
                 other.difficulty == difficulty) &&
             (identical(other.xpReward, xpReward) ||
                 other.xpReward == xpReward) &&
-            const DeepCollectionEquality().equals(other.pillar, pillar) &&
+            (identical(other.pillar, pillar) || other.pillar == pillar) &&
             const DeepCollectionEquality()
                 .equals(other._completionCriteria, _completionCriteria) &&
             const DeepCollectionEquality()
@@ -3152,7 +557,7 @@ class _$MissionImpl implements _Mission {
         category,
         difficulty,
         xpReward,
-        const DeepCollectionEquality().hash(pillar),
+        pillar,
         const DeepCollectionEquality().hash(_completionCriteria),
         const DeepCollectionEquality().hash(_prerequisites),
         isCompleted,
@@ -3189,9 +594,9 @@ abstract class _Mission implements Mission {
       {required final String id,
       required final String title,
       required final String description,
-      required final MissionType type,
-      required final MissionCategory category,
-      required final MissionDifficulty difficulty,
+      @MissionTypeConverter() required final MissionType type,
+      @MissionCategoryConverter() required final MissionCategory category,
+      @MissionDifficultyConverter() required final MissionDifficulty difficulty,
       required final int xpReward,
       required final AdmissionsPillar pillar,
       required final Map<String, dynamic> completionCriteria,
@@ -3219,10 +624,13 @@ abstract class _Mission implements Mission {
   @override
   String get description;
   @override
+  @MissionTypeConverter()
   MissionType get type;
   @override
+  @MissionCategoryConverter()
   MissionCategory get category;
   @override
+  @MissionDifficultyConverter()
   MissionDifficulty get difficulty;
   @override
   int get xpReward;
@@ -3892,8 +1300,11 @@ mixin _$MissionTemplate {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  @MissionTypeConverter()
   MissionType get type => throw _privateConstructorUsedError;
+  @MissionCategoryConverter()
   MissionCategory get category => throw _privateConstructorUsedError;
+  @MissionDifficultyConverter()
   MissionDifficulty get difficulty => throw _privateConstructorUsedError;
   int get xpReward => throw _privateConstructorUsedError;
   AdmissionsPillar get pillar => throw _privateConstructorUsedError;
@@ -3922,9 +1333,9 @@ abstract class $MissionTemplateCopyWith<$Res> {
       {String id,
       String title,
       String description,
-      MissionType type,
-      MissionCategory category,
-      MissionDifficulty difficulty,
+      @MissionTypeConverter() MissionType type,
+      @MissionCategoryConverter() MissionCategory category,
+      @MissionDifficultyConverter() MissionDifficulty difficulty,
       int xpReward,
       AdmissionsPillar pillar,
       Map<String, dynamic> completionCriteria,
@@ -3934,10 +1345,6 @@ abstract class $MissionTemplateCopyWith<$Res> {
       bool isRepeatable,
       int repeatCooldownDays,
       List<String> tags});
-
-  $MissionTypeCopyWith<$Res> get type;
-  $MissionCategoryCopyWith<$Res> get category;
-  $MissionDifficultyCopyWith<$Res> get difficulty;
 }
 
 /// @nodoc
@@ -3960,7 +1367,7 @@ class _$MissionTemplateCopyWithImpl<$Res, $Val extends MissionTemplate>
     Object? category = null,
     Object? difficulty = null,
     Object? xpReward = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? completionCriteria = null,
     Object? prerequisites = null,
     Object? progressTarget = null,
@@ -3998,7 +1405,7 @@ class _$MissionTemplateCopyWithImpl<$Res, $Val extends MissionTemplate>
           ? _value.xpReward
           : xpReward // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -4032,30 +1439,6 @@ class _$MissionTemplateCopyWithImpl<$Res, $Val extends MissionTemplate>
               as List<String>,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionTypeCopyWith<$Res> get type {
-    return $MissionTypeCopyWith<$Res>(_value.type, (value) {
-      return _then(_value.copyWith(type: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionCategoryCopyWith<$Res> get category {
-    return $MissionCategoryCopyWith<$Res>(_value.category, (value) {
-      return _then(_value.copyWith(category: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MissionDifficultyCopyWith<$Res> get difficulty {
-    return $MissionDifficultyCopyWith<$Res>(_value.difficulty, (value) {
-      return _then(_value.copyWith(difficulty: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -4070,9 +1453,9 @@ abstract class _$$MissionTemplateImplCopyWith<$Res>
       {String id,
       String title,
       String description,
-      MissionType type,
-      MissionCategory category,
-      MissionDifficulty difficulty,
+      @MissionTypeConverter() MissionType type,
+      @MissionCategoryConverter() MissionCategory category,
+      @MissionDifficultyConverter() MissionDifficulty difficulty,
       int xpReward,
       AdmissionsPillar pillar,
       Map<String, dynamic> completionCriteria,
@@ -4082,13 +1465,6 @@ abstract class _$$MissionTemplateImplCopyWith<$Res>
       bool isRepeatable,
       int repeatCooldownDays,
       List<String> tags});
-
-  @override
-  $MissionTypeCopyWith<$Res> get type;
-  @override
-  $MissionCategoryCopyWith<$Res> get category;
-  @override
-  $MissionDifficultyCopyWith<$Res> get difficulty;
 }
 
 /// @nodoc
@@ -4109,7 +1485,7 @@ class __$$MissionTemplateImplCopyWithImpl<$Res>
     Object? category = null,
     Object? difficulty = null,
     Object? xpReward = null,
-    Object? pillar = freezed,
+    Object? pillar = null,
     Object? completionCriteria = null,
     Object? prerequisites = null,
     Object? progressTarget = null,
@@ -4147,7 +1523,7 @@ class __$$MissionTemplateImplCopyWithImpl<$Res>
           ? _value.xpReward
           : xpReward // ignore: cast_nullable_to_non_nullable
               as int,
-      pillar: freezed == pillar
+      pillar: null == pillar
           ? _value.pillar
           : pillar // ignore: cast_nullable_to_non_nullable
               as AdmissionsPillar,
@@ -4190,9 +1566,9 @@ class _$MissionTemplateImpl implements _MissionTemplate {
       {required this.id,
       required this.title,
       required this.description,
-      required this.type,
-      required this.category,
-      required this.difficulty,
+      @MissionTypeConverter() required this.type,
+      @MissionCategoryConverter() required this.category,
+      @MissionDifficultyConverter() required this.difficulty,
       required this.xpReward,
       required this.pillar,
       required final Map<String, dynamic> completionCriteria,
@@ -4216,10 +1592,13 @@ class _$MissionTemplateImpl implements _MissionTemplate {
   @override
   final String description;
   @override
+  @MissionTypeConverter()
   final MissionType type;
   @override
+  @MissionCategoryConverter()
   final MissionCategory category;
   @override
+  @MissionDifficultyConverter()
   final MissionDifficulty difficulty;
   @override
   final int xpReward;
@@ -4279,7 +1658,7 @@ class _$MissionTemplateImpl implements _MissionTemplate {
                 other.difficulty == difficulty) &&
             (identical(other.xpReward, xpReward) ||
                 other.xpReward == xpReward) &&
-            const DeepCollectionEquality().equals(other.pillar, pillar) &&
+            (identical(other.pillar, pillar) || other.pillar == pillar) &&
             const DeepCollectionEquality()
                 .equals(other._completionCriteria, _completionCriteria) &&
             const DeepCollectionEquality()
@@ -4306,7 +1685,7 @@ class _$MissionTemplateImpl implements _MissionTemplate {
       category,
       difficulty,
       xpReward,
-      const DeepCollectionEquality().hash(pillar),
+      pillar,
       const DeepCollectionEquality().hash(_completionCriteria),
       const DeepCollectionEquality().hash(_prerequisites),
       progressTarget,
@@ -4335,9 +1714,9 @@ abstract class _MissionTemplate implements MissionTemplate {
       {required final String id,
       required final String title,
       required final String description,
-      required final MissionType type,
-      required final MissionCategory category,
-      required final MissionDifficulty difficulty,
+      @MissionTypeConverter() required final MissionType type,
+      @MissionCategoryConverter() required final MissionCategory category,
+      @MissionDifficultyConverter() required final MissionDifficulty difficulty,
       required final int xpReward,
       required final AdmissionsPillar pillar,
       required final Map<String, dynamic> completionCriteria,
@@ -4358,10 +1737,13 @@ abstract class _MissionTemplate implements MissionTemplate {
   @override
   String get description;
   @override
+  @MissionTypeConverter()
   MissionType get type;
   @override
+  @MissionCategoryConverter()
   MissionCategory get category;
   @override
+  @MissionDifficultyConverter()
   MissionDifficulty get difficulty;
   @override
   int get xpReward;

@@ -1,6 +1,6 @@
 name: Implement Hypothesis
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       hypothesis_id:

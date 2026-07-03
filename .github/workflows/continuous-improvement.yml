@@ -1,6 +1,6 @@
 name: Continuous Improvement Pipeline
 
-on:
+"on":
   schedule:
     - cron: '0 14 * * 1'  # Every Monday 2 PM (after research at 9 AM)
   workflow_dispatch:

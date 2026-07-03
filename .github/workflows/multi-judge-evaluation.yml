@@ -1,6 +1,6 @@
 name: Multi-Judge Evaluation Pipeline
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       build_artifact:

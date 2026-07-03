@@ -1,6 +1,6 @@
 name: Visual Regression & UI Testing
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       baseline_branch:

@@ -24,6 +24,8 @@ mixin _$Streak {
   int get longestStreak => throw _privateConstructorUsedError;
   int get totalActiveDays => throw _privateConstructorUsedError;
   int get freezeTokens => throw _privateConstructorUsedError;
+  int get maxFreezeTokens => throw _privateConstructorUsedError;
+  int get freezeTokensEarned => throw _privateConstructorUsedError;
   int get graceDaysRemaining => throw _privateConstructorUsedError;
   int get graceDaysUsedThisWeek => throw _privateConstructorUsedError;
   DateTime? get lastActiveDate => throw _privateConstructorUsedError;
@@ -35,6 +37,9 @@ mixin _$Streak {
   int get weeklyCheckInTarget => throw _privateConstructorUsedError;
   int get weeklyCheckInsCompleted => throw _privateConstructorUsedError;
   DateTime get lastWeekReset => throw _privateConstructorUsedError;
+  bool get hasWeekendAmulet => throw _privateConstructorUsedError;
+  DateTime? get weekendAmuletExpiresAt => throw _privateConstructorUsedError;
+  List<int> get weeklyActivityPattern => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,6 +56,8 @@ abstract class $StreakCopyWith<$Res> {
       int longestStreak,
       int totalActiveDays,
       int freezeTokens,
+      int maxFreezeTokens,
+      int freezeTokensEarned,
       int graceDaysRemaining,
       int graceDaysUsedThisWeek,
       DateTime? lastActiveDate,
@@ -60,7 +67,10 @@ abstract class $StreakCopyWith<$Res> {
       DateTime? lastFreezeTokenEarned,
       int weeklyCheckInTarget,
       int weeklyCheckInsCompleted,
-      DateTime lastWeekReset});
+      DateTime lastWeekReset,
+      bool hasWeekendAmulet,
+      DateTime? weekendAmuletExpiresAt,
+      List<int> weeklyActivityPattern});
 }
 
 /// @nodoc
@@ -80,6 +90,8 @@ class _$StreakCopyWithImpl<$Res, $Val extends Streak>
     Object? longestStreak = null,
     Object? totalActiveDays = null,
     Object? freezeTokens = null,
+    Object? maxFreezeTokens = null,
+    Object? freezeTokensEarned = null,
     Object? graceDaysRemaining = null,
     Object? graceDaysUsedThisWeek = null,
     Object? lastActiveDate = freezed,
@@ -90,6 +102,9 @@ class _$StreakCopyWithImpl<$Res, $Val extends Streak>
     Object? weeklyCheckInTarget = null,
     Object? weeklyCheckInsCompleted = null,
     Object? lastWeekReset = null,
+    Object? hasWeekendAmulet = null,
+    Object? weekendAmuletExpiresAt = freezed,
+    Object? weeklyActivityPattern = null,
   }) {
     return _then(_value.copyWith(
       currentStreak: null == currentStreak
@@ -107,6 +122,14 @@ class _$StreakCopyWithImpl<$Res, $Val extends Streak>
       freezeTokens: null == freezeTokens
           ? _value.freezeTokens
           : freezeTokens // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxFreezeTokens: null == maxFreezeTokens
+          ? _value.maxFreezeTokens
+          : maxFreezeTokens // ignore: cast_nullable_to_non_nullable
+              as int,
+      freezeTokensEarned: null == freezeTokensEarned
+          ? _value.freezeTokensEarned
+          : freezeTokensEarned // ignore: cast_nullable_to_non_nullable
               as int,
       graceDaysRemaining: null == graceDaysRemaining
           ? _value.graceDaysRemaining
@@ -148,6 +171,18 @@ class _$StreakCopyWithImpl<$Res, $Val extends Streak>
           ? _value.lastWeekReset
           : lastWeekReset // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      hasWeekendAmulet: null == hasWeekendAmulet
+          ? _value.hasWeekendAmulet
+          : hasWeekendAmulet // ignore: cast_nullable_to_non_nullable
+              as bool,
+      weekendAmuletExpiresAt: freezed == weekendAmuletExpiresAt
+          ? _value.weekendAmuletExpiresAt
+          : weekendAmuletExpiresAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      weeklyActivityPattern: null == weeklyActivityPattern
+          ? _value.weeklyActivityPattern
+          : weeklyActivityPattern // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 }
@@ -164,6 +199,8 @@ abstract class _$$StreakImplCopyWith<$Res> implements $StreakCopyWith<$Res> {
       int longestStreak,
       int totalActiveDays,
       int freezeTokens,
+      int maxFreezeTokens,
+      int freezeTokensEarned,
       int graceDaysRemaining,
       int graceDaysUsedThisWeek,
       DateTime? lastActiveDate,
@@ -173,7 +210,10 @@ abstract class _$$StreakImplCopyWith<$Res> implements $StreakCopyWith<$Res> {
       DateTime? lastFreezeTokenEarned,
       int weeklyCheckInTarget,
       int weeklyCheckInsCompleted,
-      DateTime lastWeekReset});
+      DateTime lastWeekReset,
+      bool hasWeekendAmulet,
+      DateTime? weekendAmuletExpiresAt,
+      List<int> weeklyActivityPattern});
 }
 
 /// @nodoc
@@ -191,6 +231,8 @@ class __$$StreakImplCopyWithImpl<$Res>
     Object? longestStreak = null,
     Object? totalActiveDays = null,
     Object? freezeTokens = null,
+    Object? maxFreezeTokens = null,
+    Object? freezeTokensEarned = null,
     Object? graceDaysRemaining = null,
     Object? graceDaysUsedThisWeek = null,
     Object? lastActiveDate = freezed,
@@ -201,6 +243,9 @@ class __$$StreakImplCopyWithImpl<$Res>
     Object? weeklyCheckInTarget = null,
     Object? weeklyCheckInsCompleted = null,
     Object? lastWeekReset = null,
+    Object? hasWeekendAmulet = null,
+    Object? weekendAmuletExpiresAt = freezed,
+    Object? weeklyActivityPattern = null,
   }) {
     return _then(_$StreakImpl(
       currentStreak: null == currentStreak
@@ -218,6 +263,14 @@ class __$$StreakImplCopyWithImpl<$Res>
       freezeTokens: null == freezeTokens
           ? _value.freezeTokens
           : freezeTokens // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxFreezeTokens: null == maxFreezeTokens
+          ? _value.maxFreezeTokens
+          : maxFreezeTokens // ignore: cast_nullable_to_non_nullable
+              as int,
+      freezeTokensEarned: null == freezeTokensEarned
+          ? _value.freezeTokensEarned
+          : freezeTokensEarned // ignore: cast_nullable_to_non_nullable
               as int,
       graceDaysRemaining: null == graceDaysRemaining
           ? _value.graceDaysRemaining
@@ -259,6 +312,18 @@ class __$$StreakImplCopyWithImpl<$Res>
           ? _value.lastWeekReset
           : lastWeekReset // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      hasWeekendAmulet: null == hasWeekendAmulet
+          ? _value.hasWeekendAmulet
+          : hasWeekendAmulet // ignore: cast_nullable_to_non_nullable
+              as bool,
+      weekendAmuletExpiresAt: freezed == weekendAmuletExpiresAt
+          ? _value.weekendAmuletExpiresAt
+          : weekendAmuletExpiresAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      weeklyActivityPattern: null == weeklyActivityPattern
+          ? _value._weeklyActivityPattern
+          : weeklyActivityPattern // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
@@ -271,6 +336,8 @@ class _$StreakImpl implements _Streak {
       required this.longestStreak,
       required this.totalActiveDays,
       required this.freezeTokens,
+      required this.maxFreezeTokens,
+      required this.freezeTokensEarned,
       required this.graceDaysRemaining,
       required this.graceDaysUsedThisWeek,
       required this.lastActiveDate,
@@ -280,9 +347,13 @@ class _$StreakImpl implements _Streak {
       required this.lastFreezeTokenEarned,
       required this.weeklyCheckInTarget,
       required this.weeklyCheckInsCompleted,
-      required this.lastWeekReset})
+      required this.lastWeekReset,
+      required this.hasWeekendAmulet,
+      required this.weekendAmuletExpiresAt,
+      required final List<int> weeklyActivityPattern})
       : _milestonesAchieved = milestonesAchieved,
-        _graceDayHistory = graceDayHistory;
+        _graceDayHistory = graceDayHistory,
+        _weeklyActivityPattern = weeklyActivityPattern;
 
   factory _$StreakImpl.fromJson(Map<String, dynamic> json) =>
       _$$StreakImplFromJson(json);
@@ -295,6 +366,10 @@ class _$StreakImpl implements _Streak {
   final int totalActiveDays;
   @override
   final int freezeTokens;
+  @override
+  final int maxFreezeTokens;
+  @override
+  final int freezeTokensEarned;
   @override
   final int graceDaysRemaining;
   @override
@@ -328,10 +403,22 @@ class _$StreakImpl implements _Streak {
   final int weeklyCheckInsCompleted;
   @override
   final DateTime lastWeekReset;
+  @override
+  final bool hasWeekendAmulet;
+  @override
+  final DateTime? weekendAmuletExpiresAt;
+  final List<int> _weeklyActivityPattern;
+  @override
+  List<int> get weeklyActivityPattern {
+    if (_weeklyActivityPattern is EqualUnmodifiableListView)
+      return _weeklyActivityPattern;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_weeklyActivityPattern);
+  }
 
   @override
   String toString() {
-    return 'Streak(currentStreak: $currentStreak, longestStreak: $longestStreak, totalActiveDays: $totalActiveDays, freezeTokens: $freezeTokens, graceDaysRemaining: $graceDaysRemaining, graceDaysUsedThisWeek: $graceDaysUsedThisWeek, lastActiveDate: $lastActiveDate, streakStartDate: $streakStartDate, milestonesAchieved: $milestonesAchieved, graceDayHistory: $graceDayHistory, lastFreezeTokenEarned: $lastFreezeTokenEarned, weeklyCheckInTarget: $weeklyCheckInTarget, weeklyCheckInsCompleted: $weeklyCheckInsCompleted, lastWeekReset: $lastWeekReset)';
+    return 'Streak(currentStreak: $currentStreak, longestStreak: $longestStreak, totalActiveDays: $totalActiveDays, freezeTokens: $freezeTokens, maxFreezeTokens: $maxFreezeTokens, freezeTokensEarned: $freezeTokensEarned, graceDaysRemaining: $graceDaysRemaining, graceDaysUsedThisWeek: $graceDaysUsedThisWeek, lastActiveDate: $lastActiveDate, streakStartDate: $streakStartDate, milestonesAchieved: $milestonesAchieved, graceDayHistory: $graceDayHistory, lastFreezeTokenEarned: $lastFreezeTokenEarned, weeklyCheckInTarget: $weeklyCheckInTarget, weeklyCheckInsCompleted: $weeklyCheckInsCompleted, lastWeekReset: $lastWeekReset, hasWeekendAmulet: $hasWeekendAmulet, weekendAmuletExpiresAt: $weekendAmuletExpiresAt, weeklyActivityPattern: $weeklyActivityPattern)';
   }
 
   @override
@@ -347,6 +434,10 @@ class _$StreakImpl implements _Streak {
                 other.totalActiveDays == totalActiveDays) &&
             (identical(other.freezeTokens, freezeTokens) ||
                 other.freezeTokens == freezeTokens) &&
+            (identical(other.maxFreezeTokens, maxFreezeTokens) ||
+                other.maxFreezeTokens == maxFreezeTokens) &&
+            (identical(other.freezeTokensEarned, freezeTokensEarned) ||
+                other.freezeTokensEarned == freezeTokensEarned) &&
             (identical(other.graceDaysRemaining, graceDaysRemaining) ||
                 other.graceDaysRemaining == graceDaysRemaining) &&
             (identical(other.graceDaysUsedThisWeek, graceDaysUsedThisWeek) ||
@@ -367,27 +458,39 @@ class _$StreakImpl implements _Streak {
                     other.weeklyCheckInsCompleted, weeklyCheckInsCompleted) ||
                 other.weeklyCheckInsCompleted == weeklyCheckInsCompleted) &&
             (identical(other.lastWeekReset, lastWeekReset) ||
-                other.lastWeekReset == lastWeekReset));
+                other.lastWeekReset == lastWeekReset) &&
+            (identical(other.hasWeekendAmulet, hasWeekendAmulet) ||
+                other.hasWeekendAmulet == hasWeekendAmulet) &&
+            (identical(other.weekendAmuletExpiresAt, weekendAmuletExpiresAt) ||
+                other.weekendAmuletExpiresAt == weekendAmuletExpiresAt) &&
+            const DeepCollectionEquality()
+                .equals(other._weeklyActivityPattern, _weeklyActivityPattern));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      currentStreak,
-      longestStreak,
-      totalActiveDays,
-      freezeTokens,
-      graceDaysRemaining,
-      graceDaysUsedThisWeek,
-      lastActiveDate,
-      streakStartDate,
-      const DeepCollectionEquality().hash(_milestonesAchieved),
-      const DeepCollectionEquality().hash(_graceDayHistory),
-      lastFreezeTokenEarned,
-      weeklyCheckInTarget,
-      weeklyCheckInsCompleted,
-      lastWeekReset);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        currentStreak,
+        longestStreak,
+        totalActiveDays,
+        freezeTokens,
+        maxFreezeTokens,
+        freezeTokensEarned,
+        graceDaysRemaining,
+        graceDaysUsedThisWeek,
+        lastActiveDate,
+        streakStartDate,
+        const DeepCollectionEquality().hash(_milestonesAchieved),
+        const DeepCollectionEquality().hash(_graceDayHistory),
+        lastFreezeTokenEarned,
+        weeklyCheckInTarget,
+        weeklyCheckInsCompleted,
+        lastWeekReset,
+        hasWeekendAmulet,
+        weekendAmuletExpiresAt,
+        const DeepCollectionEquality().hash(_weeklyActivityPattern)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -409,6 +512,8 @@ abstract class _Streak implements Streak {
       required final int longestStreak,
       required final int totalActiveDays,
       required final int freezeTokens,
+      required final int maxFreezeTokens,
+      required final int freezeTokensEarned,
       required final int graceDaysRemaining,
       required final int graceDaysUsedThisWeek,
       required final DateTime? lastActiveDate,
@@ -418,7 +523,10 @@ abstract class _Streak implements Streak {
       required final DateTime? lastFreezeTokenEarned,
       required final int weeklyCheckInTarget,
       required final int weeklyCheckInsCompleted,
-      required final DateTime lastWeekReset}) = _$StreakImpl;
+      required final DateTime lastWeekReset,
+      required final bool hasWeekendAmulet,
+      required final DateTime? weekendAmuletExpiresAt,
+      required final List<int> weeklyActivityPattern}) = _$StreakImpl;
 
   factory _Streak.fromJson(Map<String, dynamic> json) = _$StreakImpl.fromJson;
 
@@ -430,6 +538,10 @@ abstract class _Streak implements Streak {
   int get totalActiveDays;
   @override
   int get freezeTokens;
+  @override
+  int get maxFreezeTokens;
+  @override
+  int get freezeTokensEarned;
   @override
   int get graceDaysRemaining;
   @override
@@ -450,6 +562,12 @@ abstract class _Streak implements Streak {
   int get weeklyCheckInsCompleted;
   @override
   DateTime get lastWeekReset;
+  @override
+  bool get hasWeekendAmulet;
+  @override
+  DateTime? get weekendAmuletExpiresAt;
+  @override
+  List<int> get weeklyActivityPattern;
   @override
   @JsonKey(ignore: true)
   _$$StreakImplCopyWith<_$StreakImpl> get copyWith =>

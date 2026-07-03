@@ -11,6 +11,8 @@ _$StreakImpl _$$StreakImplFromJson(Map<String, dynamic> json) => _$StreakImpl(
       longestStreak: (json['longestStreak'] as num).toInt(),
       totalActiveDays: (json['totalActiveDays'] as num).toInt(),
       freezeTokens: (json['freezeTokens'] as num).toInt(),
+      maxFreezeTokens: (json['maxFreezeTokens'] as num).toInt(),
+      freezeTokensEarned: (json['freezeTokensEarned'] as num).toInt(),
       graceDaysRemaining: (json['graceDaysRemaining'] as num).toInt(),
       graceDaysUsedThisWeek: (json['graceDaysUsedThisWeek'] as num).toInt(),
       lastActiveDate: json['lastActiveDate'] == null
@@ -31,6 +33,13 @@ _$StreakImpl _$$StreakImplFromJson(Map<String, dynamic> json) => _$StreakImpl(
       weeklyCheckInTarget: (json['weeklyCheckInTarget'] as num).toInt(),
       weeklyCheckInsCompleted: (json['weeklyCheckInsCompleted'] as num).toInt(),
       lastWeekReset: DateTime.parse(json['lastWeekReset'] as String),
+      hasWeekendAmulet: json['hasWeekendAmulet'] as bool,
+      weekendAmuletExpiresAt: json['weekendAmuletExpiresAt'] == null
+          ? null
+          : DateTime.parse(json['weekendAmuletExpiresAt'] as String),
+      weeklyActivityPattern: (json['weeklyActivityPattern'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$StreakImplToJson(_$StreakImpl instance) =>
@@ -39,6 +48,8 @@ Map<String, dynamic> _$$StreakImplToJson(_$StreakImpl instance) =>
       'longestStreak': instance.longestStreak,
       'totalActiveDays': instance.totalActiveDays,
       'freezeTokens': instance.freezeTokens,
+      'maxFreezeTokens': instance.maxFreezeTokens,
+      'freezeTokensEarned': instance.freezeTokensEarned,
       'graceDaysRemaining': instance.graceDaysRemaining,
       'graceDaysUsedThisWeek': instance.graceDaysUsedThisWeek,
       'lastActiveDate': instance.lastActiveDate?.toIso8601String(),
@@ -50,6 +61,10 @@ Map<String, dynamic> _$$StreakImplToJson(_$StreakImpl instance) =>
       'weeklyCheckInTarget': instance.weeklyCheckInTarget,
       'weeklyCheckInsCompleted': instance.weeklyCheckInsCompleted,
       'lastWeekReset': instance.lastWeekReset.toIso8601String(),
+      'hasWeekendAmulet': instance.hasWeekendAmulet,
+      'weekendAmuletExpiresAt':
+          instance.weekendAmuletExpiresAt?.toIso8601String(),
+      'weeklyActivityPattern': instance.weeklyActivityPattern,
     };
 
 _$StreakMilestoneImpl _$$StreakMilestoneImplFromJson(

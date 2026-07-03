@@ -769,12 +769,3 @@ class CompetitionData {
     );
   }
 }
-
-enum CompetitionCategory {
-  science,
-  mathematics,
-  coding,
-  research,
-  innovation,
-  general,
-}

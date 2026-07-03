@@ -1,0 +1,149 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$SkinImpl _$$SkinImplFromJson(Map<String, dynamic> json) => _$SkinImpl(
+      id: json['id'] as String,
+      tier: const SkinTierConverter().fromJson(json['tier'] as String),
+      name: json['name'] as String,
+      displayName: json['displayName'] as String,
+      description: json['description'] as String,
+      loreDescription: json['loreDescription'] as String,
+      rarity: const SkinRarityConverter().fromJson(json['rarity'] as String),
+      previewAssetPath: json['previewAssetPath'] as String,
+      unlockedAssetPath: json['unlockedAssetPath'] as String,
+      lockedAssetPath: json['lockedAssetPath'] as String,
+      iconAssetPath: json['iconAssetPath'] as String,
+      particleEffectPath: json['particleEffectPath'] as String,
+      backgroundAssetPath: json['backgroundAssetPath'] as String,
+      xpRequired: (json['xpRequired'] as num).toInt(),
+      tierOrder: (json['tierOrder'] as num).toInt(),
+      pillarXPRequirements:
+          Map<String, int>.from(json['pillarXPRequirements'] as Map),
+      unlockCriteria: (json['unlockCriteria'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      visualProperties: json['visualProperties'] as Map<String, dynamic>,
+      unlockedAt: json['unlockedAt'] == null
+          ? null
+          : DateTime.parse(json['unlockedAt'] as String),
+      isUnlocked: json['isUnlocked'] as bool,
+      isEquipped: json['isEquipped'] as bool,
+      equippedAt: json['equippedAt'] == null
+          ? null
+          : DateTime.parse(json['equippedAt'] as String),
+    );
+
+Map<String, dynamic> _$$SkinImplToJson(_$SkinImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'tier': const SkinTierConverter().toJson(instance.tier),
+      'name': instance.name,
+      'displayName': instance.displayName,
+      'description': instance.description,
+      'loreDescription': instance.loreDescription,
+      'rarity': const SkinRarityConverter().toJson(instance.rarity),
+      'previewAssetPath': instance.previewAssetPath,
+      'unlockedAssetPath': instance.unlockedAssetPath,
+      'lockedAssetPath': instance.lockedAssetPath,
+      'iconAssetPath': instance.iconAssetPath,
+      'particleEffectPath': instance.particleEffectPath,
+      'backgroundAssetPath': instance.backgroundAssetPath,
+      'xpRequired': instance.xpRequired,
+      'tierOrder': instance.tierOrder,
+      'pillarXPRequirements': instance.pillarXPRequirements,
+      'unlockCriteria': instance.unlockCriteria,
+      'visualProperties': instance.visualProperties,
+      'unlockedAt': instance.unlockedAt?.toIso8601String(),
+      'isUnlocked': instance.isUnlocked,
+      'isEquipped': instance.isEquipped,
+      'equippedAt': instance.equippedAt?.toIso8601String(),
+    };
+
+_$PillarXPRequirementsImpl _$$PillarXPRequirementsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PillarXPRequirementsImpl(
+      academicsXP: (json['academicsXP'] as num).toInt(),
+      evidenceXP: (json['evidenceXP'] as num).toInt(),
+      consistencyXP: (json['consistencyXP'] as num).toInt(),
+      researchXP: (json['researchXP'] as num).toInt(),
+      leadershipXP: (json['leadershipXP'] as num).toInt(),
+      creativityXP: (json['creativityXP'] as num).toInt(),
+      communityImpactXP: (json['communityImpactXP'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$PillarXPRequirementsImplToJson(
+        _$PillarXPRequirementsImpl instance) =>
+    <String, dynamic>{
+      'academicsXP': instance.academicsXP,
+      'evidenceXP': instance.evidenceXP,
+      'consistencyXP': instance.consistencyXP,
+      'researchXP': instance.researchXP,
+      'leadershipXP': instance.leadershipXP,
+      'creativityXP': instance.creativityXP,
+      'communityImpactXP': instance.communityImpactXP,
+    };
+
+_$SkinConfigImpl _$$SkinConfigImplFromJson(Map<String, dynamic> json) =>
+    _$SkinConfigImpl(
+      tier: $enumDecode(_$SkinTierEnumMap, json['tier']),
+      name: json['name'] as String,
+      displayName: json['displayName'] as String,
+      description: json['description'] as String,
+      loreDescription: json['loreDescription'] as String,
+      rarity: $enumDecode(_$SkinRarityEnumMap, json['rarity']),
+      xpRequired: (json['xpRequired'] as num).toInt(),
+      tierOrder: (json['tierOrder'] as num).toInt(),
+      pillarXPRequirements: PillarXPRequirements.fromJson(
+          json['pillarXPRequirements'] as Map<String, dynamic>),
+      unlockCriteria: (json['unlockCriteria'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      visualProperties: json['visualProperties'] as Map<String, dynamic>,
+      previewAsset: json['previewAsset'] as String,
+      unlockedAsset: json['unlockedAsset'] as String,
+      lockedAsset: json['lockedAsset'] as String,
+      iconAsset: json['iconAsset'] as String,
+      particleEffect: json['particleEffect'] as String,
+      backgroundAsset: json['backgroundAsset'] as String,
+    );
+
+Map<String, dynamic> _$$SkinConfigImplToJson(_$SkinConfigImpl instance) =>
+    <String, dynamic>{
+      'tier': _$SkinTierEnumMap[instance.tier]!,
+      'name': instance.name,
+      'displayName': instance.displayName,
+      'description': instance.description,
+      'loreDescription': instance.loreDescription,
+      'rarity': _$SkinRarityEnumMap[instance.rarity]!,
+      'xpRequired': instance.xpRequired,
+      'tierOrder': instance.tierOrder,
+      'pillarXPRequirements': instance.pillarXPRequirements,
+      'unlockCriteria': instance.unlockCriteria,
+      'visualProperties': instance.visualProperties,
+      'previewAsset': instance.previewAsset,
+      'unlockedAsset': instance.unlockedAsset,
+      'lockedAsset': instance.lockedAsset,
+      'iconAsset': instance.iconAsset,
+      'particleEffect': instance.particleEffect,
+      'backgroundAsset': instance.backgroundAsset,
+    };
+
+const _$SkinTierEnumMap = {
+  SkinTier.explorer: 'explorer',
+  SkinTier.scholar: 'scholar',
+  SkinTier.evidenceKeeper: 'evidenceKeeper',
+  SkinTier.marathonRunner: 'marathonRunner',
+  SkinTier.researcher: 'researcher',
+  SkinTier.leader: 'leader',
+  SkinTier.creator: 'creator',
+  SkinTier.changemaker: 'changemaker',
+  SkinTier.trailblazer: 'trailblazer',
+};
+
+const _$SkinRarityEnumMap = {
+  SkinRarity.common: 'common',
+  SkinRarity.uncommon: 'uncommon',
+  SkinRarity.rare: 'rare',
+  SkinRarity.legendary: 'legendary',
+};

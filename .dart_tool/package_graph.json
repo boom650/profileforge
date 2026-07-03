@@ -26,6 +26,7 @@
         "json_annotation",
         "latlong2",
         "lottie",
+        "meta",
         "path",
         "path_provider",
         "riverpod_annotation",
@@ -188,6 +189,11 @@
         "test_api",
         "vector_math"
       ]
+    },
+    {
+      "name": "meta",
+      "version": "1.18.0",
+      "dependencies": []
     },
     {
       "name": "collection",
@@ -447,11 +453,6 @@
         "source_span",
         "yaml"
       ]
-    },
-    {
-      "name": "meta",
-      "version": "1.18.0",
-      "dependencies": []
     },
     {
       "name": "build_config",

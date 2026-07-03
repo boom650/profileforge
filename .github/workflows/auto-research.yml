@@ -1,6 +1,6 @@
 name: Auto-Research & Trend Analysis
 
-on:
+"on":
   schedule:
     - cron: '0 9 * * 1'  # Every Monday 9 AM
   workflow_dispatch:

@@ -5,26 +5,62 @@ part 'skins.freezed.dart';
 part 'skins.g.dart';
 
 /// Skin tiers mapped to admissions pillars
-@freezed
-abstract class SkinTier with _$SkinTier {
-  const factory SkinTier.explorer() = _Explorer;           // Academic Explorer - Academics
-  const factory SkinTier.scholar() = _Scholar;             // Scholar - Academics depth
-  const factory SkinTier.evidenceKeeper() = _EvidenceKeeper; // Evidence Keeper - Evidence/Activities
-  const factory SkinTier.marathonRunner() = _MarathonRunner; // Marathon Runner - Consistency/Stamina
-  const factory SkinTier.researcher() = _Researcher;       // Researcher - Research pillar
-  const factory SkinTier.leader() = _Leader;               // Leader - Leadership pillar
-  const factory SkinTier.creator() = _Creator;             // Creator - Creative/Arts pillar
-  const factory SkinTier.changemaker() = _Changemaker;     // Changemaker - Community/Impact pillar
-  const factory SkinTier.trailblazer() = _Trailblazer;     // Trailblazer - Trailblazer/Innovation pillar (Legendary)
+enum SkinTier {
+  explorer,           // Academic Explorer - Academics
+  scholar,            // Scholar - Academics depth
+  evidenceKeeper,     // Evidence Keeper - Evidence/Activities
+  marathonRunner,     // Marathon Runner - Consistency/Stamina
+  researcher,         // Researcher - Research pillar
+  leader,             // Leader - Leadership pillar
+  creator,            // Creator - Creative/Arts pillar
+  changemaker,        // Changemaker - Community/Impact pillar
+  trailblazer,        // Trailblazer - Trailblazer/Innovation pillar (Legendary)
+}
+
+extension SkinTierExtension on SkinTier {
+  String get name => toString().split('.').last;
+}
+
+class SkinTierConverter implements JsonConverter<SkinTier, String> {
+  const SkinTierConverter();
+
+  @override
+  SkinTier fromJson(String json) {
+    return SkinTier.values.firstWhere(
+      (e) => e.name.toLowerCase() == json.toLowerCase(),
+      orElse: () => SkinTier.explorer,
+    );
+  }
+
+  @override
+  String toJson(SkinTier object) => object.name;
 }
 
 /// Skin rarity tiers
-@freezed
-abstract class SkinRarity with _$SkinRarity {
-  const factory SkinRarity.common() = _Common;      // Explorer, Scholar
-  const factory SkinRarity.uncommon() = _Uncommon;  // Evidence Keeper, Marathon Runner
-  const factory SkinRarity.rare() = _Rare;          // Researcher, Leader, Creator, Changemaker
-  const factory SkinRarity.legendary() = _Legendary; // Trailblazer
+enum SkinRarity {
+  common,      // Explorer, Scholar
+  uncommon,    // Evidence Keeper, Marathon Runner
+  rare,        // Researcher, Leader, Creator, Changemaker
+  legendary,   // Trailblazer
+}
+
+extension SkinRarityExtension on SkinRarity {
+  String get name => toString().split('.').last;
+}
+
+class SkinRarityConverter implements JsonConverter<SkinRarity, String> {
+  const SkinRarityConverter();
+
+  @override
+  SkinRarity fromJson(String json) {
+    return SkinRarity.values.firstWhere(
+      (e) => e.name.toLowerCase() == json.toLowerCase(),
+      orElse: () => SkinRarity.common,
+    );
+  }
+
+  @override
+  String toJson(SkinRarity object) => object.name;
 }
 
 /// Skin model with all visual and metadata properties
@@ -32,12 +68,12 @@ abstract class SkinRarity with _$SkinRarity {
 abstract class Skin with _$Skin {
   const factory Skin({
     required String id,
-    required SkinTier tier,
+    @SkinTierConverter() required SkinTier tier,
     required String name,
     required String displayName,
     required String description,
     required String loreDescription,
-    required SkinRarity rarity,
+    @SkinRarityConverter() required SkinRarity rarity,
     required String previewAssetPath,
     required String unlockedAssetPath,
     required String lockedAssetPath,
@@ -72,28 +108,18 @@ abstract class PillarXPRequirements with _$PillarXPRequirements {
   }) = _PillarXPRequirements;
 
   factory PillarXPRequirements.fromJson(Map<String, dynamic> json) => _$PillarXPRequirementsFromJson(json);
-  
-  Map<String, dynamic> toJson() => {
-    'academicsXP': academicsXP,
-    'evidenceXP': evidenceXP,
-    'consistencyXP': consistencyXP,
-    'researchXP': researchXP,
-    'leadershipXP': leadershipXP,
-    'creativityXP': creativityXP,
-    'communityImpactXP': communityImpactXP,
-  };
 }
 
 /// Predefined skin configurations
 class SkinCatalog {
   static const Map<SkinTier, SkinConfig> skins = {
-    SkinTier.explorer(): SkinConfig(
-      tier: SkinTier.explorer(),
+    SkinTier.explorer: SkinConfig(
+      tier: SkinTier.explorer,
       name: 'explorer',
       displayName: 'Academic Explorer',
       description: 'First steps into academic exploration. Curiosity sparked.',
       loreDescription: 'Every journey begins with a single question. The Explorer has asked theirs.',
-      rarity: SkinRarity.common(),
+      rarity: SkinRarity.common,
       xpRequired: 0,
       tierOrder: 1,
       pillarXPRequirements: PillarXPRequirements(
@@ -124,13 +150,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/explorer/particles.json',
       backgroundAsset: 'assets/skins/explorer/bg.png',
     ),
-    SkinTier.scholar(): SkinConfig(
-      tier: SkinTier.scholar(),
+    SkinTier.scholar: SkinConfig(
+      tier: SkinTier.scholar,
       name: 'scholar',
       displayName: 'Scholar',
       description: 'Deep academic commitment. Knowledge becomes second nature.',
-      loreDescription: 'The Scholar doesn\'t just learn—they understand. Every subject, a new lens.',
-      rarity: SkinRarity.common(),
+      loreDescription: 'The Scholar doesn\'t just learn - they understand. Every subject, a new lens.',
+      rarity: SkinRarity.common,
       xpRequired: 500,
       tierOrder: 2,
       pillarXPRequirements: PillarXPRequirements(
@@ -162,13 +188,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/scholar/particles.json',
       backgroundAsset: 'assets/skins/scholar/bg.png',
     ),
-    SkinTier.evidenceKeeper(): SkinConfig(
-      tier: SkinTier.evidenceKeeper(),
+    SkinTier.evidenceKeeper: SkinConfig(
+      tier: SkinTier.evidenceKeeper,
       name: 'evidence_keeper',
       displayName: 'Evidence Keeper',
       description: 'Master of documentation. Every achievement, preserved.',
       loreDescription: 'The Evidence Keeper knows: if it isn\'t documented, it didn\'t happen. They archive greatness.',
-      rarity: SkinRarity.uncommon(),
+      rarity: SkinRarity.uncommon,
       xpRequired: 1500,
       tierOrder: 3,
       pillarXPRequirements: PillarXPRequirements(
@@ -200,13 +226,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/evidence_keeper/particles.json',
       backgroundAsset: 'assets/skins/evidence_keeper/bg.png',
     ),
-    SkinTier.marathonRunner(): SkinConfig(
-      tier: SkinTier.marathonRunner(),
+    SkinTier.marathonRunner: SkinConfig(
+      tier: SkinTier.marathonRunner,
       name: 'marathon_runner',
       displayName: 'Marathon Runner',
       description: 'Consistency incarnate. Shows up every single day.',
       loreDescription: 'The Marathon Runner doesn\'t sprint. They endure. Day after day, they show up.',
-      rarity: SkinRarity.uncommon(),
+      rarity: SkinRarity.uncommon,
       xpRequired: 2500,
       tierOrder: 4,
       pillarXPRequirements: PillarXPRequirements(
@@ -238,13 +264,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/marathon_runner/particles.json',
       backgroundAsset: 'assets/skins/marathon_runner/bg.png',
     ),
-    SkinTier.researcher(): SkinConfig(
-      tier: SkinTier.researcher(),
+    SkinTier.researcher: SkinConfig(
+      tier: SkinTier.researcher,
       name: 'researcher',
       displayName: 'Researcher',
       description: 'Seeker of new knowledge. Creates what didn\'t exist before.',
       loreDescription: 'The Researcher doesn\'t accept answers. They question them. Then find new ones.',
-      rarity: SkinRarity.rare(),
+      rarity: SkinRarity.rare,
       xpRequired: 5000,
       tierOrder: 5,
       pillarXPRequirements: PillarXPRequirements(
@@ -276,13 +302,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/researcher/particles.json',
       backgroundAsset: 'assets/skins/researcher/bg.png',
     ),
-    SkinTier.leader(): SkinConfig(
-      tier: SkinTier.leader(),
+    SkinTier.leader: SkinConfig(
+      tier: SkinTier.leader,
       name: 'leader',
       displayName: 'Leader',
       description: 'Guides others. Builds teams. Creates change through others.',
       loreDescription: 'The Leader doesn\'t walk alone. They clear the path so others can follow.',
-      rarity: SkinRarity.rare(),
+      rarity: SkinRarity.rare,
       xpRequired: 5000,
       tierOrder: 6,
       pillarXPRequirements: PillarXPRequirements(
@@ -314,13 +340,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/leader/particles.json',
       backgroundAsset: 'assets/skins/leader/bg.png',
     ),
-    SkinTier.creator(): SkinConfig(
-      tier: SkinTier.creator(),
+    SkinTier.creator: SkinConfig(
+      tier: SkinTier.creator,
       name: 'creator',
       displayName: 'Creator',
       description: 'Makes things that didn\'t exist. Art, code, music, systems.',
       loreDescription: 'The Creator sees blank canvases everywhere. And fills them all.',
-      rarity: SkinRarity.rare(),
+      rarity: SkinRarity.rare,
       xpRequired: 5000,
       tierOrder: 7,
       pillarXPRequirements: PillarXPRequirements(
@@ -352,13 +378,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/creator/particles.json',
       backgroundAsset: 'assets/skins/creator/bg.png',
     ),
-    SkinTier.changemaker(): SkinConfig(
-      tier: SkinTier.changemaker(),
+    SkinTier.changemaker: SkinConfig(
+      tier: SkinTier.changemaker,
       name: 'changemaker',
       displayName: 'Changemaker',
       description: 'Impacts community. Solves real problems. Leaves things better.',
       loreDescription: 'The Changemaker sees problems as invitations. And RSVPs with action.',
-      rarity: SkinRarity.rare(),
+      rarity: SkinRarity.rare,
       xpRequired: 5000,
       tierOrder: 8,
       pillarXPRequirements: PillarXPRequirements(
@@ -390,13 +416,13 @@ class SkinCatalog {
       particleEffect: 'assets/skins/changemaker/particles.json',
       backgroundAsset: 'assets/skins/changemaker/bg.png',
     ),
-    SkinTier.trailblazer(): SkinConfig(
-      tier: SkinTier.trailblazer(),
+    SkinTier.trailblazer: SkinConfig(
+      tier: SkinTier.trailblazer,
       name: 'trailblazer',
       displayName: 'Trailblazer',
       description: 'Legendary. Masters all pillars. Blazes trails for others.',
       loreDescription: 'The Trailblazer doesn\'t follow paths. They forge them. Others follow the light.',
-      rarity: SkinRarity.legendary(),
+      rarity: SkinRarity.legendary,
       xpRequired: 15000,
       tierOrder: 9,
       pillarXPRequirements: PillarXPRequirements(
@@ -432,11 +458,11 @@ class SkinCatalog {
 
   static SkinConfig getConfig(SkinTier tier) => skins[tier]!;
   
-  static List<SkinTier> getOrderedTiers() => skins.entries
-      .toList()
-    ..sort((a, b) => a.value.tierOrder.compareTo(b.value.tierOrder))
-    ..map((e) => e.key)
-    .toList();
+  static List<SkinTier> getOrderedTiers() {
+    final entries = skins.entries.toList();
+    entries.sort((a, b) => a.value.tierOrder.compareTo(b.value.tierOrder));
+    return entries.map((e) => e.key).toList();
+  }
 }
 
 @freezed
@@ -462,7 +488,9 @@ abstract class SkinConfig with _$SkinConfig {
   }) = _SkinConfig;
 
   factory SkinConfig.fromJson(Map<String, dynamic> json) => _$SkinConfigFromJson(json);
-  
+}
+
+extension SkinConfigX on SkinConfig {
   Skin toSkin({required bool unlocked, bool equipped = false}) {
     return Skin(
       id: name,
@@ -480,7 +508,7 @@ abstract class SkinConfig with _$SkinConfig {
       backgroundAssetPath: backgroundAsset,
       xpRequired: xpRequired,
       tierOrder: tierOrder,
-      pillarXPRequirements: pillarXPRequirements.toJson(),
+      pillarXPRequirements: Map<String, int>.from(pillarXPRequirements.toJson()),
       unlockCriteria: unlockCriteria,
       visualProperties: visualProperties,
       unlockedAt: unlocked ? DateTime.now() : null,

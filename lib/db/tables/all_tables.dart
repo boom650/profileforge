@@ -34,6 +34,7 @@ enum StudentProfileField {
 }
 
 class StudentProfiles extends Table {
+  @UseRowClass(StudentProfileData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   TextColumn get email => text().withLength(max: 255)();
@@ -57,6 +58,9 @@ class StudentProfiles extends Table {
   IntColumn get currentStreak => integer().withDefault(const Constant(0))();
   IntColumn get longestStreak => integer().withDefault(const Constant(0))();
   IntColumn get lastActiveDate => integer().nullable()();
+  TextColumn get currentSkinId => text().nullable()();
+  TextColumn get currentFrameId => text().nullable()();
+  TextColumn get equippedBadgesJson => text().map(const StringListConverter())();
   DateTimeColumn get createdAt => dateTime().clientDefault(() => DateTime.now())();
   DateTimeColumn get updatedAt => dateTime().clientDefault(() => DateTime.now())();
 
@@ -74,6 +78,7 @@ class StudentProfiles extends Table {
 }
 
 class Activities extends Table {
+  @UseRowClass(ActivityData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get title => text().withLength(min: 1, max: 200)();
@@ -140,6 +145,7 @@ enum MissionDifficulty {
 }
 
 class Missions extends Table {
+  @UseRowClass(MissionData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get title => text().withLength(min: 1, max: 200)();
   TextColumn get description => text().withLength(max: 1000)();
@@ -171,6 +177,7 @@ class Missions extends Table {
 }
 
 class Opportunities extends Table {
+  @UseRowClass(OpportunityData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get title => text().withLength(min: 1, max: 300)();
   TextColumn get description => text().withLength(max: 5000)();
@@ -244,6 +251,7 @@ enum SkinCategory {
 }
 
 class Skins extends Table {
+  @UseRowClass(SkinData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   TextColumn get description => text().withLength(max: 500)();
@@ -265,6 +273,7 @@ class Skins extends Table {
 }
 
 class Streaks extends Table {
+  @UseRowClass(StreakData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get type => text().withDefault(const Constant('activity'))();
@@ -287,6 +296,7 @@ class Streaks extends Table {
 }
 
 class Evidence extends Table {
+  @UseRowClass(EvidenceData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get activityId => text().references(Activities, #id, onDelete: KeyAction.cascade).nullable()();
@@ -316,6 +326,7 @@ class Evidence extends Table {
 }
 
 class AdmissionsProbabilities extends Table {
+  @UseRowClass(AdmissionsProbabilityData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get universityName => text().withLength(min: 1, max: 300)();
@@ -353,6 +364,7 @@ class AdmissionsProbabilities extends Table {
 }
 
 class MissionProgresses extends Table {
+  @UseRowClass(MissionProgressData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get missionId => text().references(Missions, #id, onDelete: KeyAction.cascade)();
@@ -375,6 +387,7 @@ class MissionProgresses extends Table {
 }
 
 class OpportunityApplications extends Table {
+  @UseRowClass(OpportunityApplicationData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get opportunityId => text().references(Opportunities, #id, onDelete: KeyAction.cascade)();
@@ -401,6 +414,7 @@ class OpportunityApplications extends Table {
 }
 
 class SkinCollections extends Table {
+  @UseRowClass(SkinCollectionData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get skinId => text().references(Skins, #id, onDelete: KeyAction.cascade)();
@@ -422,6 +436,7 @@ class SkinCollections extends Table {
 }
 
 class Notifications extends Table {
+  @UseRowClass(NotificationData)
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get studentId => text().references(StudentProfiles, #id, onDelete: KeyAction.cascade)();
   TextColumn get title => text().withLength(min: 1, max: 200)();

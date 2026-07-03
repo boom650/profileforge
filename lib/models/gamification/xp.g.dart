@@ -1,0 +1,171 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'xp.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$XPStateImpl _$$XPStateImplFromJson(Map<String, dynamic> json) =>
+    _$XPStateImpl(
+      totalXP: (json['totalXP'] as num).toInt(),
+      pillarXP: (json['pillarXP'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            $enumDecode(_$AdmissionsPillarEnumMap, k), (e as num).toInt()),
+      ),
+      currentLevel: (json['currentLevel'] as num).toInt(),
+      xpToNextLevel: (json['xpToNextLevel'] as num).toInt(),
+      pillarLevels: (json['pillarLevels'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            $enumDecode(_$AdmissionsPillarEnumMap, k), (e as num).toInt()),
+      ),
+      transactionHistory: (json['transactionHistory'] as List<dynamic>)
+          .map((e) => XPTransaction.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+      lifetimeXPEarned: (json['lifetimeXPEarned'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$XPStateImplToJson(_$XPStateImpl instance) =>
+    <String, dynamic>{
+      'totalXP': instance.totalXP,
+      'pillarXP': instance.pillarXP
+          .map((k, e) => MapEntry(_$AdmissionsPillarEnumMap[k]!, e)),
+      'currentLevel': instance.currentLevel,
+      'xpToNextLevel': instance.xpToNextLevel,
+      'pillarLevels': instance.pillarLevels
+          .map((k, e) => MapEntry(_$AdmissionsPillarEnumMap[k]!, e)),
+      'transactionHistory': instance.transactionHistory,
+      'lastUpdated': instance.lastUpdated.toIso8601String(),
+      'lifetimeXPEarned': instance.lifetimeXPEarned,
+    };
+
+const _$AdmissionsPillarEnumMap = {
+  AdmissionsPillar.academics: 'academics',
+  AdmissionsPillar.evidence: 'evidence',
+  AdmissionsPillar.consistency: 'consistency',
+  AdmissionsPillar.research: 'research',
+  AdmissionsPillar.leadership: 'leadership',
+  AdmissionsPillar.creativity: 'creativity',
+  AdmissionsPillar.communityImpact: 'communityImpact',
+  AdmissionsPillar.trailblazer: 'trailblazer',
+};
+
+_$XPTransactionImpl _$$XPTransactionImplFromJson(Map<String, dynamic> json) =>
+    _$XPTransactionImpl(
+      id: json['id'] as String,
+      amount: (json['amount'] as num).toInt(),
+      pillar: $enumDecode(_$AdmissionsPillarEnumMap, json['pillar']),
+      type: $enumDecode(_$XPTransactionTypeEnumMap, json['type']),
+      source: json['source'] as String,
+      description: json['description'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      metadata: json['metadata'] as Map<String, dynamic>?,
+    );
+
+Map<String, dynamic> _$$XPTransactionImplToJson(_$XPTransactionImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'amount': instance.amount,
+      'pillar': _$AdmissionsPillarEnumMap[instance.pillar]!,
+      'type': _$XPTransactionTypeEnumMap[instance.type]!,
+      'source': instance.source,
+      'description': instance.description,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'metadata': instance.metadata,
+    };
+
+const _$XPTransactionTypeEnumMap = {
+  XPTransactionType.earned: 'earned',
+  XPTransactionType.spent: 'spent',
+  XPTransactionType.bonus: 'bonus',
+  XPTransactionType.penalty: 'penalty',
+  XPTransactionType.milestone: 'milestone',
+  XPTransactionType.streak: 'streak',
+  XPTransactionType.mission: 'mission',
+  XPTransactionType.activity: 'activity',
+  XPTransactionType.verification: 'verification',
+};
+
+_$XPSourceImpl _$$XPSourceImplFromJson(Map<String, dynamic> json) =>
+    _$XPSourceImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      pillar: $enumDecode(_$AdmissionsPillarEnumMap, json['pillar']),
+      baseXP: (json['baseXP'] as num).toInt(),
+      description: json['description'] as String,
+      isRepeatable: json['isRepeatable'] as bool,
+      maxPerDay: (json['maxPerDay'] as num?)?.toInt(),
+      maxPerWeek: (json['maxPerWeek'] as num?)?.toInt(),
+      conditions: json['conditions'] as Map<String, dynamic>,
+    );
+
+Map<String, dynamic> _$$XPSourceImplToJson(_$XPSourceImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'pillar': _$AdmissionsPillarEnumMap[instance.pillar]!,
+      'baseXP': instance.baseXP,
+      'description': instance.description,
+      'isRepeatable': instance.isRepeatable,
+      'maxPerDay': instance.maxPerDay,
+      'maxPerWeek': instance.maxPerWeek,
+      'conditions': instance.conditions,
+    };
+
+_$LevelConfigImpl _$$LevelConfigImplFromJson(Map<String, dynamic> json) =>
+    _$LevelConfigImpl(
+      level: (json['level'] as num).toInt(),
+      xpRequired: (json['xpRequired'] as num).toInt(),
+      cumulativeXP: (json['cumulativeXP'] as num).toInt(),
+      rewards:
+          (json['rewards'] as List<dynamic>).map((e) => e as String).toList(),
+      pillarXPRequired: (json['pillarXPRequired'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            $enumDecode(_$AdmissionsPillarEnumMap, k), (e as num).toInt()),
+      ),
+    );
+
+Map<String, dynamic> _$$LevelConfigImplToJson(_$LevelConfigImpl instance) =>
+    <String, dynamic>{
+      'level': instance.level,
+      'xpRequired': instance.xpRequired,
+      'cumulativeXP': instance.cumulativeXP,
+      'rewards': instance.rewards,
+      'pillarXPRequired': instance.pillarXPRequired
+          .map((k, e) => MapEntry(_$AdmissionsPillarEnumMap[k]!, e)),
+    };
+
+_$XPActivityImpl _$$XPActivityImplFromJson(Map<String, dynamic> json) =>
+    _$XPActivityImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      pillar: $enumDecode(_$AdmissionsPillarEnumMap, json['pillar']),
+      baseXP: (json['baseXP'] as num).toInt(),
+      description: json['description'] as String,
+      type: $enumDecode(_$XPTransactionTypeEnumMap, json['type']),
+      isRepeatable: json['isRepeatable'] as bool,
+      maxPerDay: (json['maxPerDay'] as num?)?.toInt(),
+      maxPerWeek: (json['maxPerWeek'] as num?)?.toInt(),
+      maxPerMonth: (json['maxPerMonth'] as num?)?.toInt(),
+      maxPerQuarter: (json['maxPerQuarter'] as num?)?.toInt(),
+      maxPerYear: (json['maxPerYear'] as num?)?.toInt(),
+      maxPerSection: (json['maxPerSection'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$XPActivityImplToJson(_$XPActivityImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'pillar': _$AdmissionsPillarEnumMap[instance.pillar]!,
+      'baseXP': instance.baseXP,
+      'description': instance.description,
+      'type': _$XPTransactionTypeEnumMap[instance.type]!,
+      'isRepeatable': instance.isRepeatable,
+      'maxPerDay': instance.maxPerDay,
+      'maxPerWeek': instance.maxPerWeek,
+      'maxPerMonth': instance.maxPerMonth,
+      'maxPerQuarter': instance.maxPerQuarter,
+      'maxPerYear': instance.maxPerYear,
+      'maxPerSection': instance.maxPerSection,
+    };

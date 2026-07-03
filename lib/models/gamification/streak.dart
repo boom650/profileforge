@@ -11,6 +11,8 @@ abstract class Streak with _$Streak {
     required int longestStreak,
     required int totalActiveDays,
     required int freezeTokens,
+    required int maxFreezeTokens,
+    required int freezeTokensEarned,
     required int graceDaysRemaining,
     required int graceDaysUsedThisWeek,
     required DateTime? lastActiveDate,
@@ -21,6 +23,9 @@ abstract class Streak with _$Streak {
     required int weeklyCheckInTarget,
     required int weeklyCheckInsCompleted,
     required DateTime lastWeekReset,
+    required bool hasWeekendAmulet,
+    required DateTime? weekendAmuletExpiresAt,
+    required List<int> weeklyActivityPattern, // 7 ints for Mon-Sun activity count
   }) = _Streak;
 
   factory Streak.fromJson(Map<String, dynamic> json) => _$StreakFromJson(json);
@@ -30,6 +35,8 @@ abstract class Streak with _$Streak {
         longestStreak: 0,
         totalActiveDays: 0,
         freezeTokens: 3,
+        maxFreezeTokens: 5,
+        freezeTokensEarned: 0,
         graceDaysRemaining: 2,
         graceDaysUsedThisWeek: 0,
         lastActiveDate: null,
@@ -40,6 +47,9 @@ abstract class Streak with _$Streak {
         weeklyCheckInTarget: 5,
         weeklyCheckInsCompleted: 0,
         lastWeekReset: DateTime.now(),
+        hasWeekendAmulet: false,
+        weekendAmuletExpiresAt: null,
+        weeklyActivityPattern: [0, 0, 0, 0, 0, 0, 0],
       );
 }
 
