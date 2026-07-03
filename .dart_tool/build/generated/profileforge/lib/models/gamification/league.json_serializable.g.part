@@ -1,0 +1,462 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$LeagueStandingImpl _$$LeagueStandingImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueStandingImpl(
+      userId: json['userId'] as String,
+      username: json['username'] as String,
+      avatarUrl: json['avatarUrl'] as String,
+      currentTier: $enumDecode(_$LeagueTierEnumMap, json['currentTier']),
+      weeklyXP: (json['weeklyXP'] as num).toInt(),
+      rank: (json['rank'] as num).toInt(),
+      previousRank: (json['previousRank'] as num).toInt(),
+      streakDays: (json['streakDays'] as num).toInt(),
+      isPromoted: json['isPromoted'] as bool,
+      isDemoted: json['isDemoted'] as bool,
+      isNewEntry: json['isNewEntry'] as bool,
+      achievements: (json['achievements'] as List<dynamic>)
+          .map((e) => LeagueAchievement.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$LeagueStandingImplToJson(
+        _$LeagueStandingImpl instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'username': instance.username,
+      'avatarUrl': instance.avatarUrl,
+      'currentTier': _$LeagueTierEnumMap[instance.currentTier]!,
+      'weeklyXP': instance.weeklyXP,
+      'rank': instance.rank,
+      'previousRank': instance.previousRank,
+      'streakDays': instance.streakDays,
+      'isPromoted': instance.isPromoted,
+      'isDemoted': instance.isDemoted,
+      'isNewEntry': instance.isNewEntry,
+      'achievements': instance.achievements,
+    };
+
+const _$LeagueTierEnumMap = {
+  LeagueTier.bronze: 'bronze',
+  LeagueTier.silver: 'silver',
+  LeagueTier.gold: 'gold',
+  LeagueTier.platinum: 'platinum',
+  LeagueTier.diamond: 'diamond',
+  LeagueTier.obsidian: 'obsidian',
+};
+
+_$LeagueAchievementImpl _$$LeagueAchievementImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LeagueAchievementImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      iconAsset: json['iconAsset'] as String,
+      earnedAt: DateTime.parse(json['earnedAt'] as String),
+      tierWhenEarned: $enumDecode(_$LeagueTierEnumMap, json['tierWhenEarned']),
+    );
+
+Map<String, dynamic> _$$LeagueAchievementImplToJson(
+        _$LeagueAchievementImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'description': instance.description,
+      'iconAsset': instance.iconAsset,
+      'earnedAt': instance.earnedAt.toIso8601String(),
+      'tierWhenEarned': _$LeagueTierEnumMap[instance.tierWhenEarned]!,
+    };
+
+_$LeagueSeasonImpl _$$LeagueSeasonImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueSeasonImpl(
+      seasonNumber: (json['seasonNumber'] as num).toInt(),
+      weekNumber: (json['weekNumber'] as num).toInt(),
+      year: (json['year'] as num).toInt(),
+      startDate: DateTime.parse(json['startDate'] as String),
+      endDate: DateTime.parse(json['endDate'] as String),
+      tierConfigs: (json['tierConfigs'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry($enumDecode(_$LeagueTierEnumMap, k),
+            LeagueTierConfig.fromJson(e as Map<String, dynamic>)),
+      ),
+      rewardPool:
+          LeagueRewardPool.fromJson(json['rewardPool'] as Map<String, dynamic>),
+      isActive: json['isActive'] as bool,
+    );
+
+Map<String, dynamic> _$$LeagueSeasonImplToJson(_$LeagueSeasonImpl instance) =>
+    <String, dynamic>{
+      'seasonNumber': instance.seasonNumber,
+      'weekNumber': instance.weekNumber,
+      'year': instance.year,
+      'startDate': instance.startDate.toIso8601String(),
+      'endDate': instance.endDate.toIso8601String(),
+      'tierConfigs': instance.tierConfigs
+          .map((k, e) => MapEntry(_$LeagueTierEnumMap[k]!, e)),
+      'rewardPool': instance.rewardPool,
+      'isActive': instance.isActive,
+    };
+
+_$LeagueTierConfigImpl _$$LeagueTierConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LeagueTierConfigImpl(
+      tier: $enumDecode(_$LeagueTierEnumMap, json['tier']),
+      leagueSize: (json['leagueSize'] as num).toInt(),
+      promotionSpots: (json['promotionSpots'] as num).toInt(),
+      demotionSpots: (json['demotionSpots'] as num).toInt(),
+      minXPToEnter: (json['minXPToEnter'] as num).toInt(),
+      rewards: (json['rewards'] as List<dynamic>)
+          .map((e) => LeagueReward.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      divisionName: json['divisionName'] as String,
+    );
+
+Map<String, dynamic> _$$LeagueTierConfigImplToJson(
+        _$LeagueTierConfigImpl instance) =>
+    <String, dynamic>{
+      'tier': _$LeagueTierEnumMap[instance.tier]!,
+      'leagueSize': instance.leagueSize,
+      'promotionSpots': instance.promotionSpots,
+      'demotionSpots': instance.demotionSpots,
+      'minXPToEnter': instance.minXPToEnter,
+      'rewards': instance.rewards,
+      'divisionName': instance.divisionName,
+    };
+
+_$LeagueRewardImpl _$$LeagueRewardImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueRewardImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      iconAsset: json['iconAsset'] as String,
+      type: $enumDecode(_$RewardTypeEnumMap, json['type']),
+      amount: (json['amount'] as num).toInt(),
+      rankRequired: (json['rankRequired'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$LeagueRewardImplToJson(_$LeagueRewardImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'description': instance.description,
+      'iconAsset': instance.iconAsset,
+      'type': _$RewardTypeEnumMap[instance.type]!,
+      'amount': instance.amount,
+      'rankRequired': instance.rankRequired,
+    };
+
+const _$RewardTypeEnumMap = {
+  RewardType.xp: 'xp',
+  RewardType.freezeToken: 'freezeToken',
+  RewardType.graceDay: 'graceDay',
+  RewardType.skin: 'skin',
+  RewardType.frame: 'frame',
+  RewardType.badge: 'badge',
+  RewardType.title: 'title',
+  RewardType.background: 'background',
+  RewardType.particleEffect: 'particleEffect',
+  RewardType.coins: 'coins',
+};
+
+_$LeagueRewardPoolImpl _$$LeagueRewardPoolImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LeagueRewardPoolImpl(
+      totalXP: (json['totalXP'] as num).toInt(),
+      totalFreezeTokens: (json['totalFreezeTokens'] as num).toInt(),
+      totalGraceDays: (json['totalGraceDays'] as num).toInt(),
+      exclusiveSkins: (json['exclusiveSkins'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      exclusiveFrames: (json['exclusiveFrames'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      exclusiveTitles: (json['exclusiveTitles'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      exclusiveBackgrounds: (json['exclusiveBackgrounds'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+    );
+
+Map<String, dynamic> _$$LeagueRewardPoolImplToJson(
+        _$LeagueRewardPoolImpl instance) =>
+    <String, dynamic>{
+      'totalXP': instance.totalXP,
+      'totalFreezeTokens': instance.totalFreezeTokens,
+      'totalGraceDays': instance.totalGraceDays,
+      'exclusiveSkins': instance.exclusiveSkins,
+      'exclusiveFrames': instance.exclusiveFrames,
+      'exclusiveTitles': instance.exclusiveTitles,
+      'exclusiveBackgrounds': instance.exclusiveBackgrounds,
+    };
+
+_$LeagueProfileImpl _$$LeagueProfileImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueProfileImpl(
+      userId: json['userId'] as String,
+      currentTier: $enumDecode(_$LeagueTierEnumMap, json['currentTier']),
+      totalLeagueXP: (json['totalLeagueXP'] as num).toInt(),
+      currentSeasonNumber: (json['currentSeasonNumber'] as num).toInt(),
+      currentWeekNumber: (json['currentWeekNumber'] as num).toInt(),
+      currentRank: (json['currentRank'] as num).toInt(),
+      highestTierReached: (json['highestTierReached'] as num).toInt(),
+      highestRankAchieved: (json['highestRankAchieved'] as num).toInt(),
+      weeksInCurrentTier: (json['weeksInCurrentTier'] as num).toInt(),
+      totalPromotions: (json['totalPromotions'] as num).toInt(),
+      totalDemotions: (json['totalDemotions'] as num).toInt(),
+      seasonHistory: (json['seasonHistory'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            int.parse(k), LeagueStanding.fromJson(e as Map<String, dynamic>)),
+      ),
+      achievements: (json['achievements'] as List<dynamic>)
+          .map((e) => LeagueAchievement.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      lastWeekReset: DateTime.parse(json['lastWeekReset'] as String),
+      isShielded: json['isShielded'] as bool,
+      shieldUsesRemaining: (json['shieldUsesRemaining'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$LeagueProfileImplToJson(_$LeagueProfileImpl instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'currentTier': _$LeagueTierEnumMap[instance.currentTier]!,
+      'totalLeagueXP': instance.totalLeagueXP,
+      'currentSeasonNumber': instance.currentSeasonNumber,
+      'currentWeekNumber': instance.currentWeekNumber,
+      'currentRank': instance.currentRank,
+      'highestTierReached': instance.highestTierReached,
+      'highestRankAchieved': instance.highestRankAchieved,
+      'weeksInCurrentTier': instance.weeksInCurrentTier,
+      'totalPromotions': instance.totalPromotions,
+      'totalDemotions': instance.totalDemotions,
+      'seasonHistory':
+          instance.seasonHistory.map((k, e) => MapEntry(k.toString(), e)),
+      'achievements': instance.achievements,
+      'lastWeekReset': instance.lastWeekReset.toIso8601String(),
+      'isShielded': instance.isShielded,
+      'shieldUsesRemaining': instance.shieldUsesRemaining,
+    };
+
+_$LeagueGroupImpl _$$LeagueGroupImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueGroupImpl(
+      groupId: json['groupId'] as String,
+      tier: $enumDecode(_$LeagueTierEnumMap, json['tier']),
+      weekNumber: (json['weekNumber'] as num).toInt(),
+      year: (json['year'] as num).toInt(),
+      memberIds:
+          (json['memberIds'] as List<dynamic>).map((e) => e as String).toList(),
+      memberXP: Map<String, int>.from(json['memberXP'] as Map),
+      memberRanks: Map<String, int>.from(json['memberRanks'] as Map),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      endsAt: DateTime.parse(json['endsAt'] as String),
+      isFinalized: json['isFinalized'] as bool,
+    );
+
+Map<String, dynamic> _$$LeagueGroupImplToJson(_$LeagueGroupImpl instance) =>
+    <String, dynamic>{
+      'groupId': instance.groupId,
+      'tier': _$LeagueTierEnumMap[instance.tier]!,
+      'weekNumber': instance.weekNumber,
+      'year': instance.year,
+      'memberIds': instance.memberIds,
+      'memberXP': instance.memberXP,
+      'memberRanks': instance.memberRanks,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'endsAt': instance.endsAt.toIso8601String(),
+      'isFinalized': instance.isFinalized,
+    };
+
+_$PromotionNotificationImpl _$$PromotionNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PromotionNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      fromTier: $enumDecode(_$LeagueTierEnumMap, json['fromTier']),
+      toTier: $enumDecode(_$LeagueTierEnumMap, json['toTier']),
+      rank: (json['rank'] as num).toInt(),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$PromotionNotificationImplToJson(
+        _$PromotionNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'fromTier': _$LeagueTierEnumMap[instance.fromTier]!,
+      'toTier': _$LeagueTierEnumMap[instance.toTier]!,
+      'rank': instance.rank,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$DemotionNotificationImpl _$$DemotionNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$DemotionNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      fromTier: $enumDecode(_$LeagueTierEnumMap, json['fromTier']),
+      toTier: $enumDecode(_$LeagueTierEnumMap, json['toTier']),
+      rank: (json['rank'] as num).toInt(),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$DemotionNotificationImplToJson(
+        _$DemotionNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'fromTier': _$LeagueTierEnumMap[instance.fromTier]!,
+      'toTier': _$LeagueTierEnumMap[instance.toTier]!,
+      'rank': instance.rank,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$RankChangeNotificationImpl _$$RankChangeNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RankChangeNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      oldRank: (json['oldRank'] as num).toInt(),
+      newRank: (json['newRank'] as num).toInt(),
+      tier: $enumDecode(_$LeagueTierEnumMap, json['tier']),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$RankChangeNotificationImplToJson(
+        _$RankChangeNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'oldRank': instance.oldRank,
+      'newRank': instance.newRank,
+      'tier': _$LeagueTierEnumMap[instance.tier]!,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$AchievementNotificationImpl _$$AchievementNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AchievementNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      achievement: LeagueAchievement.fromJson(
+          json['achievement'] as Map<String, dynamic>),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$AchievementNotificationImplToJson(
+        _$AchievementNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'achievement': instance.achievement,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$WeeklyRewardsNotificationImpl _$$WeeklyRewardsNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$WeeklyRewardsNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      tier: $enumDecode(_$LeagueTierEnumMap, json['tier']),
+      rank: (json['rank'] as num).toInt(),
+      rewards: (json['rewards'] as List<dynamic>)
+          .map((e) => LeagueReward.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$WeeklyRewardsNotificationImplToJson(
+        _$WeeklyRewardsNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'tier': _$LeagueTierEnumMap[instance.tier]!,
+      'rank': instance.rank,
+      'rewards': instance.rewards,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$LeagueStartingNotificationImpl _$$LeagueStartingNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LeagueStartingNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      tier: $enumDecode(_$LeagueTierEnumMap, json['tier']),
+      startTime: DateTime.parse(json['startTime'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$LeagueStartingNotificationImplToJson(
+        _$LeagueStartingNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'tier': _$LeagueTierEnumMap[instance.tier]!,
+      'startTime': instance.startTime.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$ShieldEarnedNotificationImpl _$$ShieldEarnedNotificationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ShieldEarnedNotificationImpl(
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      shieldCount: (json['shieldCount'] as num).toInt(),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      isRead: json['isRead'] as bool,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$ShieldEarnedNotificationImplToJson(
+        _$ShieldEarnedNotificationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'shieldCount': instance.shieldCount,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'isRead': instance.isRead,
+      'runtimeType': instance.$type,
+    };
+
+_$LeagueSettingsImpl _$$LeagueSettingsImplFromJson(Map<String, dynamic> json) =>
+    _$LeagueSettingsImpl(
+      leaguesEnabled: json['leaguesEnabled'] as bool,
+      autoJoin: json['autoJoin'] as bool,
+      notificationsEnabled: json['notificationsEnabled'] as bool,
+      showInLeaderboard: json['showInLeaderboard'] as bool,
+      shareProgress: json['shareProgress'] as bool,
+      preferredTier: $enumDecode(_$LeagueTierEnumMap, json['preferredTier']),
+      competitiveMode: json['competitiveMode'] as bool,
+    );
+
+Map<String, dynamic> _$$LeagueSettingsImplToJson(
+        _$LeagueSettingsImpl instance) =>
+    <String, dynamic>{
+      'leaguesEnabled': instance.leaguesEnabled,
+      'autoJoin': instance.autoJoin,
+      'notificationsEnabled': instance.notificationsEnabled,
+      'showInLeaderboard': instance.showInLeaderboard,
+      'shareProgress': instance.shareProgress,
+      'preferredTier': _$LeagueTierEnumMap[instance.preferredTier]!,
+      'competitiveMode': instance.competitiveMode,
+    };
