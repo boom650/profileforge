@@ -24,8 +24,8 @@ mixin _$UserProfile {
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
-  String get board => throw _privateConstructorUsedError;
-  String get stream => throw _privateConstructorUsedError;
+  String? get board => throw _privateConstructorUsedError;
+  String? get stream => throw _privateConstructorUsedError;
   int get grade => throw _privateConstructorUsedError;
   Map<String, double> get subjects => throw _privateConstructorUsedError;
   double get tenthPercentage => throw _privateConstructorUsedError;
@@ -70,8 +70,8 @@ abstract class $UserProfileCopyWith<$Res> {
       String name,
       String email,
       String phone,
-      String board,
-      String stream,
+      String? board,
+      String? stream,
       int grade,
       Map<String, double> subjects,
       double tenthPercentage,
@@ -120,8 +120,8 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? name = null,
     Object? email = null,
     Object? phone = null,
-    Object? board = null,
-    Object? stream = null,
+    Object? board = freezed,
+    Object? stream = freezed,
     Object? grade = null,
     Object? subjects = null,
     Object? tenthPercentage = null,
@@ -166,14 +166,14 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String,
-      board: null == board
+      board: freezed == board
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
-              as String,
-      stream: null == stream
+              as String?,
+      stream: freezed == stream
           ? _value.stream
           : stream // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       grade: null == grade
           ? _value.grade
           : grade // ignore: cast_nullable_to_non_nullable
@@ -311,8 +311,8 @@ abstract class _$$UserProfileImplCopyWith<$Res>
       String name,
       String email,
       String phone,
-      String board,
-      String stream,
+      String? board,
+      String? stream,
       int grade,
       Map<String, double> subjects,
       double tenthPercentage,
@@ -361,8 +361,8 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? name = null,
     Object? email = null,
     Object? phone = null,
-    Object? board = null,
-    Object? stream = null,
+    Object? board = freezed,
+    Object? stream = freezed,
     Object? grade = null,
     Object? subjects = null,
     Object? tenthPercentage = null,
@@ -407,14 +407,14 @@ class __$$UserProfileImplCopyWithImpl<$Res>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String,
-      board: null == board
+      board: freezed == board
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
-              as String,
-      stream: null == stream
+              as String?,
+      stream: freezed == stream
           ? _value.stream
           : stream // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       grade: null == grade
           ? _value.grade
           : grade // ignore: cast_nullable_to_non_nullable
@@ -531,8 +531,8 @@ class _$UserProfileImpl implements _UserProfile {
       required this.name,
       required this.email,
       required this.phone,
-      required this.board,
-      required this.stream,
+      this.board,
+      this.stream,
       required this.grade,
       required final Map<String, double> subjects,
       required this.tenthPercentage,
@@ -582,9 +582,9 @@ class _$UserProfileImpl implements _UserProfile {
   @override
   final String phone;
   @override
-  final String board;
+  final String? board;
   @override
-  final String stream;
+  final String? stream;
   @override
   final int grade;
   final Map<String, double> _subjects;
@@ -823,8 +823,8 @@ abstract class _UserProfile implements UserProfile {
       required final String name,
       required final String email,
       required final String phone,
-      required final String board,
-      required final String stream,
+      final String? board,
+      final String? stream,
       required final int grade,
       required final Map<String, double> subjects,
       required final double tenthPercentage,
@@ -864,9 +864,9 @@ abstract class _UserProfile implements UserProfile {
   @override
   String get phone;
   @override
-  String get board;
+  String? get board;
   @override
-  String get stream;
+  String? get stream;
   @override
   int get grade;
   @override

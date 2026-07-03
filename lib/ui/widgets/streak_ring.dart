@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
+import 'micro_interactions.dart';
 
 class StreakRing extends StatelessWidget {
   final int currentStreak;
@@ -147,13 +148,19 @@ class StreakRing extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '$currentStreak',
-                    style: GoogleFonts.inter(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w900,
-                      color: AppTheme.textPrimary,
-                    ),
+                  CountingAnimation(
+                    targetValue: currentStreak,
+                    duration: const Duration(milliseconds: 1000),
+                    builder: (context, currentValue) {
+                      return Text(
+                        '$currentValue',
+                        style: GoogleFonts.inter(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w900,
+                          color: AppTheme.textPrimary,
+                        ),
+                      );
+                    },
                   )
                   .animate()
                   .scale(duration: 600.ms, curve: Curves.elasticOut),

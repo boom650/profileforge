@@ -8,8 +8,8 @@ _$UserProfileImpl _$$UserProfileImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String,
-      board: json['board'] as String,
-      stream: json['stream'] as String,
+      board: json['board'] as String?,
+      stream: json['stream'] as String?,
       grade: (json['grade'] as num).toInt(),
       subjects: (json['subjects'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),

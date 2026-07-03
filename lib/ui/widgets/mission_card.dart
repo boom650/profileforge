@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../../providers/app_providers.dart';
 import '../../models/gamification/missions.dart';
+import 'micro_interactions.dart';
 
 class MissionCard extends StatelessWidget {
   final Mission mission;
@@ -24,7 +25,11 @@ class MissionCard extends StatelessWidget {
 
     final color = typeColors[mission.type] ?? AppTheme.primaryBlue;
 
-    return Container(
+    return TapScale(
+      onTap: mission.isCompleted ? null : () {
+        HapticHelper.light();
+      },
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.surfaceWhite,
@@ -150,18 +155,25 @@ class MissionCard extends StatelessWidget {
           ),
           // Action button
           if (!mission.isCompleted)
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: color,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                minimumSize: const Size(80, 36),
-              ),
-              child: Text(
-                'Start',
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+            TapScale(
+              onTap: () {
+                HapticHelper.medium();
+              },
+              child: ElevatedButton(
+                onPressed: () {
+                  HapticHelper.medium();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 36),
+                ),
+                child: Text(
+                  'Start',
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+                ),
               ),
             )
           else
@@ -181,6 +193,7 @@ class MissionCard extends StatelessWidget {
               ),
             ),
         ],
+      ),
       ),
     ).animate().fadeIn().slideX(begin: 0.1);
   }

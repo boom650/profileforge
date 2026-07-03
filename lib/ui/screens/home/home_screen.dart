@@ -11,6 +11,7 @@ import '../../widgets/probability_radar.dart';
 import '../../widgets/mission_card.dart' hide SkinShowcaseCompact;
 import '../../widgets/skin_showcase.dart';
 import '../../widgets/opportunity_card.dart';
+import '../../widgets/micro_interactions.dart';
 import '../../../models/gamification/missions.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -352,13 +353,18 @@ class _XPProgressCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Text(
-                '$xp / $nextThreshold',
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
-                ),
+              CountingAnimation(
+                targetValue: xp,
+                builder: (context, currentValue) {
+                  return Text(
+                    '$currentValue / $nextThreshold',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textPrimary,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -776,9 +782,17 @@ class ProfileTab extends ConsumerWidget {
                       color: Colors.white,
                     ),
                   ),
-                  Text(
-                    'Grade 11 • CBSE • Science',
-                    style: GoogleFonts.inter(fontSize: 14, color: Colors.white.withValues(alpha: 0.8)),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final profile = ref.watch(studentProfileProvider);
+                      final grade = profile?.grade ?? 11;
+                      final board = profile?.board ?? 'CBSE';
+                      final stream = profile?.stream ?? 'Science';
+                      return Text(
+                        'Grade $grade • $board • $stream',
+                        style: GoogleFonts.inter(fontSize: 14, color: Colors.white.withValues(alpha: 0.8)),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   Row(

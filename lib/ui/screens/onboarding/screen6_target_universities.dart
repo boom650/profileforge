@@ -9,9 +9,9 @@ class Screen6TargetUniversities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reachUnis = ['MIT', 'Stanford', 'Harvard', 'Caltech', 'Princeton', 'Yale', 'Columbia', 'UPenn'];
-    final matchUnis = ['UCLA', 'UCSD', 'UWash', 'Georgia Tech', 'UT Austin', 'UIUC', 'Purdue', 'Texas A&M'];
-    final safetyUnis = ['UMass Amherst', 'ASU', 'Purdue', 'Ohio State', 'UC Irvine', 'UC Davis', 'Colorado Boulder'];
+    final reachUnis = ['MIT', 'Stanford', 'Harvard', 'Caltech', 'Princeton', 'Oxford', 'Cambridge', 'ETH Zurich'];
+    final matchUnis = ['Yale', 'Columbia', 'UCLA', 'UCL', 'Edinburgh', 'UofT', 'UBC', 'Bocconi'];
+    final safetyUnis = ['UCSD', 'Purdue', 'UIUC', 'LSE', 'McGill', 'Waterloo', 'Melbourne', 'TU Delft'];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -45,11 +45,16 @@ class Screen6TargetUniversities extends StatelessWidget {
               Expanded(
                 child: _DropdownField(
                   label: 'Intended Major',
-                  value: 'Computer Science',
+                  value: 'Select your major',
                   items: [
                     'Computer Science', 'Data Science', 'AI/ML', 'Electrical Engineering',
                     'Mechanical Engineering', 'Physics', 'Mathematics', 'Biology/Pre-med',
-                    'Economics', 'Business', 'Psychology', 'Political Science', 'Other'
+                    'Chemistry', 'English Literature', 'History', 'Philosophy', 'Languages',
+                    'Sociology', 'Fine Arts', 'Law', 'Political Science', 'Psychology',
+                    'Economics', 'Business', 'International Relations', 'Media Studies',
+                    'Anthropology', 'Geography', 'Music', 'Theatre/Drama', 'Creative Writing',
+                    'Environmental Science', 'Education', 'Nursing', 'Architecture',
+                    'Journalism', 'Communications', 'Sustainability Studies'
                   ],
                   delay: 200,
                 ),
