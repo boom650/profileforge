@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
@@ -9,13 +10,13 @@ part 'streak_dao.g.dart';
 class StreakDao extends DatabaseAccessor<AppDatabase> with _$StreakDaoMixin {
   StreakDao(super.db);
 
-  Future<StreakData?> getStreak(String studentId, String type) => 
+  Future<Streak?> getStreak(String studentId, String type) => 
       (select(streaks)..where((s) => s.studentId.equals(studentId) & s.type.equals(type))).getSingleOrNull();
 
-  Stream<StreakData?> watchStreak(String studentId, String type) => 
+  Stream<Streak?> watchStreak(String studentId, String type) => 
       (select(streaks)..where((s) => s.studentId.equals(studentId) & s.type.equals(type))).watchSingleOrNull();
 
-  Future<List<StreakData>> getAllStreaks(String studentId) => 
+  Future<List<Streak>> getAllStreaks(String studentId) => 
       (select(streaks)..where((s) => s.studentId.equals(studentId))).get();
 
   Future<int> upsertStreak(StreaksCompanion streak) => 
@@ -59,7 +60,6 @@ class StreakDao extends DatabaseAccessor<AppDatabase> with _$StreakDaoMixin {
       lastActivityDate: Value(today),
       streakStartDate: Value(newStreakStart),
       totalDays: Value((existing?.totalDays ?? 0) + 1),
-      isActive: const Value(true),
     ));
   }
 
@@ -69,7 +69,6 @@ class StreakDao extends DatabaseAccessor<AppDatabase> with _$StreakDaoMixin {
       .write(StreaksCompanion(
         currentStreak: const Value(0),
         streakStartDate: Value(DateTime.now()),
-        isActive: const Value(false),
       ));
   }
 
@@ -85,6 +84,6 @@ class StreakDao extends DatabaseAccessor<AppDatabase> with _$StreakDaoMixin {
 
   Future<bool> isStreakActive(String studentId, String type) async {
     final streak = await getStreak(studentId, type);
-    return streak?.isActive ?? false;
+    return (streak?.currentStreak ?? 0) > 0;
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../models/student_profile.dart';
+import '../../../models/student_profile.dart';
 
 class Screen5ActivityInventory extends StatelessWidget {
   const Screen5ActivityInventory({super.key});
@@ -195,7 +195,7 @@ class _CategoryRow extends StatelessWidget {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(category.icon, color: color, size: 22),
+              child: Text(category.icon, style: TextStyle(fontSize: 22)),
             ),
             const SizedBox(width: 16),
             Expanded(

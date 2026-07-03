@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
@@ -9,17 +10,17 @@ part 'mission_progress_dao.g.dart';
 class MissionProgressDao extends DatabaseAccessor<AppDatabase> with _$MissionProgressDaoMixin {
   MissionProgressDao(super.db);
 
-  Future<MissionProgressData?> getProgress(String studentId, String missionId) => 
+  Future<MissionProgressesData?> getProgress(String studentId, String missionId) => 
       (select(missionProgresses)
         ..where((mp) => mp.studentId.equals(studentId) & mp.missionId.equals(missionId)))
         .getSingleOrNull();
 
-  Stream<MissionProgressData?> watchProgress(String studentId, String missionId) => 
+  Stream<MissionProgressesData?> watchProgress(String studentId, String missionId) => 
       (select(missionProgresses)
         ..where((mp) => mp.studentId.equals(studentId) & mp.missionId.equals(missionId)))
         .watchSingleOrNull();
 
-  Future<List<MissionProgressData>> getAllProgress(String studentId) => 
+  Future<List<MissionProgressesData>> getAllProgress(String studentId) => 
       (select(missionProgresses)..where((mp) => mp.studentId.equals(studentId))).get();
 
   Future<int> upsertProgress(MissionProgressesCompanion progress) => 

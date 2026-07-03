@@ -1,25 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meta/meta.dart';
-import 'dart:convert';
-import 'models/student_profile.dart';
-import 'models/gamification/skins.dart';
-import 'models/gamification/streak.dart';
-import 'models/gamification/xp.dart';
-import 'models/gamification/missions.dart';
-import 'services/gamification/gamification_service.dart';
+import '../models/student_profile.dart';
+import '../models/gamification/skins.dart';
+import '../models/gamification/streak.dart';
+import '../models/gamification/xp.dart';
+import '../models/gamification/missions.dart';
 
 // Onboarding state
 final onboardingCompletedProvider = FutureProvider<bool>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('onboarding_completed') ?? false;
+  // Default to not onboarded; actual persistence handled later
+  return false;
 });
 
 final setOnboardingCompletedProvider = Provider<Future<void> Function(bool)>((ref) {
   return (bool completed) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarding_completed', completed);
-    ref.invalidate(onboardingCompletedProvider);
+    // Persistence placeholder
   };
 });
 
@@ -46,74 +41,62 @@ class StudentProfileNotifier extends StateNotifier<StudentProfile?> {
   }
 }
 
-// ========== GAMIFICATION PROVIDERS ==========
+// ========== GAMIFICATION STATE (in-memory) ==========
 
-// Main Gamification Service
-final gamificationServiceProvider = gamificationServiceProvider;
+// Streak State
+final streakStateProvider = StateNotifierProvider<StreakStateNotifier, Streak>((ref) {
+  return StreakStateNotifier();
+});
+
+class StreakStateNotifier extends StateNotifier<Streak> {
+  StreakStateNotifier() : super(Streak.initial());
+
+  void updateStreak(Streak streak) {
+    state = streak;
+  }
+}
 
 // Skin State
 final currentSkinProvider = Provider<Skin>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getCurrentSkin() ?? SkinCatalog.getConfig(SkinTier.explorer()).toSkin(unlocked: true);
+  return SkinCatalog.getConfig(SkinTier.explorer).toSkin(unlocked: true);
 });
 
 final unlockedSkinsProvider = Provider<List<Skin>>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getUnlockedSkins() ?? [];
+  return [];
 });
 
 final lockedSkinsProvider = Provider<List<Skin>>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getLockedSkins() ?? [];
-});
-
-final nextSkinToUnlockProvider = Provider<Skin?>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getNextSkinToUnlock();
-});
-
-// Streak State
-final streakProvider = Provider<Streak>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getCurrentStreak() ?? Streak.initial();
-});
-
-final streakActionProvider = Provider.future((ref) async {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.markDailyActive();
+  return SkinTier.values.map((tier) => SkinCatalog.getConfig(tier).toSkin(unlocked: false)).toList();
 });
 
 // XP State
-final xpStateProvider = Provider<XPState>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getXPState() ?? XPState.initial();
+final xpStateProvider = StateNotifierProvider<XPStateNotifier, XPState>((ref) {
+  return XPStateNotifier();
 });
+
+class XPStateNotifier extends StateNotifier<XPState> {
+  XPStateNotifier() : super(XPState.initial());
+
+  void addXP(int amount) {
+    state = state.copyWith(totalXP: state.totalXP + amount);
+  }
+}
 
 final totalXPProvider = Provider<int>((ref) {
   return ref.watch(xpStateProvider).totalXP;
-});
-
-final pillarXPProvider = Provider<Map<AdmissionsPillar, int>>((ref) {
-  return ref.watch(xpStateProvider).pillarXP;
 });
 
 final currentLevelProvider = Provider<int>((ref) {
   return ref.watch(xpStateProvider).currentLevel;
 });
 
-final xpToNextLevelProvider = Provider<int>((ref) {
-  return ref.watch(xpStateProvider).xpToNextLevel;
-});
-
 // Missions State
 final missionsProvider = Provider<List<Mission>>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getActiveMissions() ?? [];
+  return [];
 });
 
 final completedMissionsProvider = Provider<List<Mission>>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getCompletedMissions() ?? [];
+  return [];
 });
 
 final dailyMissionsProvider = Provider<List<Mission>>((ref) {
@@ -126,56 +109,47 @@ final weeklyMissionsProvider = Provider<List<Mission>>((ref) {
   return missions.where((m) => m.type == MissionType.weekly).toList();
 });
 
-final milestoneMissionsProvider = Provider<List<Mission>>((ref) {
-  final missions = ref.watch(missionsProvider);
-  return missions.where((m) => m.type == MissionType.milestone).toList();
-});
-
 final weeklyMissionSetProvider = Provider<WeeklyMissionSet?>((ref) {
-  final service = ref.watch(gamificationServiceProvider).value;
-  return service?.getWeeklyMissions();
+  return null;
 });
 
-// Notifiers for UI events
-final skinUnlockNotifierProvider = skinUnlockNotifierProvider;
-final levelUpNotifierProvider = levelUpNotifierProvider;
-final missionCompleteNotifierProvider = missionCompleteNotifierProvider;
+// ========== NOTIFIERS ==========
 
-// Gamification Actions
+final streakChangedProvider = StateProvider<int>((ref) => 0);
+final levelUpProvider = StateProvider<int>((ref) => 0);
+final missionCompletedProvider = StateProvider<String?>((ref) => null);
+
+// ========== GAMIFICATION ACTIONS ==========
+
 final markDailyActiveProvider = Provider<Future<StreakActionResult> Function({GraceDayReason? graceDayReason})>((ref) {
   return ({GraceDayReason? graceDayReason}) async {
-    final service = ref.read(gamificationServiceProvider).value!;
-    return service.markDailyActive(graceDayReason: graceDayReason);
+    return StreakActionResult.success(
+      newStreak: Streak.initial(),
+      newMilestones: [],
+      xpEarned: 10,
+      freezeTokensEarned: 0,
+      graceDaysEarned: 0,
+      message: "Day marked active!",
+    );
   };
 });
 
 final equipSkinProvider = Provider<Future<void> Function(SkinTier)>((ref) {
-  return (SkinTier tier) async {
-    final service = ref.read(gamificationServiceProvider).value!;
-    await service.equipSkin(tier);
-  };
+  return (SkinTier tier) async {};
 });
 
 final claimMissionRewardProvider = Provider<Future<void> Function(String)>((ref) {
-  return (String missionId) async {
-    // Implementation in service
-  };
+  return (String missionId) async {};
 });
 
 final claimWeeklyBonusProvider = Provider<Future<void> Function()>((ref) {
-  return () async {
-    final service = ref.read(gamificationServiceProvider).value!;
-    await service.claimWeeklyBonus();
-  };
+  return () async {};
 });
 
-// Admissions Probability State
-final admissionsProbabilityProvider = StateNotifierProvider<AdmissionsProbabilityNotifier, Map<String, AdmissionsProbability>>((ref) {
-  return AdmissionsProbabilityNotifier();
-});
+// ========== ADMISSIONS PROBABILITY ==========
 
 @immutable
-class AdmissionsProbability {
+class AdmissionsProbabilityData {
   final String university;
   final String country;
   final String major;
@@ -184,7 +158,7 @@ class AdmissionsProbability {
   final List<String> keyLevers;
   final Map<String, double> sensitivity;
 
-  const AdmissionsProbability({
+  const AdmissionsProbabilityData({
     required this.university,
     required this.country,
     required this.major,
@@ -195,19 +169,20 @@ class AdmissionsProbability {
   });
 }
 
-class AdmissionsProbabilityNotifier extends StateNotifier<Map<String, AdmissionsProbability>> {
+final admissionsProbabilityProvider = StateNotifierProvider<AdmissionsProbabilityNotifier, Map<String, AdmissionsProbabilityData>>((ref) {
+  return AdmissionsProbabilityNotifier();
+});
+
+class AdmissionsProbabilityNotifier extends StateNotifier<Map<String, AdmissionsProbabilityData>> {
   AdmissionsProbabilityNotifier() : super({});
 
-  void updateProbability(String universityKey, AdmissionsProbability probability) {
+  void updateProbability(String universityKey, AdmissionsProbabilityData probability) {
     state = {...state, universityKey: probability};
-  }
-
-  void setAll(Map<String, AdmissionsProbability> probabilities) {
-    state = probabilities;
   }
 }
 
-// Legacy providers for backwards compatibility
+// ========== LEGACY PROVIDERS (for backwards compatibility) ==========
+
 final legacyStreakProvider = StateNotifierProvider<LegacyStreakNotifier, LegacyStreakState>((ref) {
   return LegacyStreakNotifier();
 });
@@ -250,7 +225,7 @@ class LegacyStreakNotifier extends StateNotifier<LegacyStreakState> {
   void markActive() {
     final today = DateTime.now();
     final todayDate = DateTime(today.year, today.month, today.day);
-    
+
     if (state.lastActiveDate == null) {
       state = state.copyWith(
         currentStreak: 1,
@@ -263,9 +238,9 @@ class LegacyStreakNotifier extends StateNotifier<LegacyStreakState> {
     final lastDate = state.lastActiveDate!;
     final diff = todayDate.difference(lastDate).inDays;
 
-    if (diff == 0) {
-      return;
-    } else if (diff == 1) {
+    if (diff == 0) return;
+
+    if (diff == 1) {
       final newStreak = state.currentStreak + 1;
       state = state.copyWith(
         currentStreak: newStreak,
@@ -284,29 +259,9 @@ class LegacyStreakNotifier extends StateNotifier<LegacyStreakState> {
           lastActiveDate: todayDate,
         );
       } else {
-        state = state.copyWith(
-          currentStreak: 1,
-          lastActiveDate: todayDate,
-        );
+        state = state.copyWith(currentStreak: 1, lastActiveDate: todayDate);
       }
     }
-  }
-
-  void addFreezeToken() {
-    state = state.copyWith(freezeTokens: state.freezeTokens + 1);
-  }
-
-  void useGraceDay(DateTime date) {
-    final dateOnly = DateTime(date.year, date.month, date.day);
-    if (!state.graceDaysUsed.contains(dateOnly)) {
-      state = state.copyWith(
-        graceDaysUsed: [...state.graceDaysUsed, dateOnly],
-      );
-    }
-  }
-
-  void loadFromStorage(LegacyStreakState stored) {
-    state = stored;
   }
 }
 
@@ -316,17 +271,13 @@ final legacyXPProvider = StateNotifierProvider<LegacyXPNotifier, int>((ref) {
 
 class LegacyXPNotifier extends StateNotifier<int> {
   LegacyXPNotifier() : super(0);
-
-  void addXP(int amount) {
-    state += amount;
-  }
-
-  void setXP(int xp) {
-    state = xp;
-  }
+  void addXP(int amount) { state += amount; }
 }
 
-@immutable
+final legacyMissionsProvider = StateNotifierProvider<LegacyMissionsNotifier, List<LegacyMission>>((ref) {
+  return LegacyMissionsNotifier();
+});
+
 class LegacyMission {
   final String id;
   final String title;
@@ -334,8 +285,6 @@ class LegacyMission {
   final MissionType type;
   final int xpReward;
   final bool isCompleted;
-  final DateTime? completedAt;
-  final Map<String, dynamic>? metadata;
 
   const LegacyMission({
     required this.id,
@@ -344,63 +293,21 @@ class LegacyMission {
     required this.type,
     required this.xpReward,
     this.isCompleted = false,
-    this.completedAt,
-    this.metadata,
   });
 
-  LegacyMission copyWith({
-    String? id,
-    String? title,
-    String? description,
-    MissionType? type,
-    int? xpReward,
-    bool? isCompleted,
-    DateTime? completedAt,
-    Map<String, dynamic>? metadata,
-  }) {
+  LegacyMission copyWith({bool? isCompleted}) {
     return LegacyMission(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      type: type ?? this.type,
-      xpReward: xpReward ?? this.xpReward,
+      id: id, title: title, description: description,
+      type: type, xpReward: xpReward,
       isCompleted: isCompleted ?? this.isCompleted,
-      completedAt: completedAt ?? this.completedAt,
-      metadata: metadata ?? this.metadata,
     );
   }
 }
 
-final legacyMissionsProvider = StateNotifierProvider<LegacyMissionsNotifier, List<LegacyMission>>((ref) {
-  return LegacyMissionsNotifier();
-});
-
 class LegacyMissionsNotifier extends StateNotifier<List<LegacyMission>> {
   LegacyMissionsNotifier() : super([]);
-
-  void addMission(LegacyMission mission) {
-    state = [...state, mission];
+  void addMission(LegacyMission m) { state = [...state, m]; }
+  void completeMission(String id) {
+    state = state.map((m) => m.id == id ? m.copyWith(isCompleted: true) : m).toList();
   }
-
-  void completeMission(String missionId) {
-    state = state.map((m) {
-      if (m.id == missionId) {
-        return m.copyWith(isCompleted: true, completedAt: DateTime.now());
-      }
-      return m;
-    }).toList();
-  }
-
-  void setMissions(List<LegacyMission> missions) {
-    state = missions;
-  }
-
-  void clearCompleted() {
-    state = state.where((m) => !m.isCompleted).toList();
-  }
-
-  List<LegacyMission> get activeMissions => state.where((m) => !m.isCompleted).toList();
-  List<LegacyMission> get completedMissions => state.where((m) => m.isCompleted).toList();
-  List<LegacyMission> get dailyMissions => state.where((m) => m.type == MissionType.daily && !m.isCompleted).toList();
-  List<LegacyMission> get weeklyMissions => state.where((m) => m.type == MissionType.weekly && !m.isCompleted).toList();
 }

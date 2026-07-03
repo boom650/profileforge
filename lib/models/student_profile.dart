@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:ui' show Color;
 
 part 'student_profile.freezed.dart';
 part 'student_profile.g.dart';

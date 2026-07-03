@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../models/student_profile.dart';
+import '../../../models/student_profile.dart';
 
 class Screen6TargetUniversities extends StatelessWidget {
   const Screen6TargetUniversities({super.key});

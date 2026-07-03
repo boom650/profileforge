@@ -19,11 +19,7 @@ class Screen1Welcome extends StatelessWidget {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppTheme.gradientPrimary,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              gradient: AppTheme.gradientPrimary,
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(

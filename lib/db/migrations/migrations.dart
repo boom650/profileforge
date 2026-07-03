@@ -5,10 +5,13 @@ import 'package:sqlite3/sqlite3.dart';
 import '../tables/all_tables.dart';
 import '../database.dart';
 
+/// Helper to get the AppDatabase from the Migrator
+AppDatabase _db(Migrator m) => m.database as AppDatabase;
+
 /// Migration from v1 to v2 - Add notification table and update indexes
 Future<void> migrationV1ToV2(Migrator m, int from, int to) async {
   // Create notifications table
-  await m.createTable(notifications);
+  await m.createTable(_db(m).notifications);
   
   // Add indexes for better query performance
   await m.createIndex(Index.byDialect('idx_student_profiles_email', {SqlDialect.sqlite: 'CREATE INDEX idx_student_profiles_email ON student_profiles (email)'}));
@@ -36,14 +39,14 @@ Future<void> migrationV1ToV2(Migrator m, int from, int to) async {
 /// Migration from v2 to v3 - Add streak milestones and activity verification fields
 Future<void> migrationV2ToV3(Migrator m, int from, int to) async {
   // Add streak milestones column if not exists (might need custom statement)
-  await m.addColumn(streaks, streaks.milestoneRewards);
+  await m.addColumn(_db(m).streaks, _db(m).streaks.milestoneRewards);
   
   // Add admissions score to activities
-  await m.addColumn(activities, activities.admissionsScore);
+  await m.addColumn(_db(m).activities, _db(m).activities.admissionsScore);
   
   // Add verification fields to activities
-  await m.addColumn(activities, activities.verifiedAt);
-  await m.addColumn(activities, activities.verifiedBy);
+  await m.addColumn(_db(m).activities, _db(m).activities.verifiedAt);
+  await m.addColumn(_db(m).activities, _db(m).activities.verifiedBy);
   
   // Create trigger for auto-updating updatedAt timestamps
   await _createUpdatedAtTriggers(m);
@@ -142,30 +145,30 @@ Future<void> _createUpdatedAtTriggers(Migrator m) async {
 /// Migration from v3 to v4 - Add university cost and scholarship fields
 Future<void> migrationV3ToV4(Migrator m, int from, int to) async {
   // Add estimated cost column to admissions_probabilities
-  await m.addColumn(admissionsProbabilities, admissionsProbabilities.estimatedCost);
+  await m.addColumn(_db(m).admissionsProbabilities, _db(m).admissionsProbabilities.estimatedCost);
   
   // Add scholarships column
-  await m.addColumn(admissionsProbabilities, admissionsProbabilities.scholarships);
+  await m.addColumn(_db(m).admissionsProbabilities, _db(m).admissionsProbabilities.scholarships);
   
   // Add application deadline column
-  await m.addColumn(admissionsProbabilities, admissionsProbabilities.applicationDeadline);
+  await m.addColumn(_db(m).admissionsProbabilities, _db(m).admissionsProbabilities.applicationDeadline);
 }
 
 /// Migration from v4 to v5 - Add evidence credibility score
 Future<void> migrationV4ToV5(Migrator m, int from, int to) async {
-  await m.addColumn(evidence, evidence.credibilityScore);
+  await m.addColumn(_db(m).evidence, _db(m).evidence.credibilityScore);
 }
 
 /// Migration from v5 to v6 - Add mission streak tracking
 Future<void> migrationV5ToV6(Migrator m, int from, int to) async {
-  await m.addColumn(missionProgresses, missionProgresses.streakCount);
+  await m.addColumn(_db(m).missionProgresses, _db(m).missionProgresses.streakCount);
 }
 
 /// Migration from v6 to v7 - Add notification scheduling
 Future<void> migrationV6ToV7(Migrator m, int from, int to) async {
-  await m.addColumn(notifications, notifications.scheduledAt);
-  await m.addColumn(notifications, notifications.sentAt);
-  await m.addColumn(notifications, notifications.readAt);
+  await m.addColumn(_db(m).notifications, _db(m).notifications.scheduledAt);
+  await m.addColumn(_db(m).notifications, _db(m).notifications.sentAt);
+  await m.addColumn(_db(m).notifications, _db(m).notifications.readAt);
 }
 
 /// All migrations in order

@@ -9,19 +9,19 @@ part 'notification_dao.g.dart';
 class NotificationDao extends DatabaseAccessor<AppDatabase> with _$NotificationDaoMixin {
   NotificationDao(super.db);
 
-  Future<List<NotificationData>> getAllNotifications(String studentId) => 
+  Future<List<Notification>> getAllNotifications(String studentId) => 
       (select(notifications)
         ..where((n) => n.studentId.equals(studentId))
         ..orderBy([(n) => OrderingTerm.desc(n.createdAt)]))
         .get();
 
-  Stream<List<NotificationData>> watchNotifications(String studentId) => 
+  Stream<List<Notification>> watchNotifications(String studentId) => 
       (select(notifications)
         ..where((n) => n.studentId.equals(studentId))
         ..orderBy([(n) => OrderingTerm.desc(n.createdAt)]))
         .watch();
 
-  Future<List<NotificationData>> getUnreadNotifications(String studentId) => 
+  Future<List<Notification>> getUnreadNotifications(String studentId) => 
       (select(notifications)
         ..where((n) => n.studentId.equals(studentId) & n.isRead.equals(false) & n.isArchived.equals(false))
         ..orderBy([(n) => OrderingTerm.desc(n.createdAt)]))
@@ -35,7 +35,7 @@ class NotificationDao extends DatabaseAccessor<AppDatabase> with _$NotificationD
     return result.read(notifications.id.count()) ?? 0;
   }
 
-  Future<NotificationData?> getNotification(String id) => 
+  Future<Notification?> getNotification(String id) => 
       (select(notifications)..where((n) => n.id.equals(id))).getSingleOrNull();
 
   Future<int> insertNotification(NotificationsCompanion notification) => 

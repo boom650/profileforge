@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
@@ -9,31 +10,31 @@ part 'mission_dao.g.dart';
 class MissionDao extends DatabaseAccessor<AppDatabase> with _$MissionDaoMixin {
   MissionDao(super.db);
 
-  Future<List<MissionData>> getAllMissions() => 
+  Future<List<Mission>> getAllMissions() => 
       (select(missions)..orderBy([(m) => OrderingTerm.asc(m.sortOrder)])).get();
 
-  Stream<List<MissionData>> watchAllMissions() => 
+  Stream<List<Mission>> watchAllMissions() => 
       (select(missions)..orderBy([(m) => OrderingTerm.asc(m.sortOrder)])).watch();
 
-  Future<List<MissionData>> getActiveMissions() => 
+  Future<List<Mission>> getActiveMissions() => 
       (select(missions)
         ..where((m) => m.isActive.equals(true))
         ..orderBy([(m) => OrderingTerm.asc(m.sortOrder)]))
         .get();
 
-  Future<List<MissionData>> getMissionsByCategory(MissionCategory category) => 
+  Future<List<Mission>> getMissionsByCategory(MissionCategory category) => 
       (select(missions)
         ..where((m) => m.category.equals(category.name) & m.isActive.equals(true))
         ..orderBy([(m) => OrderingTerm.asc(m.sortOrder)]))
         .get();
 
-  Future<List<MissionData>> getDailyMissions() => getMissionsByCategory(MissionCategory.daily);
-  Future<List<MissionData>> getWeeklyMissions() => getMissionsByCategory(MissionCategory.weekly);
-  Future<List<MissionData>> getMonthlyMissions() => getMissionsByCategory(MissionCategory.monthly);
-  Future<List<MissionData>> getSpecialMissions() => getMissionsByCategory(MissionCategory.special);
-  Future<List<MissionData>> getMilestoneMissions() => getMissionsByCategory(MissionCategory.milestone);
+  Future<List<Mission>> getDailyMissions() => getMissionsByCategory(MissionCategory.daily);
+  Future<List<Mission>> getWeeklyMissions() => getMissionsByCategory(MissionCategory.weekly);
+  Future<List<Mission>> getMonthlyMissions() => getMissionsByCategory(MissionCategory.monthly);
+  Future<List<Mission>> getSpecialMissions() => getMissionsByCategory(MissionCategory.special);
+  Future<List<Mission>> getMilestoneMissions() => getMissionsByCategory(MissionCategory.milestone);
 
-  Future<MissionData?> getMission(String id) => 
+  Future<Mission?> getMission(String id) => 
       (select(missions)..where((m) => m.id.equals(id))).getSingleOrNull();
 
   Future<int> insertMission(MissionsCompanion mission) => 
@@ -46,17 +47,17 @@ class MissionDao extends DatabaseAccessor<AppDatabase> with _$MissionDaoMixin {
       (delete(missions)..where((m) => m.id.equals(id))).go();
 
   // Mission Progress
-  Future<MissionProgressData?> getProgress(String studentId, String missionId) => 
+  Future<MissionProgressesData?> getProgress(String studentId, String missionId) => 
       (select(missionProgresses)
         ..where((mp) => mp.studentId.equals(studentId) & mp.missionId.equals(missionId)))
         .getSingleOrNull();
 
-  Stream<MissionProgressData?> watchProgress(String studentId, String missionId) => 
+  Stream<MissionProgressesData?> watchProgress(String studentId, String missionId) => 
       (select(missionProgresses)
         ..where((mp) => mp.studentId.equals(studentId) & mp.missionId.equals(missionId)))
         .watchSingleOrNull();
 
-  Future<List<MissionProgressData>> getAllProgress(String studentId) => 
+  Future<List<MissionProgressesData>> getAllProgress(String studentId) => 
       (select(missionProgresses)..where((mp) => mp.studentId.equals(studentId))).get();
 
   Future<int> upsertProgress(MissionProgressesCompanion progress) => 

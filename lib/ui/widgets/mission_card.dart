@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../theme/app_theme.dart';
 import '../../providers/app_providers.dart';
+import '../../models/gamification/missions.dart';
 
 class MissionCard extends StatelessWidget {
   final Mission mission;
@@ -193,6 +194,7 @@ class MissionCard extends StatelessWidget {
       case MissionType.research: return Icons.science_rounded;
       case MissionType.leadership: return Icons.people_rounded;
       case MissionType.volunteering: return Icons.volunteer_activism_rounded;
+      case MissionType.special: return Icons.star_rounded;
     }
   }
 }

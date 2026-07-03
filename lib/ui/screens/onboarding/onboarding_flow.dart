@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../ui/theme/app_theme.dart';
-import '../providers/app_providers.dart';
-import 'onboarding/screen1_welcome.dart';
-import 'onboarding/screen2_consent.dart';
-import 'onboarding/screen3_location_school.dart';
-import 'onboarding/screen4_academic_profile.dart';
-import 'onboarding/screen5_activity_inventory.dart';
-import 'onboarding/screen6_target_universities.dart';
-import 'onboarding/screen7_schedule_builder.dart';
-import 'onboarding/screen8_motivation_personality.dart';
-import 'onboarding/screen9_roadmap.dart';
+import '../../theme/app_theme.dart';
+import '../../../providers/app_providers.dart';
+import 'screen1_welcome.dart';
+import 'screen2_consent.dart';
+import 'screen3_location_school.dart';
+import 'screen4_academic_profile.dart';
+import 'screen5_activity_inventory.dart';
+import 'screen6_target_universities.dart';
+import 'screen7_schedule_builder.dart';
+import 'screen8_motivation_personality.dart';
+import 'screen9_roadmap.dart';
 
 class OnboardingFlow extends ConsumerStatefulWidget {
   const OnboardingFlow({super.key});

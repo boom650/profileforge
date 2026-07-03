@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
+import '../../models/student_profile.dart' hide Activity, StudentProfile;
 
 part 'activity_dao.g.dart';
 
@@ -9,18 +10,18 @@ part 'activity_dao.g.dart';
 class ActivityDao extends DatabaseAccessor<AppDatabase> with _$ActivityDaoMixin {
   ActivityDao(super.db);
 
-  Future<List<ActivityData>> getAllActivities(String studentId) => 
+  Future<List<Activity>> getAllActivities(String studentId) => 
       (select(activities)..where((a) => a.studentId.equals(studentId))).get();
 
-  Stream<List<ActivityData>> watchActivities(String studentId) => 
+  Stream<List<Activity>> watchActivities(String studentId) => 
       (select(activities)..where((a) => a.studentId.equals(studentId))).watch();
 
-  Future<List<ActivityData>> getActivitiesByCategory(String studentId, ActivityCategory category) => 
+  Future<List<Activity>> getActivitiesByCategory(String studentId, ActivityCategory category) => 
       (select(activities)
         ..where((a) => a.studentId.equals(studentId) & a.category.equals(category.name)))
         .get();
 
-  Future<ActivityData?> getActivity(String id) => 
+  Future<Activity?> getActivity(String id) => 
       (select(activities)..where((a) => a.id.equals(id))).getSingleOrNull();
 
   Future<int> insertActivity(ActivitiesCompanion activity) => 
@@ -92,7 +93,7 @@ class ActivityDao extends DatabaseAccessor<AppDatabase> with _$ActivityDaoMixin 
     return result;
   }
 
-  Future<List<ActivityData>> getVerifiedActivities(String studentId) => 
+  Future<List<Activity>> getVerifiedActivities(String studentId) => 
       (select(activities)
         ..where((a) => a.studentId.equals(studentId) & a.verificationStatus.equals('verified')))
         .get();

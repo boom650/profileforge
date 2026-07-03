@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flutter_animate/flutter_animate.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 
@@ -123,11 +123,7 @@ class Screen7ScheduleBuilder extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppTheme.gradientSuccess,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              gradient: AppTheme.gradientSuccess,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(

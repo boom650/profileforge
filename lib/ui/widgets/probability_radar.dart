@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../providers/app_providers.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../../providers/app_providers.dart';
 
 class ProbabilityRadarChart extends StatelessWidget {
-  final Map<String, AdmissionsProbability> probabilities;
+  final Map<String, AdmissionsProbabilityData> probabilities;
 
   const ProbabilityRadarChart({super.key, required this.probabilities});
 
@@ -175,7 +176,7 @@ class _RadarLegendItem extends StatelessWidget {
 
 // Compact version for dashboard
 class ProbabilityRadarCompact extends StatelessWidget {
-  final Map<String, AdmissionsProbability> probabilities;
+  final Map<String, AdmissionsProbabilityData> probabilities;
 
   const ProbabilityRadarCompact({super.key, required this.probabilities});
 

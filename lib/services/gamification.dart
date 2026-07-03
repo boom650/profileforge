@@ -1,3 +1,3 @@
 library gamification_services;
 
-export 'gamification_service.dart';
+export 'gamification/gamification_service.dart';

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
@@ -9,29 +10,29 @@ part 'skin_collection_dao.g.dart';
 class SkinCollectionDao extends DatabaseAccessor<AppDatabase> with _$SkinCollectionDaoMixin {
   SkinCollectionDao(super.db);
 
-  Future<SkinCollectionData?> getCollectionItem(String studentId, String skinId) => 
+  Future<SkinCollection?> getCollectionItem(String studentId, String skinId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId) & sc.skinId.equals(skinId)))
         .getSingleOrNull();
 
-  Stream<SkinCollectionData?> watchCollectionItem(String studentId, String skinId) => 
+  Stream<SkinCollection?> watchCollectionItem(String studentId, String skinId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId) & sc.skinId.equals(skinId)))
         .watchSingleOrNull();
 
-  Future<List<SkinCollectionData>> getStudentCollection(String studentId) => 
+  Future<List<SkinCollection>> getStudentCollection(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId))
         ..orderBy([(sc) => OrderingTerm.asc(sc.createdAt)]))
         .get();
 
-  Stream<List<SkinCollectionData>> watchStudentCollection(String studentId) => 
+  Stream<List<SkinCollection>> watchStudentCollection(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId))
         ..orderBy([(sc) => OrderingTerm.asc(sc.createdAt)]))
         .watch();
 
-  Future<List<SkinCollectionData>> getUnlockedCollection(String studentId) => 
+  Future<List<SkinCollection>> getUnlockedCollection(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId) & sc.isUnlocked.equals(true)))
         .get();
@@ -111,7 +112,7 @@ class SkinCollectionDao extends DatabaseAccessor<AppDatabase> with _$SkinCollect
     return result.read(skinCollections.id.count()) ?? 0;
   }
 
-  Future<SkinCollectionData?> getEquippedByCategory(String studentId, String category) async {
+  Future<SkinCollection?> getEquippedByCategory(String studentId, String category) async {
     final collections = await getStudentCollection(studentId);
     for (final c in collections) {
       if (c.isEquipped) {

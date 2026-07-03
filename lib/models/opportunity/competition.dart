@@ -162,7 +162,7 @@ extension CompetitionExtension on Competition {
       case CompetitionCategory.debate: return Icons.record_voice_over;
       case CompetitionCategory.quiz: return Icons.quiz;
       case CompetitionCategory.olympiad: return Icons.emoji_events;
-      case CompetitionCategory.hackathon: return Icons.hacker_mode;
+      case CompetitionCategory.hackathon: return Icons.code;
       case CompetitionCategory.design: return Icons.design_services;
       case CompetitionCategory.entrepreneurship: return Icons.business;
       case CompetitionCategory.socialImpact: return Icons.volunteer_activism;

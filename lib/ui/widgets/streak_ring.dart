@@ -18,13 +18,13 @@ class StreakRing extends StatelessWidget {
     super.key,
     required this.currentStreak,
     required this.longestStreak,
-    required this.freezeTokens,
-    required this.maxFreezeTokens,
-    required this.hasWeekendAmulet,
-    required this.weekendAmuletExpiresAt,
-    required this.weeklyActivityPattern,
-    required this.freezeTokensEarned,
-    required this.achievedMilestones,
+    this.freezeTokens = 3,
+    this.maxFreezeTokens = 5,
+    this.hasWeekendAmulet = false,
+    this.weekendAmuletExpiresAt,
+    this.weeklyActivityPattern = const [],
+    this.freezeTokensEarned = 0,
+    this.achievedMilestones = const [],
   });
 
   @override

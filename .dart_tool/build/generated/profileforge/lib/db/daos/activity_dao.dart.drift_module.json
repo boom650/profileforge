@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/daos/activity_dao.dart",
-        "offset": 172,
+        "offset": 246,
         "name": "ActivityDao"
       },
       "references": [
@@ -47,6 +47,7 @@
   "imports": [
     "package:drift/drift.dart",
     "package:profileforge/db/tables/all_tables.dart",
-    "package:profileforge/db/database.dart"
+    "package:profileforge/db/database.dart",
+    "package:profileforge/models/student_profile.dart"
   ]
 }

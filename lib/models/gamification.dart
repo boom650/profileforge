@@ -1,7 +1,7 @@
 library gamification_models;
 
-export 'admissions_pillar.dart';
-export 'skins.dart';
-export 'streak.dart';
-export 'xp.dart';
-export 'missions.dart';
+export 'gamification/admissions_pillar.dart';
+export 'gamification/skins.dart';
+export 'gamification/streak.dart';
+export 'gamification/xp.dart';
+export 'gamification/missions.dart';

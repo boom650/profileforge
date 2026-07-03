@@ -9,29 +9,29 @@ part 'opportunity_application_dao.g.dart';
 class OpportunityApplicationDao extends DatabaseAccessor<AppDatabase> with _$OpportunityApplicationDaoMixin {
   OpportunityApplicationDao(super.db);
 
-  Future<OpportunityApplicationData?> getApplication(String studentId, String opportunityId) => 
+  Future<OpportunityApplication?> getApplication(String studentId, String opportunityId) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId) & oa.opportunityId.equals(opportunityId)))
         .getSingleOrNull();
 
-  Stream<OpportunityApplicationData?> watchApplication(String studentId, String opportunityId) => 
+  Stream<OpportunityApplication?> watchApplication(String studentId, String opportunityId) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId) & oa.opportunityId.equals(opportunityId)))
         .watchSingleOrNull();
 
-  Future<List<OpportunityApplicationData>> getStudentApplications(String studentId) => 
+  Future<List<OpportunityApplication>> getStudentApplications(String studentId) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId))
         ..orderBy([(oa) => OrderingTerm.desc(oa.createdAt)]))
         .get();
 
-  Stream<List<OpportunityApplicationData>> watchStudentApplications(String studentId) => 
+  Stream<List<OpportunityApplication>> watchStudentApplications(String studentId) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId))
         ..orderBy([(oa) => OrderingTerm.desc(oa.createdAt)]))
         .watch();
 
-  Future<List<OpportunityApplicationData>> getApplicationsByStatus(String studentId, String status) => 
+  Future<List<OpportunityApplication>> getApplicationsByStatus(String studentId, String status) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId) & oa.status.equals(status)))
         .get();
@@ -87,13 +87,13 @@ class OpportunityApplicationDao extends DatabaseAccessor<AppDatabase> with _$Opp
     return result.read(opportunityApplications.id.count()) ?? 0;
   }
 
-  Future<List<OpportunityApplicationData>> getUpcomingDeadlines(String studentId, {int days = 7}) => 
+  Future<List<OpportunityApplication>> getUpcomingDeadlines(String studentId, {int days = 7}) => 
       (select(opportunityApplications)
         ..where((oa) => oa.studentId.equals(studentId) & 
           oa.status.isIn(['interested', 'preparing', 'applied', 'submitted']) &
           oa.isReminderEnabled.equals(true))
         ..join([innerJoin(opportunities, opportunities.id.equalsExp(opportunityApplications.opportunityId))])
-        ..where(opportunities.applicationDeadline.isSmallerThanValue(DateTime.now().add(Duration(days: days)).millisecondsSinceEpoch))
+        ..where((_) => opportunities.applicationDeadline.isSmallerThanValue(DateTime.now().add(Duration(days: days)).millisecondsSinceEpoch))
         ..orderBy([(oa) => OrderingTerm.asc(opportunities.applicationDeadline)]))
         .get();
 }

@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/daos/opportunity_dao.dart",
-        "offset": 203,
+        "offset": 248,
         "name": "OpportunityDao"
       },
       "references": [
@@ -55,6 +55,7 @@
   "imports": [
     "package:drift/drift.dart",
     "package:profileforge/db/tables/all_tables.dart",
+    "package:profileforge/db/converters/type_converters.dart",
     "package:profileforge/db/database.dart"
   ]
 }

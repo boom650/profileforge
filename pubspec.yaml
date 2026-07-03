@@ -33,6 +33,15 @@ dependencies:
   # UI & Animations
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.0
+  
+  # Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.3
+  
+  # Google Services
+  google_places_flutter: ^2.0.5
+  google_maps_flutter: ^2.7.0
   shimmer: ^3.0.0
   cached_network_image: ^3.3.1
   lottie: ^3.1.2
@@ -43,8 +52,8 @@ dependencies:
   
   # Background tasks
   workmanager: ^0.5.2
-  
-  # Utilities
+
+    # Utilities
   intl: ^0.19.0
   uuid: ^4.4.0
   json_annotation: ^4.9.0

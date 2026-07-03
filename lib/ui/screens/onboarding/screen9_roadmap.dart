@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../models/gamification/skins.dart';
+import '../../../models/gamification/skins.dart';
 
 class Screen9Roadmap extends StatelessWidget {
   const Screen9Roadmap({super.key});

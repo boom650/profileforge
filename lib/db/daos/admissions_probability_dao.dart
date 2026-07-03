@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
+import '../converters/type_converters.dart';
 
 part 'admissions_probability_dao.g.dart';
 
@@ -9,28 +10,28 @@ part 'admissions_probability_dao.g.dart';
 class AdmissionsProbabilityDao extends DatabaseAccessor<AppDatabase> with _$AdmissionsProbabilityDaoMixin {
   AdmissionsProbabilityDao(super.db);
 
-  Future<List<AdmissionsProbabilityData>> getAllProbabilities(String studentId) => 
+  Future<List<AdmissionsProbability>> getAllProbabilities(String studentId) => 
       (select(admissionsProbabilities)
         ..where((p) => p.studentId.equals(studentId))
         ..orderBy([(p) => OrderingTerm.desc(p.calculatedAt)]))
         .get();
 
-  Stream<List<AdmissionsProbabilityData>> watchProbabilities(String studentId) => 
+  Stream<List<AdmissionsProbability>> watchProbabilities(String studentId) => 
       (select(admissionsProbabilities)
         ..where((p) => p.studentId.equals(studentId))
         ..orderBy([(p) => OrderingTerm.desc(p.calculatedAt)]))
         .watch();
 
-  Future<List<AdmissionsProbabilityData>> getProbabilitiesByCategory(String studentId, UniversityCategory category) => 
+  Future<List<AdmissionsProbability>> getProbabilitiesByCategory(String studentId, UniversityCategory category) => 
       (select(admissionsProbabilities)
         ..where((p) => p.studentId.equals(studentId) & p.category.equals(category.name))
         ..orderBy([(p) => OrderingTerm.desc(p.overallProbability)]))
         .get();
 
-  Future<AdmissionsProbabilityData?> getProbability(String id) => 
+  Future<AdmissionsProbability?> getProbability(String id) => 
       (select(admissionsProbabilities)..where((p) => p.id.equals(id))).getSingleOrNull();
 
-  Future<AdmissionsProbabilityData?> getLatestForUniversity(String studentId, String universityName) => 
+  Future<AdmissionsProbability?> getLatestForUniversity(String studentId, String universityName) => 
       (select(admissionsProbabilities)
         ..where((p) => p.studentId.equals(studentId) & p.universityName.equals(universityName))
         ..orderBy([(p) => OrderingTerm.desc(p.calculatedAt)]))
@@ -79,8 +80,9 @@ class AdmissionsProbabilityDao extends DatabaseAccessor<AppDatabase> with _$Admi
   }
 
   Future<Map<UniversityCategory, double>> getAverageProbabilities(String studentId) async {
+    final avgExpr = admissionsProbabilities.overallProbability.avg();
     final rows = await (selectOnly(admissionsProbabilities)
-      ..addColumns([admissionsProbabilities.category, admissionsProbabilities.overallProbability.avg()])
+      ..addColumns([admissionsProbabilities.category, avgExpr])
       ..where(admissionsProbabilities.studentId.equals(studentId))
       ..groupBy([admissionsProbabilities.category]))
       .get();
@@ -91,12 +93,12 @@ class AdmissionsProbabilityDao extends DatabaseAccessor<AppDatabase> with _$Admi
         (e) => e.name == row.read(admissionsProbabilities.category),
         orElse: () => UniversityCategory.target,
       );
-      result[category] = row.read(admissionsProbabilities.overallProbability.avg()) ?? 0.0;
+      result[category] = row.read(avgExpr) ?? 0.0;
     }
     return result;
   }
 
-  Future<List<AdmissionsProbabilityData>> getUpcomingDeadlines(String studentId, {int days = 30}) => 
+  Future<List<AdmissionsProbability>> getUpcomingDeadlines(String studentId, {int days = 30}) => 
       (select(admissionsProbabilities)
         ..where((p) => p.studentId.equals(studentId) & 
           p.applicationStatus.isIn(['planning', 'preparing', 'submitted']) &

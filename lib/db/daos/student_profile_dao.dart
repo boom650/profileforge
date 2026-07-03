@@ -34,15 +34,15 @@ class StudentProfileDao extends DatabaseAccessor<AppDatabase> with _$StudentProf
         updatedAt: Value(DateTime.now()),
       ));
 
-  Future<void> incrementXp(String id, int xp) => 
+  Future<void> incrementXp(String id, int xp) async => 
       (update(studentProfiles)..where((p) => p.id.equals(id))).write(StudentProfilesCompanion(
-        totalXp: Value((await getProfile(id))?.totalXp ?? 0 + xp),
+        totalXp: Value(((await getProfile(id))?.totalXp ?? 0) + xp),
         updatedAt: Value(DateTime.now()),
       ));
 
-  Future<void> incrementCoins(String id, int coins) => 
+  Future<void> incrementCoins(String id, int coins) async => 
       (update(studentProfiles)..where((p) => p.id.equals(id))).write(StudentProfilesCompanion(
-        totalCoins: Value((await getProfile(id))?.totalCoins ?? 0 + coins),
+        totalCoins: Value(((await getProfile(id))?.totalCoins ?? 0) + coins),
         updatedAt: Value(DateTime.now()),
       ));
 

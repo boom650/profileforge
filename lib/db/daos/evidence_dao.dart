@@ -56,10 +56,11 @@ class EvidenceDao extends DatabaseAccessor<AppDatabase> with _$EvidenceDaoMixin 
   }
 
   Future<double> getAverageCredibility(String studentId) async {
+    final avgExpr = evidence.credibilityScore.avg();
     final result = await (selectOnly(evidence)
-      ..addColumns([evidence.credibilityScore.average()])
+      ..addColumns([avgExpr])
       ..where(evidence.studentId.equals(studentId)))
       .getSingle();
-    return result.read(evidence.credibilityScore.average()) ?? 0.0;
+    return result.read(avgExpr) ?? 0.0;
   }
 }

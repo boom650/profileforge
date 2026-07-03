@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../theme/app_theme.dart';
-import '../../providers/app_providers.dart';
-import '../../models/gamification/skins.dart';
-import '../widgets/streak_ring.dart';
-import '../widgets/probability_radar.dart';
-import '../widgets/mission_card.dart';
-import '../widgets/skin_showcase.dart';
-import '../widgets/opportunity_card.dart';
+import '../../../providers/app_providers.dart';
+import '../../../models/gamification/skins.dart';
+import '../../widgets/streak_ring.dart';
+import '../../widgets/probability_radar.dart';
+import '../../widgets/mission_card.dart' hide SkinShowcaseCompact;
+import '../../widgets/skin_showcase.dart';
+import '../../widgets/opportunity_card.dart';
+import '../../../models/gamification/missions.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -92,8 +93,8 @@ class DashboardTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streak = ref.watch(streakProvider);
-    final xp = ref.watch(xpProvider);
+    final streak = ref.watch(streakStateProvider);
+    final xp = ref.watch(totalXPProvider);
     final currentSkin = ref.watch(currentSkinProvider);
     final missions = ref.watch(missionsProvider);
     final probabilities = ref.watch(admissionsProbabilityProvider);
@@ -154,7 +155,7 @@ class DashboardTab extends ConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: _XPProgressCard(xp: xp, currentSkin: currentSkin),
+                  child: _XPProgressCard(xp: xp, currentSkin: currentSkin.name),
                 ),
               ],
             ),
@@ -324,11 +325,7 @@ class _XPProgressCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppTheme.surfaceWhite, AppTheme.surfaceLight],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: AppTheme.gradientPrimary,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
       ),
@@ -760,11 +757,7 @@ class ProfileTab extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: AppTheme.gradientPrimary,
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppTheme.gradientPrimary,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Column(

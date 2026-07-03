@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
@@ -9,19 +10,19 @@ part 'skin_dao.g.dart';
 class SkinDao extends DatabaseAccessor<AppDatabase> with _$SkinDaoMixin {
   SkinDao(super.db);
 
-  Future<List<SkinData>> getAllSkins() => 
+  Future<List<Skin>> getAllSkins() => 
       (select(skins)..orderBy([(s) => OrderingTerm.asc(s.sortOrder)])).get();
 
-  Stream<List<SkinData>> watchAllSkins() => 
+  Stream<List<Skin>> watchAllSkins() => 
       (select(skins)..orderBy([(s) => OrderingTerm.asc(s.sortOrder)])).watch();
 
-  Future<List<SkinData>> getSkinsByCategory(SkinCategory category) => 
+  Future<List<Skin>> getSkinsByCategory(SkinCategory category) => 
       (select(skins)
         ..where((s) => s.category.equals(category.name))
         ..orderBy([(s) => OrderingTerm.asc(s.sortOrder)]))
         .get();
 
-  Future<SkinData?> getSkin(String id) => 
+  Future<Skin?> getSkin(String id) => 
       (select(skins)..where((s) => s.id.equals(id))).getSingleOrNull();
 
   Future<int> insertSkin(SkinsCompanion skin) => 
@@ -34,30 +35,30 @@ class SkinDao extends DatabaseAccessor<AppDatabase> with _$SkinDaoMixin {
       (delete(skins)..where((s) => s.id.equals(id))).go();
 
   // Skin Collection
-  Future<SkinCollectionData?> getCollectionItem(String studentId, String skinId) => 
+  Future<SkinCollection?> getCollectionItem(String studentId, String skinId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId) & sc.skinId.equals(skinId)))
         .getSingleOrNull();
 
-  Future<List<SkinCollectionData>> getStudentCollection(String studentId) => 
+  Future<List<SkinCollection>> getStudentCollection(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId))
         ..join([innerJoin(skins, skins.id.equalsExp(skinCollections.skinId))]))
         .get();
 
-  Stream<List<SkinCollectionData>> watchStudentCollection(String studentId) => 
+  Stream<List<SkinCollection>> watchStudentCollection(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId))
         ..join([innerJoin(skins, skins.id.equalsExp(skinCollections.skinId))]))
         .watch();
 
-  Future<List<SkinCollectionData>> getUnlockedSkins(String studentId) => 
+  Future<List<SkinCollection>> getUnlockedSkins(String studentId) => 
       (select(skinCollections)
         ..where((sc) => sc.studentId.equals(studentId) & sc.isUnlocked.equals(true))
         ..join([innerJoin(skins, skins.id.equalsExp(skinCollections.skinId))]))
         .get();
 
-  Future<SkinCollectionData?> getEquippedSkin(String studentId, SkinCategory category) async {
+  Future<SkinCollection?> getEquippedSkin(String studentId, SkinCategory category) async {
     final collections = await getStudentCollection(studentId);
     for (final c in collections) {
       if (c.isEquipped) {

@@ -4,10 +4,13 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 import 'tables/all_tables.dart';
 import 'daos/all_daos.dart';
+import 'converters/type_converters.dart';
+import '../models/student_profile.dart' hide Activity, StudentProfile;
 import 'migrations/migrations.dart';
 
 part 'database.g.dart';

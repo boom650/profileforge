@@ -16,6 +16,28 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF64748B);
   static const Color textMuted = Color(0xFF94A3B8);
 
+  // Gradients
+  static const LinearGradient gradientPrimary = LinearGradient(
+    colors: [primaryBlue, primaryBlueLight],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  static const LinearGradient gradientGold = LinearGradient(
+    colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  static const LinearGradient gradientSuccess = LinearGradient(
+    colors: [Color(0xFF10B981), Color(0xFF059669)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  // Additional colors
+  static const Color primaryPurple = Color(0xFF7C3AED);
+  static const Color accentOrange = Color(0xFFF97316);
+  static const Color accentTeal = Color(0xFF14B8A6);
+
   static const Map<String, Color> categoryColors = {
     'clubs': Color(0xFF3B82F6),
     'sports': Color(0xFF10B981),

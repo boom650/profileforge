@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/database.dart",
-        "offset": 960,
+        "offset": 1106,
         "name": "AppDatabase"
       },
       "references": [
@@ -174,8 +174,11 @@
     "package:path/path.dart",
     "package:path_provider/path_provider.dart",
     "package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart",
+    "package:uuid/uuid.dart",
     "package:profileforge/db/tables/all_tables.dart",
     "package:profileforge/db/daos/all_daos.dart",
+    "package:profileforge/db/converters/type_converters.dart",
+    "package:profileforge/models/student_profile.dart",
     "package:profileforge/db/migrations/migrations.dart"
   ]
 }
