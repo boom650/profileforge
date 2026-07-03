@@ -1433,3 +1433,775 @@ abstract class _SkinConfig implements SkinConfig {
   _$$SkinConfigImplCopyWith<_$SkinConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$SkinCollection {
+  Map<SkinTier, Skin> get ownedSkins => throw _privateConstructorUsedError;
+  SkinTier? get equippedSkin => throw _privateConstructorUsedError;
+  Map<SkinTier, DateTime> get unlockDates => throw _privateConstructorUsedError;
+  Map<SkinTier, int> get unlockOrder => throw _privateConstructorUsedError;
+  List<UnlockCelebration> get celebrationHistory =>
+      throw _privateConstructorUsedError;
+  Map<SkinSynergy, bool> get activeSynergies =>
+      throw _privateConstructorUsedError;
+  SkinTier? get featuredSkin => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $SkinCollectionCopyWith<SkinCollection> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SkinCollectionCopyWith<$Res> {
+  factory $SkinCollectionCopyWith(
+          SkinCollection value, $Res Function(SkinCollection) then) =
+      _$SkinCollectionCopyWithImpl<$Res, SkinCollection>;
+  @useResult
+  $Res call(
+      {Map<SkinTier, Skin> ownedSkins,
+      SkinTier? equippedSkin,
+      Map<SkinTier, DateTime> unlockDates,
+      Map<SkinTier, int> unlockOrder,
+      List<UnlockCelebration> celebrationHistory,
+      Map<SkinSynergy, bool> activeSynergies,
+      SkinTier? featuredSkin});
+}
+
+/// @nodoc
+class _$SkinCollectionCopyWithImpl<$Res, $Val extends SkinCollection>
+    implements $SkinCollectionCopyWith<$Res> {
+  _$SkinCollectionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? ownedSkins = null,
+    Object? equippedSkin = freezed,
+    Object? unlockDates = null,
+    Object? unlockOrder = null,
+    Object? celebrationHistory = null,
+    Object? activeSynergies = null,
+    Object? featuredSkin = freezed,
+  }) {
+    return _then(_value.copyWith(
+      ownedSkins: null == ownedSkins
+          ? _value.ownedSkins
+          : ownedSkins // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, Skin>,
+      equippedSkin: freezed == equippedSkin
+          ? _value.equippedSkin
+          : equippedSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+      unlockDates: null == unlockDates
+          ? _value.unlockDates
+          : unlockDates // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, DateTime>,
+      unlockOrder: null == unlockOrder
+          ? _value.unlockOrder
+          : unlockOrder // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, int>,
+      celebrationHistory: null == celebrationHistory
+          ? _value.celebrationHistory
+          : celebrationHistory // ignore: cast_nullable_to_non_nullable
+              as List<UnlockCelebration>,
+      activeSynergies: null == activeSynergies
+          ? _value.activeSynergies
+          : activeSynergies // ignore: cast_nullable_to_non_nullable
+              as Map<SkinSynergy, bool>,
+      featuredSkin: freezed == featuredSkin
+          ? _value.featuredSkin
+          : featuredSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SkinCollectionImplCopyWith<$Res>
+    implements $SkinCollectionCopyWith<$Res> {
+  factory _$$SkinCollectionImplCopyWith(_$SkinCollectionImpl value,
+          $Res Function(_$SkinCollectionImpl) then) =
+      __$$SkinCollectionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Map<SkinTier, Skin> ownedSkins,
+      SkinTier? equippedSkin,
+      Map<SkinTier, DateTime> unlockDates,
+      Map<SkinTier, int> unlockOrder,
+      List<UnlockCelebration> celebrationHistory,
+      Map<SkinSynergy, bool> activeSynergies,
+      SkinTier? featuredSkin});
+}
+
+/// @nodoc
+class __$$SkinCollectionImplCopyWithImpl<$Res>
+    extends _$SkinCollectionCopyWithImpl<$Res, _$SkinCollectionImpl>
+    implements _$$SkinCollectionImplCopyWith<$Res> {
+  __$$SkinCollectionImplCopyWithImpl(
+      _$SkinCollectionImpl _value, $Res Function(_$SkinCollectionImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? ownedSkins = null,
+    Object? equippedSkin = freezed,
+    Object? unlockDates = null,
+    Object? unlockOrder = null,
+    Object? celebrationHistory = null,
+    Object? activeSynergies = null,
+    Object? featuredSkin = freezed,
+  }) {
+    return _then(_$SkinCollectionImpl(
+      ownedSkins: null == ownedSkins
+          ? _value._ownedSkins
+          : ownedSkins // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, Skin>,
+      equippedSkin: freezed == equippedSkin
+          ? _value.equippedSkin
+          : equippedSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+      unlockDates: null == unlockDates
+          ? _value._unlockDates
+          : unlockDates // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, DateTime>,
+      unlockOrder: null == unlockOrder
+          ? _value._unlockOrder
+          : unlockOrder // ignore: cast_nullable_to_non_nullable
+              as Map<SkinTier, int>,
+      celebrationHistory: null == celebrationHistory
+          ? _value._celebrationHistory
+          : celebrationHistory // ignore: cast_nullable_to_non_nullable
+              as List<UnlockCelebration>,
+      activeSynergies: null == activeSynergies
+          ? _value._activeSynergies
+          : activeSynergies // ignore: cast_nullable_to_non_nullable
+              as Map<SkinSynergy, bool>,
+      featuredSkin: freezed == featuredSkin
+          ? _value.featuredSkin
+          : featuredSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SkinCollectionImpl implements _SkinCollection {
+  const _$SkinCollectionImpl(
+      {required final Map<SkinTier, Skin> ownedSkins,
+      required this.equippedSkin,
+      required final Map<SkinTier, DateTime> unlockDates,
+      required final Map<SkinTier, int> unlockOrder,
+      required final List<UnlockCelebration> celebrationHistory,
+      required final Map<SkinSynergy, bool> activeSynergies,
+      required this.featuredSkin})
+      : _ownedSkins = ownedSkins,
+        _unlockDates = unlockDates,
+        _unlockOrder = unlockOrder,
+        _celebrationHistory = celebrationHistory,
+        _activeSynergies = activeSynergies;
+
+  final Map<SkinTier, Skin> _ownedSkins;
+  @override
+  Map<SkinTier, Skin> get ownedSkins {
+    if (_ownedSkins is EqualUnmodifiableMapView) return _ownedSkins;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_ownedSkins);
+  }
+
+  @override
+  final SkinTier? equippedSkin;
+  final Map<SkinTier, DateTime> _unlockDates;
+  @override
+  Map<SkinTier, DateTime> get unlockDates {
+    if (_unlockDates is EqualUnmodifiableMapView) return _unlockDates;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_unlockDates);
+  }
+
+  final Map<SkinTier, int> _unlockOrder;
+  @override
+  Map<SkinTier, int> get unlockOrder {
+    if (_unlockOrder is EqualUnmodifiableMapView) return _unlockOrder;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_unlockOrder);
+  }
+
+  final List<UnlockCelebration> _celebrationHistory;
+  @override
+  List<UnlockCelebration> get celebrationHistory {
+    if (_celebrationHistory is EqualUnmodifiableListView)
+      return _celebrationHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_celebrationHistory);
+  }
+
+  final Map<SkinSynergy, bool> _activeSynergies;
+  @override
+  Map<SkinSynergy, bool> get activeSynergies {
+    if (_activeSynergies is EqualUnmodifiableMapView) return _activeSynergies;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_activeSynergies);
+  }
+
+  @override
+  final SkinTier? featuredSkin;
+
+  @override
+  String toString() {
+    return 'SkinCollection(ownedSkins: $ownedSkins, equippedSkin: $equippedSkin, unlockDates: $unlockDates, unlockOrder: $unlockOrder, celebrationHistory: $celebrationHistory, activeSynergies: $activeSynergies, featuredSkin: $featuredSkin)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SkinCollectionImpl &&
+            const DeepCollectionEquality()
+                .equals(other._ownedSkins, _ownedSkins) &&
+            (identical(other.equippedSkin, equippedSkin) ||
+                other.equippedSkin == equippedSkin) &&
+            const DeepCollectionEquality()
+                .equals(other._unlockDates, _unlockDates) &&
+            const DeepCollectionEquality()
+                .equals(other._unlockOrder, _unlockOrder) &&
+            const DeepCollectionEquality()
+                .equals(other._celebrationHistory, _celebrationHistory) &&
+            const DeepCollectionEquality()
+                .equals(other._activeSynergies, _activeSynergies) &&
+            (identical(other.featuredSkin, featuredSkin) ||
+                other.featuredSkin == featuredSkin));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_ownedSkins),
+      equippedSkin,
+      const DeepCollectionEquality().hash(_unlockDates),
+      const DeepCollectionEquality().hash(_unlockOrder),
+      const DeepCollectionEquality().hash(_celebrationHistory),
+      const DeepCollectionEquality().hash(_activeSynergies),
+      featuredSkin);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SkinCollectionImplCopyWith<_$SkinCollectionImpl> get copyWith =>
+      __$$SkinCollectionImplCopyWithImpl<_$SkinCollectionImpl>(
+          this, _$identity);
+}
+
+abstract class _SkinCollection implements SkinCollection {
+  const factory _SkinCollection(
+      {required final Map<SkinTier, Skin> ownedSkins,
+      required final SkinTier? equippedSkin,
+      required final Map<SkinTier, DateTime> unlockDates,
+      required final Map<SkinTier, int> unlockOrder,
+      required final List<UnlockCelebration> celebrationHistory,
+      required final Map<SkinSynergy, bool> activeSynergies,
+      required final SkinTier? featuredSkin}) = _$SkinCollectionImpl;
+
+  @override
+  Map<SkinTier, Skin> get ownedSkins;
+  @override
+  SkinTier? get equippedSkin;
+  @override
+  Map<SkinTier, DateTime> get unlockDates;
+  @override
+  Map<SkinTier, int> get unlockOrder;
+  @override
+  List<UnlockCelebration> get celebrationHistory;
+  @override
+  Map<SkinSynergy, bool> get activeSynergies;
+  @override
+  SkinTier? get featuredSkin;
+  @override
+  @JsonKey(ignore: true)
+  _$$SkinCollectionImplCopyWith<_$SkinCollectionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$UnlockCelebration {
+  SkinTier get tier => throw _privateConstructorUsedError;
+  DateTime get timestamp => throw _privateConstructorUsedError;
+  UnlockCelebrationType get celebrationType =>
+      throw _privateConstructorUsedError;
+  List<String> get particlesUsed => throw _privateConstructorUsedError;
+  int get xpAwarded => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $UnlockCelebrationCopyWith<UnlockCelebration> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UnlockCelebrationCopyWith<$Res> {
+  factory $UnlockCelebrationCopyWith(
+          UnlockCelebration value, $Res Function(UnlockCelebration) then) =
+      _$UnlockCelebrationCopyWithImpl<$Res, UnlockCelebration>;
+  @useResult
+  $Res call(
+      {SkinTier tier,
+      DateTime timestamp,
+      UnlockCelebrationType celebrationType,
+      List<String> particlesUsed,
+      int xpAwarded});
+}
+
+/// @nodoc
+class _$UnlockCelebrationCopyWithImpl<$Res, $Val extends UnlockCelebration>
+    implements $UnlockCelebrationCopyWith<$Res> {
+  _$UnlockCelebrationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? tier = null,
+    Object? timestamp = null,
+    Object? celebrationType = null,
+    Object? particlesUsed = null,
+    Object? xpAwarded = null,
+  }) {
+    return _then(_value.copyWith(
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as SkinTier,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      celebrationType: null == celebrationType
+          ? _value.celebrationType
+          : celebrationType // ignore: cast_nullable_to_non_nullable
+              as UnlockCelebrationType,
+      particlesUsed: null == particlesUsed
+          ? _value.particlesUsed
+          : particlesUsed // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      xpAwarded: null == xpAwarded
+          ? _value.xpAwarded
+          : xpAwarded // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UnlockCelebrationImplCopyWith<$Res>
+    implements $UnlockCelebrationCopyWith<$Res> {
+  factory _$$UnlockCelebrationImplCopyWith(_$UnlockCelebrationImpl value,
+          $Res Function(_$UnlockCelebrationImpl) then) =
+      __$$UnlockCelebrationImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {SkinTier tier,
+      DateTime timestamp,
+      UnlockCelebrationType celebrationType,
+      List<String> particlesUsed,
+      int xpAwarded});
+}
+
+/// @nodoc
+class __$$UnlockCelebrationImplCopyWithImpl<$Res>
+    extends _$UnlockCelebrationCopyWithImpl<$Res, _$UnlockCelebrationImpl>
+    implements _$$UnlockCelebrationImplCopyWith<$Res> {
+  __$$UnlockCelebrationImplCopyWithImpl(_$UnlockCelebrationImpl _value,
+      $Res Function(_$UnlockCelebrationImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? tier = null,
+    Object? timestamp = null,
+    Object? celebrationType = null,
+    Object? particlesUsed = null,
+    Object? xpAwarded = null,
+  }) {
+    return _then(_$UnlockCelebrationImpl(
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as SkinTier,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      celebrationType: null == celebrationType
+          ? _value.celebrationType
+          : celebrationType // ignore: cast_nullable_to_non_nullable
+              as UnlockCelebrationType,
+      particlesUsed: null == particlesUsed
+          ? _value._particlesUsed
+          : particlesUsed // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      xpAwarded: null == xpAwarded
+          ? _value.xpAwarded
+          : xpAwarded // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UnlockCelebrationImpl implements _UnlockCelebration {
+  const _$UnlockCelebrationImpl(
+      {required this.tier,
+      required this.timestamp,
+      required this.celebrationType,
+      required final List<String> particlesUsed,
+      required this.xpAwarded})
+      : _particlesUsed = particlesUsed;
+
+  @override
+  final SkinTier tier;
+  @override
+  final DateTime timestamp;
+  @override
+  final UnlockCelebrationType celebrationType;
+  final List<String> _particlesUsed;
+  @override
+  List<String> get particlesUsed {
+    if (_particlesUsed is EqualUnmodifiableListView) return _particlesUsed;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_particlesUsed);
+  }
+
+  @override
+  final int xpAwarded;
+
+  @override
+  String toString() {
+    return 'UnlockCelebration(tier: $tier, timestamp: $timestamp, celebrationType: $celebrationType, particlesUsed: $particlesUsed, xpAwarded: $xpAwarded)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UnlockCelebrationImpl &&
+            (identical(other.tier, tier) || other.tier == tier) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.celebrationType, celebrationType) ||
+                other.celebrationType == celebrationType) &&
+            const DeepCollectionEquality()
+                .equals(other._particlesUsed, _particlesUsed) &&
+            (identical(other.xpAwarded, xpAwarded) ||
+                other.xpAwarded == xpAwarded));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, tier, timestamp, celebrationType,
+      const DeepCollectionEquality().hash(_particlesUsed), xpAwarded);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UnlockCelebrationImplCopyWith<_$UnlockCelebrationImpl> get copyWith =>
+      __$$UnlockCelebrationImplCopyWithImpl<_$UnlockCelebrationImpl>(
+          this, _$identity);
+}
+
+abstract class _UnlockCelebration implements UnlockCelebration {
+  const factory _UnlockCelebration(
+      {required final SkinTier tier,
+      required final DateTime timestamp,
+      required final UnlockCelebrationType celebrationType,
+      required final List<String> particlesUsed,
+      required final int xpAwarded}) = _$UnlockCelebrationImpl;
+
+  @override
+  SkinTier get tier;
+  @override
+  DateTime get timestamp;
+  @override
+  UnlockCelebrationType get celebrationType;
+  @override
+  List<String> get particlesUsed;
+  @override
+  int get xpAwarded;
+  @override
+  @JsonKey(ignore: true)
+  _$$UnlockCelebrationImplCopyWith<_$UnlockCelebrationImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$WeeklySkinRotation {
+  int get weekNumber => throw _privateConstructorUsedError;
+  int get year => throw _privateConstructorUsedError;
+  SkinTier get featuredSkin => throw _privateConstructorUsedError;
+  SkinTier? get exclusiveVariant => throw _privateConstructorUsedError;
+  DateTime get startDate => throw _privateConstructorUsedError;
+  DateTime get endDate => throw _privateConstructorUsedError;
+  Map<String, dynamic> get bonusRewards => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $WeeklySkinRotationCopyWith<WeeklySkinRotation> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $WeeklySkinRotationCopyWith<$Res> {
+  factory $WeeklySkinRotationCopyWith(
+          WeeklySkinRotation value, $Res Function(WeeklySkinRotation) then) =
+      _$WeeklySkinRotationCopyWithImpl<$Res, WeeklySkinRotation>;
+  @useResult
+  $Res call(
+      {int weekNumber,
+      int year,
+      SkinTier featuredSkin,
+      SkinTier? exclusiveVariant,
+      DateTime startDate,
+      DateTime endDate,
+      Map<String, dynamic> bonusRewards});
+}
+
+/// @nodoc
+class _$WeeklySkinRotationCopyWithImpl<$Res, $Val extends WeeklySkinRotation>
+    implements $WeeklySkinRotationCopyWith<$Res> {
+  _$WeeklySkinRotationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? weekNumber = null,
+    Object? year = null,
+    Object? featuredSkin = null,
+    Object? exclusiveVariant = freezed,
+    Object? startDate = null,
+    Object? endDate = null,
+    Object? bonusRewards = null,
+  }) {
+    return _then(_value.copyWith(
+      weekNumber: null == weekNumber
+          ? _value.weekNumber
+          : weekNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      year: null == year
+          ? _value.year
+          : year // ignore: cast_nullable_to_non_nullable
+              as int,
+      featuredSkin: null == featuredSkin
+          ? _value.featuredSkin
+          : featuredSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier,
+      exclusiveVariant: freezed == exclusiveVariant
+          ? _value.exclusiveVariant
+          : exclusiveVariant // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+      startDate: null == startDate
+          ? _value.startDate
+          : startDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      bonusRewards: null == bonusRewards
+          ? _value.bonusRewards
+          : bonusRewards // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$WeeklySkinRotationImplCopyWith<$Res>
+    implements $WeeklySkinRotationCopyWith<$Res> {
+  factory _$$WeeklySkinRotationImplCopyWith(_$WeeklySkinRotationImpl value,
+          $Res Function(_$WeeklySkinRotationImpl) then) =
+      __$$WeeklySkinRotationImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int weekNumber,
+      int year,
+      SkinTier featuredSkin,
+      SkinTier? exclusiveVariant,
+      DateTime startDate,
+      DateTime endDate,
+      Map<String, dynamic> bonusRewards});
+}
+
+/// @nodoc
+class __$$WeeklySkinRotationImplCopyWithImpl<$Res>
+    extends _$WeeklySkinRotationCopyWithImpl<$Res, _$WeeklySkinRotationImpl>
+    implements _$$WeeklySkinRotationImplCopyWith<$Res> {
+  __$$WeeklySkinRotationImplCopyWithImpl(_$WeeklySkinRotationImpl _value,
+      $Res Function(_$WeeklySkinRotationImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? weekNumber = null,
+    Object? year = null,
+    Object? featuredSkin = null,
+    Object? exclusiveVariant = freezed,
+    Object? startDate = null,
+    Object? endDate = null,
+    Object? bonusRewards = null,
+  }) {
+    return _then(_$WeeklySkinRotationImpl(
+      weekNumber: null == weekNumber
+          ? _value.weekNumber
+          : weekNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      year: null == year
+          ? _value.year
+          : year // ignore: cast_nullable_to_non_nullable
+              as int,
+      featuredSkin: null == featuredSkin
+          ? _value.featuredSkin
+          : featuredSkin // ignore: cast_nullable_to_non_nullable
+              as SkinTier,
+      exclusiveVariant: freezed == exclusiveVariant
+          ? _value.exclusiveVariant
+          : exclusiveVariant // ignore: cast_nullable_to_non_nullable
+              as SkinTier?,
+      startDate: null == startDate
+          ? _value.startDate
+          : startDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      bonusRewards: null == bonusRewards
+          ? _value._bonusRewards
+          : bonusRewards // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$WeeklySkinRotationImpl implements _WeeklySkinRotation {
+  const _$WeeklySkinRotationImpl(
+      {required this.weekNumber,
+      required this.year,
+      required this.featuredSkin,
+      required this.exclusiveVariant,
+      required this.startDate,
+      required this.endDate,
+      required final Map<String, dynamic> bonusRewards})
+      : _bonusRewards = bonusRewards;
+
+  @override
+  final int weekNumber;
+  @override
+  final int year;
+  @override
+  final SkinTier featuredSkin;
+  @override
+  final SkinTier? exclusiveVariant;
+  @override
+  final DateTime startDate;
+  @override
+  final DateTime endDate;
+  final Map<String, dynamic> _bonusRewards;
+  @override
+  Map<String, dynamic> get bonusRewards {
+    if (_bonusRewards is EqualUnmodifiableMapView) return _bonusRewards;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_bonusRewards);
+  }
+
+  @override
+  String toString() {
+    return 'WeeklySkinRotation(weekNumber: $weekNumber, year: $year, featuredSkin: $featuredSkin, exclusiveVariant: $exclusiveVariant, startDate: $startDate, endDate: $endDate, bonusRewards: $bonusRewards)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$WeeklySkinRotationImpl &&
+            (identical(other.weekNumber, weekNumber) ||
+                other.weekNumber == weekNumber) &&
+            (identical(other.year, year) || other.year == year) &&
+            (identical(other.featuredSkin, featuredSkin) ||
+                other.featuredSkin == featuredSkin) &&
+            (identical(other.exclusiveVariant, exclusiveVariant) ||
+                other.exclusiveVariant == exclusiveVariant) &&
+            (identical(other.startDate, startDate) ||
+                other.startDate == startDate) &&
+            (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            const DeepCollectionEquality()
+                .equals(other._bonusRewards, _bonusRewards));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      weekNumber,
+      year,
+      featuredSkin,
+      exclusiveVariant,
+      startDate,
+      endDate,
+      const DeepCollectionEquality().hash(_bonusRewards));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$WeeklySkinRotationImplCopyWith<_$WeeklySkinRotationImpl> get copyWith =>
+      __$$WeeklySkinRotationImplCopyWithImpl<_$WeeklySkinRotationImpl>(
+          this, _$identity);
+}
+
+abstract class _WeeklySkinRotation implements WeeklySkinRotation {
+  const factory _WeeklySkinRotation(
+          {required final int weekNumber,
+          required final int year,
+          required final SkinTier featuredSkin,
+          required final SkinTier? exclusiveVariant,
+          required final DateTime startDate,
+          required final DateTime endDate,
+          required final Map<String, dynamic> bonusRewards}) =
+      _$WeeklySkinRotationImpl;
+
+  @override
+  int get weekNumber;
+  @override
+  int get year;
+  @override
+  SkinTier get featuredSkin;
+  @override
+  SkinTier? get exclusiveVariant;
+  @override
+  DateTime get startDate;
+  @override
+  DateTime get endDate;
+  @override
+  Map<String, dynamic> get bonusRewards;
+  @override
+  @JsonKey(ignore: true)
+  _$$WeeklySkinRotationImplCopyWith<_$WeeklySkinRotationImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

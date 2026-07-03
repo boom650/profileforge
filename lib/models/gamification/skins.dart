@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'admissions_pillar.dart';
 
@@ -517,4 +518,313 @@ extension SkinConfigX on SkinConfig {
       equippedAt: equipped ? DateTime.now() : null,
     );
   }
+}
+
+/// Skin unlock celebration types
+enum UnlockCelebrationType {
+  confetti,        // Standard confetti burst
+  particleBurst,   // Skin-specific particle explosion
+  themeTransition, // Full app theme morph
+  legendaryReveal, // Special legendary cinematic
+}
+
+/// Theme data for each skin
+class SkinTheme {
+  final SkinTier tier;
+  final int primaryColor;
+  final int secondaryColor;
+  final int accentColor;
+  final int backgroundColor;
+  final int surfaceColor;
+  final int onPrimaryColor;
+  final int onSurfaceColor;
+  final String particleType;
+  final String backgroundPattern;
+  final double glowIntensity;
+  final List<int> gradientColors;
+  final String fontFamily;
+  final Map<String, dynamic> customProperties;
+
+  const SkinTheme({
+    required this.tier,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.accentColor,
+    required this.backgroundColor,
+    required this.surfaceColor,
+    required this.onPrimaryColor,
+    required this.onSurfaceColor,
+    required this.particleType,
+    required this.backgroundPattern,
+    required this.glowIntensity,
+    required this.gradientColors,
+    required this.fontFamily,
+    required this.customProperties,
+  });
+
+  // Convert to Material ColorScheme
+  ColorScheme toColorScheme() {
+    return ColorScheme(
+      primary: Color(primaryColor),
+      secondary: Color(secondaryColor),
+      tertiary: Color(accentColor),
+      surface: Color(surfaceColor),
+      background: Color(backgroundColor),
+      error: const Color(0xFFB00020),
+      onPrimary: Color(onPrimaryColor),
+      onSecondary: Color(onPrimaryColor),
+      onSurface: Color(onSurfaceColor),
+      onBackground: Color(onSurfaceColor),
+      onError: const Color(0xFFFFFFFF),
+      brightness: backgroundColor < 0xFF888888 ? Brightness.dark : Brightness.light,
+    );
+  }
+}
+
+/// Predefined skin themes
+class SkinThemes {
+  static const Map<SkinTier, SkinTheme> themes = {
+    SkinTier.explorer: SkinTheme(
+      tier: SkinTier.explorer,
+      primaryColor: 0xFF4A90D9,
+      secondaryColor: 0xFFE8F4FD,
+      accentColor: 0xFF2E6DA4,
+      backgroundColor: 0xFFF8FAFC,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF1E293B,
+      particleType: 'sparkle',
+      backgroundPattern: 'subtle_grid',
+      glowIntensity: 0.3,
+      gradientColors: [0xFF4A90D9, 0xFF2E6DA4],
+      fontFamily: 'GoogleFonts.poppins',
+      customProperties: {
+        'cardElevation': 2.0,
+        'borderRadius': 12.0,
+      },
+    ),
+    SkinTier.scholar: SkinTheme(
+      tier: SkinTier.scholar,
+      primaryColor: 0xFF2E6DA4,
+      secondaryColor: 0xFFD6EAF8,
+      accentColor: 0xFF1B4F72,
+      backgroundColor: 0xFFFEFEFE,
+      surfaceColor: 0xFFF8F9FA,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF1B4F72,
+      particleType: 'book_particles',
+      backgroundPattern: 'parchment',
+      glowIntensity: 0.5,
+      gradientColors: [0xFF2E6DA4, 0xFF1B4F72],
+      fontFamily: 'GoogleFonts.lora',
+      customProperties: {
+        'cardElevation': 4.0,
+        'borderRadius': 16.0,
+        'inkColor': 0xFF1B4F72,
+      },
+    ),
+    SkinTier.evidenceKeeper: SkinTheme(
+      tier: SkinTier.evidenceKeeper,
+      primaryColor: 0xFF27AE60,
+      secondaryColor: 0xFFE8F8F5,
+      accentColor: 0xFF1E8449,
+      backgroundColor: 0xFFFAFBFA,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF145A32,
+      particleType: 'document_particles',
+      backgroundPattern: 'archive_texture',
+      glowIntensity: 0.6,
+      gradientColors: [0xFF27AE60, 0xFF1E8449],
+      fontFamily: 'GoogleFonts.sourceCodePro',
+      customProperties: {
+        'cardElevation': 3.0,
+        'borderRadius': 12.0,
+        'stampColor': 0xFF1E8449,
+      },
+    ),
+    SkinTier.marathonRunner: SkinTheme(
+      tier: SkinTier.marathonRunner,
+      primaryColor: 0xFFE67E22,
+      secondaryColor: 0xFFFDF2E9,
+      accentColor: 0xFFD35400,
+      backgroundColor: 0xFFFFF8F0,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF9C4D00,
+      particleType: 'endurance_trail',
+      backgroundPattern: 'track_texture',
+      glowIntensity: 0.7,
+      gradientColors: [0xFFE67E22, 0xFFD35400],
+      fontFamily: 'GoogleFonts.robotoMono',
+      customProperties: {
+        'cardElevation': 4.0,
+        'borderRadius': 20.0,
+        'trackColor': 0xFFD35400,
+      },
+    ),
+    SkinTier.researcher: SkinTheme(
+      tier: SkinTier.researcher,
+      primaryColor: 0xFF8E44AD,
+      secondaryColor: 0xFFF5EEF8,
+      accentColor: 0xFF7D3C98,
+      backgroundColor: 0xFFFCF9FD,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF5B2C6F,
+      particleType: 'data_particles',
+      backgroundPattern: 'lab_notes',
+      glowIntensity: 0.8,
+      gradientColors: [0xFF8E44AD, 0xFF7D3C98],
+      fontFamily: 'GoogleFonts.jetBrainsMono',
+      customProperties: {
+        'cardElevation': 5.0,
+        'borderRadius': 16.0,
+        'dataLineColor': 0xFF7D3C98,
+      },
+    ),
+    SkinTier.leader: SkinTheme(
+      tier: SkinTier.leader,
+      primaryColor: 0xFFC0392B,
+      secondaryColor: 0xFFFADBD8,
+      accentColor: 0xFF922B21,
+      backgroundColor: 0xFFFDFAFA,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF7B241C,
+      particleType: 'leadership_aura',
+      backgroundPattern: 'banner_pattern',
+      glowIntensity: 0.8,
+      gradientColors: [0xFFC0392B, 0xFF922B21],
+      fontFamily: 'GoogleFonts.merriweather',
+      customProperties: {
+        'cardElevation': 6.0,
+        'borderRadius': 8.0,
+        'bannerColor': 0xFF922B21,
+      },
+    ),
+    SkinTier.creator: SkinTheme(
+      tier: SkinTier.creator,
+      primaryColor: 0xFFE74C3C,
+      secondaryColor: 0xFFFDF2F2,
+      accentColor: 0xFFC0392B,
+      backgroundColor: 0xFFFEF8F8,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF962D22,
+      particleType: 'creative_sparks',
+      backgroundPattern: 'canvas_texture',
+      glowIntensity: 0.75,
+      gradientColors: [0xFFE74C3C, 0xFFC0392B],
+      fontFamily: 'GoogleFonts.pacifico',
+      customProperties: {
+        'cardElevation': 3.0,
+        'borderRadius': 24.0,
+        'splatterColor': 0xFFC0392B,
+      },
+    ),
+    SkinTier.changemaker: SkinTheme(
+      tier: SkinTier.changemaker,
+      primaryColor: 0xFF16A085,
+      secondaryColor: 0xFFE8F8F5,
+      accentColor: 0xFF138D75,
+      backgroundColor: 0xFFFAFBFA,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFFFFFFFF,
+      onSurfaceColor: 0xFF0E6655,
+      particleType: 'impact_ripples',
+      backgroundPattern: 'community_mesh',
+      glowIntensity: 0.85,
+      gradientColors: [0xFF16A085, 0xFF138D75],
+      fontFamily: 'GoogleFonts.nunito',
+      customProperties: {
+        'cardElevation': 4.0,
+        'borderRadius': 16.0,
+        'rippleColor': 0xFF138D75,
+      },
+    ),
+    SkinTier.trailblazer: SkinTheme(
+      tier: SkinTier.trailblazer,
+      primaryColor: 0xFFF39C12,
+      secondaryColor: 0xFFFEF9E7,
+      accentColor: 0xFFD4AC0D,
+      backgroundColor: 0xFFFFFFFF,
+      surfaceColor: 0xFFFFFFFF,
+      onPrimaryColor: 0xFF1A1A1A,
+      onSurfaceColor: 0xFF0D0D0D,
+      particleType: 'legendary_aura',
+      backgroundPattern: 'constellation_map',
+      glowIntensity: 1.0,
+      gradientColors: [0xFFF39C12, 0xFFD4AC0D, 0xFFF39C12],
+      fontFamily: 'GoogleFonts.cinzel',
+      customProperties: {
+        'cardElevation': 12.0,
+        'borderRadius': 28.0,
+        'constellationLines': true,
+        'goldShimmer': true,
+      },
+    ),
+  };
+
+  static SkinTheme getTheme(SkinTier tier) => themes[tier] ?? themes[SkinTier.explorer]!;
+}
+
+/// Skin combination synergy effects
+enum SkinSynergy {
+  none,
+  scholarEvidence,      // Scholar + Evidence Keeper: +20% research XP
+  marathonResearcher,   // Marathon Runner + Researcher: streak protects research progress
+  leaderChangemaker,    // Leader + Changemaker: community impact doubled
+  creatorResearcher,    // Creator + Researcher: innovation bonus
+  fullSet,              // All 9 skins: legendary passive
+}
+
+/// Skin collection gallery state
+@freezed
+abstract class SkinCollection with _$SkinCollection {
+  const factory SkinCollection({
+    required Map<SkinTier, Skin> ownedSkins,
+    required SkinTier? equippedSkin,
+    required Map<SkinTier, DateTime> unlockDates,
+    required Map<SkinTier, int> unlockOrder,
+    required List<UnlockCelebration> celebrationHistory,
+    required Map<SkinSynergy, bool> activeSynergies,
+    required SkinTier? featuredSkin,
+  }) = _SkinCollection;
+
+  factory SkinCollection.initial() => SkinCollection(
+        ownedSkins: {SkinTier.explorer: SkinCatalog.getConfig(SkinTier.explorer).toSkin(unlocked: true)},
+        equippedSkin: SkinTier.explorer,
+        unlockDates: {SkinTier.explorer: DateTime.now()},
+        unlockOrder: {SkinTier.explorer: 1},
+        celebrationHistory: [],
+        activeSynergies: {},
+        featuredSkin: null,
+      );
+}
+
+/// Unlock celebration record
+@freezed
+abstract class UnlockCelebration with _$UnlockCelebration {
+  const factory UnlockCelebration({
+    required SkinTier tier,
+    required DateTime timestamp,
+    required UnlockCelebrationType celebrationType,
+    required List<String> particlesUsed,
+    required int xpAwarded,
+  }) = _UnlockCelebration;
+}
+
+/// Weekly skin rotation
+@freezed
+abstract class WeeklySkinRotation with _$WeeklySkinRotation {
+  const factory WeeklySkinRotation({
+    required int weekNumber,
+    required int year,
+    required SkinTier featuredSkin,
+    required SkinTier? exclusiveVariant,
+    required DateTime startDate,
+    required DateTime endDate,
+    required Map<String, dynamic> bonusRewards,
+  }) = _WeeklySkinRotation;
 }
