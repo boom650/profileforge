@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../../theme/app_theme.dart';
+import '../settings/privacy_screen.dart';
 import '../../../providers/app_providers.dart';
 import '../../../models/gamification/skins.dart';
 import '../../widgets/streak_ring.dart';
@@ -13,7 +14,8 @@ import '../../widgets/skin_showcase.dart';
 import '../../widgets/opportunity_card.dart';
 import '../../widgets/micro_interactions.dart';
 import '../../../models/gamification/missions.dart';
-
+import '../../../services/spike_framework.dart';
+import '../../widgets/empty_state.dart' as empty_state;
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -44,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         children: _pages,
       ),
       bottomNavigationBar: NavigationBar(
@@ -98,7 +100,9 @@ class DashboardTab extends ConsumerWidget {
     final xp = ref.watch(totalXPProvider);
     final currentSkin = ref.watch(currentSkinProvider);
     final missions = ref.watch(missionsProvider);
-    final probabilities = ref.watch(admissionsProbabilityProvider);
+    final factorBreakdown = ref.watch(factorBreakdownProvider);
+    final admissionsProbability = ref.watch(admissionsProbabilityProvider);
+    final topSpikes = ref.watch(topSpikesProvider(3));
 
     return CustomScrollView(
       slivers: [
@@ -132,11 +136,13 @@ class DashboardTab extends ConsumerWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.notifications_none_rounded),
-              onPressed: () {},
+              onPressed: () { HapticFeedback.lightImpact(); },
             ),
             IconButton(
               icon: const Icon(Icons.settings_rounded),
-              onPressed: () {},
+              onPressed: () { HapticFeedback.lightImpact(); Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PrivacyScreen()),
+              ); },
             ),
           ],
         ).animate().fadeIn(delay: 100.ms).slideY(begin: -0.1),
@@ -182,13 +188,24 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () { HapticFeedback.lightImpact(); },
                       child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                ProbabilityRadarChart(probabilities: probabilities),
+                if (factorBreakdown != null)
+                  ProbabilityRadarChart(
+                    factorBreakdown: factorBreakdown,
+                    monteCarloResult: admissionsProbability.isNotEmpty
+                        ? admissionsProbability.values.first.monteCarloResult
+                        : null,
+                    universityName: admissionsProbability.isNotEmpty
+                        ? admissionsProbability.values.first.university
+                        : '',
+                  )
+                else
+                  const SizedBox.shrink(),
               ],
             ),
           ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
@@ -213,7 +230,7 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () { HapticFeedback.lightImpact(); },
                       child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -231,6 +248,49 @@ class DashboardTab extends ConsumerWidget {
             ),
           ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
         ),
+
+        // Your Top Spikes
+        if (topSpikes.isNotEmpty)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Your Top Spikes',
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () { HapticFeedback.lightImpact(); },
+                        child: Text('Details', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'These achievements make your profile stand out',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppTheme.textMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...topSpikes.map((spike) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _SpikeCard(spike: spike),
+                  )),
+                ],
+              ),
+            ).animate().fadeIn(delay: 450.ms).slideY(begin: 0.1),
+          ),
 
         // Current Skin Showcase
         SliverToBoxAdapter(
@@ -251,7 +311,7 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () { HapticFeedback.lightImpact(); },
                       child: Text('Gallery', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -282,7 +342,7 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () { HapticFeedback.lightImpact(); },
                       child: Text('Explore', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -460,6 +520,118 @@ class _EmptyMissionsCard extends StatelessWidget {
   }
 }
 
+class _SpikeCard extends StatelessWidget {
+  final Spike spike;
+
+  const _SpikeCard({required this.spike});
+
+  @override
+  Widget build(BuildContext context) {
+    final categoryColor =
+        AppTheme.categoryColors[spike.category.colorKey] ?? AppTheme.primaryBlue;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceWhite,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: categoryColor.withValues(alpha: 0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: categoryColor.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Category icon badge
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: categoryColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                spike.category.icon,
+                style: const TextStyle(fontSize: 22),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          // Description and meta
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  spike.description,
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textPrimary,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      spike.starsDisplay,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.accentGold,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      spike.category.displayName,
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: categoryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Impact score circle
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [categoryColor, categoryColor.withValues(alpha: 0.7)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '${spike.impactScore}',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MissionsTab extends ConsumerWidget {
   const MissionsTab({super.key});
 
@@ -536,36 +708,73 @@ class _MissionList extends StatelessWidget {
 class OpportunitiesTab extends ConsumerWidget {
   const OpportunitiesTab({super.key});
 
+  static final _sampleOpportunities = [
+    _OpportunityData('Goonj Weekend Teaching', 'NGO Volunteering', 2, '3.2 km', 0.94),
+    _OpportunityData('ATL Lab Robotics Club', 'In-School Club', 2, 'In School', 0.88),
+    _OpportunityData('IRIS National Science Fair', 'Competition', 1, '12 km', 0.76),
+    _OpportunityData('Google Code-in', 'Competition', 1, 'Online', 0.82),
+    _OpportunityData('NGO Dhara Sansthan', 'NGO Volunteering', 3, '5.1 km', 0.71),
+    _OpportunityData('School MUN Conference', 'In-School Club', 2, 'In School', 0.85),
+    _OpportunityData('KVPY Fellowship', 'Competition', 1, 'Online', 0.68),
+    _OpportunityData('Local Library Volunteer', 'Volunteering', 3, '2.8 km', 0.65),
+    _OpportunityData('District Chess Tournament', 'Competition', 3, '8 km', 0.60),
+    _OpportunityData('Ashoka University YSP', 'Summer Program', 2, 'Online', 0.78),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final opportunities = _sampleOpportunities;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Opportunities', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list_rounded),
-            onPressed: () {},
+            onPressed: () { HapticFeedback.lightImpact(); },
           ),
           IconButton(
             icon: const Icon(Icons.map_rounded),
-            onPressed: () {},
+            onPressed: () { HapticFeedback.lightImpact(); },
           ),
         ],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(24),
-        itemCount: 10,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (context, index) => OpportunityCardVertical(
-          title: ['Goonj Weekend Teaching', 'ATL Lab Robotics Club', 'IRIS National Science Fair', 'Google Code-in', 'NGO Dhara Sansthan', 'School MUN Conference', 'KVPY Fellowship', 'Local Library Volunteer', 'District Chess Tournament', 'Ashoka University YSP'][index],
-          type: ['NGO Volunteering', 'In-School Club', 'Competition', 'Competition', 'NGO Volunteering', 'In-School Club', 'Competition', 'Volunteering', 'Competition', 'Summer Program'][index],
-          tier: [2, 2, 1, 1, 3, 2, 1, 3, 3, 2][index],
-          distance: ['3.2 km', 'In School', '12 km', 'Online', '5.1 km', 'In School', 'Online', '2.8 km', '8 km', 'Online'][index],
-          matchScore: [0.94, 0.88, 0.76, 0.82, 0.71, 0.85, 0.68, 0.65, 0.60, 0.78][index],
-        ),
-      ),
+      body: opportunities.isEmpty
+          ? empty_state.EmptyStateWidget(
+              icon: Icons.explore_outlined,
+              title: 'No opportunities found',
+              description: 'We couldn\'t find any opportunities matching your profile. Try adjusting your filters or location.',
+              actionLabel: 'Refresh',
+              onAction: () {},
+              iconColor: AppTheme.primaryBlue,
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.all(24),
+              itemCount: opportunities.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              itemBuilder: (context, index) {
+                final opp = opportunities[index];
+                return OpportunityCardVertical(
+                  title: opp.title,
+                  type: opp.type,
+                  tier: opp.tier,
+                  distance: opp.distance,
+                  matchScore: opp.matchScore,
+                );
+              },
+            ),
     );
   }
+}
+
+class _OpportunityData {
+  final String title;
+  final String type;
+  final int tier;
+  final String distance;
+  final double matchScore;
+
+  const _OpportunityData(this.title, this.type, this.tier, this.distance, this.matchScore);
 }
 
 class SkinsTab extends ConsumerWidget {
@@ -579,16 +788,23 @@ class SkinsTab extends ConsumerWidget {
       appBar: AppBar(
         title: Text('Skins Gallery', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(24),
-        itemCount: skins.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          final tier = skins[index];
-          final config = SkinCatalog.getConfig(tier);
-          return _SkinGalleryCard(config: config);
-        },
-      ),
+      body: skins.isEmpty
+          ? empty_state.EmptyStateWidget(
+              icon: Icons.emoji_events_outlined,
+              title: 'No skins available',
+              description: 'Complete missions and earn XP to unlock new skins.',
+              iconColor: AppTheme.accentGold,
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.all(24),
+              itemCount: skins.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              itemBuilder: (context, index) {
+                final tier = skins[index];
+                final config = SkinCatalog.getConfig(tier);
+                return _SkinGalleryCard(config: config);
+              },
+            ),
     );
   }
 }
@@ -751,7 +967,7 @@ class ProfileTab extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_rounded),
-            onPressed: () {},
+            onPressed: () { HapticFeedback.lightImpact(); },
           ),
         ],
       ),
@@ -835,6 +1051,14 @@ class ProfileTab extends ConsumerWidget {
                 _SettingsRow(icon: Icons.notifications_rounded, title: 'Notifications', subtitle: 'Mission reminders, weekly briefings'),
                 _SettingsRow(icon: Icons.location_on_rounded, title: 'Location Privacy', subtitle: 'Precise location stays on device'),
                 _SettingsRow(icon: Icons.backup_rounded, title: 'Backup & Sync', subtitle: 'Encrypted backup to cloud'),
+                _SettingsRow(
+                  icon: Icons.shield_rounded,
+                  title: 'Privacy & Data',
+                  subtitle: 'What we collect, where it stays',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PrivacyScreen()),
+                  ),
+                ),
                 _SettingsRow(icon: Icons.help_rounded, title: 'Help & Support', subtitle: 'FAQ, contact, feedback'),
               ],
             ),
@@ -882,9 +1106,9 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
+        border: Border.all(color: context.borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -896,7 +1120,7 @@ class _SectionCard extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
+                color: context.textPrimary,
               ),
             ),
           ),
@@ -1014,15 +1238,16 @@ class _SettingsRow extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final VoidCallback? onTap;
 
-  const _SettingsRow({required this.icon, required this.title, required this.subtitle});
+  const _SettingsRow({required this.icon, required this.title, required this.subtitle, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Container(
-        width: 40,
-        height: 40,
+        width: 44,
+        height: 44,
         decoration: BoxDecoration(
           color: AppTheme.primaryBlue.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
@@ -1032,7 +1257,7 @@ class _SettingsRow extends StatelessWidget {
       title: Text(title, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: AppTheme.textPrimary)),
       subtitle: Text(subtitle, style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textMuted)),
       trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted),
-      onTap: () {},
+      onTap: onTap != null ? () { HapticFeedback.lightImpact(); onTap!(); } : () {},
     );
   }
 }

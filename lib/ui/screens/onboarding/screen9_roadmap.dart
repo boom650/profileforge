@@ -317,7 +317,7 @@ class Screen9Roadmap extends StatelessWidget {
               _NextStep(
                 number: '4',
                 title: 'Probability Updates',
-                subtitle: 'Monte Carlo re-runs weekly — watch your odds climb',
+                subtitle: 'Odds update weekly — watch your odds climb',
                 icon: Icons.trending_up_rounded,
                 color: const Color(0xFFF59E0B),
               ),

@@ -1,1 +1,1 @@
-{"valid_import":true,"imports":[{"uri":"package:flutter_riverpod/flutter_riverpod.dart","transitive":false}],"elements":[]}
+{"valid_import":true,"imports":[{"uri":"package:profileforge/models/student_profile.dart","transitive":false}],"elements":[]}

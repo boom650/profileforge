@@ -716,7 +716,12 @@ mixin _$Activity {
   ActivityTier get tier => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   int get hoursPerWeek => throw _privateConstructorUsedError;
-  int get weeksPerYear => throw _privateConstructorUsedError;
+  int get weeksPerYear =>
+      throw _privateConstructorUsedError; // Common App fields
+  String? get position => throw _privateConstructorUsedError;
+  String? get organizationName => throw _privateConstructorUsedError;
+  String? get gradeLevels => throw _privateConstructorUsedError;
+  bool? get isContinuousYearRound => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime? get endDate => throw _privateConstructorUsedError;
   String? get evidence => throw _privateConstructorUsedError;
@@ -746,6 +751,10 @@ abstract class $ActivityCopyWith<$Res> {
       String description,
       int hoursPerWeek,
       int weeksPerYear,
+      String? position,
+      String? organizationName,
+      String? gradeLevels,
+      bool? isContinuousYearRound,
       DateTime startDate,
       DateTime? endDate,
       String? evidence,
@@ -777,6 +786,10 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
     Object? description = null,
     Object? hoursPerWeek = null,
     Object? weeksPerYear = null,
+    Object? position = freezed,
+    Object? organizationName = freezed,
+    Object? gradeLevels = freezed,
+    Object? isContinuousYearRound = freezed,
     Object? startDate = null,
     Object? endDate = freezed,
     Object? evidence = freezed,
@@ -816,6 +829,22 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
           ? _value.weeksPerYear
           : weeksPerYear // ignore: cast_nullable_to_non_nullable
               as int,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organizationName: freezed == organizationName
+          ? _value.organizationName
+          : organizationName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gradeLevels: freezed == gradeLevels
+          ? _value.gradeLevels
+          : gradeLevels // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isContinuousYearRound: freezed == isContinuousYearRound
+          ? _value.isContinuousYearRound
+          : isContinuousYearRound // ignore: cast_nullable_to_non_nullable
+              as bool?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -872,6 +901,10 @@ abstract class _$$ActivityImplCopyWith<$Res>
       String description,
       int hoursPerWeek,
       int weeksPerYear,
+      String? position,
+      String? organizationName,
+      String? gradeLevels,
+      bool? isContinuousYearRound,
       DateTime startDate,
       DateTime? endDate,
       String? evidence,
@@ -901,6 +934,10 @@ class __$$ActivityImplCopyWithImpl<$Res>
     Object? description = null,
     Object? hoursPerWeek = null,
     Object? weeksPerYear = null,
+    Object? position = freezed,
+    Object? organizationName = freezed,
+    Object? gradeLevels = freezed,
+    Object? isContinuousYearRound = freezed,
     Object? startDate = null,
     Object? endDate = freezed,
     Object? evidence = freezed,
@@ -940,6 +977,22 @@ class __$$ActivityImplCopyWithImpl<$Res>
           ? _value.weeksPerYear
           : weeksPerYear // ignore: cast_nullable_to_non_nullable
               as int,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as String?,
+      organizationName: freezed == organizationName
+          ? _value.organizationName
+          : organizationName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gradeLevels: freezed == gradeLevels
+          ? _value.gradeLevels
+          : gradeLevels // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isContinuousYearRound: freezed == isContinuousYearRound
+          ? _value.isContinuousYearRound
+          : isContinuousYearRound // ignore: cast_nullable_to_non_nullable
+              as bool?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -991,6 +1044,10 @@ class _$ActivityImpl implements _Activity {
       required this.description,
       required this.hoursPerWeek,
       required this.weeksPerYear,
+      this.position,
+      this.organizationName,
+      this.gradeLevels,
+      this.isContinuousYearRound,
       required this.startDate,
       required this.endDate,
       required this.evidence,
@@ -1019,6 +1076,15 @@ class _$ActivityImpl implements _Activity {
   final int hoursPerWeek;
   @override
   final int weeksPerYear;
+// Common App fields
+  @override
+  final String? position;
+  @override
+  final String? organizationName;
+  @override
+  final String? gradeLevels;
+  @override
+  final bool? isContinuousYearRound;
   @override
   final DateTime startDate;
   @override
@@ -1046,7 +1112,7 @@ class _$ActivityImpl implements _Activity {
 
   @override
   String toString() {
-    return 'Activity(id: $id, title: $title, category: $category, tier: $tier, description: $description, hoursPerWeek: $hoursPerWeek, weeksPerYear: $weeksPerYear, startDate: $startDate, endDate: $endDate, evidence: $evidence, teacherVerification: $teacherVerification, skills: $skills, narrativeAngle: $narrativeAngle, admissionsValue: $admissionsValue, isInSchool: $isInSchool, location: $location)';
+    return 'Activity(id: $id, title: $title, category: $category, tier: $tier, description: $description, hoursPerWeek: $hoursPerWeek, weeksPerYear: $weeksPerYear, position: $position, organizationName: $organizationName, gradeLevels: $gradeLevels, isContinuousYearRound: $isContinuousYearRound, startDate: $startDate, endDate: $endDate, evidence: $evidence, teacherVerification: $teacherVerification, skills: $skills, narrativeAngle: $narrativeAngle, admissionsValue: $admissionsValue, isInSchool: $isInSchool, location: $location)';
   }
 
   @override
@@ -1065,6 +1131,14 @@ class _$ActivityImpl implements _Activity {
                 other.hoursPerWeek == hoursPerWeek) &&
             (identical(other.weeksPerYear, weeksPerYear) ||
                 other.weeksPerYear == weeksPerYear) &&
+            (identical(other.position, position) ||
+                other.position == position) &&
+            (identical(other.organizationName, organizationName) ||
+                other.organizationName == organizationName) &&
+            (identical(other.gradeLevels, gradeLevels) ||
+                other.gradeLevels == gradeLevels) &&
+            (identical(other.isContinuousYearRound, isContinuousYearRound) ||
+                other.isContinuousYearRound == isContinuousYearRound) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
@@ -1085,24 +1159,29 @@ class _$ActivityImpl implements _Activity {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      category,
-      tier,
-      description,
-      hoursPerWeek,
-      weeksPerYear,
-      startDate,
-      endDate,
-      evidence,
-      teacherVerification,
-      const DeepCollectionEquality().hash(_skills),
-      narrativeAngle,
-      admissionsValue,
-      isInSchool,
-      location);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        title,
+        category,
+        tier,
+        description,
+        hoursPerWeek,
+        weeksPerYear,
+        position,
+        organizationName,
+        gradeLevels,
+        isContinuousYearRound,
+        startDate,
+        endDate,
+        evidence,
+        teacherVerification,
+        const DeepCollectionEquality().hash(_skills),
+        narrativeAngle,
+        admissionsValue,
+        isInSchool,
+        location
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -1127,6 +1206,10 @@ abstract class _Activity implements Activity {
       required final String description,
       required final int hoursPerWeek,
       required final int weeksPerYear,
+      final String? position,
+      final String? organizationName,
+      final String? gradeLevels,
+      final bool? isContinuousYearRound,
       required final DateTime startDate,
       required final DateTime? endDate,
       required final String? evidence,
@@ -1154,6 +1237,14 @@ abstract class _Activity implements Activity {
   int get hoursPerWeek;
   @override
   int get weeksPerYear;
+  @override // Common App fields
+  String? get position;
+  @override
+  String? get organizationName;
+  @override
+  String? get gradeLevels;
+  @override
+  bool? get isContinuousYearRound;
   @override
   DateTime get startDate;
   @override

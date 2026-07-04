@@ -3,6 +3,8 @@ import 'package:uuid/uuid.dart';
 
 import '../tables/all_tables.dart';
 import '../database.dart';
+import '../../models/gamification/missions.dart'
+    show MissionCategory, MissionType;
 
 part 'mission_dao.g.dart';
 
@@ -26,13 +28,18 @@ class MissionDao extends DatabaseAccessor<AppDatabase> with _$MissionDaoMixin {
       (select(missions)
         ..where((m) => m.category.equals(category.name) & m.isActive.equals(true))
         ..orderBy([(m) => OrderingTerm.asc(m.sortOrder)]))
-        .get();
+      .get();
 
-  Future<List<Mission>> getDailyMissions() => getMissionsByCategory(MissionCategory.daily);
-  Future<List<Mission>> getWeeklyMissions() => getMissionsByCategory(MissionCategory.weekly);
-  Future<List<Mission>> getMonthlyMissions() => getMissionsByCategory(MissionCategory.monthly);
-  Future<List<Mission>> getSpecialMissions() => getMissionsByCategory(MissionCategory.special);
-  Future<List<Mission>> getMilestoneMissions() => getMissionsByCategory(MissionCategory.milestone);
+  Future<List<Mission>> getMissionsByType(MissionType type) =>
+      (select(missions)
+        ..where((m) => m.type.equals(type.name) & m.isActive.equals(true))
+        ..orderBy([(m) => OrderingTerm.asc(m.sortOrder)]))
+      .get();
+
+  Future<List<Mission>> getDailyMissions() => getMissionsByType(MissionType.daily);
+  Future<List<Mission>> getWeeklyMissions() => getMissionsByType(MissionType.weekly);
+  Future<List<Mission>> getMilestoneMissions() => getMissionsByType(MissionType.milestone);
+  Future<List<Mission>> getSpecialMissions() => getMissionsByType(MissionType.special);
 
   Future<Mission?> getMission(String id) => 
       (select(missions)..where((m) => m.id.equals(id))).getSingleOrNull();

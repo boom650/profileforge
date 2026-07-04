@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/daos/student_profile_dao.dart",
-        "offset": 184,
+        "offset": 2397,
         "name": "StudentProfileDao"
       },
       "references": [
@@ -47,6 +47,7 @@
   "imports": [
     "package:drift/drift.dart",
     "package:profileforge/db/tables/all_tables.dart",
-    "package:profileforge/db/database.dart"
+    "package:profileforge/db/database.dart",
+    "package:profileforge/services/encryption_service.dart"
   ]
 }

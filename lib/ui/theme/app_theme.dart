@@ -52,6 +52,12 @@ class AppTheme {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+  // Dark-mode variant of the primary gradient (muted, not harsh on dark bg)
+  static const LinearGradient gradientPrimaryDark = LinearGradient(
+    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)], // Softer Indigo → Softer Violet
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 
   // ── Category colors (distinctive, non-Tailwind) ────────────────────────
   static const Map<String, Color> categoryColors = {
@@ -358,6 +364,170 @@ class AppTheme {
         color: const Color(0xFF1E293B),
         shadowColor: Colors.black.withValues(alpha: 0.3),
       ),
+      appBarTheme: const AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Color(0xFF0F172A), // Deep Navy
+        foregroundColor: Color(0xFFF1F5F9), // Light text
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFFF1F5F9),
+        ),
+        iconTheme: IconThemeData(color: Color(0xFFF1F5F9)),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: const Color(0xFFFBBF24), // Lighter Amber (secondaryGold) on dark bg
+          foregroundColor: const Color(0xFF0F172A), // Dark text on gold button
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: const Color(0xFFF1F5F9), // White text
+          side: const BorderSide(color: Color(0xFFF1F5F9), width: 1.5), // White border
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: const Color(0xFF1E293B), // Dark fill
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF334155)), // Subtle dark border
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF334155)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF818CF8), width: 2), // Lighter indigo
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFFDA4AF)), // Lighter rose
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: GoogleFonts.inter(
+          fontSize: 16,
+          color: const Color(0xFF94A3B8), // Muted text
+        ),
+        labelStyle: GoogleFonts.inter(
+          fontSize: 14,
+          color: const Color(0xFF94A3B8),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        height: 72,
+        backgroundColor: const Color(0xFF0F172A), // Deep Navy
+        elevation: 8,
+        indicatorColor: const Color(0xFFFBBF24).withValues(alpha: 0.15), // Gold indicator on dark
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFFFBBF24), // Gold for selected
+            );
+          }
+          return GoogleFonts.inter(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: const Color(0xFF94A3B8), // Muted for unselected
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: Color(0xFFFBBF24), size: 24);
+          }
+          return const IconThemeData(color: Color(0xFF94A3B8), size: 24);
+        }),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: const Color(0xFF1E293B), // Dark surface
+        selectedColor: const Color(0xFFFBBF24).withValues(alpha: 0.15), // Gold tint when selected
+        labelStyle: GoogleFonts.inter(fontSize: 13, color: const Color(0xFFF1F5F9)),
+        secondaryLabelStyle: GoogleFonts.inter(fontSize: 13, color: const Color(0xFFFBBF24)),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        side: const BorderSide(color: Color(0xFF334155)), // Subtle dark border
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: const Color(0xFF1E293B), // Dark background
+        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        behavior: SnackBarBehavior.floating,
+        elevation: 8,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: const Color(0xFF1E293B), // Dark surface
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        titleTextStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, color: const Color(0xFFF1F5F9)),
+        contentTextStyle: GoogleFonts.inter(fontSize: 16, color: const Color(0xFFCBD5E1)),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: Color(0xFF334155), // Subtle dark divider
+        thickness: 1,
+        space: 1,
+      ),
+      tabBarTheme: TabBarThemeData(
+        labelColor: const Color(0xFFFBBF24), // Gold for selected tab
+        unselectedLabelColor: const Color(0xFF94A3B8), // Muted for unselected
+        indicatorColor: const Color(0xFFFBBF24), // Gold indicator
+        indicatorSize: TabBarIndicatorSize.label,
+        labelStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+        unselectedLabelStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: const Color(0xFF818CF8), // Lighter indigo
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          textStyle: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: Color(0xFF818CF8), // Lighter indigo
+        linearTrackColor: Color(0xFF334155),
+        circularTrackColor: Color(0xFF334155),
+      ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: const Color(0xFF818CF8), // Lighter indigo
+        inactiveTrackColor: const Color(0xFF334155),
+        thumbColor: const Color(0xFF818CF8),
+        overlayColor: const Color(0xFF818CF8).withValues(alpha: 0.1),
+        valueIndicatorColor: const Color(0xFF818CF8),
+        valueIndicatorTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 12),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        elevation: 8,
+        backgroundColor: Color(0xFF0F172A), // Deep Navy
+        selectedItemColor: Color(0xFFFBBF24), // Gold selected
+        unselectedItemColor: Color(0xFF94A3B8), // Muted unselected
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+      ),
     );
   }
 }
@@ -401,4 +571,31 @@ class AppColors {
 
 extension ColorExtension on Color {
   Color withAlpha(int alpha) => withValues(alpha: alpha / 255);
+}
+
+/// Extension on BuildContext to provide theme-aware color accessors.
+/// Use these instead of hardcoded AppTheme constants to support dark mode.
+extension ThemeColors on BuildContext {
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  /// Surface background (warm white in light, dark navy in dark)
+  Color get surfaceBg => colorScheme.surface;
+
+  /// Slightly elevated surface (card backgrounds, containers)
+  Color get surfaceElevated =>
+      isDarkMode ? const Color(0xFF1E293B) : const Color(0xFFFDF8F3);
+
+  /// Primary text color
+  Color get textPrimary => colorScheme.onSurface;
+
+  /// Secondary text color (subtitles, descriptions)
+  Color get textSecondary => colorScheme.onSurface.withValues(alpha: 0.7);
+
+  /// Muted text color (hints, timestamps)
+  Color get textMuted => colorScheme.onSurface.withValues(alpha: 0.5);
+
+  /// Border color for cards and dividers
+  Color get borderColor =>
+      isDarkMode ? const Color(0xFF334155) : const Color(0xFFE2D5C8);
 }

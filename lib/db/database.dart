@@ -11,6 +11,8 @@ import 'tables/all_tables.dart';
 import 'daos/all_daos.dart';
 import 'converters/type_converters.dart';
 import '../models/student_profile.dart' hide Activity, StudentProfile;
+import '../models/gamification/missions.dart'
+    show MissionCategory, MissionType, MissionDifficulty;
 import 'migrations/migrations.dart';
 
 part 'database.g.dart';
@@ -56,7 +58,6 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
-        await _createUpdatedAtTriggers(m);
       },
       onUpgrade: (Migrator m, int from, int to) async {
         await migrationSteps(m, from, to);
@@ -92,93 +93,6 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Future<void> _createUpdatedAtTriggers(Migrator m) async {
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_student_profiles_timestamp
-      AFTER UPDATE ON student_profiles
-      BEGIN
-        UPDATE student_profiles SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_activities_timestamp
-      AFTER UPDATE ON activities
-      BEGIN
-        UPDATE activities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_opportunities_timestamp
-      AFTER UPDATE ON opportunities
-      BEGIN
-        UPDATE opportunities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_skins_timestamp
-      AFTER UPDATE ON skins
-      BEGIN
-        UPDATE skins SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_streaks_timestamp
-      AFTER UPDATE ON streaks
-      BEGIN
-        UPDATE streaks SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_evidence_timestamp
-      AFTER UPDATE ON evidence
-      BEGIN
-        UPDATE evidence SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_admissions_probabilities_timestamp
-      AFTER UPDATE ON admissions_probabilities
-      BEGIN
-        UPDATE admissions_probabilities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_mission_progresses_timestamp
-      AFTER UPDATE ON mission_progresses
-      BEGIN
-        UPDATE mission_progresses SET last_updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_opportunity_applications_timestamp
-      AFTER UPDATE ON opportunity_applications
-      BEGIN
-        UPDATE opportunity_applications SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_skin_collections_timestamp
-      AFTER UPDATE ON skin_collections
-      BEGIN
-        UPDATE skin_collections SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-    
-    await m.database.customStatement('''
-      CREATE TRIGGER IF NOT EXISTS update_notifications_timestamp
-      AFTER UPDATE ON notifications
-      BEGIN
-        UPDATE notifications SET created_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-      END;
-    ''');
-  }
+  // Timestamps are now updated directly in DAO code instead of via triggers.
+  // Triggers caused infinite recursion by UPDATE-ing the same table they fire on.
 }

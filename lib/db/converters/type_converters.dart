@@ -4,6 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/student_profile.dart';
+import '../../models/gamification/missions.dart'
+    show MissionCategory, MissionType, MissionDifficulty;
 import '../tables/all_tables.dart';
 
 class StringListConverter extends TypeConverter<List<String>, String> {
@@ -106,7 +108,7 @@ class MissionCategoryConverter extends TypeConverter<MissionCategory, String> {
   MissionCategory fromSql(String fromDb) {
     return MissionCategory.values.firstWhere(
       (e) => e.name == fromDb,
-      orElse: () => MissionCategory.daily,
+      orElse: () => MissionCategory.academics,
     );
   }
 
@@ -123,7 +125,7 @@ class MissionTypeConverter extends TypeConverter<MissionType, String> {
   MissionType fromSql(String fromDb) {
     return MissionType.values.firstWhere(
       (e) => e.name == fromDb,
-      orElse: () => MissionType.recurring,
+      orElse: () => MissionType.daily,
     );
   }
 

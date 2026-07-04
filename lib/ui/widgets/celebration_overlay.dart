@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'micro_interactions.dart';
 import '../theme/app_theme.dart';
@@ -214,7 +215,7 @@ class _CelebrationOverlayState extends State<CelebrationOverlay>
           const SizedBox(height: 24),
           // Dismiss button
           TextButton(
-            onPressed: _dismiss,
+            onPressed: () { HapticFeedback.lightImpact(); _dismiss(); },
             child: Text(
               'Continue',
               style: GoogleFonts.inter(
@@ -342,7 +343,7 @@ class _CelebrationOverlayState extends State<CelebrationOverlay>
                 ],
                 const SizedBox(height: 20),
                 TextButton(
-                  onPressed: _dismiss,
+                  onPressed: () { HapticFeedback.lightImpact(); _dismiss(); },
                   child: Text(
                     'Continue',
                     style: GoogleFonts.inter(

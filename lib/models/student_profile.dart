@@ -72,6 +72,11 @@ abstract class Activity with _$Activity {
     required String description,
     required int hoursPerWeek,
     required int weeksPerYear,
+    // Common App fields
+    String? position,
+    String? organizationName,
+    String? gradeLevels,
+    bool? isContinuousYearRound,
     required DateTime startDate,
     required DateTime? endDate,
     required String? evidence,

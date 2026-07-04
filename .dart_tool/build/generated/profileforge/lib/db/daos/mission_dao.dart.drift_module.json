@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/daos/mission_dao.dart",
-        "offset": 221,
+        "offset": 309,
         "name": "MissionDao"
       },
       "references": [
@@ -56,6 +56,7 @@
     "package:drift/drift.dart",
     "package:uuid/uuid.dart",
     "package:profileforge/db/tables/all_tables.dart",
-    "package:profileforge/db/database.dart"
+    "package:profileforge/db/database.dart",
+    "package:profileforge/models/gamification/missions.dart"
   ]
 }

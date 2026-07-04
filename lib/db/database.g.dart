@@ -1389,6 +1389,34 @@ class $ActivitiesTable extends Activities
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _positionMeta =
+      const VerificationMeta('position');
+  @override
+  late final GeneratedColumn<String> position = GeneratedColumn<String>(
+      'position', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _organizationNameMeta =
+      const VerificationMeta('organizationName');
+  @override
+  late final GeneratedColumn<String> organizationName = GeneratedColumn<String>(
+      'organization_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _gradeLevelsMeta =
+      const VerificationMeta('gradeLevels');
+  @override
+  late final GeneratedColumn<String> gradeLevels = GeneratedColumn<String>(
+      'grade_levels', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isContinuousYearRoundMeta =
+      const VerificationMeta('isContinuousYearRound');
+  @override
+  late final GeneratedColumn<bool> isContinuousYearRound =
+      GeneratedColumn<bool>('is_continuous_year_round', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_continuous_year_round" IN (0, 1))'),
+          defaultValue: const Constant(false));
   static const VerificationMeta _startDateMeta =
       const VerificationMeta('startDate');
   @override
@@ -1511,6 +1539,10 @@ class $ActivitiesTable extends Activities
         description,
         hoursPerWeek,
         weeksPerYear,
+        position,
+        organizationName,
+        gradeLevels,
+        isContinuousYearRound,
         startDate,
         endDate,
         evidence,
@@ -1574,6 +1606,28 @@ class $ActivitiesTable extends Activities
           _weeksPerYearMeta,
           weeksPerYear.isAcceptableOrUnknown(
               data['weeks_per_year']!, _weeksPerYearMeta));
+    }
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    }
+    if (data.containsKey('organization_name')) {
+      context.handle(
+          _organizationNameMeta,
+          organizationName.isAcceptableOrUnknown(
+              data['organization_name']!, _organizationNameMeta));
+    }
+    if (data.containsKey('grade_levels')) {
+      context.handle(
+          _gradeLevelsMeta,
+          gradeLevels.isAcceptableOrUnknown(
+              data['grade_levels']!, _gradeLevelsMeta));
+    }
+    if (data.containsKey('is_continuous_year_round')) {
+      context.handle(
+          _isContinuousYearRoundMeta,
+          isContinuousYearRound.isAcceptableOrUnknown(
+              data['is_continuous_year_round']!, _isContinuousYearRoundMeta));
     }
     if (data.containsKey('start_date')) {
       context.handle(_startDateMeta,
@@ -1682,6 +1736,15 @@ class $ActivitiesTable extends Activities
           .read(DriftSqlType.int, data['${effectivePrefix}hours_per_week'])!,
       weeksPerYear: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}weeks_per_year'])!,
+      position: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}position']),
+      organizationName: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}organization_name']),
+      gradeLevels: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}grade_levels']),
+      isContinuousYearRound: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}is_continuous_year_round'])!,
       startDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
       endDate: attachedDatabase.typeMapping
@@ -1740,6 +1803,10 @@ class Activity extends DataClass implements Insertable<Activity> {
   final String description;
   final int hoursPerWeek;
   final int weeksPerYear;
+  final String? position;
+  final String? organizationName;
+  final String? gradeLevels;
+  final bool isContinuousYearRound;
   final DateTime startDate;
   final DateTime? endDate;
   final String? evidence;
@@ -1765,6 +1832,10 @@ class Activity extends DataClass implements Insertable<Activity> {
       required this.description,
       required this.hoursPerWeek,
       required this.weeksPerYear,
+      this.position,
+      this.organizationName,
+      this.gradeLevels,
+      required this.isContinuousYearRound,
       required this.startDate,
       this.endDate,
       this.evidence,
@@ -1798,6 +1869,16 @@ class Activity extends DataClass implements Insertable<Activity> {
     map['description'] = Variable<String>(description);
     map['hours_per_week'] = Variable<int>(hoursPerWeek);
     map['weeks_per_year'] = Variable<int>(weeksPerYear);
+    if (!nullToAbsent || position != null) {
+      map['position'] = Variable<String>(position);
+    }
+    if (!nullToAbsent || organizationName != null) {
+      map['organization_name'] = Variable<String>(organizationName);
+    }
+    if (!nullToAbsent || gradeLevels != null) {
+      map['grade_levels'] = Variable<String>(gradeLevels);
+    }
+    map['is_continuous_year_round'] = Variable<bool>(isContinuousYearRound);
     map['start_date'] = Variable<DateTime>(startDate);
     if (!nullToAbsent || endDate != null) {
       map['end_date'] = Variable<DateTime>(endDate);
@@ -1844,6 +1925,16 @@ class Activity extends DataClass implements Insertable<Activity> {
       description: Value(description),
       hoursPerWeek: Value(hoursPerWeek),
       weeksPerYear: Value(weeksPerYear),
+      position: position == null && nullToAbsent
+          ? const Value.absent()
+          : Value(position),
+      organizationName: organizationName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(organizationName),
+      gradeLevels: gradeLevels == null && nullToAbsent
+          ? const Value.absent()
+          : Value(gradeLevels),
+      isContinuousYearRound: Value(isContinuousYearRound),
       startDate: Value(startDate),
       endDate: endDate == null && nullToAbsent
           ? const Value.absent()
@@ -1889,6 +1980,11 @@ class Activity extends DataClass implements Insertable<Activity> {
       description: serializer.fromJson<String>(json['description']),
       hoursPerWeek: serializer.fromJson<int>(json['hoursPerWeek']),
       weeksPerYear: serializer.fromJson<int>(json['weeksPerYear']),
+      position: serializer.fromJson<String?>(json['position']),
+      organizationName: serializer.fromJson<String?>(json['organizationName']),
+      gradeLevels: serializer.fromJson<String?>(json['gradeLevels']),
+      isContinuousYearRound:
+          serializer.fromJson<bool>(json['isContinuousYearRound']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime?>(json['endDate']),
       evidence: serializer.fromJson<String?>(json['evidence']),
@@ -1921,6 +2017,10 @@ class Activity extends DataClass implements Insertable<Activity> {
       'description': serializer.toJson<String>(description),
       'hoursPerWeek': serializer.toJson<int>(hoursPerWeek),
       'weeksPerYear': serializer.toJson<int>(weeksPerYear),
+      'position': serializer.toJson<String?>(position),
+      'organizationName': serializer.toJson<String?>(organizationName),
+      'gradeLevels': serializer.toJson<String?>(gradeLevels),
+      'isContinuousYearRound': serializer.toJson<bool>(isContinuousYearRound),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime?>(endDate),
       'evidence': serializer.toJson<String?>(evidence),
@@ -1949,6 +2049,10 @@ class Activity extends DataClass implements Insertable<Activity> {
           String? description,
           int? hoursPerWeek,
           int? weeksPerYear,
+          Value<String?> position = const Value.absent(),
+          Value<String?> organizationName = const Value.absent(),
+          Value<String?> gradeLevels = const Value.absent(),
+          bool? isContinuousYearRound,
           DateTime? startDate,
           Value<DateTime?> endDate = const Value.absent(),
           Value<String?> evidence = const Value.absent(),
@@ -1974,6 +2078,13 @@ class Activity extends DataClass implements Insertable<Activity> {
         description: description ?? this.description,
         hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
         weeksPerYear: weeksPerYear ?? this.weeksPerYear,
+        position: position.present ? position.value : this.position,
+        organizationName: organizationName.present
+            ? organizationName.value
+            : this.organizationName,
+        gradeLevels: gradeLevels.present ? gradeLevels.value : this.gradeLevels,
+        isContinuousYearRound:
+            isContinuousYearRound ?? this.isContinuousYearRound,
         startDate: startDate ?? this.startDate,
         endDate: endDate.present ? endDate.value : this.endDate,
         evidence: evidence.present ? evidence.value : this.evidence,
@@ -2009,6 +2120,15 @@ class Activity extends DataClass implements Insertable<Activity> {
       weeksPerYear: data.weeksPerYear.present
           ? data.weeksPerYear.value
           : this.weeksPerYear,
+      position: data.position.present ? data.position.value : this.position,
+      organizationName: data.organizationName.present
+          ? data.organizationName.value
+          : this.organizationName,
+      gradeLevels:
+          data.gradeLevels.present ? data.gradeLevels.value : this.gradeLevels,
+      isContinuousYearRound: data.isContinuousYearRound.present
+          ? data.isContinuousYearRound.value
+          : this.isContinuousYearRound,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
       endDate: data.endDate.present ? data.endDate.value : this.endDate,
       evidence: data.evidence.present ? data.evidence.value : this.evidence,
@@ -2053,6 +2173,10 @@ class Activity extends DataClass implements Insertable<Activity> {
           ..write('description: $description, ')
           ..write('hoursPerWeek: $hoursPerWeek, ')
           ..write('weeksPerYear: $weeksPerYear, ')
+          ..write('position: $position, ')
+          ..write('organizationName: $organizationName, ')
+          ..write('gradeLevels: $gradeLevels, ')
+          ..write('isContinuousYearRound: $isContinuousYearRound, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('evidence: $evidence, ')
@@ -2083,6 +2207,10 @@ class Activity extends DataClass implements Insertable<Activity> {
         description,
         hoursPerWeek,
         weeksPerYear,
+        position,
+        organizationName,
+        gradeLevels,
+        isContinuousYearRound,
         startDate,
         endDate,
         evidence,
@@ -2112,6 +2240,10 @@ class Activity extends DataClass implements Insertable<Activity> {
           other.description == this.description &&
           other.hoursPerWeek == this.hoursPerWeek &&
           other.weeksPerYear == this.weeksPerYear &&
+          other.position == this.position &&
+          other.organizationName == this.organizationName &&
+          other.gradeLevels == this.gradeLevels &&
+          other.isContinuousYearRound == this.isContinuousYearRound &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.evidence == this.evidence &&
@@ -2139,6 +2271,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
   final Value<String> description;
   final Value<int> hoursPerWeek;
   final Value<int> weeksPerYear;
+  final Value<String?> position;
+  final Value<String?> organizationName;
+  final Value<String?> gradeLevels;
+  final Value<bool> isContinuousYearRound;
   final Value<DateTime> startDate;
   final Value<DateTime?> endDate;
   final Value<String?> evidence;
@@ -2165,6 +2301,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     this.description = const Value.absent(),
     this.hoursPerWeek = const Value.absent(),
     this.weeksPerYear = const Value.absent(),
+    this.position = const Value.absent(),
+    this.organizationName = const Value.absent(),
+    this.gradeLevels = const Value.absent(),
+    this.isContinuousYearRound = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.evidence = const Value.absent(),
@@ -2192,6 +2332,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     required String description,
     this.hoursPerWeek = const Value.absent(),
     this.weeksPerYear = const Value.absent(),
+    this.position = const Value.absent(),
+    this.organizationName = const Value.absent(),
+    this.gradeLevels = const Value.absent(),
+    this.isContinuousYearRound = const Value.absent(),
     required DateTime startDate,
     this.endDate = const Value.absent(),
     this.evidence = const Value.absent(),
@@ -2225,6 +2369,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     Expression<String>? description,
     Expression<int>? hoursPerWeek,
     Expression<int>? weeksPerYear,
+    Expression<String>? position,
+    Expression<String>? organizationName,
+    Expression<String>? gradeLevels,
+    Expression<bool>? isContinuousYearRound,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
     Expression<String>? evidence,
@@ -2252,6 +2400,11 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       if (description != null) 'description': description,
       if (hoursPerWeek != null) 'hours_per_week': hoursPerWeek,
       if (weeksPerYear != null) 'weeks_per_year': weeksPerYear,
+      if (position != null) 'position': position,
+      if (organizationName != null) 'organization_name': organizationName,
+      if (gradeLevels != null) 'grade_levels': gradeLevels,
+      if (isContinuousYearRound != null)
+        'is_continuous_year_round': isContinuousYearRound,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
       if (evidence != null) 'evidence': evidence,
@@ -2282,6 +2435,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       Value<String>? description,
       Value<int>? hoursPerWeek,
       Value<int>? weeksPerYear,
+      Value<String?>? position,
+      Value<String?>? organizationName,
+      Value<String?>? gradeLevels,
+      Value<bool>? isContinuousYearRound,
       Value<DateTime>? startDate,
       Value<DateTime?>? endDate,
       Value<String?>? evidence,
@@ -2308,6 +2465,11 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       description: description ?? this.description,
       hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
       weeksPerYear: weeksPerYear ?? this.weeksPerYear,
+      position: position ?? this.position,
+      organizationName: organizationName ?? this.organizationName,
+      gradeLevels: gradeLevels ?? this.gradeLevels,
+      isContinuousYearRound:
+          isContinuousYearRound ?? this.isContinuousYearRound,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       evidence: evidence ?? this.evidence,
@@ -2356,6 +2518,19 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     }
     if (weeksPerYear.present) {
       map['weeks_per_year'] = Variable<int>(weeksPerYear.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<String>(position.value);
+    }
+    if (organizationName.present) {
+      map['organization_name'] = Variable<String>(organizationName.value);
+    }
+    if (gradeLevels.present) {
+      map['grade_levels'] = Variable<String>(gradeLevels.value);
+    }
+    if (isContinuousYearRound.present) {
+      map['is_continuous_year_round'] =
+          Variable<bool>(isContinuousYearRound.value);
     }
     if (startDate.present) {
       map['start_date'] = Variable<DateTime>(startDate.value);
@@ -2423,6 +2598,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
           ..write('description: $description, ')
           ..write('hoursPerWeek: $hoursPerWeek, ')
           ..write('weeksPerYear: $weeksPerYear, ')
+          ..write('position: $position, ')
+          ..write('organizationName: $organizationName, ')
+          ..write('gradeLevels: $gradeLevels, ')
+          ..write('isContinuousYearRound: $isContinuousYearRound, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('evidence: $evidence, ')
@@ -12383,6 +12562,10 @@ typedef $$ActivitiesTableCreateCompanionBuilder = ActivitiesCompanion Function({
   required String description,
   Value<int> hoursPerWeek,
   Value<int> weeksPerYear,
+  Value<String?> position,
+  Value<String?> organizationName,
+  Value<String?> gradeLevels,
+  Value<bool> isContinuousYearRound,
   required DateTime startDate,
   Value<DateTime?> endDate,
   Value<String?> evidence,
@@ -12410,6 +12593,10 @@ typedef $$ActivitiesTableUpdateCompanionBuilder = ActivitiesCompanion Function({
   Value<String> description,
   Value<int> hoursPerWeek,
   Value<int> weeksPerYear,
+  Value<String?> position,
+  Value<String?> organizationName,
+  Value<String?> gradeLevels,
+  Value<bool> isContinuousYearRound,
   Value<DateTime> startDate,
   Value<DateTime?> endDate,
   Value<String?> evidence,
@@ -12497,6 +12684,20 @@ class $$ActivitiesTableFilterComposer
 
   ColumnFilters<int> get weeksPerYear => $composableBuilder(
       column: $table.weeksPerYear, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get organizationName => $composableBuilder(
+      column: $table.organizationName,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gradeLevels => $composableBuilder(
+      column: $table.gradeLevels, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isContinuousYearRound => $composableBuilder(
+      column: $table.isContinuousYearRound,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnFilters(column));
@@ -12627,6 +12828,20 @@ class $$ActivitiesTableOrderingComposer
       column: $table.weeksPerYear,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get organizationName => $composableBuilder(
+      column: $table.organizationName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get gradeLevels => $composableBuilder(
+      column: $table.gradeLevels, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isContinuousYearRound => $composableBuilder(
+      column: $table.isContinuousYearRound,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnOrderings(column));
 
@@ -12730,6 +12945,18 @@ class $$ActivitiesTableAnnotationComposer
 
   GeneratedColumn<int> get weeksPerYear => $composableBuilder(
       column: $table.weeksPerYear, builder: (column) => column);
+
+  GeneratedColumn<String> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<String> get organizationName => $composableBuilder(
+      column: $table.organizationName, builder: (column) => column);
+
+  GeneratedColumn<String> get gradeLevels => $composableBuilder(
+      column: $table.gradeLevels, builder: (column) => column);
+
+  GeneratedColumn<bool> get isContinuousYearRound => $composableBuilder(
+      column: $table.isContinuousYearRound, builder: (column) => column);
 
   GeneratedColumn<DateTime> get startDate =>
       $composableBuilder(column: $table.startDate, builder: (column) => column);
@@ -12852,6 +13079,10 @@ class $$ActivitiesTableTableManager extends RootTableManager<
             Value<String> description = const Value.absent(),
             Value<int> hoursPerWeek = const Value.absent(),
             Value<int> weeksPerYear = const Value.absent(),
+            Value<String?> position = const Value.absent(),
+            Value<String?> organizationName = const Value.absent(),
+            Value<String?> gradeLevels = const Value.absent(),
+            Value<bool> isContinuousYearRound = const Value.absent(),
             Value<DateTime> startDate = const Value.absent(),
             Value<DateTime?> endDate = const Value.absent(),
             Value<String?> evidence = const Value.absent(),
@@ -12879,6 +13110,10 @@ class $$ActivitiesTableTableManager extends RootTableManager<
             description: description,
             hoursPerWeek: hoursPerWeek,
             weeksPerYear: weeksPerYear,
+            position: position,
+            organizationName: organizationName,
+            gradeLevels: gradeLevels,
+            isContinuousYearRound: isContinuousYearRound,
             startDate: startDate,
             endDate: endDate,
             evidence: evidence,
@@ -12906,6 +13141,10 @@ class $$ActivitiesTableTableManager extends RootTableManager<
             required String description,
             Value<int> hoursPerWeek = const Value.absent(),
             Value<int> weeksPerYear = const Value.absent(),
+            Value<String?> position = const Value.absent(),
+            Value<String?> organizationName = const Value.absent(),
+            Value<String?> gradeLevels = const Value.absent(),
+            Value<bool> isContinuousYearRound = const Value.absent(),
             required DateTime startDate,
             Value<DateTime?> endDate = const Value.absent(),
             Value<String?> evidence = const Value.absent(),
@@ -12933,6 +13172,10 @@ class $$ActivitiesTableTableManager extends RootTableManager<
             description: description,
             hoursPerWeek: hoursPerWeek,
             weeksPerYear: weeksPerYear,
+            position: position,
+            organizationName: organizationName,
+            gradeLevels: gradeLevels,
+            isContinuousYearRound: isContinuousYearRound,
             startDate: startDate,
             endDate: endDate,
             evidence: evidence,

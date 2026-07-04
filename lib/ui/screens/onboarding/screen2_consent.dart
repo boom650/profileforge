@@ -1,8 +1,14 @@
+/// UNUSED IN ONBOARDING FLOW — kept for future reference.
+/// Consent is now merged into screen1_welcome.dart footer.
+/// Original flow: Screen 2 of 9.
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 
+// ignore: unused_element
 class Screen2Consent extends StatelessWidget {
   const Screen2Consent({super.key});
 
@@ -85,6 +91,32 @@ class Screen2Consent extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 600.ms),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.successGreen.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppTheme.successGreen.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.lock_rounded, size: 18, color: AppTheme.successGreen),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'All your data stays on your phone. We never send your grades or scores anywhere. You can delete everything anytime from Settings.',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.textPrimary,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(delay: 700.ms),
         ],
       ),
     );

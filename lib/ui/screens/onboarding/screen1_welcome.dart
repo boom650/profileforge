@@ -50,7 +50,7 @@ class Screen1Welcome extends StatelessWidget {
           ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3),
           const SizedBox(height: 12),
           Text(
-            'Your admissions strategist\nin your pocket',
+            'Get into your dream uni.\nWe\'ll figure out how.',
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 20,
@@ -65,29 +65,29 @@ class Screen1Welcome extends StatelessWidget {
             children: [
               _FeatureItem(
                 icon: Icons.psychology_rounded,
-                title: 'AI-Powered Strategy',
-                subtitle: 'Monte Carlo admissions simulation\nwith 10,000+ scenarios',
+                title: 'We crunch your odds',
+                subtitle: 'Thousands of scenarios per uni,\nzero effort from you',
                 color: AppTheme.primaryBlue,
                 delay: 600,
               ),
               _FeatureItem(
                 icon: Icons.explore_rounded,
-                title: 'Hyper-Local Opportunities',
-                subtitle: '573K NGOs, 14.7L schools, 10K ATL labs\nmatched to your schedule & location',
+                title: 'Stuff near you colleges care about',
+                subtitle: 'NGOs, schools, labs, competitions\nmatched to your schedule & location',
                 color: AppTheme.successGreen,
                 delay: 700,
               ),
               _FeatureItem(
                 icon: Icons.emoji_events_rounded,
-                title: 'Identity-Based Gamification',
-                subtitle: 'Skins > Currency. Unlock Researcher,\nLeader, Creator, Changemaker, Trailblazer',
+                title: 'Earn skins, not boring coins',
+                subtitle: 'Unlock Researcher,\nLeader, Creator, Changemaker, Trailblazer',
                 color: AppTheme.accentGold,
                 delay: 800,
               ),
               _FeatureItem(
                 icon: Icons.school_rounded,
-                title: 'Zero-Commute School Tasks',
-                subtitle: 'In-school clubs, labs, teachers mapped\nto your free periods automatically',
+                title: 'School stuff in your PJs',
+                subtitle: 'Clubs, labs, teachers mapped\nto your free periods automatically',
                 color: AppTheme.accentSilver,
                 delay: 900,
               ),
@@ -104,6 +104,53 @@ class Screen1Welcome extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 1000.ms),
+          const SizedBox(height: 32),
+          // Consent footer (merged from screen2_consent)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryBlue.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.15)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.lock_rounded, color: AppTheme.primaryBlue, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Your data stays on your device. We personalize missions based on your profile, location & goals.',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.settings_rounded, color: AppTheme.primaryBlue, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'You control every permission — revocable anytime in Settings.',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ).animate().fadeIn(delay: 1100.ms),
         ],
       ),
     );

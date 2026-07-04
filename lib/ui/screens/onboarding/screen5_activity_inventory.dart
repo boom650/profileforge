@@ -29,7 +29,7 @@ class Screen5ActivityInventory extends StatelessWidget {
           ).animate().fadeIn().slideX(begin: -0.2),
           const SizedBox(height: 8),
           Text(
-            'Import from resume, LinkedIn, or add manually — we\'ll tier them for admissions impact',
+            'Add your activities — we\'ll tier them for admissions impact',
             style: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w400,
@@ -41,7 +41,7 @@ class Screen5ActivityInventory extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceLight,
+              color: context.surfaceElevated,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.2)),
             ),
@@ -182,7 +182,7 @@ class _CategoryRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceWhite,
+          color: context.surfaceElevated,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
@@ -207,14 +207,14 @@ class _CategoryRow extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: context.textPrimary,
                     ),
                   ),
                   Text(
                     _getExamples(category),
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppTheme.textMuted,
+                      color: context.textMuted,
                     ),
                   ),
                 ],

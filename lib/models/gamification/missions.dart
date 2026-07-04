@@ -194,7 +194,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'daily_checkin',
       title: 'Daily Check-in',
-      description: 'Open ProfileForge and mark your progress for today',
+      description: 'Just open the app and check in — takes 30 seconds',
       type: MissionType.daily,
       category: MissionCategory.wellbeing,
       difficulty: MissionDifficulty.easy,
@@ -211,7 +211,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'study_session_45',
       title: 'Focused Study Session',
-      description: 'Complete a 45-minute focused study session (no phone!)',
+      description: 'Put the phone away and study for 45 minutes straight',
       type: MissionType.daily,
       category: MissionCategory.academics,
       difficulty: MissionDifficulty.easy,
@@ -228,7 +228,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'review_schedule',
       title: 'Review Tomorrow\'s Schedule',
-      description: 'Check your schedule for tomorrow and prepare materials',
+      description: 'Quick peek at tomorrow so you\'re not scrambling',
       type: MissionType.daily,
       category: MissionCategory.profile,
       difficulty: MissionDifficulty.easy,
@@ -247,7 +247,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'add_evidence_today',
       title: 'Document Today\'s Achievement',
-      description: 'Add evidence (photo, certificate, note) for something you did today',
+      description: 'Snap a photo or jot down something cool you did today',
       type: MissionType.daily,
       category: MissionCategory.activities,
       difficulty: MissionDifficulty.medium,
@@ -264,7 +264,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'practice_problem_set',
       title: 'Practice Problem Set',
-      description: 'Complete 10 practice problems in any subject',
+      description: 'Do 10 practice problems — any subject, your call',
       type: MissionType.daily,
       category: MissionCategory.academics,
       difficulty: MissionDifficulty.medium,
@@ -283,7 +283,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'weekly_plan_create',
       title: 'Create Weekly Plan',
-      description: 'Plan your study, activities, and goals for the week ahead',
+      description: 'Map out what you want to get done this week',
       type: MissionType.weekly,
       category: MissionCategory.profile,
       difficulty: MissionDifficulty.easy,
@@ -300,7 +300,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'connect_with_mentor',
       title: 'Connect with a Mentor',
-      description: 'Reach out to a teacher, counselor, or mentor for guidance',
+      description: 'Hit up a teacher, counselor, or mentor — even a quick text counts',
       type: MissionType.weekly,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.easy,
@@ -319,7 +319,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'complete_activity_profile',
       title: 'Complete an Activity Profile',
-      description: 'Fully fill out one activity with description, hours, skills, and narrative',
+      description: 'Fill in one activity with details, hours, and a quick story about it',
       type: MissionType.weekly,
       category: MissionCategory.activities,
       difficulty: MissionDifficulty.medium,
@@ -336,7 +336,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'mock_test_section',
       title: 'Mock Test Section',
-      description: 'Complete one timed section of a mock test (SAT, ACT, or subject test)',
+      description: 'Do one timed section of a practice test (SAT, ACT, whatever you\'re prepping)',
       type: MissionType.weekly,
       category: MissionCategory.academics,
       difficulty: MissionDifficulty.medium,
@@ -353,7 +353,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'volunteer_hours_weekly',
       title: 'Weekly Volunteer Hours',
-      description: 'Log at least 3 hours of volunteer/service work this week',
+      description: 'Log 3+ hours of volunteer or service work this week',
       type: MissionType.weekly,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.medium,
@@ -370,7 +370,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'creative_output_weekly',
       title: 'Weekly Creative Output',
-      description: 'Create something new: art, code, writing, music, design',
+      description: 'Make something — art, code, writing, music, whatever sparks you',
       type: MissionType.weekly,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.medium,
@@ -389,7 +389,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'lead_mini_initiative',
       title: 'Lead a Mini Initiative',
-      description: 'Organize a small event, study group, or project with 3+ people',
+      description: 'Get 3+ people together for a small event, study group, or project',
       type: MissionType.weekly,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.hard,
@@ -406,7 +406,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'research_progress',
       title: 'Research Progress Milestone',
-      description: 'Make measurable progress on a research project (lit review, data, analysis)',
+      description: 'Move the needle on your research — literature review, data, anything',
       type: MissionType.weekly,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.hard,
@@ -425,7 +425,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'capstone_project_proposal',
       title: 'Capstone Project Proposal',
-      description: 'Write and submit a proposal for your capstone/passion project',
+      description: 'Write up a proposal for your passion project',
       type: MissionType.milestone,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.expert,
@@ -442,7 +442,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'complete_portfolio',
       title: 'Complete Application Portfolio',
-      description: 'Finish all portfolio pieces for college applications',
+      description: 'Finish all the pieces you need for your college apps',
       type: MissionType.milestone,
       category: MissionCategory.activities,
       difficulty: MissionDifficulty.expert,
@@ -459,7 +459,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'lead_major_initiative',
       title: 'Lead a Major Initiative',
-      description: 'Found and lead a significant project impacting 20+ people',
+      description: 'Start something that impacts 20+ people — go big',
       type: MissionType.milestone,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.expert,
@@ -476,7 +476,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'research_publication',
       title: 'Publish or Present Research',
-      description: 'Get research published, accepted to conference, or win at science fair',
+      description: 'Get your research out there — publish, present, or win a fair',
       type: MissionType.milestone,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.expert,
@@ -495,7 +495,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'explore_new_activity',
       title: 'Try Something New',
-      description: 'Join a new club, try a new sport, or start a new hobby',
+      description: 'Try something totally new — club, sport, hobby, whatever',
       type: MissionType.special,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.medium,
@@ -512,7 +512,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'help_peer',
       title: 'Help a Peer Succeed',
-      description: 'Tutor, mentor, or significantly help another student',
+      description: 'Help out a classmate — tutor, mentor, or just share what you know',
       type: MissionType.special,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.medium,
@@ -529,7 +529,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'wellbeing_check',
       title: 'Wellbeing Check-in',
-      description: 'Do something purely for your mental/physical health (exercise, meditate, hobby)',
+      description: 'Do something just for you — exercise, meditate, chill with a hobby',
       type: MissionType.special,
       category: MissionCategory.wellbeing,
       difficulty: MissionDifficulty.easy,
@@ -547,7 +547,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'essay_writing_practice',
       title: 'Essay Writing Practice',
-      description: 'Write a 300-500 word essay on any topic — practice structure, clarity, and voice',
+      description: 'Write a 300-500 word essay on any topic — practice makes it click',
       type: MissionType.daily,
       category: MissionCategory.academics,
       difficulty: MissionDifficulty.medium,
@@ -564,7 +564,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'reading_goal',
       title: 'Reading Goal',
-      description: 'Read for at least 30 minutes — fiction, non-fiction, academic, or poetry',
+      description: 'Read for 30 minutes — fiction, non-fiction, academic, whatever you like',
       type: MissionType.daily,
       category: MissionCategory.wellbeing,
       difficulty: MissionDifficulty.easy,
@@ -581,7 +581,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'creative_writing_sprint',
       title: 'Creative Writing Sprint',
-      description: 'Spend 20 minutes on a creative writing piece — poetry, flash fiction, or personal narrative',
+      description: 'Spend 20 minutes writing something creative — poetry, flash fiction, whatever',
       type: MissionType.daily,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.medium,
@@ -598,7 +598,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'language_practice',
       title: 'Language Practice',
-      description: 'Practice a foreign language for 20 minutes — speaking, writing, or via an app',
+      description: 'Practice a foreign language for 20 minutes — speaking, writing, or an app',
       type: MissionType.daily,
       category: MissionCategory.academics,
       difficulty: MissionDifficulty.easy,
@@ -615,7 +615,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'journal_review',
       title: 'Journal Review',
-      description: 'Reflect and write a journal entry about your day, thoughts, or experiences',
+      description: 'Write a quick journal entry about your day or what\'s on your mind',
       type: MissionType.daily,
       category: MissionCategory.wellbeing,
       difficulty: MissionDifficulty.easy,
@@ -632,7 +632,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'art_music_practice',
       title: 'Art/Music Practice',
-      description: 'Spend 30 minutes practicing art, music, photography, or any creative discipline',
+      description: 'Spend 30 minutes on art, music, photography — whatever creative thing you\'re into',
       type: MissionType.daily,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.easy,
@@ -650,7 +650,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'debate_preparation',
       title: 'Debate Preparation',
-      description: 'Research and prepare arguments for a debate topic, MUN, or discussion',
+      description: 'Research and prep arguments for a debate topic, MUN, or class discussion',
       type: MissionType.weekly,
       category: MissionCategory.social,
       difficulty: MissionDifficulty.medium,
@@ -667,7 +667,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'portfolio_development',
       title: 'Portfolio Development',
-      description: 'Work on your writing, art, or creative portfolio — curate, refine, and add new work',
+      description: 'Work on your creative portfolio — curate, refine, add something new',
       type: MissionType.weekly,
       category: MissionCategory.activities,
       difficulty: MissionDifficulty.medium,
@@ -684,7 +684,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'cultural_engagement_visit',
       title: 'Cultural Engagement Visit',
-      description: 'Visit a museum, gallery, theatre, cultural site, or attend a cultural event',
+      description: 'Hit up a museum, gallery, theatre, or cultural event',
       type: MissionType.weekly,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.medium,
@@ -701,7 +701,7 @@ class MissionTemplates {
     MissionTemplate(
       id: 'philosophy_discussion',
       title: 'Philosophy Discussion',
-      description: 'Engage in a philosophical discussion, write a response to a thought experiment, or read a philosophy text',
+      description: 'Get into a philosophical discussion, respond to a thought experiment, or read some philosophy',
       type: MissionType.weekly,
       category: MissionCategory.exploration,
       difficulty: MissionDifficulty.hard,

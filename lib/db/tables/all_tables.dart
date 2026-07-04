@@ -84,6 +84,11 @@ class Activities extends Table {
   TextColumn get description => text().withLength(max: 2000)();
   IntColumn get hoursPerWeek => integer().withDefault(const Constant(0))();
   IntColumn get weeksPerYear => integer().withDefault(const Constant(0))();
+  // Common App fields
+  TextColumn get position => text().nullable()();
+  TextColumn get organizationName => text().nullable()();
+  TextColumn get gradeLevels => text().nullable()();
+  BoolColumn get isContinuousYearRound => boolean().withDefault(const Constant(false))();
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime().nullable()();
   TextColumn get evidence => text().nullable()();
@@ -113,32 +118,14 @@ class Activities extends Table {
       ];
 }
 
-enum MissionCategory {
-  daily,
-  weekly,
-  monthly,
-  special,
-  milestone,
-}
-
-enum MissionType {
-  recurring,
-  oneTime,
-}
-
+// MissionCategory, MissionType, MissionDifficulty enums removed.
+// Use the canonical definitions from models/gamification/missions.dart instead.
+// MissionFrequency kept here as it's only used by the DB layer.
 enum MissionFrequency {
   daily,
   weekly,
   monthly,
   oneTime,
-}
-
-enum MissionDifficulty {
-  easy,
-  medium,
-  hard,
-  expert,
-  legendary,
 }
 
 class Missions extends Table {

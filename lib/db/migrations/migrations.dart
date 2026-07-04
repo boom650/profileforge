@@ -47,100 +47,10 @@ Future<void> migrationV2ToV3(Migrator m, int from, int to) async {
   // Add verification fields to activities
   await m.addColumn(_db(m).activities, _db(m).activities.verifiedAt);
   await m.addColumn(_db(m).activities, _db(m).activities.verifiedBy);
-  
-  // Create trigger for auto-updating updatedAt timestamps
-  await _createUpdatedAtTriggers(m);
 }
 
-Future<void> _createUpdatedAtTriggers(Migrator m) async {
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_student_profiles_timestamp
-    AFTER UPDATE ON student_profiles
-    BEGIN
-      UPDATE student_profiles SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_activities_timestamp
-    AFTER UPDATE ON activities
-    BEGIN
-      UPDATE activities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_opportunities_timestamp
-    AFTER UPDATE ON opportunities
-    BEGIN
-      UPDATE opportunities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_skins_timestamp
-    AFTER UPDATE ON skins
-    BEGIN
-      UPDATE skins SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_streaks_timestamp
-    AFTER UPDATE ON streaks
-    BEGIN
-      UPDATE streaks SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_evidence_timestamp
-    AFTER UPDATE ON evidence
-    BEGIN
-      UPDATE evidence SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_admissions_probabilities_timestamp
-    AFTER UPDATE ON admissions_probabilities
-    BEGIN
-      UPDATE admissions_probabilities SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_mission_progresses_timestamp
-    AFTER UPDATE ON mission_progresses
-    BEGIN
-      UPDATE mission_progresses SET last_updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_opportunity_applications_timestamp
-    AFTER UPDATE ON opportunity_applications
-    BEGIN
-      UPDATE opportunity_applications SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_skin_collections_timestamp
-    AFTER UPDATE ON skin_collections
-    BEGIN
-      UPDATE skin_collections SET updated_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-  
-  await m.database.customStatement('''
-    CREATE TRIGGER IF NOT EXISTS update_notifications_timestamp
-    AFTER UPDATE ON notifications
-    BEGIN
-      UPDATE notifications SET created_at = strftime('%s', 'now') * 1000 WHERE id = NEW.id;
-    END;
-  ''');
-}
+// Triggers removed — timestamps are updated directly in DAO code.
+// The old triggers caused infinite recursion by UPDATE-ing the same table they fire on.
 
 /// Migration from v3 to v4 - Add university cost and scholarship fields
 Future<void> migrationV3ToV4(Migrator m, int from, int to) async {
@@ -171,12 +81,19 @@ Future<void> migrationV6ToV7(Migrator m, int from, int to) async {
   await m.addColumn(_db(m).notifications, _db(m).notifications.readAt);
 }
 
+/// Migration from v7 to v8 - Add Common App fields to activities
+Future<void> migrationV7ToV8(Migrator m, int from, int to) async {
+  await m.addColumn(_db(m).activities, _db(m).activities.position);
+  await m.addColumn(_db(m).activities, _db(m).activities.organizationName);
+  await m.addColumn(_db(m).activities, _db(m).activities.gradeLevels);
+  await m.addColumn(_db(m).activities, _db(m).activities.isContinuousYearRound);
+}
+
 /// All migrations in order
 final List<MigrationStrategy> migrationStrategies = [
   MigrationStrategy(
     onCreate: (Migrator m) async {
       await m.createAll();
-      await _createUpdatedAtTriggers(m);
     },
   ),
 ];
@@ -200,5 +117,8 @@ Future<void> migrationSteps(Migrator m, int from, int to) async {
   }
   if (from < 7 && to >= 7) {
     await migrationV6ToV7(m, from, to);
+  }
+  if (from < 8 && to >= 8) {
+    await migrationV7ToV8(m, from, to);
   }
 }

@@ -1148,6 +1148,99 @@
         },
         {
           "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": true,
+          "nameInSql": "position",
+          "nameInDart": "position",
+          "declaration": {
+            "source_uri": "package:profileforge/db/tables/all_tables.dart",
+            "offset": 3642,
+            "name": "position"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": true,
+          "nameInSql": "organization_name",
+          "nameInDart": "organizationName",
+          "declaration": {
+            "source_uri": "package:profileforge/db/tables/all_tables.dart",
+            "offset": 3692,
+            "name": "organizationName"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "string"
+          },
+          "nullable": true,
+          "nameInSql": "grade_levels",
+          "nameInDart": "gradeLevels",
+          "declaration": {
+            "source_uri": "package:profileforge/db/tables/all_tables.dart",
+            "offset": 3750,
+            "name": "gradeLevels"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": null,
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
+            "builtin": "bool"
+          },
+          "nullable": false,
+          "nameInSql": "is_continuous_year_round",
+          "nameInDart": "isContinuousYearRound",
+          "declaration": {
+            "source_uri": "package:profileforge/db/tables/all_tables.dart",
+            "offset": 3803,
+            "name": "isContinuousYearRound"
+          },
+          "typeConverter": null,
+          "clientDefaultCode": null,
+          "defaultArgument": {
+            "elements": [
+              "const ",
+              {
+                "lexeme": "Constant",
+                "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+              },
+              "(false)"
+            ]
+          },
+          "overriddenJsonName": null,
+          "referenceName": null,
+          "documentationComment": null,
+          "constraints": [],
+          "customConstraints": null
+        },
+        {
+          "sqlType": {
             "builtin": "dateTime"
           },
           "nullable": false,
@@ -1155,7 +1248,7 @@
           "nameInDart": "startDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3623,
+            "offset": 3897,
             "name": "startDate"
           },
           "typeConverter": null,
@@ -1176,7 +1269,7 @@
           "nameInDart": "endDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3671,
+            "offset": 3945,
             "name": "endDate"
           },
           "typeConverter": null,
@@ -1197,7 +1290,7 @@
           "nameInDart": "evidence",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3724,
+            "offset": 3998,
             "name": "evidence"
           },
           "typeConverter": null,
@@ -1218,7 +1311,7 @@
           "nameInDart": "teacherVerification",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3774,
+            "offset": 4048,
             "name": "teacherVerification"
           },
           "typeConverter": null,
@@ -1239,7 +1332,7 @@
           "nameInDart": "skills",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3835,
+            "offset": 4109,
             "name": "skills"
           },
           "typeConverter": {
@@ -1279,7 +1372,7 @@
           "nameInDart": "narrativeAngle",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3905,
+            "offset": 4179,
             "name": "narrativeAngle"
           },
           "typeConverter": null,
@@ -1300,7 +1393,7 @@
           "nameInDart": "admissionsValue",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 3960,
+            "offset": 4234,
             "name": "admissionsValue"
           },
           "typeConverter": null,
@@ -1330,7 +1423,7 @@
           "nameInDart": "isInSchool",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4040,
+            "offset": 4314,
             "name": "isInSchool"
           },
           "typeConverter": null,
@@ -1360,7 +1453,7 @@
           "nameInDart": "location",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4118,
+            "offset": 4392,
             "name": "location"
           },
           "typeConverter": null,
@@ -1381,7 +1474,7 @@
           "nameInDart": "totalHours",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4167,
+            "offset": 4441,
             "name": "totalHours"
           },
           "typeConverter": null,
@@ -1411,7 +1504,7 @@
           "nameInDart": "admissionsScore",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4241,
+            "offset": 4515,
             "name": "admissionsScore"
           },
           "typeConverter": null,
@@ -1441,7 +1534,7 @@
           "nameInDart": "verificationStatus",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4321,
+            "offset": 4595,
             "name": "verificationStatus"
           },
           "typeConverter": null,
@@ -1471,7 +1564,7 @@
           "nameInDart": "verifiedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4413,
+            "offset": 4687,
             "name": "verifiedAt"
           },
           "typeConverter": null,
@@ -1492,7 +1585,7 @@
           "nameInDart": "verifiedBy",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4469,
+            "offset": 4743,
             "name": "verifiedBy"
           },
           "typeConverter": null,
@@ -1513,7 +1606,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4525,
+            "offset": 4799,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -1543,7 +1636,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 4609,
+            "offset": 4883,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -1598,7 +1691,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 5311,
+        "offset": 5594,
         "name": "Missions"
       },
       "references": [],
@@ -1613,7 +1706,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5353,
+            "offset": 5636,
             "name": "id"
           },
           "typeConverter": null,
@@ -1643,7 +1736,7 @@
           "nameInDart": "title",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5425,
+            "offset": 5708,
             "name": "title"
           },
           "typeConverter": null,
@@ -1670,7 +1763,7 @@
           "nameInDart": "description",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5490,
+            "offset": 5773,
             "name": "description"
           },
           "typeConverter": null,
@@ -1697,7 +1790,7 @@
           "nameInDart": "category",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5554,
+            "offset": 5837,
             "name": "category"
           },
           "typeConverter": {
@@ -1737,7 +1830,7 @@
           "nameInDart": "type",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5631,
+            "offset": 5914,
             "name": "type"
           },
           "typeConverter": {
@@ -1777,7 +1870,7 @@
           "nameInDart": "frequency",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5700,
+            "offset": 5983,
             "name": "frequency"
           },
           "typeConverter": {
@@ -1817,7 +1910,7 @@
           "nameInDart": "xpReward",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5778,
+            "offset": 6061,
             "name": "xpReward"
           },
           "typeConverter": null,
@@ -1847,7 +1940,7 @@
           "nameInDart": "coinReward",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5850,
+            "offset": 6133,
             "name": "coinReward"
           },
           "typeConverter": null,
@@ -1877,7 +1970,7 @@
           "nameInDart": "streakBonus",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 5924,
+            "offset": 6207,
             "name": "streakBonus"
           },
           "typeConverter": null,
@@ -1907,7 +2000,7 @@
           "nameInDart": "difficulty",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6000,
+            "offset": 6283,
             "name": "difficulty"
           },
           "typeConverter": {
@@ -1947,7 +2040,7 @@
           "nameInDart": "categoryId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6081,
+            "offset": 6364,
             "name": "categoryId"
           },
           "typeConverter": null,
@@ -1968,7 +2061,7 @@
           "nameInDart": "requiredCount",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6121,
+            "offset": 6404,
             "name": "requiredCount"
           },
           "typeConverter": null,
@@ -1998,7 +2091,7 @@
           "nameInDart": "currentProgress",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6198,
+            "offset": 6481,
             "name": "currentProgress"
           },
           "typeConverter": null,
@@ -2028,7 +2121,7 @@
           "nameInDart": "isActive",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6278,
+            "offset": 6561,
             "name": "isActive"
           },
           "typeConverter": null,
@@ -2058,7 +2151,7 @@
           "nameInDart": "isCompleted",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6354,
+            "offset": 6637,
             "name": "isCompleted"
           },
           "typeConverter": null,
@@ -2088,7 +2181,7 @@
           "nameInDart": "unlockCondition",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6434,
+            "offset": 6717,
             "name": "unlockCondition"
           },
           "typeConverter": null,
@@ -2109,7 +2202,7 @@
           "nameInDart": "unlockProgress",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6490,
+            "offset": 6773,
             "name": "unlockProgress"
           },
           "typeConverter": null,
@@ -2139,7 +2232,7 @@
           "nameInDart": "unlockTarget",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6568,
+            "offset": 6851,
             "name": "unlockTarget"
           },
           "typeConverter": null,
@@ -2169,7 +2262,7 @@
           "nameInDart": "startDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6644,
+            "offset": 6927,
             "name": "startDate"
           },
           "typeConverter": null,
@@ -2190,7 +2283,7 @@
           "nameInDart": "endDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6686,
+            "offset": 6969,
             "name": "endDate"
           },
           "typeConverter": null,
@@ -2211,7 +2304,7 @@
           "nameInDart": "icon",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6738,
+            "offset": 7021,
             "name": "icon"
           },
           "typeConverter": null,
@@ -2232,7 +2325,7 @@
           "nameInDart": "color",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6784,
+            "offset": 7067,
             "name": "color"
           },
           "typeConverter": null,
@@ -2253,7 +2346,7 @@
           "nameInDart": "sortOrder",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6830,
+            "offset": 7113,
             "name": "sortOrder"
           },
           "typeConverter": null,
@@ -2283,7 +2376,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6908,
+            "offset": 7191,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -2313,7 +2406,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 6992,
+            "offset": 7275,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -2363,7 +2456,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 7115,
+        "offset": 7398,
         "name": "Opportunities"
       },
       "references": [],
@@ -2378,7 +2471,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7162,
+            "offset": 7445,
             "name": "id"
           },
           "typeConverter": null,
@@ -2408,7 +2501,7 @@
           "nameInDart": "title",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7234,
+            "offset": 7517,
             "name": "title"
           },
           "typeConverter": null,
@@ -2435,7 +2528,7 @@
           "nameInDart": "description",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7299,
+            "offset": 7582,
             "name": "description"
           },
           "typeConverter": null,
@@ -2462,7 +2555,7 @@
           "nameInDart": "category",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7363,
+            "offset": 7646,
             "name": "category"
           },
           "typeConverter": {
@@ -2502,7 +2595,7 @@
           "nameInDart": "type",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7444,
+            "offset": 7727,
             "name": "type"
           },
           "typeConverter": {
@@ -2542,7 +2635,7 @@
           "nameInDart": "organizer",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7517,
+            "offset": 7800,
             "name": "organizer"
           },
           "typeConverter": null,
@@ -2569,7 +2662,7 @@
           "nameInDart": "location",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7578,
+            "offset": 7861,
             "name": "location"
           },
           "typeConverter": null,
@@ -2590,7 +2683,7 @@
           "nameInDart": "isVirtual",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7628,
+            "offset": 7911,
             "name": "isVirtual"
           },
           "typeConverter": null,
@@ -2620,7 +2713,7 @@
           "nameInDart": "country",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7706,
+            "offset": 7989,
             "name": "country"
           },
           "typeConverter": null,
@@ -2641,7 +2734,7 @@
           "nameInDart": "city",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7755,
+            "offset": 8038,
             "name": "city"
           },
           "typeConverter": null,
@@ -2662,7 +2755,7 @@
           "nameInDart": "startDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7800,
+            "offset": 8083,
             "name": "startDate"
           },
           "typeConverter": null,
@@ -2683,7 +2776,7 @@
           "nameInDart": "endDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7842,
+            "offset": 8125,
             "name": "endDate"
           },
           "typeConverter": null,
@@ -2704,7 +2797,7 @@
           "nameInDart": "applicationDeadline",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7882,
+            "offset": 8165,
             "name": "applicationDeadline"
           },
           "typeConverter": null,
@@ -2725,7 +2818,7 @@
           "nameInDart": "eligibility",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7935,
+            "offset": 8218,
             "name": "eligibility"
           },
           "typeConverter": null,
@@ -2752,7 +2845,7 @@
           "nameInDart": "requirements",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 7999,
+            "offset": 8282,
             "name": "requirements"
           },
           "typeConverter": null,
@@ -2779,7 +2872,7 @@
           "nameInDart": "prizes",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8064,
+            "offset": 8347,
             "name": "prizes"
           },
           "typeConverter": null,
@@ -2806,7 +2899,7 @@
           "nameInDart": "website",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8123,
+            "offset": 8406,
             "name": "website"
           },
           "typeConverter": null,
@@ -2827,7 +2920,7 @@
           "nameInDart": "contactEmail",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8172,
+            "offset": 8455,
             "name": "contactEmail"
           },
           "typeConverter": null,
@@ -2848,7 +2941,7 @@
           "nameInDart": "contactPhone",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8226,
+            "offset": 8509,
             "name": "contactPhone"
           },
           "typeConverter": null,
@@ -2869,7 +2962,7 @@
           "nameInDart": "tags",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8280,
+            "offset": 8563,
             "name": "tags"
           },
           "typeConverter": {
@@ -2909,7 +3002,7 @@
           "nameInDart": "difficulty",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8348,
+            "offset": 8631,
             "name": "difficulty"
           },
           "typeConverter": {
@@ -2949,7 +3042,7 @@
           "nameInDart": "prestige",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8433,
+            "offset": 8716,
             "name": "prestige"
           },
           "typeConverter": {
@@ -2989,7 +3082,7 @@
           "nameInDart": "applicationFee",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8513,
+            "offset": 8796,
             "name": "applicationFee"
           },
           "typeConverter": null,
@@ -3019,7 +3112,7 @@
           "nameInDart": "maxParticipants",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8591,
+            "offset": 8874,
             "name": "maxParticipants"
           },
           "typeConverter": null,
@@ -3040,7 +3133,7 @@
           "nameInDart": "currentApplicants",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8650,
+            "offset": 8933,
             "name": "currentApplicants"
           },
           "typeConverter": null,
@@ -3070,7 +3163,7 @@
           "nameInDart": "minGrade",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8731,
+            "offset": 9014,
             "name": "minGrade"
           },
           "typeConverter": null,
@@ -3091,7 +3184,7 @@
           "nameInDart": "maxGrade",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8783,
+            "offset": 9066,
             "name": "maxGrade"
           },
           "typeConverter": null,
@@ -3112,7 +3205,7 @@
           "nameInDart": "minAge",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8835,
+            "offset": 9118,
             "name": "minAge"
           },
           "typeConverter": null,
@@ -3133,7 +3226,7 @@
           "nameInDart": "maxAge",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8885,
+            "offset": 9168,
             "name": "maxAge"
           },
           "typeConverter": null,
@@ -3154,7 +3247,7 @@
           "nameInDart": "requiredGpa",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8936,
+            "offset": 9219,
             "name": "requiredGpa"
           },
           "typeConverter": null,
@@ -3175,7 +3268,7 @@
           "nameInDart": "requiredTestScores",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 8989,
+            "offset": 9272,
             "name": "requiredTestScores"
           },
           "typeConverter": {
@@ -3215,7 +3308,7 @@
           "nameInDart": "requiredDocuments",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9076,
+            "offset": 9359,
             "name": "requiredDocuments"
           },
           "typeConverter": {
@@ -3255,7 +3348,7 @@
           "nameInDart": "selectionCriteria",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9157,
+            "offset": 9440,
             "name": "selectionCriteria"
           },
           "typeConverter": null,
@@ -3282,7 +3375,7 @@
           "nameInDart": "timeline",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9227,
+            "offset": 9510,
             "name": "timeline"
           },
           "typeConverter": {
@@ -3322,7 +3415,7 @@
           "nameInDart": "isActive",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9304,
+            "offset": 9587,
             "name": "isActive"
           },
           "typeConverter": null,
@@ -3352,7 +3445,7 @@
           "nameInDart": "isFeatured",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9380,
+            "offset": 9663,
             "name": "isFeatured"
           },
           "typeConverter": null,
@@ -3382,7 +3475,7 @@
           "nameInDart": "views",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9458,
+            "offset": 9741,
             "name": "views"
           },
           "typeConverter": null,
@@ -3412,7 +3505,7 @@
           "nameInDart": "applications",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9527,
+            "offset": 9810,
             "name": "applications"
           },
           "typeConverter": null,
@@ -3442,7 +3535,7 @@
           "nameInDart": "imageUrl",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9604,
+            "offset": 9887,
             "name": "imageUrl"
           },
           "typeConverter": null,
@@ -3463,7 +3556,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9653,
+            "offset": 9936,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -3484,7 +3577,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 9695,
+            "offset": 9978,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -3532,7 +3625,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 10390,
+        "offset": 10673,
         "name": "Skins"
       },
       "references": [],
@@ -3547,7 +3640,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10429,
+            "offset": 10712,
             "name": "id"
           },
           "typeConverter": null,
@@ -3577,7 +3670,7 @@
           "nameInDart": "name",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10501,
+            "offset": 10784,
             "name": "name"
           },
           "typeConverter": null,
@@ -3604,7 +3697,7 @@
           "nameInDart": "description",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10565,
+            "offset": 10848,
             "name": "description"
           },
           "typeConverter": null,
@@ -3631,7 +3724,7 @@
           "nameInDart": "rarity",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10628,
+            "offset": 10911,
             "name": "rarity"
           },
           "typeConverter": {
@@ -3671,7 +3764,7 @@
           "nameInDart": "category",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10698,
+            "offset": 10981,
             "name": "category"
           },
           "typeConverter": {
@@ -3711,7 +3804,7 @@
           "nameInDart": "assetPath",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10772,
+            "offset": 11055,
             "name": "assetPath"
           },
           "typeConverter": null,
@@ -3732,7 +3825,7 @@
           "nameInDart": "previewPath",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10823,
+            "offset": 11106,
             "name": "previewPath"
           },
           "typeConverter": null,
@@ -3753,7 +3846,7 @@
           "nameInDart": "unlockCondition",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10876,
+            "offset": 11159,
             "name": "unlockCondition"
           },
           "typeConverter": null,
@@ -3774,7 +3867,7 @@
           "nameInDart": "unlockProgress",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 10932,
+            "offset": 11215,
             "name": "unlockProgress"
           },
           "typeConverter": null,
@@ -3804,7 +3897,7 @@
           "nameInDart": "unlockTarget",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11010,
+            "offset": 11293,
             "name": "unlockTarget"
           },
           "typeConverter": null,
@@ -3834,7 +3927,7 @@
           "nameInDart": "isUnlocked",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11087,
+            "offset": 11370,
             "name": "isUnlocked"
           },
           "typeConverter": null,
@@ -3864,7 +3957,7 @@
           "nameInDart": "isEquipped",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11166,
+            "offset": 11449,
             "name": "isEquipped"
           },
           "typeConverter": null,
@@ -3894,7 +3987,7 @@
           "nameInDart": "sortOrder",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11244,
+            "offset": 11527,
             "name": "sortOrder"
           },
           "typeConverter": null,
@@ -3924,7 +4017,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11322,
+            "offset": 11605,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -3954,7 +4047,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11406,
+            "offset": 11689,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -4004,7 +4097,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 11529,
+        "offset": 11812,
         "name": "Streaks"
       },
       "references": [
@@ -4024,7 +4117,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11570,
+            "offset": 11853,
             "name": "id"
           },
           "typeConverter": null,
@@ -4054,7 +4147,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11642,
+            "offset": 11925,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -4089,7 +4182,7 @@
           "nameInDart": "type",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11744,
+            "offset": 12027,
             "name": "type"
           },
           "typeConverter": null,
@@ -4119,7 +4212,7 @@
           "nameInDart": "currentStreak",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11818,
+            "offset": 12101,
             "name": "currentStreak"
           },
           "typeConverter": null,
@@ -4149,7 +4242,7 @@
           "nameInDart": "longestStreak",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11895,
+            "offset": 12178,
             "name": "longestStreak"
           },
           "typeConverter": null,
@@ -4179,7 +4272,7 @@
           "nameInDart": "lastActivityDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 11977,
+            "offset": 12260,
             "name": "lastActivityDate"
           },
           "typeConverter": null,
@@ -4200,7 +4293,7 @@
           "nameInDart": "streakStartDate",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12043,
+            "offset": 12326,
             "name": "streakStartDate"
           },
           "typeConverter": null,
@@ -4221,7 +4314,7 @@
           "nameInDart": "totalDays",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12103,
+            "offset": 12386,
             "name": "totalDays"
           },
           "typeConverter": null,
@@ -4251,7 +4344,7 @@
           "nameInDart": "milestoneRewards",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12177,
+            "offset": 12460,
             "name": "milestoneRewards"
           },
           "typeConverter": {
@@ -4291,7 +4384,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12261,
+            "offset": 12544,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -4321,7 +4414,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12345,
+            "offset": 12628,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -4373,7 +4466,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 12568,
+        "offset": 12851,
         "name": "Evidence"
       },
       "references": [
@@ -4397,7 +4490,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12610,
+            "offset": 12893,
             "name": "id"
           },
           "typeConverter": null,
@@ -4427,7 +4520,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12682,
+            "offset": 12965,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -4462,7 +4555,7 @@
           "nameInDart": "activityId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12784,
+            "offset": 13067,
             "name": "activityId"
           },
           "typeConverter": null,
@@ -4497,7 +4590,7 @@
           "nameInDart": "type",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12893,
+            "offset": 13176,
             "name": "type"
           },
           "typeConverter": null,
@@ -4518,7 +4611,7 @@
           "nameInDart": "title",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12928,
+            "offset": 13211,
             "name": "title"
           },
           "typeConverter": null,
@@ -4545,7 +4638,7 @@
           "nameInDart": "description",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 12993,
+            "offset": 13276,
             "name": "description"
           },
           "typeConverter": null,
@@ -4572,7 +4665,7 @@
           "nameInDart": "filePath",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13057,
+            "offset": 13340,
             "name": "filePath"
           },
           "typeConverter": null,
@@ -4593,7 +4686,7 @@
           "nameInDart": "fileType",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13107,
+            "offset": 13390,
             "name": "fileType"
           },
           "typeConverter": null,
@@ -4614,7 +4707,7 @@
           "nameInDart": "fileSize",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13156,
+            "offset": 13439,
             "name": "fileSize"
           },
           "typeConverter": null,
@@ -4635,7 +4728,7 @@
           "nameInDart": "url",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13209,
+            "offset": 13492,
             "name": "url"
           },
           "typeConverter": null,
@@ -4656,7 +4749,7 @@
           "nameInDart": "verificationStatus",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13254,
+            "offset": 13537,
             "name": "verificationStatus"
           },
           "typeConverter": null,
@@ -4686,7 +4779,7 @@
           "nameInDart": "verifiedBy",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13342,
+            "offset": 13625,
             "name": "verifiedBy"
           },
           "typeConverter": null,
@@ -4707,7 +4800,7 @@
           "nameInDart": "verifiedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13398,
+            "offset": 13681,
             "name": "verifiedAt"
           },
           "typeConverter": null,
@@ -4728,7 +4821,7 @@
           "nameInDart": "verificationNotes",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13454,
+            "offset": 13737,
             "name": "verificationNotes"
           },
           "typeConverter": null,
@@ -4749,7 +4842,7 @@
           "nameInDart": "credibilityScore",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13512,
+            "offset": 13795,
             "name": "credibilityScore"
           },
           "typeConverter": null,
@@ -4779,7 +4872,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13598,
+            "offset": 13881,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -4809,7 +4902,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 13682,
+            "offset": 13965,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -4862,7 +4955,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 14039,
+        "offset": 14322,
         "name": "AdmissionsProbabilities"
       },
       "references": [
@@ -4882,7 +4975,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14096,
+            "offset": 14379,
             "name": "id"
           },
           "typeConverter": null,
@@ -4912,7 +5005,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14168,
+            "offset": 14451,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -4947,7 +5040,7 @@
           "nameInDart": "universityName",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14270,
+            "offset": 14553,
             "name": "universityName"
           },
           "typeConverter": null,
@@ -4974,7 +5067,7 @@
           "nameInDart": "country",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14344,
+            "offset": 14627,
             "name": "country"
           },
           "typeConverter": null,
@@ -5001,7 +5094,7 @@
           "nameInDart": "major",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14403,
+            "offset": 14686,
             "name": "major"
           },
           "typeConverter": null,
@@ -5028,7 +5121,7 @@
           "nameInDart": "category",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14460,
+            "offset": 14743,
             "name": "category"
           },
           "typeConverter": {
@@ -5068,7 +5161,7 @@
           "nameInDart": "reachProbability",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14540,
+            "offset": 14823,
             "name": "reachProbability"
           },
           "typeConverter": null,
@@ -5098,7 +5191,7 @@
           "nameInDart": "matchProbability",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14620,
+            "offset": 14903,
             "name": "matchProbability"
           },
           "typeConverter": null,
@@ -5128,7 +5221,7 @@
           "nameInDart": "safetyProbability",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14700,
+            "offset": 14983,
             "name": "safetyProbability"
           },
           "typeConverter": null,
@@ -5158,7 +5251,7 @@
           "nameInDart": "overallProbability",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14781,
+            "offset": 15064,
             "name": "overallProbability"
           },
           "typeConverter": null,
@@ -5188,7 +5281,7 @@
           "nameInDart": "factors",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14863,
+            "offset": 15146,
             "name": "factors"
           },
           "typeConverter": {
@@ -5228,7 +5321,7 @@
           "nameInDart": "strengths",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 14939,
+            "offset": 15222,
             "name": "strengths"
           },
           "typeConverter": {
@@ -5268,7 +5361,7 @@
           "nameInDart": "weaknesses",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15012,
+            "offset": 15295,
             "name": "weaknesses"
           },
           "typeConverter": {
@@ -5308,7 +5401,7 @@
           "nameInDart": "recommendations",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15086,
+            "offset": 15369,
             "name": "recommendations"
           },
           "typeConverter": {
@@ -5348,7 +5441,7 @@
           "nameInDart": "estimatedCost",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15164,
+            "offset": 15447,
             "name": "estimatedCost"
           },
           "typeConverter": null,
@@ -5369,7 +5462,7 @@
           "nameInDart": "scholarships",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15222,
+            "offset": 15505,
             "name": "scholarships"
           },
           "typeConverter": {
@@ -5409,7 +5502,7 @@
           "nameInDart": "applicationDeadline",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15297,
+            "offset": 15580,
             "name": "applicationDeadline"
           },
           "typeConverter": null,
@@ -5430,7 +5523,7 @@
           "nameInDart": "applicationStatus",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15361,
+            "offset": 15644,
             "name": "applicationStatus"
           },
           "typeConverter": null,
@@ -5460,7 +5553,7 @@
           "nameInDart": "notes",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15449,
+            "offset": 15732,
             "name": "notes"
           },
           "typeConverter": null,
@@ -5481,7 +5574,7 @@
           "nameInDart": "calculatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15500,
+            "offset": 15783,
             "name": "calculatedAt"
           },
           "typeConverter": null,
@@ -5511,7 +5604,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15587,
+            "offset": 15870,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -5541,7 +5634,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 15671,
+            "offset": 15954,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -5597,7 +5690,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 16275,
+        "offset": 16558,
         "name": "MissionProgresses"
       },
       "references": [
@@ -5621,7 +5714,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16326,
+            "offset": 16609,
             "name": "id"
           },
           "typeConverter": null,
@@ -5651,7 +5744,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16398,
+            "offset": 16681,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -5686,7 +5779,7 @@
           "nameInDart": "missionId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16500,
+            "offset": 16783,
             "name": "missionId"
           },
           "typeConverter": null,
@@ -5721,7 +5814,7 @@
           "nameInDart": "currentProgress",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16594,
+            "offset": 16877,
             "name": "currentProgress"
           },
           "typeConverter": null,
@@ -5751,7 +5844,7 @@
           "nameInDart": "isCompleted",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16674,
+            "offset": 16957,
             "name": "isCompleted"
           },
           "typeConverter": null,
@@ -5781,7 +5874,7 @@
           "nameInDart": "completedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16758,
+            "offset": 17041,
             "name": "completedAt"
           },
           "typeConverter": null,
@@ -5802,7 +5895,7 @@
           "nameInDart": "xpEarned",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16814,
+            "offset": 17097,
             "name": "xpEarned"
           },
           "typeConverter": null,
@@ -5832,7 +5925,7 @@
           "nameInDart": "coinsEarned",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16886,
+            "offset": 17169,
             "name": "coinsEarned"
           },
           "typeConverter": null,
@@ -5862,7 +5955,7 @@
           "nameInDart": "streakCount",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 16961,
+            "offset": 17244,
             "name": "streakCount"
           },
           "typeConverter": null,
@@ -5892,7 +5985,7 @@
           "nameInDart": "lastUpdatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17041,
+            "offset": 17324,
             "name": "lastUpdatedAt"
           },
           "typeConverter": null,
@@ -5922,7 +6015,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17129,
+            "offset": 17412,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -5974,7 +6067,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 17357,
+        "offset": 17640,
         "name": "OpportunityApplications"
       },
       "references": [
@@ -5998,7 +6091,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17414,
+            "offset": 17697,
             "name": "id"
           },
           "typeConverter": null,
@@ -6028,7 +6121,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17486,
+            "offset": 17769,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -6063,7 +6156,7 @@
           "nameInDart": "opportunityId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17588,
+            "offset": 17871,
             "name": "opportunityId"
           },
           "typeConverter": null,
@@ -6098,7 +6191,7 @@
           "nameInDart": "status",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17692,
+            "offset": 17975,
             "name": "status"
           },
           "typeConverter": null,
@@ -6128,7 +6221,7 @@
           "nameInDart": "applicationData",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17771,
+            "offset": 18054,
             "name": "applicationData"
           },
           "typeConverter": {
@@ -6168,7 +6261,7 @@
           "nameInDart": "documents",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17855,
+            "offset": 18138,
             "name": "documents"
           },
           "typeConverter": {
@@ -6208,7 +6301,7 @@
           "nameInDart": "notes",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17928,
+            "offset": 18211,
             "name": "notes"
           },
           "typeConverter": null,
@@ -6229,7 +6322,7 @@
           "nameInDart": "appliedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 17979,
+            "offset": 18262,
             "name": "appliedAt"
           },
           "typeConverter": null,
@@ -6250,7 +6343,7 @@
           "nameInDart": "respondedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18038,
+            "offset": 18321,
             "name": "respondedAt"
           },
           "typeConverter": null,
@@ -6271,7 +6364,7 @@
           "nameInDart": "response",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18095,
+            "offset": 18378,
             "name": "response"
           },
           "typeConverter": null,
@@ -6292,7 +6385,7 @@
           "nameInDart": "reminderDaysBefore",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18144,
+            "offset": 18427,
             "name": "reminderDaysBefore"
           },
           "typeConverter": null,
@@ -6322,7 +6415,7 @@
           "nameInDart": "isReminderEnabled",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18227,
+            "offset": 18510,
             "name": "isReminderEnabled"
           },
           "typeConverter": null,
@@ -6352,7 +6445,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18316,
+            "offset": 18599,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -6382,7 +6475,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18400,
+            "offset": 18683,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -6435,7 +6528,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 18798,
+        "offset": 19081,
         "name": "SkinCollections"
       },
       "references": [
@@ -6459,7 +6552,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18847,
+            "offset": 19130,
             "name": "id"
           },
           "typeConverter": null,
@@ -6489,7 +6582,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 18919,
+            "offset": 19202,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -6524,7 +6617,7 @@
           "nameInDart": "skinId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19021,
+            "offset": 19304,
             "name": "skinId"
           },
           "typeConverter": null,
@@ -6559,7 +6652,7 @@
           "nameInDart": "isUnlocked",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19110,
+            "offset": 19393,
             "name": "isUnlocked"
           },
           "typeConverter": null,
@@ -6589,7 +6682,7 @@
           "nameInDart": "isEquipped",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19189,
+            "offset": 19472,
             "name": "isEquipped"
           },
           "typeConverter": null,
@@ -6619,7 +6712,7 @@
           "nameInDart": "unlockProgress",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19267,
+            "offset": 19550,
             "name": "unlockProgress"
           },
           "typeConverter": null,
@@ -6649,7 +6742,7 @@
           "nameInDart": "unlockedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19350,
+            "offset": 19633,
             "name": "unlockedAt"
           },
           "typeConverter": null,
@@ -6670,7 +6763,7 @@
           "nameInDart": "equippedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19410,
+            "offset": 19693,
             "name": "equippedAt"
           },
           "typeConverter": null,
@@ -6691,7 +6784,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19470,
+            "offset": 19753,
             "name": "createdAt"
           },
           "typeConverter": null,
@@ -6721,7 +6814,7 @@
           "nameInDart": "updatedAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19554,
+            "offset": 19837,
             "name": "updatedAt"
           },
           "typeConverter": null,
@@ -6773,7 +6866,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/tables/all_tables.dart",
-        "offset": 19779,
+        "offset": 20062,
         "name": "Notifications"
       },
       "references": [
@@ -6793,7 +6886,7 @@
           "nameInDart": "id",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19826,
+            "offset": 20109,
             "name": "id"
           },
           "typeConverter": null,
@@ -6823,7 +6916,7 @@
           "nameInDart": "studentId",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 19898,
+            "offset": 20181,
             "name": "studentId"
           },
           "typeConverter": null,
@@ -6858,7 +6951,7 @@
           "nameInDart": "title",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20000,
+            "offset": 20283,
             "name": "title"
           },
           "typeConverter": null,
@@ -6885,7 +6978,7 @@
           "nameInDart": "body",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20065,
+            "offset": 20348,
             "name": "body"
           },
           "typeConverter": null,
@@ -6912,7 +7005,7 @@
           "nameInDart": "type",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20122,
+            "offset": 20405,
             "name": "type"
           },
           "typeConverter": null,
@@ -6933,7 +7026,7 @@
           "nameInDart": "payload",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20157,
+            "offset": 20440,
             "name": "payload"
           },
           "typeConverter": {
@@ -6973,7 +7066,7 @@
           "nameInDart": "isRead",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20233,
+            "offset": 20516,
             "name": "isRead"
           },
           "typeConverter": null,
@@ -7003,7 +7096,7 @@
           "nameInDart": "isArchived",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20308,
+            "offset": 20591,
             "name": "isArchived"
           },
           "typeConverter": null,
@@ -7033,7 +7126,7 @@
           "nameInDart": "scheduledAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20391,
+            "offset": 20674,
             "name": "scheduledAt"
           },
           "typeConverter": null,
@@ -7054,7 +7147,7 @@
           "nameInDart": "sentAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20452,
+            "offset": 20735,
             "name": "sentAt"
           },
           "typeConverter": null,
@@ -7075,7 +7168,7 @@
           "nameInDart": "readAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20508,
+            "offset": 20791,
             "name": "readAt"
           },
           "typeConverter": null,
@@ -7096,7 +7189,7 @@
           "nameInDart": "createdAt",
           "declaration": {
             "source_uri": "package:profileforge/db/tables/all_tables.dart",
-            "offset": 20564,
+            "offset": 20847,
             "name": "createdAt"
           },
           "typeConverter": null,

@@ -84,6 +84,10 @@ _$ActivityImpl _$$ActivityImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String,
       hoursPerWeek: (json['hoursPerWeek'] as num).toInt(),
       weeksPerYear: (json['weeksPerYear'] as num).toInt(),
+      position: json['position'] as String?,
+      organizationName: json['organizationName'] as String?,
+      gradeLevels: json['gradeLevels'] as String?,
+      isContinuousYearRound: json['isContinuousYearRound'] as bool?,
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: json['endDate'] == null
           ? null
@@ -107,6 +111,10 @@ Map<String, dynamic> _$$ActivityImplToJson(_$ActivityImpl instance) =>
       'description': instance.description,
       'hoursPerWeek': instance.hoursPerWeek,
       'weeksPerYear': instance.weeksPerYear,
+      'position': instance.position,
+      'organizationName': instance.organizationName,
+      'gradeLevels': instance.gradeLevels,
+      'isContinuousYearRound': instance.isContinuousYearRound,
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate?.toIso8601String(),
       'evidence': instance.evidence,

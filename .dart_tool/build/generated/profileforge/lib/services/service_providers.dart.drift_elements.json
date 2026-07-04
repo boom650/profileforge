@@ -1,1 +1,1 @@
-{"valid_import":true,"imports":[{"uri":"package:flutter_riverpod/flutter_riverpod.dart","transitive":false}],"elements":[]}
+{"valid_import":true,"imports":[{"uri":"package:flutter_riverpod/flutter_riverpod.dart","transitive":false},{"uri":"package:profileforge/db/database.dart","transitive":false},{"uri":"package:profileforge/services/gamification/gamification_service.dart","transitive":false},{"uri":"package:profileforge/services/encryption_service.dart","transitive":false}],"elements":[]}

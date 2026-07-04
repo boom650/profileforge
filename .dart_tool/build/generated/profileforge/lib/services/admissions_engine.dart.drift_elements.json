@@ -1,1 +1,1 @@
-{"valid_import":true,"imports":[{"uri":"package:flutter_riverpod/flutter_riverpod.dart","transitive":false},{"uri":"package:profileforge/models/gamification/admissions_pillar.dart","transitive":false}],"elements":[]}
+{"valid_import":true,"imports":[{"uri":"package:profileforge/services/admissions_probability/admissions_engine.dart","transitive":true}],"elements":[]}

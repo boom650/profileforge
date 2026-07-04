@@ -7,7 +7,7 @@
       },
       "declaration": {
         "source_uri": "package:profileforge/db/database.dart",
-        "offset": 1106,
+        "offset": 1210,
         "name": "AppDatabase"
       },
       "references": [
@@ -179,6 +179,7 @@
     "package:profileforge/db/daos/all_daos.dart",
     "package:profileforge/db/converters/type_converters.dart",
     "package:profileforge/models/student_profile.dart",
+    "package:profileforge/models/gamification/missions.dart",
     "package:profileforge/db/migrations/migrations.dart"
   ]
 }
