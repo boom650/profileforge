@@ -1,6 +1,6 @@
 name: Build ProfileForge APK
 
-"on":
+on:
   push:
     branches: ["master", "main"]
   workflow_dispatch:
@@ -27,8 +27,8 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Run analysis
-        run: flutter analyze
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Regenerate Android platform
         run: |
