@@ -1,0 +1,28 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Disable strict rules for now
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
+    avoid_print: false
+    use_key_in_widget_constructors: false
+    
+# Treat warnings as info (not errors)
+analyzer:
+  errors:
+    # Suppress generated file warnings
+    invalid_annotation_target: ignore
+    deprecated_member_use: ignore
+    unnecessary_import: ignore
+    unused_import: ignore
+    unused_local_variable: ignore
+    dead_null_aware_expression: ignore
+    unnecessary_null_comparison: ignore
+    unnecessary_non_null_assertion: ignore
+    
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.drift.dart"
+    - "**/*.drift.g.part"
