@@ -50,9 +50,6 @@ dependencies:
   # Notifications
   flutter_local_notifications: ^17.2.2
   
-  # Background tasks
-  workmanager: ^0.5.2
-
   # Security & Encryption
   flutter_secure_storage: ^9.0.0
   encrypt: ^5.0.3
