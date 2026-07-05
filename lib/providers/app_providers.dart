@@ -446,6 +446,16 @@ final claimMissionRewardProvider =
     ref.read(xpStateProvider.notifier).syncFromService();
   };
 });
+/// Update progress on a mission. When progress reaches the target,
+/// the mission is marked as completed.
+final updateMissionProgressProvider =
+    Provider<Future<void> Function(String, int)>((ref) {
+  return (String missionId, int increment) async {
+    final service = ref.read(gamificationServiceProvider);
+    await service.updateMissionProgress(missionId, increment);
+  };
+});
+
 
 /// Claim the weekly mission set bonus (if all weekly missions completed).
 final claimWeeklyBonusProvider = Provider<Future<void> Function()>((ref) {

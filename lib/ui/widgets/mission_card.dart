@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
@@ -6,13 +7,13 @@ import '../../providers/app_providers.dart';
 import '../../models/gamification/missions.dart';
 import 'micro_interactions.dart';
 
-class MissionCard extends StatelessWidget {
+class MissionCard extends ConsumerWidget {
   final Mission mission;
 
   const MissionCard({super.key, required this.mission});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final typeColors = {
       MissionType.daily: AppTheme.primaryBlue,
       MissionType.weekly: const Color(0xFF8B5CF6),
@@ -154,29 +155,7 @@ class MissionCard extends StatelessWidget {
             ),
           ),
           // Action button
-          if (!mission.isCompleted)
-            TapScale(
-              onTap: () {
-                HapticHelper.medium();
-              },
-              child: ElevatedButton(
-                onPressed: () {
-                  HapticHelper.medium();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: color,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  minimumSize: const Size(80, 36),
-                ),
-                child: Text(
-                  'Start',
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
-                ),
-              ),
-            )
-          else
+          if (mission.isClaimed)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
@@ -189,6 +168,70 @@ class MissionCard extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: AppTheme.successGreen,
+                ),
+              ),
+            )
+          else if (mission.isCompleted)
+            TapScale(
+              onTap: null,
+              child: ElevatedButton(
+                onPressed: () async {
+                  HapticFeedback.heavyImpact();
+                  await ref.read(claimMissionRewardProvider)(mission.id);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Claimed ${mission.xpReward} XP reward! 🎉'),
+                        backgroundColor: AppTheme.successGreen,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.successGreen,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 36),
+                ),
+                child: Text(
+                  'Claim',
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+                ),
+              ),
+            )
+          else
+            TapScale(
+              onTap: null,
+              child: ElevatedButton(
+                onPressed: () async {
+                  HapticFeedback.mediumImpact();
+                  await ref.read(updateMissionProgressProvider)(mission.id, 1);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(mission.progressCurrent + 1 >= mission.progressTarget
+                            ? 'Mission completed! 🎉'
+                            : 'Progress: ${mission.progressCurrent + 1}/${mission.progressTarget}'),
+                        backgroundColor: color,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 36),
+                ),
+                child: Text(
+                  mission.progressCurrent > 0 ? 'Continue' : 'Start',
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

@@ -5,6 +5,8 @@ import '../../models/gamification/streak.dart';
 import '../../models/gamification/xp.dart';
 import '../../models/gamification/missions.dart';
 import '../../models/gamification/admissions_pillar.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// XP add result — returned whenever XP is awarded.
 @immutable
@@ -28,10 +30,12 @@ class XPAddResult {
   });
 }
 
-/// GamificationService — manages all gamification business logic:
-/// streaks, XP, missions, skins, and admissions pillar scoring.
 class GamificationService {
-  GamificationService();
+  static const String _prefsKey = 'gamification_state';
+
+  GamificationService() {
+    _loadFromPrefs();
+  }
 
   // ─── Internal state ───────────────────────────────────────────────────
   XPState _xpState = XPState.initial();
@@ -195,6 +199,8 @@ class GamificationService {
     // ── Check for newly unlocked skins ──
     final SkinTier? newSkin = _checkAndUnlockSkins();
 
+    _saveToPrefs();
+
     return XPAddResult(
       totalXP: _xpState.totalXP,
       pillarXP: newPillarXP[pillar]!,
@@ -258,6 +264,8 @@ class GamificationService {
       final milestones = _checkStreakMilestones(newStreak);
       _streak = _applyMilestoneRewards(newStreak, milestones);
 
+      _saveToPrefs();
+
       return StreakActionResult.success(
         newStreak: _streak,
         newMilestones: milestones,
@@ -297,6 +305,8 @@ class GamificationService {
 
       final milestones = _checkStreakMilestones(newStreak);
       _streak = _applyMilestoneRewards(newStreak, milestones);
+
+      _saveToPrefs();
 
       return StreakActionResult.success(
         newStreak: _streak,
@@ -346,6 +356,8 @@ class GamificationService {
         source: 'daily_checkin',
       );
 
+      _saveToPrefs();
+
       return StreakActionResult.freezeTokenUsed(
         newStreak: _streak,
         tokensUsed: tokensUsed,
@@ -394,6 +406,8 @@ class GamificationService {
           source: 'daily_checkin',
         );
 
+        _saveToPrefs();
+
         return StreakActionResult.graceDayUsed(
           newStreak: _streak,
           graceDayUsage: graceUsage,
@@ -415,6 +429,8 @@ class GamificationService {
       ),
     );
     _streak = newStreak;
+
+    _saveToPrefs();
 
     return StreakActionResult.streakBroken(
       newStreak: _streak,
@@ -488,6 +504,8 @@ class GamificationService {
     if (updated.isCompleted) {
       _missionCompleteController.add(updated);
     }
+
+    _saveToPrefs();
   }
 
   /// Claim the XP reward for a completed mission.
@@ -509,6 +527,8 @@ class GamificationService {
       source: '${mission.type.name}_mission',
       missionId: mission.id,
     );
+
+    _saveToPrefs();
   }
 
   /// Claim the weekly mission set bonus (if all weekly missions completed).
@@ -531,6 +551,8 @@ class GamificationService {
       pillar: AdmissionsPillar.consistency,
       source: 'weekly_bonus',
     );
+
+    _saveToPrefs();
   }
 
   /// Check if the current weekly mission set is complete.
@@ -545,6 +567,7 @@ class GamificationService {
   Future<void> equipSkin(SkinTier tier) async {
     if (_ownedSkins.containsKey(tier)) {
       _equippedSkin = tier;
+      _saveToPrefs();
     }
   }
 
@@ -709,6 +732,8 @@ class GamificationService {
       bonusClaimedAt: null,
       categoryCompletion: {},
     );
+
+    _saveToPrefs();
   }
 
   // ─── Dispose ──────────────────────────────────────────────────────────
@@ -942,6 +967,8 @@ class GamificationService {
           graceDaysUsedThisWeek: 0,
         );
       }
+
+      _saveToPrefs();
     }
   }
 
@@ -1028,5 +1055,193 @@ class GamificationService {
       guess = (guess + x / guess) / 2;
     }
     return guess;
+  }
+
+  // ─── SharedPreferences persistence ─────────────────────────────────────
+
+  /// Fire-and-forget load from SharedPreferences.
+  /// Called once at construction. Defaults are fine for first-time users.
+  Future<void> _loadFromPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = prefs.getString(_prefsKey);
+      if (jsonString == null) return;
+
+      final state = jsonDecode(jsonString) as Map<String, dynamic>;
+
+      try {
+        final xpJson = state['xpState'];
+        if (xpJson is Map<String, dynamic>) {
+          _xpState = XPState.fromJson(xpJson);
+        }
+      } catch (_) {
+        // Keep default XPState
+      }
+
+      try {
+        final streakJson = state['streak'];
+        if (streakJson is Map<String, dynamic>) {
+          _streak = Streak.fromJson(streakJson);
+        }
+      } catch (_) {
+        // Keep default Streak
+      }
+
+      try {
+        final missionsJson = state['missions'];
+        if (missionsJson is List) {
+          _missions
+            ..clear()
+            ..addAll(
+              missionsJson
+                  .whereType<Map<String, dynamic>>()
+                  .map((m) => Mission.fromJson(m)),
+            );
+        }
+      } catch (_) {
+        // Keep default (empty) missions
+      }
+
+      try {
+        final wmsJson = state['weeklyMissionSet'];
+        if (wmsJson is Map<String, dynamic>) {
+          _weeklyMissionSet = WeeklyMissionSet.fromJson(wmsJson);
+        } else {
+          _weeklyMissionSet = null;
+        }
+      } catch (_) {
+        _weeklyMissionSet = null;
+      }
+
+      try {
+        final skinsJson = state['ownedSkins'];
+        if (skinsJson is Map<String, dynamic>) {
+          _ownedSkins.clear();
+          for (final entry in skinsJson.entries) {
+            try {
+              final tier = SkinTier.values.firstWhere(
+                (t) => t.name == entry.key,
+                orElse: () => SkinTier.explorer,
+              );
+              if (entry.value is Map<String, dynamic>) {
+                _ownedSkins[tier] = Skin.fromJson(entry.value);
+              }
+            } catch (_) {
+              // Skip corrupt skin entry
+            }
+          }
+          // Ensure explorer is always present
+          if (!_ownedSkins.containsKey(SkinTier.explorer)) {
+            _ownedSkins[SkinTier.explorer] = SkinCatalog.getConfig(
+              SkinTier.explorer,
+            ).toSkin(unlocked: true);
+          }
+        }
+      } catch (_) {
+        // Keep default owned skins (explorer)
+      }
+
+      try {
+        final skinName = state['equippedSkin'] as String?;
+        if (skinName != null) {
+          _equippedSkin = SkinTier.values.firstWhere(
+            (t) => t.name == skinName,
+            orElse: () => SkinTier.explorer,
+          );
+        }
+      } catch (_) {
+        // Keep default equipped skin
+      }
+
+      try {
+        final frameId = state['equippedFrameId'] as String?;
+        if (frameId != null) {
+          _equippedFrameId = frameId;
+        }
+      } catch (_) {
+        // Keep default frame
+      }
+
+      try {
+        final badges = state['equippedBadges'];
+        if (badges is List) {
+          _equippedBadges
+            ..clear()
+            ..addAll(badges.whereType<String>());
+        }
+      } catch (_) {
+        // Keep default badges
+      }
+
+      try {
+        final daily = state['dailyActivityCounts'];
+        if (daily is Map<String, dynamic>) {
+          _dailyActivityCounts
+            ..clear()
+            ..addAll(daily.map((k, v) => MapEntry(k, v as int)));
+        }
+      } catch (_) {
+        // Keep default
+      }
+
+      try {
+        final weekly = state['weeklyActivityCounts'];
+        if (weekly is Map<String, dynamic>) {
+          _weeklyActivityCounts
+            ..clear()
+            ..addAll(weekly.map((k, v) => MapEntry(k, v as int)));
+        }
+      } catch (_) {
+        // Keep default
+      }
+
+      try {
+        final dayReset = state['lastDayReset'] as String?;
+        if (dayReset != null) {
+          _lastDayReset = DateTime.parse(dayReset);
+        }
+      } catch (_) {
+        // Keep default
+      }
+
+      try {
+        final weekReset = state['lastWeekReset'] as String?;
+        if (weekReset != null) {
+          _lastWeekReset = DateTime.parse(weekReset);
+        }
+      } catch (_) {
+        // Keep default
+      }
+    } catch (_) {
+      // Entire load failed — defaults are fine for first-time users
+    }
+  }
+
+  /// Fire-and-forget save to SharedPreferences.
+  /// Serializes all state to a single JSON string.
+  void _saveToPrefs() {
+    try {
+      final state = <String, dynamic>{
+        'xpState': _xpState.toJson(),
+        'streak': _streak.toJson(),
+        'missions': _missions.map((m) => m.toJson()).toList(),
+        'weeklyMissionSet': _weeklyMissionSet?.toJson(),
+        'ownedSkins': _ownedSkins.map(
+          (tier, skin) => MapEntry(tier.name, skin.toJson()),
+        ),
+        'equippedSkin': _equippedSkin.name,
+        'equippedFrameId': _equippedFrameId,
+        'equippedBadges': _equippedBadges,
+        'dailyActivityCounts': _dailyActivityCounts,
+        'weeklyActivityCounts': _weeklyActivityCounts,
+        'lastDayReset': _lastDayReset.toIso8601String(),
+        'lastWeekReset': _lastWeekReset.toIso8601String(),
+      };
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.setString(_prefsKey, jsonEncode(state));
+      });
+    } catch (_) {
+      // Silently fail — don't crash the app for persistence issues
+    }
   }
 }

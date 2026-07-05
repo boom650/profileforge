@@ -81,9 +81,19 @@ class OpportunityFeedNotifier extends StateNotifier<OpportunityFeed> {
       // 1. Get device location
       final location = await _locationService.getCurrentLocation();
       if (location == null) {
+        // Location unavailable — skip geolocation, just fetch competitions
+        // and show the city search prompt instead of an error
+        final gradeArg = grade ?? 11;
+        final compFuture = Future.value(_competitions.getForGrade(gradeArg));
+        final openFuture = Future.value(_competitions.getOpenNow());
+
+        final results = await Future.wait([compFuture, openFuture]);
+
         state = state.copyWith(
+          competitions: results[0] as List<Competition>,
+          openNow: results[1] as List<Competition>,
           isLoading: false,
-          error: 'Location access denied. Enable location in settings.',
+          error: 'Location not available',
         );
         return;
       }

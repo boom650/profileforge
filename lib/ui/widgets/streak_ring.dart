@@ -14,6 +14,7 @@ class StreakRing extends StatelessWidget {
   final List<int> weeklyActivityPattern;
   final int freezeTokensEarned;
   final List<int> achievedMilestones;
+  final VoidCallback? onCheckIn;
 
   const StreakRing({
     super.key,
@@ -26,6 +27,7 @@ class StreakRing extends StatelessWidget {
     this.weeklyActivityPattern = const [],
     this.freezeTokensEarned = 0,
     this.achievedMilestones = const [],
+    this.onCheckIn,
   });
 
   @override
@@ -225,6 +227,30 @@ class StreakRing extends StatelessWidget {
               ),
             ],
           ),
+          // Check In button
+          if (onCheckIn != null) ...[
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: onCheckIn,
+                icon: const Icon(Icons.check_circle_rounded, size: 20),
+                label: Text(
+                  'Check In',
+                  style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryBlue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  elevation: 0,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../settings/privacy_screen.dart';
 import '../../../providers/app_providers.dart';
+import '../../../models/student_profile.dart';
 import '../../../models/gamification/skins.dart';
 import '../../widgets/streak_ring.dart';
 import '../../widgets/probability_radar.dart';
@@ -20,6 +21,7 @@ import '../../../services/ngo_darpan_service.dart';
 import '../../../services/overpass_service.dart';
 import '../../../services/competition_calendar_service.dart';
 import '../../widgets/empty_state.dart' as empty_state;
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -30,14 +32,28 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
+  late final List<Widget> _pages;
 
-  final List<Widget> _pages = [
-    const DashboardTab(),
-    const MissionsTab(),
-    const OpportunitiesTab(),
-    const SkinsTab(),
-    const ProfileTab(),
-  ];
+  void _switchTab(int index) {
+    setState(() => _currentIndex = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      DashboardTab(onTabChange: _switchTab),
+      const MissionsTab(),
+      const OpportunitiesTab(),
+      const SkinsTab(),
+      ProfileTab(onTabChange: _switchTab),
+    ];
+  }
 
   @override
   void dispose() {
@@ -95,8 +111,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
+/// Helper to compute time-of-day greeting.
+String _greetingForHour(int hour) {
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
 class DashboardTab extends ConsumerWidget {
-  const DashboardTab({super.key});
+  final ValueChanged<int> onTabChange;
+
+  const DashboardTab({super.key, required this.onTabChange});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -107,6 +132,43 @@ class DashboardTab extends ConsumerWidget {
     final factorBreakdown = ref.watch(factorBreakdownProvider);
     final admissionsProbability = ref.watch(admissionsProbabilityProvider);
     final topSpikes = ref.watch(topSpikesProvider(3));
+    final onboardingData = ref.watch(onboardingDataProvider);
+    final profile = ref.watch(studentProfileProvider);
+    final feed = ref.watch(opportunityFeedProvider);
+
+    // Compute dynamic greeting from user's name
+    final userName = onboardingData.name.isNotEmpty
+        ? onboardingData.name
+        : (profile?.name ?? '');
+    final greeting = _greetingForHour(DateTime.now().hour);
+    final greetingText = userName.isNotEmpty ? '$greeting, $userName 👋' : '$greeting 👋';
+
+    // Compute day/week from streak
+    final dayText = streak.currentStreak > 0
+        ? 'Week ${((streak.currentStreak - 1) ~/ 7) + 1} • Day ${((streak.currentStreak - 1) % 7) + 1}'
+        : 'Start your journey!';
+
+    // Build opportunity cards from real feed data
+    final opportunityCards = <Widget>[];
+    for (final ngo in feed.ngos.take(2)) {
+      opportunityCards.add(OpportunityCardHorizontal(
+        title: ngo.name,
+        type: 'NGO Volunteering',
+        tier: 2,
+        distance: ngo.city,
+        matchScore: 0.85,
+      ));
+    }
+    for (final comp in feed.competitions.take(1)) {
+      opportunityCards.add(OpportunityCardHorizontal(
+        title: comp.name,
+        type: 'Competition',
+        tier: 1,
+        distance: 'Online',
+        matchScore: 0.80,
+      ));
+    }
+    final displayCards = opportunityCards.take(3).toList();
 
     return CustomScrollView(
       slivers: [
@@ -120,7 +182,7 @@ class DashboardTab extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good morning, Shridhar 👋',
+                greetingText,
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -128,7 +190,7 @@ class DashboardTab extends ConsumerWidget {
                 ),
               ),
               Text(
-                'Week 3 • Day 4',
+                dayText,
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -140,13 +202,24 @@ class DashboardTab extends ConsumerWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.notifications_none_rounded),
-              onPressed: () { HapticFeedback.lightImpact(); },
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Coming soon'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
             ),
             IconButton(
               icon: const Icon(Icons.settings_rounded),
-              onPressed: () { HapticFeedback.lightImpact(); Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const PrivacyScreen()),
-              ); },
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PrivacyScreen()),
+                );
+              },
             ),
           ],
         ).animate().fadeIn(delay: 100.ms).slideY(begin: -0.1),
@@ -162,6 +235,64 @@ class DashboardTab extends ConsumerWidget {
                     currentStreak: streak.currentStreak,
                     longestStreak: streak.longestStreak,
                     freezeTokens: streak.freezeTokens,
+                    onCheckIn: () async {
+                      HapticFeedback.heavyImpact();
+                      final result = await ref.read(markDailyActiveProvider)();
+                      if (context.mounted) {
+                        result.when(
+                          success: (streak, _, __, ___, ____, _____) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Streak updated! ${streak.currentStreak} days 🔥'),
+                                backgroundColor: AppTheme.primaryBlue,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          },
+                          graceDayUsed: (streak, _, __) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Grace day used. ${streak.currentStreak} day streak 🔥'),
+                                backgroundColor: AppTheme.accentOrange,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          },
+                          freezeTokenUsed: (streak, _, __) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Freeze token used. ${streak.currentStreak} day streak ❄️'),
+                                backgroundColor: const Color(0xFF06B6D4),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          },
+                          streakBroken: (_, __, ___, ____) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Streak broken! Let\'s start fresh today 💪'),
+                                backgroundColor: AppTheme.accentOrange,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          },
+                          alreadyMarked: (_, __) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Already checked in today! ✅'),
+                                backgroundColor: AppTheme.successGreen,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -192,7 +323,10 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () { HapticFeedback.lightImpact(); },
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        onTabChange(1); // Switch to Missions tab
+                      },
                       child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -234,7 +368,10 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () { HapticFeedback.lightImpact(); },
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        onTabChange(1); // Switch to Missions tab
+                      },
                       child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -273,7 +410,10 @@ class DashboardTab extends ConsumerWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () { HapticFeedback.lightImpact(); },
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          onTabChange(1); // Switch to Missions tab (spikes are activity details)
+                        },
                         child: Text('Details', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                       ),
                     ],
@@ -315,7 +455,10 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () { HapticFeedback.lightImpact(); },
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        onTabChange(3); // Switch to Skins tab
+                      },
                       child: Text('Gallery', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
@@ -346,27 +489,55 @@ class DashboardTab extends ConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () { HapticFeedback.lightImpact(); },
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        onTabChange(2); // Switch to Opportunities tab
+                      },
                       child: Text('Explore', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
-                    itemBuilder: (context, index) => OpportunityCardHorizontal(
-                      title: ['Goonj Teaching', 'ATL Lab Robotics', 'IRIS Science Fair'][index],
-                      type: ['NGO Volunteering', 'In-School Club', 'Competition'][index],
-                      tier: [2, 2, 1][index],
-                      distance: ['3.2 km', 'In School', '12 km'][index],
-                      matchScore: [0.94, 0.88, 0.76][index],
+                if (displayCards.isNotEmpty)
+                  SizedBox(
+                    height: 200,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: displayCards.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 12),
+                      itemBuilder: (context, index) => displayCards[index],
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      onTabChange(2); // Switch to Opportunities tab
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceLight,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.explore_rounded, color: AppTheme.primaryBlue, size: 20),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Discover opportunities →',
+                            style: GoogleFonts.inter(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.primaryBlue,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1),
@@ -681,21 +852,27 @@ class _MissionList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (missions.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.assignment_outlined, size: 64, color: AppTheme.textMuted),
-            const SizedBox(height: 16),
-            Text(
-              'No missions yet',
-              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: AppTheme.textSecondary),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Complete onboarding to unlock missions',
-              style: GoogleFonts.inter(fontSize: 14, color: AppTheme.textMuted),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.assignment_outlined, size: 64, color: AppTheme.primaryBlue.withValues(alpha: 0.3)),
+              const SizedBox(height: 16),
+              Text(
+                'No missions here yet!',
+                style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Check in daily to unlock new missions and earn XP.\nStart on the Dashboard tab to keep your streak going!',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 14, color: AppTheme.textSecondary, height: 1.4),
+              ),
+              const SizedBox(height: 20),
+              Icon(Icons.local_fire_department_rounded, size: 32, color: AppTheme.accentOrange.withValues(alpha: 0.6)),
+            ],
+          ),
         ),
       );
     }
@@ -768,7 +945,14 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
       body: feed.isLoading
           ? const Center(child: CircularProgressIndicator())
           : feed.error != null
-              ? _buildError(feed.error!)
+              ? (feed.error!.toLowerCase().contains('location')
+                  ? Column(
+                      children: [
+                        _buildSearchBar(),
+                        Expanded(child: _buildError(feed.error!)),
+                      ],
+                    )
+                  : _buildError(feed.error!))
               : Column(
                   children: [
                     // Search bar
@@ -1020,16 +1204,17 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
         children: [
           Icon(Icons.explore_outlined, size: 56, color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3)),
           const SizedBox(height: 16),
-          Text('No opportunities found', style: GoogleFonts.inter(
+          Text('Enter your city to find nearby opportunities', style: GoogleFonts.inter(
               fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.outline)),
           const SizedBox(height: 8),
-          Text('Try enabling location or searching a city',
+          Text('Use the search bar above to discover NGOs, competitions, and more',
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
           const SizedBox(height: 16),
           FilledButton.icon(
             onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
             icon: const Icon(Icons.my_location, size: 16),
-            label: const Text('Use My Location'),
+            label: const Text('Try My Location'),
           ),
         ],
       ),
@@ -1037,6 +1222,32 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
   }
 
   Widget _buildError(String error) {
+    if (error.toLowerCase().contains('location')) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_off_rounded, size: 56, color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3)),
+              const SizedBox(height: 16),
+              Text('Location not available', style: GoogleFonts.inter(
+                  fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.outline)),
+              const SizedBox(height: 8),
+              Text('Enter your city in the search bar above to find opportunities near you',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
+                icon: const Icon(Icons.my_location, size: 16),
+                label: const Text('Try My Location'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -1249,17 +1460,98 @@ class _SkinGalleryCard extends StatelessWidget {
 }
 
 class ProfileTab extends ConsumerWidget {
-  const ProfileTab({super.key});
+  final ValueChanged<int> onTabChange;
+
+  const ProfileTab({super.key, required this.onTabChange});
+
+  /// Maps an ActivityCategory enum value to the lowercase color key used by AppColors.categoryColors.
+  static String _categoryColorKey(ActivityCategory cat) {
+    switch (cat) {
+      case ActivityCategory.work:
+        return 'work';
+      default:
+        return cat.name; // clubs, sports, arts, competitions, research, volunteering, leadership, courses, unique
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(studentProfileProvider);
+    final onboardingData = ref.watch(onboardingDataProvider);
+    final totalXP = ref.watch(totalXPProvider);
+    final streak = ref.watch(streakStateProvider);
+    final unlockedSkins = ref.watch(unlockedSkinsProvider);
+    final admissionsProbability = ref.watch(admissionsProbabilityProvider);
+
+    // Resolve display name
+    final displayName = onboardingData.name.isNotEmpty
+        ? onboardingData.name
+        : (profile?.name ?? '');
+
+    // Compute activity summary from profile
+    final activities = profile?.activities ?? [];
+    final categoryCounts = <ActivityCategory, int>{};
+    final categoryXP = <ActivityCategory, int>{};
+    for (final activity in activities) {
+      categoryCounts[activity.category] = (categoryCounts[activity.category] ?? 0) + 1;
+      categoryXP[activity.category] = (categoryXP[activity.category] ?? 0) + activity.admissionsValue;
+    }
+
+    // Build target university rows from profile
+    final targetUniRows = <Widget>[];
+    final major = profile?.targetMajor ?? '';
+    final country = profile?.targetCountries.isNotEmpty == true
+        ? profile!.targetCountries.first
+        : '';
+    // Reach universities
+    for (final uniName in profile?.reachUniversities ?? []) {
+      double prob = 0.15;
+      for (final entry in admissionsProbability.entries) {
+        if (entry.value.university.toLowerCase() == uniName.toLowerCase()) {
+          prob = entry.value.currentProbability;
+          break;
+        }
+      }
+      targetUniRows.add(_TargetUniRow(name: uniName, major: major, country: country, probability: prob, isReach: true));
+    }
+    // Match universities
+    for (final uniName in profile?.matchUniversities ?? []) {
+      double prob = 0.45;
+      for (final entry in admissionsProbability.entries) {
+        if (entry.value.university.toLowerCase() == uniName.toLowerCase()) {
+          prob = entry.value.currentProbability;
+          break;
+        }
+      }
+      targetUniRows.add(_TargetUniRow(name: uniName, major: major, country: country, probability: prob, isReach: false));
+    }
+    // Safety universities
+    for (final uniName in profile?.safetyUniversities ?? []) {
+      double prob = 0.75;
+      for (final entry in admissionsProbability.entries) {
+        if (entry.value.university.toLowerCase() == uniName.toLowerCase()) {
+          prob = entry.value.currentProbability;
+          break;
+        }
+      }
+      targetUniRows.add(_TargetUniRow(name: uniName, major: major, country: country, probability: prob, isReach: false));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_rounded),
-            onPressed: () { HapticFeedback.lightImpact(); },
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Coming soon'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -1283,32 +1575,24 @@ class ProfileTab extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Shridhar',
+                    displayName.isNotEmpty ? displayName : 'Student',
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
-                  Consumer(
-                    builder: (context, ref, _) {
-                      final profile = ref.watch(studentProfileProvider);
-                      final grade = profile?.grade ?? 11;
-                      final board = profile?.board ?? 'CBSE';
-                      final stream = profile?.stream ?? 'Science';
-                      return Text(
-                        'Grade $grade • $board • $stream',
-                        style: GoogleFonts.inter(fontSize: 14, color: Colors.white.withValues(alpha: 0.8)),
-                      );
-                    },
+                  Text(
+                    'Grade ${profile?.grade ?? 11} • ${profile?.board ?? 'CBSE'} • ${profile?.stream ?? 'Science'}',
+                    style: GoogleFonts.inter(fontSize: 14, color: Colors.white.withValues(alpha: 0.8)),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _StatItem(label: 'Total XP', value: '1,247'),
-                      _StatItem(label: 'Streak', value: '12 days'),
-                      _StatItem(label: 'Skins', value: '3/9'),
+                      _StatItem(label: 'Total XP', value: '$totalXP'),
+                      _StatItem(label: 'Streak', value: '${streak.currentStreak} days'),
+                      _StatItem(label: 'Skins', value: '${unlockedSkins.length}/9'),
                     ],
                   ),
                 ],
@@ -1318,31 +1602,85 @@ class ProfileTab extends ConsumerWidget {
             // Target universities
             _SectionCard(
               title: 'Target Universities',
-              children: [
-                _TargetUniRow(name: 'MIT', major: 'CS', country: 'US', probability: 0.12, isReach: true),
-                _TargetUniRow(name: 'UCLA', major: 'CS', country: 'US', probability: 0.34, isReach: false),
-                _TargetUniRow(name: 'UMass', major: 'CS', country: 'US', probability: 0.67, isReach: false),
-              ],
+              children: targetUniRows.isNotEmpty
+                  ? targetUniRows
+                  : [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        child: Text(
+                          'Complete onboarding to set target universities',
+                          style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textMuted),
+                        ),
+                      ),
+                    ],
             ),
             const SizedBox(height: 16),
             // Activity summary
             _SectionCard(
               title: 'Activity Summary',
-              children: [
-                _ActivitySummaryRow(category: 'Research', count: 0, xp: 0),
-                _ActivitySummaryRow(category: 'Leadership', count: 2, xp: 450),
-                _ActivitySummaryRow(category: 'Volunteering', count: 3, xp: 780),
-                _ActivitySummaryRow(category: 'Competitions', count: 1, xp: 320),
-              ],
+              children: categoryCounts.isNotEmpty
+                  ? categoryCounts.entries.map((entry) {
+                      final cat = entry.key;
+                      final count = entry.value;
+                      final xpVal = categoryXP[cat] ?? 0;
+                      final colorKey = _categoryColorKey(cat);
+                      final displayCat = cat.name[0].toUpperCase() + cat.name.substring(1);
+                      return _ActivitySummaryRow(category: displayCat, count: count, xp: xpVal);
+                    }).toList()
+                  : [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        child: Text(
+                          'Add activities in onboarding to see your summary',
+                          style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textMuted),
+                        ),
+                      ),
+                    ],
             ),
             const SizedBox(height: 16),
             // Settings
             _SectionCard(
               title: 'Settings',
               children: [
-                _SettingsRow(icon: Icons.notifications_rounded, title: 'Notifications', subtitle: 'Mission reminders, weekly briefings'),
-                _SettingsRow(icon: Icons.location_on_rounded, title: 'Location Privacy', subtitle: 'Precise location stays on device'),
-                _SettingsRow(icon: Icons.backup_rounded, title: 'Backup & Sync', subtitle: 'Encrypted backup to cloud'),
+                _SettingsRow(
+                  icon: Icons.notifications_rounded,
+                  title: 'Notifications',
+                  subtitle: 'Mission reminders, weekly briefings',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Coming soon'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+                _SettingsRow(
+                  icon: Icons.location_on_rounded,
+                  title: 'Location Privacy',
+                  subtitle: 'Precise location stays on device',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Coming soon'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+                _SettingsRow(
+                  icon: Icons.backup_rounded,
+                  title: 'Backup & Sync',
+                  subtitle: 'Encrypted backup to cloud',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Coming soon'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
                 _SettingsRow(
                   icon: Icons.shield_rounded,
                   title: 'Privacy & Data',
@@ -1351,7 +1689,19 @@ class ProfileTab extends ConsumerWidget {
                     MaterialPageRoute(builder: (_) => const PrivacyScreen()),
                   ),
                 ),
-                _SettingsRow(icon: Icons.help_rounded, title: 'Help & Support', subtitle: 'FAQ, contact, feedback'),
+                _SettingsRow(
+                  icon: Icons.help_rounded,
+                  title: 'Help & Support',
+                  subtitle: 'FAQ, contact, feedback',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Coming soon'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ],
@@ -1457,7 +1807,8 @@ class _TargetUniRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
-                Text('$major • $country', style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textMuted)),
+                if (major.isNotEmpty || country.isNotEmpty)
+                  Text('$major${major.isNotEmpty && country.isNotEmpty ? ' • ' : ''}$country', style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textMuted)),
               ],
             ),
           ),
@@ -1521,6 +1872,12 @@ class _ActivitySummaryRow extends StatelessWidget {
       case 'leadership': return Icons.people_rounded;
       case 'volunteering': return Icons.volunteer_activism_rounded;
       case 'competitions': return Icons.emoji_events_rounded;
+      case 'clubs': return Icons.school_rounded;
+      case 'sports': return Icons.sports_soccer_rounded;
+      case 'arts': return Icons.palette_rounded;
+      case 'work': return Icons.work_rounded;
+      case 'courses': return Icons.menu_book_rounded;
+      case 'unique': return Icons.auto_awesome_rounded;
       default: return Icons.star_rounded;
     }
   }
