@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
+import '../../../providers/app_providers.dart';
 
-class Screen3Goals extends StatefulWidget {
-  const Screen3Goals({super.key});
+class Screen3Goals extends ConsumerStatefulWidget {
+  const Screen3Goals({super.key, this.onFormChanged});
 
   /// Static GlobalKey so the onboarding flow can trigger validation.
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -12,11 +14,14 @@ class Screen3Goals extends StatefulWidget {
   /// Whether the form is currently valid — updated by _FormValidationListener.
   static bool isFormValid = false;
 
+  /// Called when form validity changes, so the parent flow can rebuild.
+  final VoidCallback? onFormChanged;
+
   @override
-  State<Screen3Goals> createState() => _Screen3GoalsState();
+  ConsumerState<Screen3Goals> createState() => _Screen3GoalsState();
 }
 
-class _Screen3GoalsState extends State<Screen3Goals> {
+class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
   String? _selectedMajor;
   final Set<String> _selectedCountries = {};
 
@@ -25,17 +30,43 @@ class _Screen3GoalsState extends State<Screen3Goals> {
   final safetyUnis = ['UCSD', 'Purdue', 'UIUC', 'McGill', 'Melbourne', 'Waterloo'];
 
   @override
+  void initState() {
+    super.initState();
+    // Restore previously saved onboarding data
+    final existingData = ref.read(onboardingDataProvider);
+    if (existingData.targetMajor != null && existingData.targetMajor!.isNotEmpty) {
+      _selectedMajor = existingData.targetMajor;
+    }
+    if (existingData.targetCountries.isNotEmpty) {
+      _selectedCountries.addAll(existingData.targetCountries);
+    }
+  }
+
+  /// Save current goals data to the onboarding data provider.
+  void _saveToProvider() {
+    final notifier = ref.read(onboardingDataProvider.notifier);
+    notifier.updateTargetMajor(_selectedMajor);
+    notifier.updateTargetCountries(Set<String>.from(_selectedCountries));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _FormValidationListener(
       formKey: Screen3Goals.formKey,
-      onChanged: (valid) => Screen3Goals.isFormValid = valid,
+      onChanged: (valid) {
+        Screen3Goals.isFormValid = valid;
+        widget.onFormChanged?.call();
+      },
       child: Form(
         key: Screen3Goals.formKey,
         onChanged: () {
           final form = Screen3Goals.formKey.currentState;
           if (form != null) {
             Screen3Goals.isFormValid = form.validate();
+            widget.onFormChanged?.call();
           }
+          // Save to provider on every form change
+          _saveToProvider();
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -78,6 +109,7 @@ class _Screen3GoalsState extends State<Screen3Goals> {
                 delay: 200,
                 onChanged: (val) {
                   setState(() => _selectedMajor = val);
+                  _saveToProvider();
                   // Re-validate form on change
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     final form = Screen3Goals.formKey.currentState;
@@ -219,6 +251,7 @@ class _Screen3GoalsState extends State<Screen3Goals> {
         _selectedCountries.add(country);
       }
     });
+    _saveToProvider();
     // Re-validate form on change
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final form = Screen3Goals.formKey.currentState;
@@ -255,10 +288,8 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   }
 
   void _checkValidation() {
-    final form = widget.formKey.currentState;
-    if (form != null) {
-      widget.onChanged(form.validate());
-    }
+    // Set initial state as invalid without showing validation errors.
+    // Validation will happen via Form.onChanged when user interacts with fields.
   }
 
   @override
@@ -412,7 +443,7 @@ class _ValidatedDropdownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      initialValue: value,
+      value: value,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.inter(color: AppTheme.textSecondary),

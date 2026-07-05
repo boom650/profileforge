@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
@@ -8,17 +9,23 @@ import 'providers/app_providers.dart';
 import 'db/database.dart';
 import 'services/service_providers.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Create the database instance (Drift handles connection lazily)
   final database = AppDatabase();
+
+  // Load persisted onboarding status from SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+  final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
 
   runApp(
     ProviderScope(
       overrides: [
         // Inject the real database so all providers can access it
         databaseProvider.overrideWithValue(database),
+        // Initialize the onboarding state from persisted SharedPreferences value
+        onboardingCompletedProvider.overrideWithValue(onboardingCompleted),
       ],
       child: const ProfileForgeApp(),
     ),
@@ -46,15 +53,9 @@ class ProfileForgeApp extends ConsumerWidget {
             return const AgeGateScreen();
           }
           // For 13-17 and 18+, check onboarding status
-          return isOnboarded.when(
-            data: (onboarded) => onboarded
-                ? const HomeScreen()
-                : const OnboardingFlow(),
-            loading: () => const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-            error: (_, __) => const OnboardingFlow(),
-          );
+          return isOnboarded
+              ? const HomeScreen()
+              : const OnboardingFlow();
         },
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),

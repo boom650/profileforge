@@ -143,8 +143,8 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
         ),
       );
     } else {
-      // Navigate to onboarding or home
-      Navigator.of(context).pushReplacementNamed('/');
+      // Navigate to onboarding or home — the provider change will trigger rebuild
+      Navigator.of(context).popUntil((route) => route.isFirst);
     }
   }
 

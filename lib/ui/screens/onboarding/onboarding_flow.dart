@@ -23,10 +23,17 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   int _currentPage = 0;
   final int _totalPages = 5;
 
-  final List<Widget> _screens = const [
+  // Remove const since ConsumerStatefulWidget instances need widget tree setup
+  final List<Widget> _screens = [
     Screen1Welcome(),
-    Screen2QuickProfile(),
-    Screen3Goals(),
+    Screen2QuickProfile(onFormChanged: () {
+      // Trigger rebuild when form validity changes
+      if (mounted) setState(() {});
+    }),
+    Screen3Goals(onFormChanged: () {
+      // Trigger rebuild when form validity changes
+      if (mounted) setState(() {});
+    }),
     Screen4Activities(),
     Screen9Roadmap(),
   ];
@@ -44,10 +51,10 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         return Screen2QuickProfile.isFormValid;
       case 2: // Screen3Goals
         return Screen3Goals.isFormValid;
-      case 3: // Screen4AcademicProfile (not in flow, but defensive)
+      case 3: // Screen4Activities (display only, always valid)
         return true;
       default:
-        // Pages without form validation (welcome, activities, roadmap) are always valid
+        // Pages without form validation (welcome, roadmap) are always valid
         return true;
     }
   }
@@ -97,11 +104,22 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   }
 
   void _completeOnboarding() async {
+    // 1. Read accumulated onboarding data
+    final onboardingData = ref.read(onboardingDataProvider);
+
+    // 2. Build a StudentProfile from the onboarding data
+    final profile = buildStudentProfileFromOnboarding(onboardingData);
+
+    // 3. Set the profile in the Riverpod provider (in-memory for the rest of the app)
+    ref.read(studentProfileProvider.notifier).setProfile(profile);
+
+    // 4. Mark onboarding as completed (persists to SharedPreferences)
     final setCompleted = ref.read(setOnboardingCompletedProvider);
     await setCompleted(true);
-    if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/home');
-    }
+
+    // 6. Reset onboarding data (no longer needed in memory)
+    ref.read(onboardingDataProvider.notifier).reset();
+    // The provider change will trigger main.dart to rebuild and show HomeScreen
   }
 
   @override

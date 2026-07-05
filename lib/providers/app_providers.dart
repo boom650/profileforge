@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 import '../models/student_profile.dart';
 import '../models/gamification/skins.dart';
 import '../models/gamification/streak.dart';
@@ -15,15 +17,160 @@ import '../services/service_providers.dart';
 // ONBOARDING STATE
 // ═══════════════════════════════════════════════════════════════════════════
 
-final onboardingCompletedProvider = FutureProvider<bool>((ref) async {
-  // Default to not onboarded; actual persistence handled later
+final onboardingCompletedProvider = StateProvider<bool>((ref) {
   return false;
 });
 
 final setOnboardingCompletedProvider =
     Provider<Future<void> Function(bool)>((ref) {
   return (bool completed) async {
-    // Persistence placeholder
+    // Persist to SharedPreferences so it survives app restarts
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', completed);
+    // Update in-memory state so the UI reacts immediately
+    ref.read(onboardingCompletedProvider.notifier).state = completed;
+  };
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ONBOARDING DATA — accumulates form data across onboarding screens
+// ═══════════════════════════════════════════════════════════════════════════
+
+class OnboardingData {
+  // Screen 2: Quick Profile
+  final String name;
+  final String? board;
+  final String? stream;
+  final int? grade;
+  final Map<String, double> subjects; // subject name -> score
+
+  // Screen 3: Goals
+  final String? targetMajor;
+  final Set<String> targetCountries;
+  final List<String> targetUniversities;
+
+  const OnboardingData({
+    this.name = '',
+    this.board,
+    this.stream,
+    this.grade,
+    this.subjects = const {},
+    this.targetMajor,
+    this.targetCountries = const {},
+    this.targetUniversities = const [],
+  });
+
+  OnboardingData copyWith({
+    String? name,
+    String? board,
+    String? stream,
+    int? grade,
+    Map<String, double>? subjects,
+    String? targetMajor,
+    Set<String>? targetCountries,
+    List<String>? targetUniversities,
+  }) {
+    return OnboardingData(
+      name: name ?? this.name,
+      board: board ?? this.board,
+      stream: stream ?? this.stream,
+      grade: grade ?? this.grade,
+      subjects: subjects ?? this.subjects,
+      targetMajor: targetMajor ?? this.targetMajor,
+      targetCountries: targetCountries ?? this.targetCountries,
+      targetUniversities: targetUniversities ?? this.targetUniversities,
+    );
+  }
+}
+
+class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
+  OnboardingDataNotifier() : super(const OnboardingData());
+
+  void updateName(String name) {
+    state = state.copyWith(name: name);
+  }
+
+  void updateBoard(String? board) {
+    state = state.copyWith(board: board);
+  }
+
+  void updateStream(String? stream) {
+    state = state.copyWith(stream: stream);
+  }
+
+  void updateGrade(int? grade) {
+    state = state.copyWith(grade: grade);
+  }
+
+  void updateSubject(String subjectName, double score) {
+    final newSubjects = Map<String, double>.from(state.subjects);
+    newSubjects[subjectName] = score;
+    state = state.copyWith(subjects: newSubjects);
+  }
+
+  /// Replace all subjects at once (used during onboarding to avoid stale entries).
+  void replaceSubjects(Map<String, double> subjects) {
+    state = state.copyWith(subjects: Map<String, double>.from(subjects));
+  }
+
+  void updateTargetMajor(String? major) {
+    state = state.copyWith(targetMajor: major);
+  }
+
+  void updateTargetCountries(Set<String> countries) {
+    state = state.copyWith(targetCountries: countries);
+  }
+
+  void updateTargetUniversities(List<String> universities) {
+    state = state.copyWith(targetUniversities: universities);
+  }
+
+  void reset() {
+    state = const OnboardingData();
+  }
+}
+
+final onboardingDataProvider =
+    StateNotifierProvider<OnboardingDataNotifier, OnboardingData>((ref) {
+  return OnboardingDataNotifier();
+});
+
+/// Converts accumulated onboarding data into a StudentProfile.
+StudentProfile buildStudentProfileFromOnboarding(OnboardingData data) {
+  return StudentProfile(
+    id: const Uuid().v4(),
+    name: data.name.trim(),
+    email: '',
+    phone: '',
+    board: data.board,
+    stream: data.stream,
+    grade: data.grade ?? 11,
+    subjects: data.subjects,
+    tenthPercentage: 0.0,
+    coachingInstitute: '',
+    coachingHoursPerWeek: 0,
+    satScore: null,
+    ieltsScore: null,
+    targetCountries: data.targetCountries.toList(),
+    targetMajor: data.targetMajor ?? '',
+    reachUniversities: data.targetUniversities,
+    matchUniversities: [],
+    safetyUniversities: [],
+    activities: [],
+    schedule: WeeklySchedule.empty(),
+    motivation: MotivationProfile.empty(),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
+}
+
+/// Provider that persists the onboarding profile to the database and sets
+/// the in-memory student profile provider.
+final persistOnboardingProfileProvider =
+    Provider<Future<void> Function(StudentProfile)>((ref) {
+  return (StudentProfile profile) async {
+    // Set the in-memory provider so the rest of the app can use it immediately
+    ref.read(studentProfileProvider.notifier).setProfile(profile);
   };
 });
 

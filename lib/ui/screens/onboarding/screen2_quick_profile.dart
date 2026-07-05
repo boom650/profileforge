@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
+import '../../../providers/app_providers.dart';
 
-class Screen2QuickProfile extends StatefulWidget {
-  const Screen2QuickProfile({super.key});
+class Screen2QuickProfile extends ConsumerStatefulWidget {
+  const Screen2QuickProfile({super.key, this.onFormChanged});
 
   /// Static GlobalKey so the onboarding flow can trigger validation.
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -12,11 +14,14 @@ class Screen2QuickProfile extends StatefulWidget {
   /// Whether the form is currently valid — updated by _FormValidationListener.
   static bool isFormValid = false;
 
+  /// Called when form validity changes, so the parent flow can rebuild.
+  final VoidCallback? onFormChanged;
+
   @override
-  State<Screen2QuickProfile> createState() => _Screen2QuickProfileState();
+  ConsumerState<Screen2QuickProfile> createState() => _Screen2QuickProfileState();
 }
 
-class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
+class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
   final _nameController = TextEditingController();
   final _subject1Controller = TextEditingController();
   final _subject1ScoreController = TextEditingController();
@@ -28,6 +33,91 @@ class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
   String? _selectedBoard;
   String? _selectedStream;
   String? _selectedGrade;
+
+  @override
+  void initState() {
+    super.initState();
+    // Restore any previously saved onboarding data
+    final existingData = ref.read(onboardingDataProvider);
+    if (existingData.name.isNotEmpty) {
+      _nameController.text = existingData.name;
+    }
+    if (existingData.board != null) {
+      _selectedBoard = existingData.board;
+    }
+    if (existingData.stream != null) {
+      _selectedStream = existingData.stream;
+    }
+    if (existingData.grade != null) {
+      _selectedGrade = _gradeToString(existingData.grade!);
+    }
+    // Restore subjects
+    final subjectKeys = existingData.subjects.keys.toList();
+    if (subjectKeys.isNotEmpty) {
+      _subject1Controller.text = subjectKeys[0];
+      _subject1ScoreController.text =
+          existingData.subjects[subjectKeys[0]]?.toInt().toString() ?? '';
+    }
+    if (subjectKeys.length > 1) {
+      _subject2Controller.text = subjectKeys[1];
+      _subject2ScoreController.text =
+          existingData.subjects[subjectKeys[1]]?.toInt().toString() ?? '';
+    }
+    if (subjectKeys.length > 2) {
+      _subject3Controller.text = subjectKeys[2];
+      _subject3ScoreController.text =
+          existingData.subjects[subjectKeys[2]]?.toInt().toString() ?? '';
+    }
+  }
+
+  int? _gradeToInt(String grade) {
+    final map = {'9th': 9, '10th': 10, '11th': 11, '12th': 12};
+    return map[grade];
+  }
+
+  String _gradeToString(int grade) {
+    final map = {9: '9th', 10: '10th', 11: '11th', 12: '12th'};
+    return map[grade] ?? '11th';
+  }
+
+  /// Save all current form data to the onboarding data provider.
+  void _saveToProvider() {
+    final notifier = ref.read(onboardingDataProvider.notifier);
+
+    // Save name
+    notifier.updateName(_nameController.text);
+
+    // Save board, stream, grade
+    notifier.updateBoard(_selectedBoard);
+    notifier.updateStream(_selectedStream);
+    final gradeInt = _gradeToInt(_selectedGrade ?? '');
+    notifier.updateGrade(gradeInt);
+
+    // Save subjects (name -> score pairs)
+    final subjects = <String, double>{};
+    if (_subject1Controller.text.trim().isNotEmpty &&
+        _subject1ScoreController.text.trim().isNotEmpty) {
+      final score = double.tryParse(_subject1ScoreController.text.trim());
+      if (score != null) {
+        subjects[_subject1Controller.text.trim()] = score;
+      }
+    }
+    if (_subject2Controller.text.trim().isNotEmpty &&
+        _subject2ScoreController.text.trim().isNotEmpty) {
+      final score = double.tryParse(_subject2ScoreController.text.trim());
+      if (score != null) {
+        subjects[_subject2Controller.text.trim()] = score;
+      }
+    }
+    if (_subject3Controller.text.trim().isNotEmpty &&
+        _subject3ScoreController.text.trim().isNotEmpty) {
+      final score = double.tryParse(_subject3ScoreController.text.trim());
+      if (score != null) {
+        subjects[_subject3Controller.text.trim()] = score;
+      }
+    }
+    notifier.replaceSubjects(subjects);
+  }
 
   @override
   void dispose() {
@@ -45,14 +135,19 @@ class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
   Widget build(BuildContext context) {
     return _FormValidationListener(
       formKey: Screen2QuickProfile.formKey,
-      onChanged: (valid) => Screen2QuickProfile.isFormValid = valid,
+      onChanged: (valid) {
+        Screen2QuickProfile.isFormValid = valid;
+        widget.onFormChanged?.call();
+      },
       child: Form(
         key: Screen2QuickProfile.formKey,
         onChanged: () {
           final form = Screen2QuickProfile.formKey.currentState;
           if (form != null) {
             Screen2QuickProfile.isFormValid = form.validate();
+            widget.onFormChanged?.call();
           }
+          _saveToProvider();
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -110,7 +205,10 @@ class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
                       value: _selectedBoard,
                       items: ['CBSE', 'ICSE', 'State Board', 'IB', 'IGCSE', 'NIOS'],
                       delay: 300,
-                      onChanged: (val) => setState(() => _selectedBoard = val),
+                      onChanged: (val) => setState(() {
+                        _selectedBoard = val;
+                        _saveToProvider();
+                      }),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Select a board';
@@ -126,7 +224,10 @@ class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
                       value: _selectedStream,
                       items: ['Science', 'Commerce', 'Arts', 'Vocational'],
                       delay: 350,
-                      onChanged: (val) => setState(() => _selectedStream = val),
+                      onChanged: (val) => setState(() {
+                        _selectedStream = val;
+                        _saveToProvider();
+                      }),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Select a stream';
@@ -144,7 +245,10 @@ class _Screen2QuickProfileState extends State<Screen2QuickProfile> {
                 value: _selectedGrade,
                 items: ['9th', '10th', '11th', '12th'],
                 delay: 400,
-                onChanged: (val) => setState(() => _selectedGrade = val),
+                onChanged: (val) => setState(() {
+                  _selectedGrade = val;
+                  _saveToProvider();
+                }),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Select your grade';
@@ -245,10 +349,8 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   }
 
   void _checkValidation() {
-    final form = widget.formKey.currentState;
-    if (form != null) {
-      widget.onChanged(form.validate());
-    }
+    // Set initial state as invalid without showing validation errors.
+    // Validation will happen via Form.onChanged when user interacts with fields.
   }
 
   @override
@@ -351,7 +453,7 @@ class _ValidatedDropdownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      initialValue: value,
+      value: value,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.inter(color: AppTheme.textSecondary),
