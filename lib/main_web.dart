@@ -11,15 +11,7 @@ import 'ui/screens/onboarding/age_gate.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
 import 'ui/screens/home/home_screen.dart';
 
-// Re-declare providers that main_web needs WITHOUT importing database.dart chain
-
-/// Age verification status - mirrors app_providers.dart
-enum AgeVerificationStatus { unknown, under13, minor, adult }
-
-final ageVerificationProvider =
-    StateProvider<AgeVerificationStatus>((ref) => AgeVerificationStatus.unknown);
-
-/// Onboarding completed - mirrors app_providers.dart  
+/// Onboarding completed - mirrors app_providers.dart
 final onboardingCompletedProvider = StateProvider<bool>((ref) => false);
 
 /// Onboarding data - mirrors app_providers.dart
@@ -49,11 +41,19 @@ void main() async {
     ProviderScope(
       overrides: [
         onboardingCompletedProvider.overrideWith((ref) => onboardingCompleted),
-        ageVerificationProvider.overrideWith((ref) => switch (ageVerified) {
-          'adult' => AgeVerificationStatus.adult,
-          'minor' => AgeVerificationStatus.minor,
-          'under13' => AgeVerificationStatus.under13,
-          _ => AgeVerificationStatus.unknown,
+        ageVerificationProvider.overrideWith((ref) async {
+          final prefs = await SharedPreferences.getInstance();
+          final ageVerified = prefs.getString('age_verification') ?? 'unknown';
+          switch (ageVerified) {
+            case 'adult':
+              return AgeVerificationStatus.adult18plus;
+            case 'minor':
+              return AgeVerificationStatus.minor13to17;
+            case 'under13':
+              return AgeVerificationStatus.under13;
+            default:
+              return AgeVerificationStatus.notVerified;
+          }
         }),
       ],
       child: const ProfileForgeWebApp(),
@@ -66,8 +66,10 @@ class ProfileForgeWebApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ageStatus = ref.watch(ageVerificationProvider);
+    final ageStatusAsync = ref.watch(ageVerificationProvider);
     final isOnboarded = ref.watch(onboardingCompletedProvider);
+
+    final ageStatus = ageStatusAsync.valueOrNull ?? AgeVerificationStatus.notVerified;
 
     return MaterialApp(
       title: 'ProfileForge',
@@ -75,7 +77,7 @@ class ProfileForgeWebApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: ageStatus == AgeVerificationStatus.unknown
+      home: ageStatus == AgeVerificationStatus.notVerified
           ? const AgeGateScreen()
           : ageStatus == AgeVerificationStatus.under13
               ? const AgeGateScreen()

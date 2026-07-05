@@ -11,10 +11,10 @@ final databaseProvider = Provider<AppDatabase>((ref) {
 });
 
 /// Singleton EncryptionService for AES-256 encryption of student PII.
-final encryptionServiceProvider = Provider<EncryptionService>((ref) {
+final encryptionServiceProvider = FutureProvider<EncryptionService>((ref) async {
   final service = EncryptionService();
-  // Initialize the encryption service (generates or loads keys)
-  service.initialize();
+  // Await initialization to ensure keys are ready before first use
+  await service.initialize();
   ref.onDispose(() => service.deleteKeys());
   return service;
 });
