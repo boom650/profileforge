@@ -5,15 +5,18 @@ name: Implement Hypothesis
     inputs:
       hypothesis_id:
         description: 'Hypothesis ID (e.g., H1, H2)'
-        required: true
+        required: false
+        default: 'H1'
         type: string
       hypothesis_title:
         description: 'Hypothesis title'
-        required: true
+        required: false
+        default: 'Duolingo-style streak system'
         type: string
       category:
         description: 'Category'
-        required: true
+        required: false
+        default: 'gamification'
         type: choice
         options: ['gamification', 'ui_ux', 'core_feature', 'growth']
 

@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Web-compatible encryption service.
 /// Uses SharedPreferences instead of FlutterSecureStorage (which requires dart:io).
 /// Provides same API as EncryptionService but stores keys in SharedPreferences.
-class EncryptionServiceWeb {
+class EncryptionService {
   static const _keyStorageKey = 'profileforge_encryption_key';
   static const _ivStorageKey = 'profileforge_encryption_iv';
   static const _encryptionEnabledKey = 'profileforge_encryption_enabled';
@@ -16,7 +16,7 @@ class EncryptionServiceWeb {
   encrypt_lib.IV? _iv;
   bool _initialized = false;
 
-  EncryptionServiceWeb();
+  EncryptionService();
 
   /// Initialize the encryption service - generates or loads the AES key.
   Future<void> initialize() async {

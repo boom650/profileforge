@@ -22,21 +22,23 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final int _totalPages = 5;
+  late final List<Widget> _screens;
 
-  // Remove const since ConsumerStatefulWidget instances need widget tree setup
-  final List<Widget> _screens = [
-    Screen1Welcome(),
-    Screen2QuickProfile(onFormChanged: () {
-      // Trigger rebuild when form validity changes
-      if (mounted) setState(() {});
-    }),
-    Screen3Goals(onFormChanged: () {
-      // Trigger rebuild when form validity changes
-      if (mounted) setState(() {});
-    }),
-    Screen4Activities(),
-    Screen9Roadmap(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      const Screen1Welcome(),
+      Screen2QuickProfile(onFormChanged: () {
+        if (mounted) setState(() {});
+      }),
+      Screen3Goals(onFormChanged: () {
+        if (mounted) setState(() {});
+      }),
+      const Screen4Activities(),
+      const Screen9Roadmap(),
+    ];
+  }
 
   @override
   void dispose() {

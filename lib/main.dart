@@ -25,7 +25,7 @@ void main() async {
         // Inject the real database so all providers can access it
         databaseProvider.overrideWithValue(database),
         // Initialize the onboarding state from persisted SharedPreferences value
-        onboardingCompletedProvider.overrideWithValue(onboardingCompleted),
+        onboardingCompletedProvider.overrideWith((ref) => onboardingCompleted),
       ],
       child: const ProfileForgeApp(),
     ),

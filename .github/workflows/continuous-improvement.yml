@@ -216,7 +216,6 @@ jobs:
           python3 << 'EOF'
           import json
           import os
-           os
           from datetime import datetime, timedelta
           
           print("🔍 MONTHLY QUALITY AUDIT")
