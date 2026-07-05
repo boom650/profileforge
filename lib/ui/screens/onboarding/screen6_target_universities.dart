@@ -229,7 +229,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                     )
                   : null,
               filled: true,
-              fillColor: AppTheme.surfaceWhite,
+              fillColor: context.surfaceElevated,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -282,7 +282,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: isSelected ? Colors.white : AppTheme.textSecondary,
+                    color: isSelected ? Colors.white : context.textSecondary,
                   ),
                 ),
                 selected: isSelected,
@@ -291,8 +291,8 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                     _selectedProgramFilter = selected ? program : '';
                   });
                 },
-                selectedColor: AppTheme.primaryBlue,
-                backgroundColor: AppTheme.surfaceWhite,
+                selectedColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: context.surfaceElevated,
                 checkmarkColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -377,7 +377,7 @@ class _FilterDropdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppTheme.textMuted.withValues(alpha: 0.2)),
       ),
@@ -389,7 +389,7 @@ class _FilterDropdown extends StatelessWidget {
           items: items.map((e) => DropdownMenuItem(value: e, child: Text(e, style: GoogleFonts.inter(fontSize: 12)))).toList(),
           onChanged: onChanged,
           style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textPrimary),
-          dropdownColor: AppTheme.surfaceWhite,
+          dropdownColor: context.surfaceElevated,
           icon: Icon(Icons.keyboard_arrow_down, size: 16, color: AppTheme.textSecondary),
         ),
       ),
@@ -422,7 +422,7 @@ class _UniversityResultCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isInAnyTier ? AppTheme.primaryBlue.withValues(alpha: 0.4) : AppTheme.textMuted.withValues(alpha: 0.15),
@@ -602,7 +602,7 @@ class _NonUSUniversitySection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(_groupEmoji, style: const TextStyle(fontSize: 18)),
+            Text(_groupEmoji, style: GoogleFonts.inter(fontSize: 18)),
             const SizedBox(width: 8),
             Text(
               groupLabel,
@@ -731,9 +731,9 @@ class _NonUSUniversityCard extends StatelessWidget {
                   onSelected: onAssignTier,
                   icon: Icon(Icons.add_circle_outline, size: 18, color: AppTheme.textSecondary),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'Reach', child: Text('🎯 Reach', style: TextStyle(fontSize: 12))),
-                    const PopupMenuItem(value: 'Match', child: Text('🎯 Match', style: TextStyle(fontSize: 12))),
-                    const PopupMenuItem(value: 'Safety', child: Text('🛡️ Safety', style: TextStyle(fontSize: 12))),
+                    PopupMenuItem(value: 'Reach', child: Text('🎯 Reach', style: GoogleFonts.inter(fontSize: 12))),
+                    PopupMenuItem(value: 'Match', child: Text('🎯 Match', style: GoogleFonts.inter(fontSize: 12))),
+                    PopupMenuItem(value: 'Safety', child: Text('🛡️ Safety', style: GoogleFonts.inter(fontSize: 12))),
                   ],
                 ),
             ],
@@ -837,7 +837,7 @@ class _DropdownField extends StatelessWidget {
       items: items.map((e) => DropdownMenuItem(value: e, child: Text(e, style: GoogleFonts.inter()))).toList(),
       onChanged: (_) {},
       style: GoogleFonts.inter(fontSize: 16, color: AppTheme.textPrimary),
-      dropdownColor: AppTheme.surfaceWhite,
+      dropdownColor: context.surfaceElevated,
     ).animate().fadeIn(delay: Duration(milliseconds: delay)).slideY(begin: 0.1);
   }
 }

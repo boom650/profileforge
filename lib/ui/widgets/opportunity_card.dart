@@ -29,7 +29,7 @@ class OpportunityCardHorizontal extends StatelessWidget {
       width: 280,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: tierColor.withValues(alpha: 0.2)),
         boxShadow: [
@@ -71,7 +71,7 @@ class OpportunityCardHorizontal extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.star_rounded, size: 12, color: AppTheme.accentGold),
-                    const SizedBox(width: 2),
+                    const SizedBox(width: 4),
                     Text(
                       '${(matchScore * 100).toInt()}%',
                       style: GoogleFonts.inter(
@@ -177,7 +177,7 @@ class OpportunityCardVertical extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: tierColor.withValues(alpha: 0.2)),
         boxShadow: [
@@ -235,7 +235,7 @@ class OpportunityCardVertical extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.star_rounded, size: 12, color: AppTheme.accentGold),
-                    const SizedBox(width: 2),
+                    const SizedBox(width: 4),
                     Text(
                       '${(matchScore * 100).toInt()}% Match',
                       style: GoogleFonts.inter(

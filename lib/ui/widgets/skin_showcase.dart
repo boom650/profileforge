@@ -18,10 +18,10 @@ class SkinShowcaseCompact extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: primaryColor.withOpacity(0.3),
+          color: primaryColor.withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -36,7 +36,7 @@ class SkinShowcaseCompact extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   primaryColor,
-                  primaryColor.withOpacity(0.7),
+                  primaryColor.withValues(alpha: 0.7),
                 ],
               ),
             ),
@@ -65,7 +65,7 @@ class SkinShowcaseCompact extends StatelessWidget {
                     color: AppTheme.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   currentSkin.description,
                   style: GoogleFonts.inter(
@@ -82,7 +82,7 @@ class SkinShowcaseCompact extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.15),
+              color: primaryColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(

@@ -190,7 +190,7 @@ class _ActivityCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(icon, style: const TextStyle(fontSize: 24)),
+              Text(icon, style: GoogleFonts.inter(fontSize: 24)),
               Container(
                 width: 28,
                 height: 28,

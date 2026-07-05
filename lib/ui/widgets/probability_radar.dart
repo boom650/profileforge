@@ -24,7 +24,7 @@ class ProbabilityRadarChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
         boxShadow: [
@@ -60,7 +60,7 @@ class ProbabilityRadarChart extends StatelessWidget {
               RadarChartData(
                 radarShape: RadarShape.polygon,
                 tickCount: 5,
-                ticksTextStyle: const TextStyle(fontSize: 0),
+                ticksTextStyle: GoogleFonts.inter(fontSize: 0),
                 radarBorderData: BorderSide(
                   color: AppTheme.primaryBlue.withValues(alpha: 0.2),
                   width: 1,
@@ -296,7 +296,7 @@ class _RadarLegendItem extends StatelessWidget {
             ),
             child: Icon(icon, color: color, size: 12),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -175,7 +175,7 @@ class _CelebrationOverlayState extends State<CelebrationOverlay>
       margin: const EdgeInsets.symmetric(horizontal: 40),
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -309,7 +309,7 @@ class _CelebrationOverlayState extends State<CelebrationOverlay>
             margin: const EdgeInsets.symmetric(horizontal: 40),
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceWhite,
+              color: context.surfaceElevated,
               borderRadius: BorderRadius.circular(24),
             ),
             child: Column(

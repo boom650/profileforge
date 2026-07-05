@@ -472,13 +472,13 @@ class _ValidatedDropdownField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        errorStyle: const TextStyle(fontSize: 12),
+        errorStyle: GoogleFonts.inter(fontSize: 12),
       ),
       items: items.map((e) => DropdownMenuItem(value: e, child: Text(e, style: GoogleFonts.inter()))).toList(),
       onChanged: onChanged,
       validator: validator,
       style: GoogleFonts.inter(fontSize: 16, color: AppTheme.textPrimary),
-      dropdownColor: AppTheme.surfaceWhite,
+      dropdownColor: context.surfaceElevated,
     ).animate().fadeIn(delay: Duration(milliseconds: delay)).slideY(begin: 0.1);
   }
 }

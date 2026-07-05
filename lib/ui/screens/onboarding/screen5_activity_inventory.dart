@@ -195,7 +195,7 @@ class _CategoryRow extends StatelessWidget {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(category.icon, style: TextStyle(fontSize: 22)),
+              child: Text(category.icon, style: GoogleFonts.inter(fontSize: 22)),
             ),
             const SizedBox(width: 16),
             Expanded(

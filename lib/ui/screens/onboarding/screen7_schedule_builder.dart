@@ -83,7 +83,7 @@ class Screen7ScheduleBuilder extends StatelessWidget {
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
-              color: AppTheme.surfaceWhite,
+              color: context.surfaceElevated,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.categoryColors['school']!.withValues(alpha: 0.2)),
             ),
