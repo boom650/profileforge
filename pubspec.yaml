@@ -75,6 +75,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/animations/
-    - assets/images/skins/
-    - assets/data/
+    - lib/assets/images/skins/

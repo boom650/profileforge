@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -29,12 +30,6 @@ jobs:
 
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: Regenerate Android platform
-        run: |
-          rm -rf android/
-          flutter create --project-name profileforge --platforms android .
-          flutter pub get
 
       - name: Build APK
         run: flutter build apk --debug
