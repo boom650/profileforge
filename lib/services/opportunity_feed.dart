@@ -54,14 +54,14 @@ class OpportunityFeed {
 
 /// Notifier that orchestrates all opportunity discovery.
 class OpportunityFeedNotifier extends StateNotifier<OpportunityFeed> {
-  final LocationService _locationService;
+  final LocationServiceBase _locationService;
   final NominatimService _nominatim;
   final OverpassService _overpass;
   final NGODarpanService _ngoDarpan;
   final CompetitionCalendarService _competitions;
 
   OpportunityFeedNotifier({
-    required LocationService locationService,
+    required LocationServiceBase locationService,
     required NominatimService nominatim,
     required OverpassService overpass,
     required NGODarpanService ngoDarpan,
