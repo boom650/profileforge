@@ -155,7 +155,7 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
         : null;
 
     return Scaffold(
-      backgroundColor: AppTheme.surfaceWhite,
+      backgroundColor: context.surfaceElevated,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -262,7 +262,7 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
                           vertical: 16,
                         ),
                         decoration: BoxDecoration(
-                          color: AppTheme.surfaceWhite,
+                          color: context.surfaceElevated,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: AppTheme.textMuted.withValues(alpha: 0.3),

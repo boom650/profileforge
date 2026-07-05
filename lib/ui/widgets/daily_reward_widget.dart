@@ -94,8 +94,8 @@ class _DailyRewardWidgetState extends State<DailyRewardWidget>
     final canClaim = widget.store.canClaimDailyReward && !_justClaimed;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppTheme.surfaceWhite,
+      decoration: BoxDecoration(
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Stack(
@@ -126,7 +126,7 @@ class _DailyRewardWidgetState extends State<DailyRewardWidget>
                     color: AppTheme.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text(
                   _justClaimed
                       ? 'You earned $_claimedAmount coins!'

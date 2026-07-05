@@ -179,16 +179,18 @@ class DashboardTab extends ConsumerWidget {
           floating: true,
           snap: true,
           elevation: 0,
-          backgroundColor: AppTheme.surfaceWhite,
+          backgroundColor: context.surfaceBg,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 greetingText,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textSecondary,
+                  color: context.textSecondary,
                 ),
               ),
               Text(
@@ -196,7 +198,7 @@ class DashboardTab extends ConsumerWidget {
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textPrimary,
+                  color: context.textPrimary,
                 ),
               ),
             ],
@@ -204,6 +206,7 @@ class DashboardTab extends ConsumerWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.notifications_none_rounded),
+              tooltip: 'Notifications',
               onPressed: () {
                 HapticFeedback.lightImpact();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -216,6 +219,7 @@ class DashboardTab extends ConsumerWidget {
             ),
             IconButton(
               icon: const Icon(Icons.settings_rounded),
+              tooltip: 'Settings',
               onPressed: () {
                 HapticFeedback.lightImpact();
                 Navigator.of(context).push(
@@ -246,7 +250,7 @@ class DashboardTab extends ConsumerWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Streak updated! ${streak.currentStreak} days 🔥'),
-                                backgroundColor: AppTheme.primaryBlue,
+                                backgroundColor: Theme.of(context).colorScheme.primary,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
@@ -266,7 +270,7 @@ class DashboardTab extends ConsumerWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Freeze token used. ${streak.currentStreak} day streak ❄️'),
-                                backgroundColor: const Color(0xFF06B6D4),
+                                backgroundColor: AppTheme.accentTeal,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
@@ -326,7 +330,7 @@ class DashboardTab extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: context.textPrimary,
                       ),
                     ),
                     TextButton(
@@ -371,7 +375,7 @@ class DashboardTab extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: context.textPrimary,
                       ),
                     ),
                     TextButton(
@@ -413,7 +417,7 @@ class DashboardTab extends ConsumerWidget {
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
+                          color: context.textPrimary,
                         ),
                       ),
                       TextButton(
@@ -430,12 +434,12 @@ class DashboardTab extends ConsumerWidget {
                     'These achievements make your profile stand out',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppTheme.textMuted,
+                      color: context.textMuted,
                     ),
                   ),
                   const SizedBox(height: 12),
                   ...topSpikes.map((spike) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: _SpikeCard(spike: spike),
                   )),
                 ],
@@ -458,7 +462,7 @@ class DashboardTab extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: context.textPrimary,
                       ),
                     ),
                     TextButton(
@@ -492,7 +496,7 @@ class DashboardTab extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: context.textPrimary,
                       ),
                     ),
                     TextButton(
@@ -524,21 +528,21 @@ class DashboardTab extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceLight,
+                        color: context.surfaceElevated,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
+                        border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.explore_rounded, color: AppTheme.primaryBlue, size: 20),
+                          Icon(Icons.explore_rounded, color: Theme.of(context).colorScheme.primary, size: 20),
                           const SizedBox(width: 8),
                           Text(
                             'Discover opportunities →',
                             style: GoogleFonts.inter(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.primaryBlue,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -630,13 +634,13 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryBlue.withValues(alpha: 0.08),
-              AppTheme.primaryBlue.withValues(alpha: 0.03),
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.03),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppTheme.primaryBlue.withValues(alpha: 0.15),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
           ),
         ),
         child: Row(
@@ -644,10 +648,10 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: AppTheme.primaryBlue.withValues(alpha: 0.12),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(Icons.location_on_rounded, color: AppTheme.primaryBlue, size: 22),
+              child: Icon(Icons.location_on_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -659,7 +663,7 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: context.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -667,7 +671,7 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
                     'Find NGOs, competitions & opportunities near you',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: context.textSecondary,
                     ),
                   ),
                 ],
@@ -681,6 +685,9 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
             else ...[
               TextButton(
                 onPressed: _dismiss,
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(48, 48),
+                ),
                 child: Text('Not now', style: GoogleFonts.inter(fontSize: 12)),
               ),
               FilledButton.icon(
@@ -688,9 +695,8 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
                 icon: const Icon(Icons.check, size: 16),
                 label: Text('Enable', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
                 style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  minimumSize: const Size(0, 48),
                 ),
               ),
             ],
@@ -715,9 +721,9 @@ class _XPProgressCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: AppTheme.gradientPrimary,
+        gradient: context.isDarkMode ? AppTheme.gradientPrimaryDark : AppTheme.gradientPrimary,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -727,10 +733,10 @@ class _XPProgressCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentGold.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(Icons.stars_rounded, color: AppTheme.accentGold, size: 20),
+                child: Icon(Icons.stars_rounded, color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               const SizedBox(width: 10),
               Text(
@@ -738,7 +744,7 @@ class _XPProgressCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textSecondary,
+                  color: context.textSecondary,
                 ),
               ),
               const Spacer(),
@@ -750,7 +756,7 @@ class _XPProgressCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: context.textPrimary,
                     ),
                   );
                 },
@@ -763,7 +769,7 @@ class _XPProgressCard extends StatelessWidget {
               Container(
                 height: 8,
                 decoration: BoxDecoration(
-                  color: AppTheme.accentGold.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -786,7 +792,7 @@ class _XPProgressCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryBlue,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               const Spacer(),
@@ -794,7 +800,7 @@ class _XPProgressCard extends StatelessWidget {
                 '${(progress * 100).toInt()}% to next skin',
                 style: GoogleFonts.inter(
                   fontSize: 11,
-                  color: AppTheme.textMuted,
+                  color: context.textMuted,
                 ),
               ),
             ],
@@ -819,9 +825,9 @@ class _EmptyMissionsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceLight,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1), style: BorderStyle.solid),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), style: BorderStyle.solid),
       ),
       child: Column(
         children: [
@@ -832,7 +838,7 @@ class _EmptyMissionsCard extends StatelessWidget {
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: context.textPrimary,
             ),
           ),
           const SizedBox(height: 4),
@@ -840,7 +846,7 @@ class _EmptyMissionsCard extends StatelessWidget {
             'No daily missions pending. Check back tomorrow!',
             style: GoogleFonts.inter(
               fontSize: 13,
-              color: AppTheme.textSecondary,
+              color: context.textSecondary,
             ),
           ),
         ],
@@ -857,13 +863,13 @@ class _SpikeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryColor =
-        AppTheme.categoryColors[spike.category.colorKey] ?? AppTheme.primaryBlue;
+        AppTheme.categoryColors[spike.category.colorKey] ?? Theme.of(context).colorScheme.primary;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
-        borderRadius: BorderRadius.circular(14),
+        color: context.surfaceBg,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: categoryColor.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
@@ -886,7 +892,7 @@ class _SpikeCard extends StatelessWidget {
             child: Center(
               child: Text(
                 spike.category.icon,
-                style: const TextStyle(fontSize: 22),
+                style: GoogleFonts.inter(fontSize: 22),
               ),
             ),
           ),
@@ -901,7 +907,7 @@ class _SpikeCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: context.textPrimary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -911,9 +917,9 @@ class _SpikeCard extends StatelessWidget {
                   children: [
                     Text(
                       spike.starsDisplay,
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 13,
-                        color: AppTheme.accentGold,
+                        color: Theme.of(context).colorScheme.secondary,
                         letterSpacing: 1,
                       ),
                     ),
@@ -1011,17 +1017,17 @@ class _MissionList extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.assignment_outlined, size: 64, color: AppTheme.primaryBlue.withValues(alpha: 0.3)),
+              Icon(Icons.assignment_outlined, size: 64, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)),
               const SizedBox(height: 16),
               Text(
                 'No missions here yet!',
-                style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+                style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: context.textPrimary),
               ),
               const SizedBox(height: 8),
               Text(
                 'Check in daily to unlock new missions and earn XP.\nStart on the Dashboard tab to keep your streak going!',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.inter(fontSize: 14, color: AppTheme.textSecondary, height: 1.4),
+                style: GoogleFonts.inter(fontSize: 14, color: context.textSecondary, height: 1.4),
               ),
               const SizedBox(height: 20),
               Icon(Icons.local_fire_department_rounded, size: 32, color: AppTheme.accentOrange.withValues(alpha: 0.6)),
@@ -1084,7 +1090,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
                   children: [
                     const Icon(Icons.location_on, size: 14),
                     const SizedBox(width: 2),
-                    Text(feed.cityName!, style: const TextStyle(fontSize: 12)),
+                    Text(feed.cityName!, style: GoogleFonts.inter(fontSize: 12)),
                   ],
                 ),
               ),
@@ -1170,7 +1176,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
               selected: isSelected,
               onSelected: (_) => setState(() => _selectedTab = i),
               selectedColor: Theme.of(context).colorScheme.primaryContainer,
-              labelStyle: TextStyle(
+              labelStyle: GoogleFonts.inter(
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 fontSize: 13,
               ),
@@ -1247,9 +1253,9 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: const Icon(Icons.account_balance, size: 20),
         ),
-        title: Text(ngo.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        title: Text(ngo.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14)),
         subtitle: Text('${ngo.city}, ${ngo.state} • ${ngo.focus}',
-            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+            style: GoogleFonts.inter(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
         trailing: const Icon(Icons.chevron_right, size: 18),
       ),
     );
@@ -1265,14 +1271,14 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.blue.withValues(alpha: 0.1),
-          child: Icon(icon, size: 20, color: Colors.blue),
+          backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+          child: Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
         ),
-        title: Text(place.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        title: Text(place.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14)),
         subtitle: Text('${place.distanceKm} km • ${place.type}',
-            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+            style: GoogleFonts.inter(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
         trailing: Text('${place.distanceKm}km',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.blue)),
+            style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary)),
       ),
     );
   }
@@ -1281,7 +1287,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
     final isOpen = comp.isRegistrationOpen;
     final daysLeft = comp.daysUntilDeadline;
     final statusColor = isOpen
-        ? (daysLeft < 7 ? Colors.red : Colors.green)
+        ? (daysLeft < 7 ? Theme.of(context).colorScheme.error : AppTheme.success)
         : Theme.of(context).colorScheme.outline;
 
     return Card(
@@ -1294,29 +1300,29 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(comp.category.toUpperCase(),
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: statusColor)),
+                      style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: statusColor)),
                 ),
                 if (isOpen) ...[
                   const SizedBox(width: 8),
                   Text('$daysLeft days left',
-                      style: TextStyle(fontSize: 11, color: statusColor, fontWeight: FontWeight.w500)),
+                      style: GoogleFonts.inter(fontSize: 11, color: statusColor, fontWeight: FontWeight.w500)),
                 ],
                 const Spacer(),
                 Text('${comp.examDate.day}/${comp.examDate.month}/${comp.examDate.year}',
-                    style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.outline)),
+                    style: GoogleFonts.inter(fontSize: 11, color: Theme.of(context).colorScheme.outline)),
               ],
             ),
             const SizedBox(height: 8),
-            Text(comp.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            Text(comp.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14)),
             const SizedBox(height: 4),
             Text(comp.description, maxLines: 2, overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+                style: GoogleFonts.inter(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
           ],
         ),
       ),
@@ -1363,7 +1369,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
           const SizedBox(height: 8),
           Text('Use the search bar above to discover NGOs, competitions, and more',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
+              style: GoogleFonts.inter(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
           const SizedBox(height: 16),
           FilledButton.icon(
             onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
@@ -1390,7 +1396,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
               const SizedBox(height: 8),
               Text('Enter your city in the search bar above to find opportunities near you',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
+                  style: GoogleFonts.inter(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
               const SizedBox(height: 16),
               FilledButton.icon(
                 onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
@@ -1408,10 +1414,10 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            Icon(Icons.error_outline, size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text(error, textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.outline)),
+                style: GoogleFonts.inter(fontSize: 14, color: Theme.of(context).colorScheme.outline)),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
@@ -1450,7 +1456,7 @@ class SkinsTab extends ConsumerWidget {
               icon: Icons.emoji_events_outlined,
               title: 'No skins available',
               description: 'Complete missions and earn XP to unlock new skins.',
-              iconColor: AppTheme.accentGold,
+              iconColor: Theme.of(context).colorScheme.secondary,
             )
           : ListView.separated(
               padding: const EdgeInsets.all(24),
@@ -1476,16 +1482,16 @@ class _SkinGalleryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: config.visualProperties['primaryColor'] != null 
             ? Color(config.visualProperties['primaryColor'] as int).withValues(alpha: 0.2)
-            : AppTheme.primaryBlue.withValues(alpha: 0.1)),
+            : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: (config.visualProperties['primaryColor'] != null 
                 ? Color(config.visualProperties['primaryColor'] as int)
-                : AppTheme.primaryBlue).withValues(alpha: 0.05),
+                : Theme.of(context).colorScheme.primary).withValues(alpha: 0.05),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -1499,14 +1505,14 @@ class _SkinGalleryCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: (config.visualProperties['primaryColor'] != null 
                   ? Color(config.visualProperties['primaryColor'] as int)
-                  : AppTheme.primaryBlue).withValues(alpha: 0.1),
+                  : Theme.of(context).colorScheme.primary).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
               _getIconForTier(config.tier),
               color: config.visualProperties['primaryColor'] != null 
                   ? Color(config.visualProperties['primaryColor'] as int)
-                  : AppTheme.primaryBlue,
+                  : Theme.of(context).colorScheme.primary,
               size: 32,
             ),
           ),
@@ -1522,14 +1528,14 @@ class _SkinGalleryCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
+                        color: context.textPrimary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: _getRarityColor(config.rarity).withValues(alpha: 0.1),
+                        color: _getRarityColor(config.rarity, context).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -1537,7 +1543,7 @@ class _SkinGalleryCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
-                          color: _getRarityColor(config.rarity),
+                          color: _getRarityColor(config.rarity, context),
                         ),
                       ),
                     ),
@@ -1545,7 +1551,7 @@ class _SkinGalleryCard extends StatelessWidget {
                 ),
                 Text(
                   config.description,
-                  style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary),
+                  style: GoogleFonts.inter(fontSize: 13, color: context.textSecondary),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -1554,12 +1560,12 @@ class _SkinGalleryCard extends StatelessWidget {
                   children: config.unlockCriteria.map((c) => Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: AppTheme.surfaceLight,
+                      color: context.surfaceElevated,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       c,
-                      style: GoogleFonts.inter(fontSize: 10, color: AppTheme.textMuted),
+                      style: GoogleFonts.inter(fontSize: 10, color: context.textMuted),
                     ),
                   )).toList(),
                 ),
@@ -1573,13 +1579,13 @@ class _SkinGalleryCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.accentGold,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
               const SizedBox(height: 4),
               Icon(
                 Icons.lock_outline_rounded,
-                color: AppTheme.textMuted,
+                color: context.textMuted,
                 size: 24,
               ),
             ],
@@ -1603,12 +1609,12 @@ class _SkinGalleryCard extends StatelessWidget {
     }
   }
 
-  Color _getRarityColor(SkinRarity rarity) {
+  Color _getRarityColor(SkinRarity rarity, BuildContext context) {
     switch (rarity) {
-      case SkinRarity.common: return AppTheme.textMuted;
-      case SkinRarity.uncommon: return AppTheme.primaryBlue;
+      case SkinRarity.common: return context.textMuted;
+      case SkinRarity.uncommon: return Theme.of(context).colorScheme.primary;
       case SkinRarity.rare: return const Color(0xFF8B5CF6);
-      case SkinRarity.legendary: return AppTheme.accentGold;
+      case SkinRarity.legendary: return Theme.of(context).colorScheme.secondary;
     }
   }
 }
@@ -1717,7 +1723,7 @@ class ProfileTab extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: AppTheme.gradientPrimary,
+                gradient: context.isDarkMode ? AppTheme.gradientPrimaryDark : AppTheme.gradientPrimary,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Column(
@@ -1763,7 +1769,7 @@ class ProfileTab extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         child: Text(
                           'Complete onboarding to set target universities',
-                          style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textMuted),
+                          style: GoogleFonts.inter(fontSize: 13, color: context.textMuted),
                         ),
                       ),
                     ],
@@ -1786,7 +1792,7 @@ class ProfileTab extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         child: Text(
                           'Add activities in onboarding to see your summary',
-                          style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textMuted),
+                          style: GoogleFonts.inter(fontSize: 13, color: context.textMuted),
                         ),
                       ),
                     ],
@@ -1944,7 +1950,7 @@ class _TargetUniRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isReach ? const Color(0xFF8B5CF6) : (probability > 0.5 ? const Color(0xFF10B981) : const Color(0xFF3B82F6));
+    final color = isReach ? Theme.of(context).colorScheme.tertiary : (probability > 0.5 ? AppTheme.successGreen : Theme.of(context).colorScheme.primary);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -1960,9 +1966,9 @@ class _TargetUniRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                Text(name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: context.textPrimary)),
                 if (major.isNotEmpty || country.isNotEmpty)
-                  Text('$major${major.isNotEmpty && country.isNotEmpty ? ' • ' : ''}$country', style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textMuted)),
+                  Text('$major${major.isNotEmpty && country.isNotEmpty ? ' • ' : ''}$country', style: GoogleFonts.inter(fontSize: 11, color: context.textMuted)),
               ],
             ),
           ),
@@ -1985,7 +1991,7 @@ class _ActivitySummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AppColors.categoryColors[category.toLowerCase()] ?? AppTheme.primaryBlue;
+    final color = AppColors.categoryColors[category.toLowerCase()] ?? Theme.of(context).colorScheme.primary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -2002,8 +2008,8 @@ class _ActivitySummaryRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(category, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: AppTheme.textPrimary)),
-                Text('$count activities • $xp XP', style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textMuted)),
+                Text(category, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: context.textPrimary)),
+                Text('$count activities • $xp XP', style: GoogleFonts.inter(fontSize: 11, color: context.textMuted)),
               ],
             ),
           ),
@@ -2052,14 +2058,14 @@ class _SettingsRow extends StatelessWidget {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon, color: AppTheme.primaryBlue, size: 20),
+        child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
       ),
-      title: Text(title, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: AppTheme.textPrimary)),
-      subtitle: Text(subtitle, style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textMuted)),
-      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted),
+      title: Text(title, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: context.textPrimary)),
+      subtitle: Text(subtitle, style: GoogleFonts.inter(fontSize: 12, color: context.textMuted)),
+      trailing: Icon(Icons.chevron_right_rounded, color: context.textMuted),
       onTap: onTap != null ? () { HapticFeedback.lightImpact(); onTap!(); } : () {},
     );
   }

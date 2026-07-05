@@ -47,11 +47,7 @@ class StreakRing extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppTheme.surfaceWhite, AppTheme.surfaceLight],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.1)),
         boxShadow: [
@@ -363,7 +359,7 @@ class _WeeklyHeatmap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    final maxCount = pattern.reduce((a, b) => a > b ? a : b);
+    final maxCount = pattern.isEmpty ? 1 : pattern.reduce((a, b) => a > b ? a : b);
     final todayIndex = DateTime.now().weekday - 1; // 0 = Monday
 
     return Column(
@@ -518,7 +514,7 @@ class _StreakStat extends StatelessWidget {
           ),
         ),
         if (subtitle != null) ...[
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             subtitle!,
             style: GoogleFonts.inter(

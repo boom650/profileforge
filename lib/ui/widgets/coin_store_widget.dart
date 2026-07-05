@@ -595,7 +595,7 @@ class _ShopItemCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isOwned
               ? AppTheme.successGreen.withValues(alpha: 0.05)
-              : AppTheme.surfaceWhite,
+              : context.surfaceElevated,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isOwned

@@ -17,12 +17,12 @@ class MissionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final typeColors = {
       MissionType.daily: AppTheme.primaryBlue,
-      MissionType.weekly: const Color(0xFF8B5CF6),
+      MissionType.weekly: AppTheme.primaryPurple,
       MissionType.milestone: AppTheme.accentGold,
-      MissionType.inSchool: const Color(0xFF10B981),
-      MissionType.research: const Color(0xFF8B5CF6),
-      MissionType.leadership: const Color(0xFFEF4444),
-      MissionType.volunteering: const Color(0xFFEC4899),
+      MissionType.inSchool: AppTheme.successGreen,
+      MissionType.research: AppTheme.primaryPurple,
+      MissionType.leadership: AppTheme.errorRed,
+      MissionType.volunteering: AppTheme.accentOrange,
     };
 
     final color = typeColors[mission.type] ?? AppTheme.primaryBlue;
@@ -34,7 +34,7 @@ class MissionCard extends ConsumerWidget {
       child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceWhite,
+        color: context.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withValues(alpha: mission.isCompleted ? 0.3 : 0.15)),
         boxShadow: [
@@ -81,7 +81,7 @@ class MissionCard extends ConsumerWidget {
                     ),
                     if (mission.isCompleted)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppTheme.successGreen.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
@@ -118,7 +118,7 @@ class MissionCard extends ConsumerWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
@@ -136,7 +136,7 @@ class MissionCard extends ConsumerWidget {
                       const SizedBox(width: 8),
                       ...mission.metadata!.entries.take(2).map((e) => Container(
                         margin: const EdgeInsets.only(left: 6),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppTheme.surfaceLight,
                           borderRadius: BorderRadius.circular(6),
@@ -195,7 +195,7 @@ class MissionCard extends ConsumerWidget {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  minimumSize: const Size(80, 36),
+                  minimumSize: const Size(80, 48),
                 ),
                 child: Text(
                   'Claim',
@@ -228,7 +228,7 @@ class MissionCard extends ConsumerWidget {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  minimumSize: const Size(80, 36),
+                  minimumSize: const Size(80, 48),
                 ),
                 child: Text(
                   mission.progressCurrent > 0 ? 'Continue' : 'Start',
