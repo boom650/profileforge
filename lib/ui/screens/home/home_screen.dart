@@ -15,6 +15,10 @@ import '../../widgets/opportunity_card.dart';
 import '../../widgets/micro_interactions.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../services/spike_framework.dart';
+import '../../../services/opportunity_feed.dart';
+import '../../../services/ngo_darpan_service.dart';
+import '../../../services/overpass_service.dart';
+import '../../../services/competition_calendar_service.dart';
 import '../../widgets/empty_state.dart' as empty_state;
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -705,64 +709,352 @@ class _MissionList extends StatelessWidget {
   }
 }
 
-class OpportunitiesTab extends ConsumerWidget {
+/// Opportunities tab — real discovery using free APIs.
+/// Finds NGOs, nearby places, and competitions via Overpass, NGO Darpan, etc.
+class OpportunitiesTab extends ConsumerStatefulWidget {
   const OpportunitiesTab({super.key});
 
-  static final _sampleOpportunities = [
-    _OpportunityData('Goonj Weekend Teaching', 'NGO Volunteering', 2, '3.2 km', 0.94),
-    _OpportunityData('ATL Lab Robotics Club', 'In-School Club', 2, 'In School', 0.88),
-    _OpportunityData('IRIS National Science Fair', 'Competition', 1, '12 km', 0.76),
-    _OpportunityData('Google Code-in', 'Competition', 1, 'Online', 0.82),
-    _OpportunityData('NGO Dhara Sansthan', 'NGO Volunteering', 3, '5.1 km', 0.71),
-    _OpportunityData('School MUN Conference', 'In-School Club', 2, 'In School', 0.85),
-    _OpportunityData('KVPY Fellowship', 'Competition', 1, 'Online', 0.68),
-    _OpportunityData('Local Library Volunteer', 'Volunteering', 3, '2.8 km', 0.65),
-    _OpportunityData('District Chess Tournament', 'Competition', 3, '8 km', 0.60),
-    _OpportunityData('Ashoka University YSP', 'Summer Program', 2, 'Online', 0.78),
-  ];
+  @override
+  ConsumerState<OpportunitiesTab> createState() => _OpportunitiesTabState();
+}
+
+class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
+  final _cityController = TextEditingController();
+  int _selectedTab = 0; // 0=All, 1=NGOs, 2=Nearby, 3=Competitions
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final opportunities = _sampleOpportunities;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(opportunityFeedProvider.notifier).discover();
+    });
+  }
+
+  @override
+  void dispose() {
+    _cityController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final feed = ref.watch(opportunityFeedProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Opportunities', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         actions: [
+          if (feed.cityName != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.location_on, size: 14),
+                    const SizedBox(width: 2),
+                    Text(feed.cityName!, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+              ),
+            ),
           IconButton(
-            icon: const Icon(Icons.filter_list_rounded),
-            onPressed: () { HapticFeedback.lightImpact(); },
-          ),
-          IconButton(
-            icon: const Icon(Icons.map_rounded),
-            onPressed: () { HapticFeedback.lightImpact(); },
+            icon: const Icon(Icons.my_location_rounded),
+            onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
+            tooltip: 'Use my location',
           ),
         ],
       ),
-      body: opportunities.isEmpty
-          ? empty_state.EmptyStateWidget(
-              icon: Icons.explore_outlined,
-              title: 'No opportunities found',
-              description: 'We couldn\'t find any opportunities matching your profile. Try adjusting your filters or location.',
-              actionLabel: 'Refresh',
-              onAction: () {},
-              iconColor: AppTheme.primaryBlue,
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(24),
-              itemCount: opportunities.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final opp = opportunities[index];
-                return OpportunityCardVertical(
-                  title: opp.title,
-                  type: opp.type,
-                  tier: opp.tier,
-                  distance: opp.distance,
-                  matchScore: opp.matchScore,
-                );
+      body: feed.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : feed.error != null
+              ? _buildError(feed.error!)
+              : Column(
+                  children: [
+                    // Search bar
+                    _buildSearchBar(),
+                    // Tab bar
+                    _buildTabBar(),
+                    // Content
+                    Expanded(child: _buildContent(feed)),
+                  ],
+                ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      color: Theme.of(context).colorScheme.surface,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _cityController,
+              decoration: InputDecoration(
+                hintText: 'Search by city...',
+                prefixIcon: const Icon(Icons.search, size: 20),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                isDense: true,
+              ),
+              onSubmitted: (val) {
+                if (val.trim().isNotEmpty) {
+                  ref.read(opportunityFeedProvider.notifier).searchCity(val.trim());
+                }
               },
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    final tabs = ['All', 'NGOs', 'Nearby', 'Competitions'];
+    return SizedBox(
+      height: 44,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: tabs.length,
+        itemBuilder: (ctx, i) {
+          final isSelected = _selectedTab == i;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text(tabs[i]),
+              selected: isSelected,
+              onSelected: (_) => setState(() => _selectedTab = i),
+              selectedColor: Theme.of(context).colorScheme.primaryContainer,
+              labelStyle: TextStyle(
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontSize: 13,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildContent(feed) {
+    switch (_selectedTab) {
+      case 0:
+        return _buildAllTab(feed);
+      case 1:
+        return _buildNGOList(feed.ngos);
+      case 2:
+        return _buildNearbyList(feed.nearbyPlaces);
+      case 3:
+        return _buildCompetitionList(feed.competitions, feed.openNow);
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget _buildAllTab(feed) {
+    final hasData = feed.ngos.isNotEmpty || feed.nearbyPlaces.isNotEmpty || feed.competitions.isNotEmpty;
+    if (!hasData) return _buildEmptyState();
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        if (feed.openNow.isNotEmpty) ...[
+          _sectionHeader('🟢 Registration Open', '${feed.openNow.length} competitions'),
+          ...feed.openNow.take(3).map((c) => _compTile(c)),
+          const SizedBox(height: 20),
+        ],
+        if (feed.ngos.isNotEmpty) ...[
+          _sectionHeader('🏢 NGOs in ${feed.cityName ?? "your area"}', '${feed.ngos.length} found'),
+          ...feed.ngos.take(3).map((n) => _ngoTile(n)),
+          const SizedBox(height: 20),
+        ],
+        if (feed.nearbyPlaces.isNotEmpty) ...[
+          _sectionHeader('📍 Nearby Places', '${feed.nearbyPlaces.length} found'),
+          ...feed.nearbyPlaces.take(3).map((p) => _placeTile(p)),
+          const SizedBox(height: 20),
+        ],
+        if (feed.competitions.isNotEmpty) ...[
+          _sectionHeader('🏆 All Competitions', '${feed.competitions.length} available'),
+          ...feed.competitions.take(5).map((c) => _compTile(c)),
+        ],
+      ],
+    );
+  }
+
+  Widget _sectionHeader(String title, String count) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text(count, style: GoogleFonts.inter(fontSize: 11, color: Theme.of(context).colorScheme.outline)),
+        ],
+      ),
+    );
+  }
+
+  Widget _ngoTile(NGO ngo) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          child: const Icon(Icons.account_balance, size: 20),
+        ),
+        title: Text(ngo.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        subtitle: Text('${ngo.city}, ${ngo.state} • ${ngo.focus}',
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+        trailing: const Icon(Icons.chevron_right, size: 18),
+      ),
+    );
+  }
+
+  Widget _placeTile(NearbyPlace place) {
+    final icon = place.type == 'library' ? Icons.library_books
+        : place.type == 'school' ? Icons.school
+        : place.type == 'makerspace' ? Icons.build
+        : Icons.location_city;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.withValues(alpha: 0.1),
+          child: Icon(icon, size: 20, color: Colors.blue),
+        ),
+        title: Text(place.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        subtitle: Text('${place.distanceKm} km • ${place.type}',
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+        trailing: Text('${place.distanceKm}km',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.blue)),
+      ),
+    );
+  }
+
+  Widget _compTile(Competition comp) {
+    final isOpen = comp.isRegistrationOpen;
+    final daysLeft = comp.daysUntilDeadline;
+    final statusColor = isOpen
+        ? (daysLeft < 7 ? Colors.red : Colors.green)
+        : Theme.of(context).colorScheme.outline;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(comp.category.toUpperCase(),
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: statusColor)),
+                ),
+                if (isOpen) ...[
+                  const SizedBox(width: 8),
+                  Text('$daysLeft days left',
+                      style: TextStyle(fontSize: 11, color: statusColor, fontWeight: FontWeight.w500)),
+                ],
+                const Spacer(),
+                Text('${comp.examDate.day}/${comp.examDate.month}/${comp.examDate.year}',
+                    style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.outline)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(comp.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            const SizedBox(height: 4),
+            Text(comp.description, maxLines: 2, overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.outline)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNGOList(List ngos) {
+    if (ngos.isEmpty) return _buildEmptyState();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: ngos.length,
+      itemBuilder: (ctx, i) => _ngoTile(ngos[i]),
+    );
+  }
+
+  Widget _buildNearbyList(List places) {
+    if (places.isEmpty) return _buildEmptyState();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: places.length,
+      itemBuilder: (ctx, i) => _placeTile(places[i]),
+    );
+  }
+
+  Widget _buildCompetitionList(List all, List open) {
+    final list = open.isNotEmpty ? open : all;
+    if (list.isEmpty) return _buildEmptyState();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: list.length,
+      itemBuilder: (ctx, i) => _compTile(list[i]),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.explore_outlined, size: 56, color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3)),
+          const SizedBox(height: 16),
+          Text('No opportunities found', style: GoogleFonts.inter(
+              fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.outline)),
+          const SizedBox(height: 8),
+          Text('Try enabling location or searching a city',
+              style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
+            icon: const Icon(Icons.my_location, size: 16),
+            label: const Text('Use My Location'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildError(String error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(error, textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.outline)),
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: () => ref.read(opportunityFeedProvider.notifier).discover(),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

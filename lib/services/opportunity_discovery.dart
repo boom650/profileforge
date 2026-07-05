@@ -1,17 +1,25 @@
-// Opportunity Discovery Services - Barrel Export
+/// Opportunity Discovery Services — real implementations.
+///
+/// Services:
+/// - LocationService: Device GPS → lat/lng (free, no API key)
+/// - NominatimService: Reverse geocoding via OpenStreetMap (free, no API key)
+/// - OverpassService: Nearby places via OSM Overpass API (free, no API key)
+/// - NGODarpanService: NGO search via ngodarpan.gov.in + curated fallback
+/// - CompetitionCalendarService: Hardcoded Indian competition dates
+/// - OpportunityFeed: Combined provider that orchestrates all services
 
 // Models
-export '../models/opportunity/ngo_opportunity.dart';
-export '../models/opportunity/place_opportunity.dart';
-export '../models/opportunity/udise_school.dart';
-export '../models/opportunity/atl_lab.dart';
-export '../models/opportunity/competition.dart';
-export '../models/user/user_profile.dart';
+export 'location_service.dart' show UserLocation;
+export 'overpass_service.dart' show NearbyPlace;
+export 'ngo_darpan_service.dart' show NGO;
+export 'competition_calendar_service.dart' show Competition;
 
 // Services
-export 'opportunity_discovery/ngo_darpan_service.dart';
-export 'opportunity_discovery/google_places_service.dart';
-export 'opportunity_discovery/udise_school_service.dart';
-export 'opportunity_discovery/atl_lab_service.dart';
-export 'opportunity_discovery/competition_calendar_service.dart';
-export 'opportunity_discovery/opportunity_discovery_engine.dart';
+export 'location_service.dart' show locationServiceProvider, userLocationProvider;
+export 'nominatim_service.dart' show nominatimServiceProvider;
+export 'overpass_service.dart' show overpassServiceProvider;
+export 'ngo_darpan_service.dart' show ngoDarpanServiceProvider;
+export 'competition_calendar_service.dart' show competitionCalendarProvider;
+
+// Combined feed
+export 'opportunity_feed.dart' show opportunityFeedProvider, OpportunityFeed;

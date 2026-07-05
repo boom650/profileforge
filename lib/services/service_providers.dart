@@ -3,6 +3,14 @@ import '../db/database.dart';
 import 'gamification/gamification_service.dart';
 import 'encryption_service.dart';
 
+// Re-export all services for easy access
+export 'location_service.dart';
+export 'nominatim_service.dart';
+export 'overpass_service.dart';
+export 'ngo_darpan_service.dart';
+export 'competition_calendar_service.dart';
+export 'opportunity_feed.dart';
+
 /// AppDatabase provider — initialized in main.dart via ProviderScope overrides.
 final databaseProvider = Provider<AppDatabase>((ref) {
   throw UnimplementedError(
