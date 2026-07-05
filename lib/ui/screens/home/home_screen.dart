@@ -14,10 +14,12 @@ import '../../widgets/mission_card.dart' hide SkinShowcaseCompact;
 import '../../widgets/skin_showcase.dart';
 import '../../widgets/opportunity_card.dart';
 import '../../widgets/micro_interactions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../services/spike_framework.dart';
 import '../../../services/opportunity_feed.dart';
 import '../../../services/ngo_darpan_service.dart';
+import '../../../services/location_service.dart';
 import '../../../services/overpass_service.dart';
 import '../../../services/competition_calendar_service.dart';
 import '../../widgets/empty_state.dart' as empty_state;
@@ -304,6 +306,11 @@ class DashboardTab extends ConsumerWidget {
           ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
         ),
 
+        // Location Permission Prompt
+        SliverToBoxAdapter(
+          child: _LocationPermissionPrompt(),
+        ),
+
         // Admissions Probability Radar
         SliverToBoxAdapter(
           child: Padding(
@@ -543,6 +550,153 @@ class DashboardTab extends ConsumerWidget {
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1),
         ),
       ],
+    );
+  }
+}
+
+/// Shows a location permission prompt if not yet asked.
+/// Once enabled, opportunities auto-discover nearby NGOs & competitions.
+class _LocationPermissionPrompt extends ConsumerStatefulWidget {
+  const _LocationPermissionPrompt();
+
+  @override
+  ConsumerState<_LocationPermissionPrompt> createState() => _LocationPermissionPromptState();
+}
+
+class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPrompt> {
+  bool _asked = false;
+  bool _loading = false;
+  bool _dismissed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfAsked();
+  }
+
+  Future<void> _checkIfAsked() async {
+    final prefs = await SharedPreferences.getInstance();
+    final asked = prefs.getBool('location_permission_asked') ?? false;
+    if (mounted) setState(() => _asked = asked);
+  }
+
+  Future<void> _requestLocation() async {
+    setState(() => _loading = true);
+    try {
+      final locationService = ref.read(locationServiceProvider);
+      final granted = await locationService.requestPermission();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('location_permission_asked', true);
+      if (granted) {
+        // Trigger opportunity discovery with real location
+        ref.read(opportunityFeedProvider.notifier).discover();
+      }
+      if (mounted) {
+        setState(() { _dismissed = true; _loading = false; });
+        if (granted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Location enabled! Finding opportunities near you 📍'),
+              backgroundColor: AppTheme.successGreen,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('location_permission_asked', true);
+        setState(() { _dismissed = true; _loading = false; });
+      }
+    }
+  }
+
+  Future<void> _dismiss() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('location_permission_asked', true);
+    setState(() => _dismissed = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_asked || _dismissed) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.primaryBlue.withValues(alpha: 0.08),
+              AppTheme.primaryBlue.withValues(alpha: 0.03),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.primaryBlue.withValues(alpha: 0.15),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryBlue.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(Icons.location_on_rounded, color: AppTheme.primaryBlue, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Enable Location',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Find NGOs, competitions & opportunities near you',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_loading)
+              const SizedBox(
+                width: 20, height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            else ...[
+              TextButton(
+                onPressed: _dismiss,
+                child: Text('Not now', style: GoogleFonts.inter(fontSize: 12)),
+              ),
+              FilledButton.icon(
+                onPressed: _requestLocation,
+                icon: const Icon(Icons.check, size: 16),
+                label: Text('Enable', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
     );
   }
 }
