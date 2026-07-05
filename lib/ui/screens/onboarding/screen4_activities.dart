@@ -158,7 +158,18 @@ class _ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$icon $name — we\'ll track this after onboarding'),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
+      child: Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: context.surfaceElevated,
@@ -217,6 +228,7 @@ class _ActivityCard extends StatelessWidget {
           ),
         ],
       ),
-    ).animate().fadeIn(delay: Duration(milliseconds: delay)).scale(begin: const Offset(0.9, 0.9));
+    ).animate().fadeIn(delay: Duration(milliseconds: delay)).scale(begin: const Offset(0.9, 0.9)),
+    );
   }
 }

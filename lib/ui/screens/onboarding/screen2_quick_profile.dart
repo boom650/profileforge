@@ -266,6 +266,14 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
                   color: AppTheme.textPrimary,
                 ),
               ).animate().fadeIn(delay: 450.ms),
+              const SizedBox(height: 4),
+              Text(
+                'Optional — add your strongest subjects',
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppTheme.textMuted,
+                ),
+              ).animate().fadeIn(delay: 460.ms),
               const SizedBox(height: 12),
               _SubjectScoreRow(
                 label: 'Subject 1',
@@ -343,14 +351,18 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   @override
   void initState() {
     super.initState();
+    // Validate form on init (after first frame) to check if restored data makes it valid.
+    // This ensures Continue button works when navigating back.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkValidation();
+      final form = widget.formKey.currentState;
+      if (form != null && mounted) {
+        final isValid = form.validate();
+        if (isValid != Screen2QuickProfile.isFormValid) {
+          Screen2QuickProfile.isFormValid = isValid;
+          widget.onChanged(isValid);
+        }
+      }
     });
-  }
-
-  void _checkValidation() {
-    // Set initial state as invalid without showing validation errors.
-    // Validation will happen via Form.onChanged when user interacts with fields.
   }
 
   @override
@@ -387,8 +399,11 @@ class _SubjectScoreRow extends StatelessWidget {
             prefixIcon: Icons.book_rounded,
             delay: delay,
             validator: (value) {
+              // Subject is optional — only validate if either name or score is filled
+              final scoreValue = scoreController.text.trim();
               if (value == null || value.trim().isEmpty) {
-                return 'Required';
+                if (scoreValue.isNotEmpty) return 'Name needed with score';
+                return null; // Both empty = skip subject
               }
               return null;
             },
@@ -414,8 +429,11 @@ class _SubjectScoreRow extends StatelessWidget {
             ),
             style: GoogleFonts.inter(fontSize: 16, color: AppTheme.textPrimary),
             validator: (value) {
+              // Score is optional — only validate if name is filled
+              final nameValue = nameController.text.trim();
               if (value == null || value.trim().isEmpty) {
-                return 'Required';
+                if (nameValue.isNotEmpty) return 'Score needed';
+                return null; // Empty = skip subject
               }
               final score = int.tryParse(value.trim());
               if (score == null) {

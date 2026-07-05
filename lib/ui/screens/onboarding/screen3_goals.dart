@@ -157,14 +157,24 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                   _CountryChip(label: '🇭🇰 Hong Kong', delay: 530, selected: _selectedCountries.contains('Hong Kong'), onTap: () => _toggleCountry('Hong Kong')),
                 ],
               ),
-              if (_selectedCountries.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Please select at least one target country',
-                    style: GoogleFonts.inter(fontSize: 12, color: AppTheme.errorRed),
-                  ),
-                ),
+              // Hidden validator for country selection — participates in Form validation
+              FormField<String>(
+                validator: (_) {
+                  if (_selectedCountries.isEmpty) {
+                    return 'Please select at least one country';
+                  }
+                  return null;
+                },
+                builder: (field) => field.hasError
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          field.errorText!,
+                          style: GoogleFonts.inter(fontSize: 12, color: AppTheme.errorRed),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
               const SizedBox(height: 28),
               // Target Universities
               Text(
@@ -252,11 +262,12 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
       }
     });
     _saveToProvider();
-    // Re-validate form on change
+    // Re-validate entire form (including country FormField) on change
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final form = Screen3Goals.formKey.currentState;
       if (form != null) {
         Screen3Goals.isFormValid = form.validate();
+        widget.onFormChanged?.call();
       }
     });
   }
@@ -282,14 +293,18 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   @override
   void initState() {
     super.initState();
+    // Validate form on init (after first frame) to check if restored data makes it valid.
+    // This ensures Continue button works when navigating back.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkValidation();
+      final form = widget.formKey.currentState;
+      if (form != null && mounted) {
+        final isValid = form.validate();
+        if (isValid != Screen3Goals.isFormValid) {
+          Screen3Goals.isFormValid = isValid;
+          widget.onChanged(isValid);
+        }
+      }
     });
-  }
-
-  void _checkValidation() {
-    // Set initial state as invalid without showing validation errors.
-    // Validation will happen via Form.onChanged when user interacts with fields.
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -84,49 +85,104 @@ class OnboardingData {
 }
 
 class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
-  OnboardingDataNotifier() : super(const OnboardingData());
+  OnboardingDataNotifier() : super(const OnboardingData()) {
+    _loadFromPrefs();
+  }
+
+  static const _key = 'onboarding_data';
+
+  /// Persist current state to SharedPreferences.
+  Future<void> _save() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = {
+      'name': state.name,
+      'board': state.board,
+      'stream': state.stream,
+      'grade': state.grade,
+      'subjects': state.subjects,
+      'targetMajor': state.targetMajor,
+      'targetCountries': state.targetCountries.toList(),
+      'targetUniversities': state.targetUniversities,
+    };
+    await prefs.setString(_key, jsonEncode(data));
+  }
+
+  /// Restore state from SharedPreferences (called on construction).
+  Future<void> _loadFromPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_key);
+      if (raw == null || raw.isEmpty) return;
+      final data = jsonDecode(raw) as Map<String, dynamic>;
+      state = OnboardingData(
+        name: (data['name'] as String?) ?? '',
+        board: data['board'] as String?,
+        stream: data['stream'] as String?,
+        grade: data['grade'] as int?,
+        subjects: Map<String, double>.from(
+          (data['subjects'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as num).toDouble())) ?? {},
+        ),
+        targetMajor: data['targetMajor'] as String?,
+        targetCountries: Set<String>.from(data['targetCountries'] as List<dynamic>? ?? []),
+        targetUniversities: List<String>.from(data['targetUniversities'] as List<dynamic>? ?? []),
+      );
+    } catch (_) {
+      // Silently ignore — fresh start if corrupt
+    }
+  }
 
   void updateName(String name) {
     state = state.copyWith(name: name);
+    _save();
   }
 
   void updateBoard(String? board) {
     state = state.copyWith(board: board);
+    _save();
   }
 
   void updateStream(String? stream) {
     state = state.copyWith(stream: stream);
+    _save();
   }
 
   void updateGrade(int? grade) {
     state = state.copyWith(grade: grade);
+    _save();
   }
 
   void updateSubject(String subjectName, double score) {
     final newSubjects = Map<String, double>.from(state.subjects);
     newSubjects[subjectName] = score;
     state = state.copyWith(subjects: newSubjects);
+    _save();
   }
 
   /// Replace all subjects at once (used during onboarding to avoid stale entries).
   void replaceSubjects(Map<String, double> subjects) {
     state = state.copyWith(subjects: Map<String, double>.from(subjects));
+    _save();
   }
 
   void updateTargetMajor(String? major) {
     state = state.copyWith(targetMajor: major);
+    _save();
   }
 
   void updateTargetCountries(Set<String> countries) {
     state = state.copyWith(targetCountries: countries);
+    _save();
   }
 
   void updateTargetUniversities(List<String> universities) {
     state = state.copyWith(targetUniversities: universities);
+    _save();
   }
 
-  void reset() {
+  void reset() async {
     state = const OnboardingData();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
   }
 }
 
