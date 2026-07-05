@@ -37,6 +37,13 @@ jobs:
           flutter create --project-name profileforge --platforms android .
           flutter pub get
 
+      - name: Enable core library desugaring
+        run: |
+          # Enable desugaring in compileOptions
+          sed -i 's/compileOptions {/compileOptions {\n        isCoreLibraryDesugaringEnabled = true/' android/app/build.gradle.kts
+          # Add desugaring dependency
+          sed -i '/^dependencies {/a\    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")' android/app/build.gradle.kts
+
       - name: Build APK
         run: flutter build apk --debug
 
