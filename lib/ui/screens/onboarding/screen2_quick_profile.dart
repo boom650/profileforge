@@ -13,6 +13,9 @@ class Screen2QuickProfile extends ConsumerStatefulWidget {
 
   /// Whether the form is currently valid — updated by _FormValidationListener.
   static bool isFormValid = false;
+  /// Whether the user has clicked Continue at least once.
+  /// Errors only show after first submission.
+  static bool hasSubmitted = false;
 
   /// Called when form validity changes, so the parent flow can rebuild.
   final VoidCallback? onFormChanged;
@@ -142,12 +145,16 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
       child: Form(
         key: Screen2QuickProfile.formKey,
         onChanged: () {
-          final form = Screen2QuickProfile.formKey.currentState;
-          if (form != null) {
-            Screen2QuickProfile.isFormValid = form.validate();
-            widget.onFormChanged?.call();
-          }
           _saveToProvider();
+          // Don't call form.validate() here — that shows errors on every keystroke.
+          // Instead, check validity silently by reading field values.
+          final name = _nameController.text.trim();
+          final board = _selectedBoard;
+          final stream = _selectedStream;
+          final grade = _selectedGrade;
+          Screen2QuickProfile.isFormValid =
+              name.isNotEmpty && board != null && stream != null && grade != null;
+          widget.onFormChanged?.call();
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -13,6 +13,8 @@ class Screen3Goals extends ConsumerStatefulWidget {
 
   /// Whether the form is currently valid — updated by _FormValidationListener.
   static bool isFormValid = false;
+  /// Whether the user has clicked Continue at least once.
+  static bool hasSubmitted = false;
 
   /// Called when form validity changes, so the parent flow can rebuild.
   final VoidCallback? onFormChanged;
@@ -60,13 +62,14 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
       child: Form(
         key: Screen3Goals.formKey,
         onChanged: () {
-          final form = Screen3Goals.formKey.currentState;
-          if (form != null) {
-            Screen3Goals.isFormValid = form.validate();
-            widget.onFormChanged?.call();
-          }
-          // Save to provider on every form change
           _saveToProvider();
+          // Don't call form.validate() here — that shows errors on every keystroke.
+          // Instead, check validity silently by reading field values.
+          final major = _selectedMajor;
+          final countries = _selectedCountries;
+          Screen3Goals.isFormValid =
+              major != null && major.isNotEmpty && countries.isNotEmpty;
+          widget.onFormChanged?.call();
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),

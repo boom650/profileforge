@@ -27,6 +27,11 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   @override
   void initState() {
     super.initState();
+    // Reset stale static flags from previous onboarding sessions
+    Screen2QuickProfile.isFormValid = false;
+    Screen2QuickProfile.hasSubmitted = false;
+    Screen3Goals.isFormValid = false;
+    Screen3Goals.hasSubmitted = false;
     _screens = [
       const Screen1Welcome(),
       Screen2QuickProfile(onFormChanged: () {
@@ -82,12 +87,14 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   void _triggerCurrentPageValidation() {
     switch (_currentPage) {
       case 1:
+        Screen2QuickProfile.hasSubmitted = true;
         final form = Screen2QuickProfile.formKey.currentState;
         if (form != null) {
           form.validate();
         }
         break;
       case 2:
+        Screen3Goals.hasSubmitted = true;
         final form = Screen3Goals.formKey.currentState;
         if (form != null) {
           form.validate();
@@ -108,6 +115,16 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   void _completeOnboarding() async {
     // 1. Read accumulated onboarding data
     final onboardingData = ref.read(onboardingDataProvider);
+
+    // Safety: assert minimum completeness (name required, rest optional but warned)
+    assert(onboardingData.name.isNotEmpty,
+        'Onboarding completed without a name — should not happen');
+    debugPrint(
+      '[Onboarding] Completing: name=${onboardingData.name}, '
+      'board=${onboardingData.board}, countries=${onboardingData.targetCountries.length}, '
+      'universities=${onboardingData.targetUniversities.length}, '
+      'subjects=${onboardingData.subjects.length}',
+    );
 
     // 2. Build a StudentProfile from the onboarding data
     final profile = buildStudentProfileFromOnboarding(onboardingData);
@@ -213,7 +230,9 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                physics: const ClampingScrollPhysics(),
+                physics: _isCurrentPageValid()
+                    ? const ClampingScrollPhysics()
+                    : const NeverScrollableScrollPhysics(),
                 itemCount: _totalPages,
                 onPageChanged: (index) => setState(() => _currentPage = index),
                 itemBuilder: (context, index) => _screens[index],
