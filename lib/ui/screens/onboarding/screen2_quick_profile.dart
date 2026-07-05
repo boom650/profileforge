@@ -266,7 +266,7 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
               const SizedBox(height: 24),
               // 3 Key Subject Scores
               Text(
-                'Top 3 Subject Scores (%)',
+                'Top 3 Subject Scores (Optional)',
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
