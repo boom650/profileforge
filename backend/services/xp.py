@@ -37,7 +37,7 @@ class XPService:
         Returns:
             Updated XP state with level info
         """
-        return await self.db.add_xp(user_id, amount, pillar)
+        return await self.db.add_xp(user_id, amount, pillar, source)
     
     async def get_history(self, user_id: str, limit: int = 50) -> List[dict]:
         """Get XP transaction history"""

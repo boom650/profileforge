@@ -341,7 +341,7 @@ class Database:
             "last_active": row[11]
         }
     
-    async def add_xp(self, user_id: str, amount: int, pillar: str) -> dict:
+    async def add_xp(self, user_id: str, amount: int, pillar: str, source: str = "task_completion") -> dict:
         """Add XP to user and update level"""
         now = datetime.now().isoformat()
         
@@ -349,6 +349,12 @@ class Database:
         current = await self.get_xp_state(user_id)
         if not current:
             return {"error": "User not found"}
+        
+        # Validate pillar - only allow known pillars
+        valid_pillars = {"academics", "research", "leadership", "creativity", 
+                         "community", "evidence", "consistency"}
+        if pillar not in valid_pillars:
+            pillar = "academics"  # Default fallback
         
         # Calculate new values
         new_total = current["total_xp"] + amount
@@ -370,7 +376,7 @@ class Database:
         await self.db.execute("""
             INSERT INTO xp_transactions (id, user_id, amount, source, pillar, created_at)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (tx_id, user_id, amount, f"task_completion", pillar, now))
+        """, (tx_id, user_id, amount, source, pillar, now))
         
         await self.db.commit()
         

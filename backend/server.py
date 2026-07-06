@@ -14,6 +14,7 @@ import uuid
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
+import sqlite3
 
 # Local imports
 from models.user import User, UserCreate, UserLocation
@@ -66,7 +67,10 @@ async def health_check():
 @app.post("/api/users", response_model=User)
 async def create_user(user: UserCreate):
     """Create a new user profile"""
-    return await db.create_user(user)
+    try:
+        return await db.create_user(user)
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=409, detail="User with this email already exists")
 
 
 @app.get("/api/users/{user_id}", response_model=User)
@@ -140,10 +144,13 @@ async def get_pending_tasks(user_id: str):
     return await task_service.get_user_tasks(user_id, "pending")
 
 
+class TaskStatusUpdate(BaseModel):
+    status: TaskStatus
+
 @app.put("/api/tasks/{task_id}/status")
-async def update_task_status(task_id: str, status: TaskStatus):
+async def update_task_status(task_id: str, body: TaskStatusUpdate):
     """Update task status"""
-    result = await task_service.update_status(task_id, status)
+    result = await task_service.update_status(task_id, body.status)
     if not result:
         raise HTTPException(status_code=404, detail="Task not found")
     return {"status": "success"}
@@ -331,16 +338,16 @@ async def hermes_evaluate(request: EvaluationRequest):
 # OPPORTUNITY ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/opportunities/{user_id}")
-async def get_opportunities(user_id: str):
-    """Get opportunities for user based on location"""
-    return await location_service.get_nearby_opportunities(user_id)
-
-
 @app.get("/api/opportunities/search")
 async def search_opportunities(city: str):
     """Search opportunities by city"""
     return await location_service.search_by_city(city)
+
+
+@app.get("/api/opportunities/{user_id}")
+async def get_opportunities(user_id: str):
+    """Get opportunities for user based on location"""
+    return await location_service.get_nearby_opportunities(user_id)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
