@@ -134,6 +134,40 @@ class Database:
             )
         """)
         
+        # Courses catalog table
+        await self.db.execute("""
+            CREATE TABLE IF NOT EXISTS courses (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                description TEXT,
+                provider TEXT,
+                url TEXT,
+                category TEXT,
+                pillar TEXT DEFAULT 'academics',
+                difficulty INTEGER DEFAULT 1,
+                xp_reward INTEGER DEFAULT 50,
+                estimated_hours REAL,
+                certificate_required INTEGER DEFAULT 1,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Course enrollments table
+        await self.db.execute("""
+            CREATE TABLE IF NOT EXISTS course_enrollments (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                course_id TEXT NOT NULL,
+                status TEXT DEFAULT 'enrolled',
+                certificate_url TEXT,
+                certificate_status TEXT DEFAULT 'pending',
+                enrolled_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                completed_at TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (course_id) REFERENCES courses(id)
+            )
+        """)
+        
         await self.db.commit()
     
     # ═══════════════════════════════════════════════════════════════════════════

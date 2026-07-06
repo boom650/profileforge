@@ -21,11 +21,13 @@ from models.user import User, UserCreate, UserLocation
 from models.task import Task, TaskCreate, TaskStatus
 from models.evaluation import EvaluationRequest, EvaluationResult
 from models.xp import XPTransaction, XPResult
+from models.course import CourseCreate, CertificateSubmit
 from services.database import Database
 from services.evaluation import EvaluationService
 from services.tasks import TaskService
 from services.xp import XPService
 from services.location import LocationService
+from services.courses import CourseService
 from services.ai_evaluation import AIEvaluationService
 from services.gemini_client import get_gemini
 
@@ -51,6 +53,7 @@ evaluation_service = EvaluationService()
 task_service = TaskService(db)
 xp_service = XPService(db)
 location_service = LocationService(db)
+course_service = CourseService(db)
 ai_eval = AIEvaluationService()
 
 
@@ -335,6 +338,107 @@ async def unlock_skin(user_id: str, skin_id: str):
 async def update_streak(user_id: str):
     """Update user's streak (call daily)"""
     return await xp_service.update_streak(user_id)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FREE COURSES ENDPOINTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/courses")
+async def list_courses(
+    category: Optional[str] = None,
+    pillar: Optional[str] = None,
+    difficulty: Optional[int] = None
+):
+    """List all available free courses with optional filters"""
+    return await course_service.get_all_courses(category, pillar, difficulty)
+
+
+@app.get("/api/courses/{course_id}")
+async def get_course(course_id: str):
+    """Get course details by ID"""
+    course = await course_service.get_course(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    return course
+
+
+@app.get("/api/courses/search/{query}")
+async def search_courses(query: str):
+    """Search courses by title, description, or provider"""
+    return await course_service.search_courses(query)
+
+
+@app.post("/api/courses/{course_id}")
+async def create_course(course_id: str, course: CourseCreate):
+    """Create a new course (admin/hermes endpoint)"""
+    return await course_service.create_course(course)
+
+
+@app.post("/api/courses/{user_id}/enroll/{course_id}")
+async def enroll_in_course(user_id: str, course_id: str):
+    """Enroll user in a free course"""
+    # Verify course exists
+    course = await course_service.get_course(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    enrollment = await course_service.enroll_user(user_id, course_id)
+    return enrollment
+
+
+@app.get("/api/courses/{user_id}/enrolled")
+async def get_user_enrollments(user_id: str, status: Optional[str] = None):
+    """Get all courses a user is enrolled in"""
+    return await course_service.get_user_enrollments(user_id, status)
+
+
+@app.post("/api/courses/{user_id}/submit-certificate/{course_id}")
+async def submit_certificate(user_id: str, course_id: str, body: CertificateSubmit):
+    """Submit certificate URL for a completed course"""
+    enrollment = await course_service.get_enrollment(user_id, course_id)
+    if not enrollment:
+        raise HTTPException(status_code=404, detail="Not enrolled in this course")
+    
+    result = await course_service.submit_certificate(
+        user_id, course_id, body.certificate_url
+    )
+    return result
+
+
+@app.post("/api/courses/{user_id}/complete/{course_id}")
+async def complete_course(user_id: str, course_id: str):
+    """Mark course as completed (after certificate approval)"""
+    course = await course_service.get_course(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    enrollment = await course_service.get_enrollment(user_id, course_id)
+    if not enrollment:
+        raise HTTPException(status_code=404, detail="Not enrolled in this course")
+    
+    # Complete enrollment
+    result = await course_service.complete_enrollment(user_id, course_id)
+    
+    # Award XP
+    xp_result = await xp_service.award_xp(
+        user_id=user_id,
+        amount=course.xp_reward,
+        source=f"course:{course_id}",
+        pillar=course.pillar or "academics"
+    )
+    
+    return {
+        "status": "completed",
+        "enrollment": result,
+        "xp_awarded": xp_result
+    }
+
+
+@app.get("/api/courses/{user_id}/stats")
+async def get_course_stats(user_id: str):
+    """Get course completion stats for a user"""
+    return await course_service.get_user_stats(user_id)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

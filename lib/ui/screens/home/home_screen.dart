@@ -23,6 +23,7 @@ import '../../../services/location_service.dart';
 import '../../../services/overpass_service.dart';
 import '../../../services/competition_calendar_service.dart';
 import '../../widgets/empty_state.dart' as empty_state;
+import '../courses/courses_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -52,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       DashboardTab(onTabChange: _switchTab),
       const MissionsTab(),
       const OpportunitiesTab(),
+      const CoursesScreen(),
       const SkinsTab(),
       ProfileTab(onTabChange: _switchTab),
     ];
@@ -96,6 +98,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: Icon(Icons.explore_rounded),
             selectedIcon: Icon(Icons.explore_rounded, fill: 1),
             label: 'Opportunities',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.school_rounded),
+            selectedIcon: Icon(Icons.school_rounded, fill: 1),
+            label: 'Courses',
           ),
           NavigationDestination(
             icon: Icon(Icons.emoji_events_rounded),
