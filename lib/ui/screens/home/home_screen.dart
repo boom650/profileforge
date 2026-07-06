@@ -243,60 +243,72 @@ class DashboardTab extends ConsumerWidget {
                     freezeTokens: streak.freezeTokens,
                     onCheckIn: () async {
                       HapticFeedback.heavyImpact();
-                      final result = await ref.read(markDailyActiveProvider)();
-                      if (context.mounted) {
-                        result.when(
-                          success: (streak, _, __, ___, ____, _____) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Streak updated! ${streak.currentStreak} days 🔥'),
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            );
-                          },
-                          graceDayUsed: (streak, _, __) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Grace day used. ${streak.currentStreak} day streak 🔥'),
-                                backgroundColor: AppTheme.accentOrange,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            );
-                          },
-                          freezeTokenUsed: (streak, _, __) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Freeze token used. ${streak.currentStreak} day streak ❄️'),
-                                backgroundColor: AppTheme.accentTeal,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            );
-                          },
-                          streakBroken: (_, __, ___, ____) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Streak broken! Let\'s start fresh today 💪'),
-                                backgroundColor: AppTheme.accentOrange,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            );
-                          },
-                          alreadyMarked: (_, __) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Already checked in today! ✅'),
-                                backgroundColor: AppTheme.successGreen,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            );
-                          },
-                        );
+                      try {
+                        final result = await ref.read(markDailyActiveProvider)();
+                        if (context.mounted) {
+                          result.when(
+                            success: (streak, _, __, ___, ____, _____) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Streak updated! ${streak.currentStreak} days 🔥'),
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              );
+                            },
+                            graceDayUsed: (streak, _, __) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Grace day used. ${streak.currentStreak} day streak 🔥'),
+                                  backgroundColor: AppTheme.accentOrange,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              );
+                            },
+                            freezeTokenUsed: (streak, _, __) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Freeze token used. ${streak.currentStreak} day streak ❄️'),
+                                  backgroundColor: AppTheme.accentTeal,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              );
+                            },
+                            streakBroken: (_, __, ___, ____) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Streak broken! Let\'s start fresh today 💪'),
+                                  backgroundColor: AppTheme.accentOrange,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              );
+                            },
+                            alreadyMarked: (_, __) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Already checked in today! ✅'),
+                                  backgroundColor: AppTheme.successGreen,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Check-in failed. Try again.'),
+                              backgroundColor: Colors.orange,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
                       }
                     },
                   ),
@@ -322,28 +334,28 @@ class DashboardTab extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Admissions Probability',
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: context.textPrimary,
+                if (factorBreakdown != null) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Admissions Probability',
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: context.textPrimary,
+                        ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-                        onTabChange(1); // Switch to Missions tab
-                      },
-                      child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                if (factorBreakdown != null)
+                      TextButton(
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          onTabChange(1); // Switch to Missions tab
+                        },
+                        child: Text('View All', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
                   ProbabilityRadarChart(
                     factorBreakdown: factorBreakdown,
                     monteCarloResult: admissionsProbability.isNotEmpty
@@ -352,9 +364,8 @@ class DashboardTab extends ConsumerWidget {
                     universityName: admissionsProbability.isNotEmpty
                         ? admissionsProbability.values.first.university
                         : '',
-                  )
-                else
-                  const SizedBox.shrink(),
+                  ),
+                ],
               ],
             ),
           ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
@@ -628,10 +639,12 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
           // For now, we'll use a placeholder
           await prefs.setString('user_city', 'Your City');
           
-          setState(() {
-            _gpsEnabled = true;
-            _currentCity = 'Your City';
-          });
+          if (mounted) {
+            setState(() {
+              _gpsEnabled = true;
+              _currentCity = 'Your City';
+            });
+          }
           
           // Trigger opportunity discovery with real location
           ref.read(opportunityFeedProvider.notifier).discover();
@@ -660,7 +673,7 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
         }
       } else {
         // Permission denied - show manual entry option
-        setState(() => _showCityInput = true);
+        if (mounted) setState(() => _showCityInput = true);
       }
       
       if (mounted) {
@@ -697,10 +710,12 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
       await prefs.setBool('location_permission_asked', true);
       await prefs.setString('user_city', city);
       
-      setState(() {
-        _currentCity = city;
-        _showCityInput = false;
-      });
+      if (mounted) {
+        setState(() {
+          _currentCity = city;
+          _showCityInput = false;
+        });
+      }
       
       // Trigger opportunity discovery with city
       ref.read(opportunityFeedProvider.notifier).searchCity(city);
@@ -728,7 +743,7 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
   Future<void> _dismiss() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('location_permission_asked', true);
-    setState(() => _dismissed = true);
+    if (mounted) setState(() => _dismissed = true);
   }
 
   @override
@@ -870,8 +885,10 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _gpsEnabled 
-                            ? '$_currentCity • Tap to change'
+                        _gpsEnabled
+                            ? (_currentCity != null && _currentCity!.isNotEmpty
+                                ? '$_currentCity • Tap to change'
+                                : 'Tap to set your city')
                             : 'Find NGOs, competitions & opportunities near you',
                         style: GoogleFonts.inter(
                           fontSize: 12,
