@@ -161,7 +161,7 @@ async def complete_task(task_id: str):
         user_id=task.user_id,
         amount=task.xp_reward,
         source=f"task:{task_id}",
-        pillar=task.pillar
+        pillar=task.pillar or "general"
     )
     
     # Update task status
@@ -207,7 +207,7 @@ async def evaluate_document(
                 user_id=user_id,
                 amount=task.xp_reward,
                 source=f"evaluation:{task_id}",
-                pillar=task.pillar
+                pillar=task.pillar or "general"
             )
             await task_service.update_status(task_id, TaskStatus.COMPLETED)
     
@@ -215,12 +215,12 @@ async def evaluate_document(
 
 
 @app.post("/api/evaluate/text")
-async def evaluate_text(
-    user_id: str,
-    task_id: str,
-    text: str
-):
-    """Evaluate text content against task criteria"""
+async def evaluate_text(body: dict):
+    """Evaluate text content against task criteria.
+    Accepts JSON body: {"user_id": "...", "task_id": "...", "content": "..."}"""
+    user_id = body.get("user_id", "")
+    task_id = body.get("task_id", "")
+    text = body.get("content", "")
     request = EvaluationRequest(
         user_id=user_id,
         task_id=task_id,
@@ -238,7 +238,7 @@ async def evaluate_text(
                 user_id=user_id,
                 amount=task.xp_reward,
                 source=f"evaluation:{task_id}",
-                pillar=task.pillar
+                pillar=task.pillar or "general"
             )
             await task_service.update_status(task_id, TaskStatus.COMPLETED)
     
