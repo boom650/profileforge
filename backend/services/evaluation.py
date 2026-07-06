@@ -96,7 +96,7 @@ class EvaluationService:
             relevance_score = min(25, int(relevance_ratio * 25))
         else:
             # No task context — base score for coherent content
-            relevance_score = 15 if word_count >= 100 else 10
+            relevance_score = 20 if word_count >= 100 else 12
         
         # Bonus for addressing the prompt directly
         if task_title and any(w in text.lower() for w in task_title.lower().split() if len(w) > 3):
@@ -115,24 +115,26 @@ class EvaluationService:
         
         # Word count scoring
         if word_count >= 800:
-            depth_score = 20
+            depth_score = 25
         elif word_count >= 500:
-            depth_score = 18
+            depth_score = 23
         elif word_count >= 300:
-            depth_score = 14
+            depth_score = 20
         elif word_count >= 150:
-            depth_score = 10
+            depth_score = 17
+        elif word_count >= 80:
+            depth_score = 14
         elif word_count >= 50:
-            depth_score = 6
+            depth_score = 10
         else:
-            depth_score = 2
+            depth_score = 4
         
         # Analysis indicators (vs pure description)
         analysis_words = ["because", "therefore", "however", "although", 
                          "consequently", "this means", "as a result",
                          "in contrast", "similarly", "more importantly"]
         analysis_count = sum(1 for w in analysis_words if w in text.lower())
-        depth_score = min(25, depth_score + analysis_count * 2)
+        depth_score = min(25, depth_score + analysis_count * 3)
         
         scores["depth"] = depth_score
         if depth_score >= 20:
@@ -149,26 +151,26 @@ class EvaluationService:
         
         # Paragraph organization
         if paragraph_count >= 5:
-            structure_score = 12
+            structure_score = 14
         elif paragraph_count >= 3:
-            structure_score = 10
+            structure_score = 13
         elif paragraph_count >= 2:
-            structure_score = 7
+            structure_score = 11
         elif paragraph_count >= 1:
-            structure_score = 4
+            structure_score = 8
         else:
-            structure_score = 2
+            structure_score = 4
         
         # Transition words
         transition_count = sum(1 for t in self.STRUCTURE_INDICATORS if t in text.lower())
-        structure_score = min(20, structure_score + transition_count * 2)
+        structure_score = min(20, structure_score + transition_count * 3)
         
         # Sentence variety (not all same length)
         if sentence_count > 3:
             sentences = [s.split() for s in re.split(r'[.!?]+', text) if s.strip()]
             lengths = [len(s) for s in sentences]
             if len(set(lengths)) > 1:
-                structure_score = min(20, structure_score + 2)
+                structure_score = min(20, structure_score + 3)
         
         scores["structure"] = structure_score
         if structure_score >= 15:
@@ -184,7 +186,7 @@ class EvaluationService:
         # Check for evidence indicators
         evidence_count = sum(1 for indicator in self.EVIDENCE_INDICATORS 
                            if indicator in text.lower())
-        evidence_score = min(12, evidence_count * 2)
+        evidence_score = min(12, evidence_count * 3)
         
         # Numbers and data
         numbers = re.findall(r'\d+', text)
