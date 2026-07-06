@@ -764,7 +764,7 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
                       color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.city_rounded, color: Theme.of(context).colorScheme.secondary, size: 22),
+                    child: Icon(Icons.location_city, color: Theme.of(context).colorScheme.secondary, size: 22),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

@@ -1,7 +1,5 @@
-"""
-Backend API Service
-Handles communication between Flutter app and backend server
-"""
+/// Backend API Service
+/// Handles communication between Flutter app and backend server
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
