@@ -23,7 +23,9 @@ class OpportunityCardHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tierColor = ActivityTier.values[tier - 1].color;
+    final tierColor = (tier >= 1 && tier <= ActivityTier.values.length) 
+        ? ActivityTier.values[tier - 1].color 
+        : ActivityTier.values.first.color;
 
     return Container(
       width: 280,
@@ -171,7 +173,9 @@ class OpportunityCardVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tierColor = ActivityTier.values[tier - 1].color;
+    final tierColor = (tier >= 1 && tier <= ActivityTier.values.length) 
+        ? ActivityTier.values[tier - 1].color 
+        : ActivityTier.values.first.color;
     final categoryColor = AppTheme.categoryColors[type.toLowerCase().split(' ')[0]] ?? tierColor;
 
     return Container(

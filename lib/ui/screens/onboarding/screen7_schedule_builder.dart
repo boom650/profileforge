@@ -85,7 +85,7 @@ class Screen7ScheduleBuilder extends StatelessWidget {
             decoration: BoxDecoration(
               color: context.surfaceElevated,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.categoryColors['school']!.withValues(alpha: 0.2)),
+              border: Border.all(color: (AppColors.categoryColors['school'] ?? AppTheme.primaryBlue).withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [

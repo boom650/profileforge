@@ -377,7 +377,7 @@ class _WeeklyHeatmap extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(7, (i) {
-            final count = pattern[i];
+            final count = i < pattern.length ? pattern[i] : 0;
             final intensity = maxCount > 0 ? count / maxCount : 0.0;
             final isToday = i == todayIndex;
             final isFuture = i > todayIndex;
