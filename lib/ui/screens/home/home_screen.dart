@@ -560,6 +560,7 @@ class DashboardTab extends ConsumerWidget {
 
 /// Shows a location permission prompt if not yet asked.
 /// Once enabled, opportunities auto-discover nearby NGOs & competitions.
+/// Supports both GPS and manual city entry.
 class _LocationPermissionPrompt extends ConsumerStatefulWidget {
   const _LocationPermissionPrompt();
 
@@ -571,6 +572,10 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
   bool _asked = false;
   bool _loading = false;
   bool _dismissed = false;
+  bool _showCityInput = false;
+  bool _gpsEnabled = false;
+  String? _currentCity;
+  final TextEditingController _cityController = TextEditingController();
 
   @override
   void initState() {
@@ -578,41 +583,144 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
     _checkIfAsked();
   }
 
+  @override
+  void dispose() {
+    _cityController.dispose();
+    super.dispose();
+  }
+
   Future<void> _checkIfAsked() async {
     final prefs = await SharedPreferences.getInstance();
     final asked = prefs.getBool('location_permission_asked') ?? false;
-    if (mounted) setState(() => _asked = asked);
+    final city = prefs.getString('user_city');
+    final gps = prefs.getBool('gps_enabled') ?? false;
+    if (mounted) {
+      setState(() {
+        _asked = asked;
+        _currentCity = city;
+        _gpsEnabled = gps;
+      });
+    }
   }
 
-  Future<void> _requestLocation() async {
+  /// Request GPS permission and get actual coordinates
+  Future<void> _requestGPS() async {
     setState(() => _loading = true);
     try {
       final locationService = ref.read(locationServiceProvider);
+      
+      // Request permission
       final granted = await locationService.requestPermission();
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('location_permission_asked', true);
+      
       if (granted) {
-        // Trigger opportunity discovery with real location
-        ref.read(opportunityFeedProvider.notifier).discover();
-      }
-      if (mounted) {
-        setState(() { _dismissed = true; _loading = false; });
-        if (granted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Location enabled! Finding opportunities near you 📍'),
-              backgroundColor: AppTheme.successGreen,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-          );
+        // Actually get the coordinates
+        final location = await locationService.getCurrentLocation();
+        
+        if (location != null) {
+          // Save to preferences
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('location_permission_asked', true);
+          await prefs.setBool('gps_enabled', true);
+          await prefs.setDouble('latitude', location.latitude);
+          await prefs.setDouble('longitude', location.longitude);
+          
+          // Reverse geocode to get city name
+          // For now, we'll use a placeholder
+          await prefs.setString('user_city', 'Your City');
+          
+          setState(() {
+            _gpsEnabled = true;
+            _currentCity = 'Your City';
+          });
+          
+          // Trigger opportunity discovery with real location
+          ref.read(opportunityFeedProvider.notifier).discover();
+          
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Location enabled! Lat: ${location.latitude.toStringAsFixed(4)}, Lng: ${location.longitude.toStringAsFixed(4)}'),
+                backgroundColor: AppTheme.successGreen,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+            );
+          }
+        } else {
+          // Permission granted but couldn't get location
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Permission granted but location unavailable. Try entering your city manually.'),
+                backgroundColor: Colors.orange,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
         }
+      } else {
+        // Permission denied - show manual entry option
+        setState(() => _showCityInput = true);
+      }
+      
+      if (mounted) {
+        setState(() { _loading = false; });
       }
     } catch (e) {
       if (mounted) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('location_permission_asked', true);
-        setState(() { _dismissed = true; _loading = false; });
+        setState(() { _loading = false; _showCityInput = true; });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Location error: $e. You can enter your city manually.'),
+            backgroundColor: Colors.orange,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Save manual city entry
+  Future<void> _saveCity() async {
+    final city = _cityController.text.trim();
+    if (city.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a city name')),
+      );
+      return;
+    }
+    
+    setState(() => _loading = true);
+    
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('location_permission_asked', true);
+      await prefs.setString('user_city', city);
+      
+      setState(() {
+        _currentCity = city;
+        _showCityInput = false;
+      });
+      
+      // Trigger opportunity discovery with city
+      ref.read(opportunityFeedProvider.notifier).searchCity(city);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('City set to $city! Finding opportunities...'),
+            backgroundColor: AppTheme.successGreen,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        setState(() { _loading = false; });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() { _loading = false; });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
       }
     }
   }
@@ -627,6 +735,97 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
   Widget build(BuildContext context) {
     if (_asked || _dismissed) return const SizedBox.shrink();
 
+    // Show city input mode
+    if (_showCityInput) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.secondary.withValues(alpha: 0.08),
+                Theme.of(context).colorScheme.secondary.withValues(alpha: 0.03),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(Icons.city_rounded, color: Theme.of(context).colorScheme.secondary, size: 22),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Enter Your City',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: context.textPrimary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _cityController,
+                      decoration: InputDecoration(
+                        hintText: 'e.g., Mumbai, Delhi, Pune',
+                        hintStyle: GoogleFonts.inter(fontSize: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      ),
+                      style: GoogleFonts.inter(fontSize: 14),
+                      onSubmitted: (_) => _saveCity(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  if (_loading)
+                    const SizedBox(
+                      width: 48, height: 48,
+                      child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                    )
+                  else
+                    FilledButton(
+                      onPressed: _saveCity,
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        minimumSize: const Size(0, 48),
+                      ),
+                      child: Text('Save', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => setState(() => _showCityInput = false),
+                child: Text('← Back to GPS option', style: GoogleFonts.inter(fontSize: 12)),
+              ),
+            ],
+          ),
+        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+      );
+    }
+
+    // Main location prompt
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
       child: Container(
@@ -643,63 +842,95 @@ class _LocationPermissionPromptState extends ConsumerState<_LocationPermissionPr
             color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
           ),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(Icons.location_on_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(Icons.location_on_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _gpsEnabled ? 'Location Enabled ✓' : 'Enable Location',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: _gpsEnabled ? AppTheme.successGreen : context.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        _gpsEnabled 
+                            ? '$_currentCity • Tap to change'
+                            : 'Find NGOs, competitions & opportunities near you',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: context.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Enable Location',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: context.textPrimary,
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                if (_loading)
+                  const SizedBox(
+                    width: 20, height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                else ...[
+                  // GPS Enable Button
+                  FilledButton.icon(
+                    onPressed: _requestGPS,
+                    icon: Icon(_gpsEnabled ? Icons.refresh : Icons.gps_fixed, size: 16),
+                    label: Text(
+                      _gpsEnabled ? 'Update GPS' : 'Enable GPS',
+                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      minimumSize: const Size(0, 48),
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Find NGOs, competitions & opportunities near you',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: context.textSecondary,
+                  const SizedBox(width: 8),
+                  // Manual City Entry Button
+                  OutlinedButton.icon(
+                    onPressed: () => setState(() => _showCityInput = true),
+                    icon: const Icon(Icons.edit_location_alt, size: 16),
+                    label: Text(
+                      'Enter City',
+                      style: GoogleFonts.inter(fontSize: 12),
                     ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      minimumSize: const Size(0, 48),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Dismiss Button
+                  TextButton(
+                    onPressed: _dismiss,
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                    ),
+                    child: Text('Not now', style: GoogleFonts.inter(fontSize: 12)),
                   ),
                 ],
-              ),
+              ],
             ),
-            if (_loading)
-              const SizedBox(
-                width: 20, height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            else ...[
-              TextButton(
-                onPressed: _dismiss,
-                style: TextButton.styleFrom(
-                  minimumSize: const Size(48, 48),
-                ),
-                child: Text('Not now', style: GoogleFonts.inter(fontSize: 12)),
-              ),
-              FilledButton.icon(
-                onPressed: _requestLocation,
-                icon: const Icon(Icons.check, size: 16),
-                label: Text('Enable', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  minimumSize: const Size(0, 48),
-                ),
-              ),
-            ],
           ],
         ),
       ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
