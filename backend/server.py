@@ -26,6 +26,8 @@ from services.evaluation import EvaluationService
 from services.tasks import TaskService
 from services.xp import XPService
 from services.location import LocationService
+from services.ai_evaluation import AIEvaluationService
+from services.gemini_client import get_gemini
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -49,6 +51,7 @@ evaluation_service = EvaluationService()
 task_service = TaskService(db)
 xp_service = XPService(db)
 location_service = LocationService(db)
+ai_eval = AIEvaluationService()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -260,6 +263,42 @@ async def evaluate_text(body: dict):
 async def get_xp(user_id: str):
     """Get user's XP state"""
     return await xp_service.get_xp_state(user_id)
+
+
+import httpx as _httpx
+BRIDGE_URL = "http://127.0.0.1:8090"
+
+
+@app.post("/api/ai/evaluate")
+async def ai_evaluate_via_bridge(body: dict):
+    """Submit text for AI evaluation via Hermes bridge."""
+    async with _httpx.AsyncClient(timeout=5) as client:
+        resp = await client.post(f"{BRIDGE_URL}/evaluate", json=body)
+        return resp.json()
+
+
+@app.get("/api/ai/results/{job_id}")
+async def ai_get_result(job_id: str):
+    """Get AI evaluation result from bridge."""
+    async with _httpx.AsyncClient(timeout=5) as client:
+        resp = await client.get(f"{BRIDGE_URL}/results/{job_id}")
+        return resp.json()
+
+
+@app.post("/api/ai/tasks/generate")
+async def ai_generate_tasks_via_bridge(body: dict):
+    """Request AI task generation via Hermes bridge."""
+    async with _httpx.AsyncClient(timeout=5) as client:
+        resp = await client.post(f"{BRIDGE_URL}/tasks/generate", json=body)
+        return resp.json()
+
+
+@app.get("/api/ai/task-results/{job_id}")
+async def ai_get_task_results(job_id: str):
+    """Get AI task generation results from bridge."""
+    async with _httpx.AsyncClient(timeout=5) as client:
+        resp = await client.get(f"{BRIDGE_URL}/task-results/{job_id}")
+        return resp.json()
 
 
 @app.post("/api/xp/{user_id}/award")
