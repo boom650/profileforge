@@ -587,7 +587,7 @@ class _UniversityBrowserScreenState
                 Row(
                   children: [
                     if (uni.hasNeedBasedAid)
-                      _buildBadge('Need-Based Aid', Icons.heart_rounded,
+                      _buildBadge('Need-Based Aid', Icons.favorite_rounded,
                           Colors.pink),
                     if (uni.hasNeedBasedAid && uni.hasMeritScholarships)
                       const SizedBox(width: 8),
@@ -794,21 +794,21 @@ class _UniversityDetailSheet extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   children: [
                     // Key stats grid
-                    _buildStatsGrid(),
+                    _buildStatsGrid(context),
                     const SizedBox(height: 20),
 
                     // Rankings section
                     if (university.rankingQs != null ||
                         university.rankingUsNews != null) ...[
-                      _buildSectionTitle('Rankings', Icons.emoji_events_rounded),
+                      _buildSectionTitle('Rankings', Icons.emoji_events_rounded, context),
                       const SizedBox(height: 10),
-                      _buildRankingsCard(),
+                      _buildRankingsCard(context),
                       const SizedBox(height: 20),
                     ],
 
                     // Strengths
                     if (university.strengths.isNotEmpty) ...[
-                      _buildSectionTitle('Strengths', Icons.auto_awesome_rounded),
+                      _buildSectionTitle('Strengths', Icons.auto_awesome_rounded, context),
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 8,
@@ -843,23 +843,25 @@ class _UniversityDetailSheet extends StatelessWidget {
 
                     // Aid & Scholarships
                     _buildSectionTitle(
-                        'Aid & Scholarships', Icons.volunteer_activism_rounded),
+                        'Aid & Scholarships', Icons.volunteer_activism_rounded, context),
                     const SizedBox(height: 10),
                     Row(
                       children: [
                         _buildAidCard(
                           'Need-Based Aid',
                           university.hasNeedBasedAid,
-                          Icons.heart_rounded,
+                          Icons.favorite_rounded,
                           Colors.pink,
-                        ),
+                          context,
+                        , context),
                         const SizedBox(width: 10),
                         _buildAidCard(
                           'Merit Scholarships',
                           university.hasMeritScholarships,
                           Icons.star_rounded,
                           Colors.amber,
-                        ),
+                          context,
+                        , context),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -868,23 +870,23 @@ class _UniversityDetailSheet extends StatelessWidget {
                     if (university.deadlineEarly != null ||
                         university.deadlineRegular != null) ...[
                       _buildSectionTitle(
-                          'Deadlines', Icons.calendar_today_rounded),
+                          'Deadlines', Icons.calendar_today_rounded, context),
                       const SizedBox(height: 10),
-                      _buildDeadlinesCard(),
+                      _buildDeadlinesCard(context),
                       const SizedBox(height: 20),
                     ],
 
                     // Typical Admitted Student
                     _buildSectionTitle(
-                        'Typical Admitted Student', Icons.person_rounded),
+                        'Typical Admitted Student', Icons.person_rounded, context),
                     const SizedBox(height: 10),
-                    _buildTypicalStudentCard(),
+                    _buildTypicalStudentCard(context),
                     const SizedBox(height: 20),
 
                     // Website
                     if (university.website != null &&
                         university.website!.isNotEmpty) ...[
-                      _buildSectionTitle('Website', Icons.language_rounded),
+                      _buildSectionTitle('Website', Icons.language_rounded, context),
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
@@ -946,7 +948,7 @@ class _UniversityDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title, IconData icon) {
+  Widget _buildSectionTitle(String title, IconData icon, BuildContext context) {
     return Row(
       children: [
         Icon(icon, size: 18, color: AppTheme.primary),
@@ -963,7 +965,7 @@ class _UniversityDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid() {
+  Widget _buildStatsGrid(BuildContext context) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -973,24 +975,25 @@ class _UniversityDetailSheet extends StatelessWidget {
       mainAxisSpacing: 10,
       children: [
         _buildStatTile('Acceptance Rate',
-            '${university.acceptanceRate.toStringAsFixed(1)}%', Colors.blue),
+            '${university.acceptanceRate.toStringAsFixed(1)}%', Colors.blue, context),
         _buildStatTile(
           'Tuition/Year',
           university.tuitionUsd > 0
-              ? '\$${university.tuitionUsd.toStringAsFixed(0)}'
+              ? '\\$${university.tuitionUsd.toStringAsFixed(0)}'
               : 'N/A',
           Colors.teal,
+          context,
         ),
         if (university.typicalSat != null)
           _buildStatTile(
-              'Typical SAT', '${university.typicalSat}', Colors.orange),
+              'Typical SAT', '${university.typicalSat}', Colors.orange, context),
         _buildStatTile(
-            'Typical GPA', university.typicalGpa.toStringAsFixed(2), Colors.purple),
+            'Typical GPA', university.typicalGpa.toStringAsFixed(2), Colors.purple, context),
       ],
     );
   }
 
-  Widget _buildStatTile(String label, String value, Color color) {
+  Widget _buildStatTile(String label, String value, Color color, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
@@ -1023,7 +1026,7 @@ class _UniversityDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildRankingsCard() {
+  Widget _buildRankingsCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1093,7 +1096,7 @@ class _UniversityDetailSheet extends StatelessWidget {
   }
 
   Widget _buildAidCard(
-      String label, bool hasAid, IconData icon, Color color) {
+      String label, bool hasAid, IconData icon, Color color, BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(14),
@@ -1144,7 +1147,7 @@ class _UniversityDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildDeadlinesCard() {
+  Widget _buildDeadlinesCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1208,7 +1211,7 @@ class _UniversityDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildTypicalStudentCard() {
+  Widget _buildTypicalStudentCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1220,23 +1223,25 @@ class _UniversityDetailSheet extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildTypicalStat('GPA', university.typicalGpa.toStringAsFixed(2)),
+          _buildTypicalStat('GPA', university.typicalGpa.toStringAsFixed(2), context),
           Container(width: 1, height: 40, color: context.borderColor),
           _buildTypicalStat(
             'SAT',
             university.typicalSat?.toString() ?? 'N/A',
-          ),
+            context,
+          , context),
           Container(width: 1, height: 40, color: context.borderColor),
           _buildTypicalStat(
             'Acceptance',
             '${university.acceptanceRate.toStringAsFixed(1)}%',
-          ),
+            context,
+          , context),
         ],
       ),
     );
   }
 
-  Widget _buildTypicalStat(String label, String value) {
+  Widget _buildTypicalStat(String label, String value, BuildContext context) {
     return Column(
       children: [
         Text(

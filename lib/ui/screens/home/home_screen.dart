@@ -1959,7 +1959,7 @@ class _MissionListTile extends ConsumerWidget {
             Row(
               children: [
                 if (!isComplete && mission.progressTarget > 0)
-                  FilledButton.tiny(
+                  FilledButton(
                     onPressed: () async {
                       HapticFeedback.mediumImpact();
                       await ref.read(updateMissionProgressProvider)(
@@ -1978,7 +1978,7 @@ class _MissionListTile extends ConsumerWidget {
                     ),
                   )
                 else if (isComplete && !isClaimed)
-                  FilledButton.tiny(
+                  FilledButton(
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       await ref.read(claimMissionRewardProvider)(mission.id);
@@ -2384,7 +2384,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.tiny(
+                  child: OutlinedButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2398,7 +2398,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: FilledButton.tiny(
+                  child: FilledButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2526,7 +2526,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
                 const Spacer(),
                 SizedBox(
                   height: 32,
-                  child: OutlinedButton.tiny(
+                  child: OutlinedButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2541,7 +2541,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
                 const SizedBox(width: 8),
                 SizedBox(
                   height: 32,
-                  child: FilledButton.tiny(
+                  child: FilledButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2658,7 +2658,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.tiny(
+                  child: OutlinedButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -2672,7 +2672,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: FilledButton.tiny(
+                  child: FilledButton(
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -3192,7 +3192,7 @@ class _SkinGridCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: 30,
-                child: FilledButton.tiny(
+                child: FilledButton(
                   onPressed: onEquip,
                   style: FilledButton.styleFrom(
                     backgroundColor: primaryColor,
