@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import '../../config/api_config.dart';
+import '../../../config/api_config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

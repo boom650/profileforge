@@ -1,7 +1,7 @@
 // Essay Coach Screen - Common App & Coalition essay guidance with Indian student tips
 
 import 'dart:convert';
-import '../../config/api_config.dart';
+import '../../../config/api_config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

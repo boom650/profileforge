@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../../config/api_config.dart';
+import '../../../config/api_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
