@@ -853,7 +853,7 @@ class _UniversityDetailSheet extends StatelessWidget {
                           Icons.favorite_rounded,
                           Colors.pink,
                           context,
-                        , context),
+                        ),
                         const SizedBox(width: 10),
                         _buildAidCard(
                           'Merit Scholarships',
@@ -861,7 +861,7 @@ class _UniversityDetailSheet extends StatelessWidget {
                           Icons.star_rounded,
                           Colors.amber,
                           context,
-                        , context),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -1229,13 +1229,13 @@ class _UniversityDetailSheet extends StatelessWidget {
             'SAT',
             university.typicalSat?.toString() ?? 'N/A',
             context,
-          , context),
+          ),
           Container(width: 1, height: 40, color: context.borderColor),
           _buildTypicalStat(
             'Acceptance',
             '${university.acceptanceRate.toStringAsFixed(1)}%',
             context,
-          , context),
+          ),
         ],
       ),
     );
