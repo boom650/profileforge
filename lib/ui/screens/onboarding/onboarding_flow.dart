@@ -187,7 +187,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       try {
         final setCompleted = ref.read(setOnboardingCompletedProvider);
         await setCompleted(true);
-      } catch (_) {}
+      } catch (e) { debugPrint('Error: $e'); }
     } finally {
       if (mounted) setState(() => _isCompleting = false);
     }

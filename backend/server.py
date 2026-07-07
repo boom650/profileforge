@@ -862,6 +862,525 @@ async def review_essay(request: dict):
 
 
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ACHIEVEMENTS & USER STATS
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PROFILE COMPLETION STRENGTH
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/users/{user_id}/profile-strength")
+async def get_profile_strength(user_id: str):
+    """Calculate profile completion strength as percentage"""
+    cursor = await db.db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = await cursor.fetchone()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Calculate completion based on filled fields
+    checks = {
+        "name": bool(user[1] if len(user) > 1 else None),       # name
+        "email": bool(user[2] if len(user) > 2 else None),      # email
+        "grade": bool(user[3] if len(user) > 3 else None),      # grade
+        "board": bool(user[4] if len(user) > 4 else None),      # board
+        "stream": bool(user[5] if len(user) > 5 else None),     # stream
+        "city": bool(user[7] if len(user) > 7 else None),       # city
+        "state": bool(user[8] if len(user) > 8 else None),      # state
+    }
+    
+    filled = sum(1 for v in checks.values() if v)
+    total = len(checks)
+    percentage = round(filled / total * 100)
+    
+    # Recommendations
+    missing = [k for k, v in checks.items() if not v]
+    tips = []
+    if not checks["grade"]:
+        tips.append("Add your grade to help us find age-appropriate opportunities")
+    if not checks["stream"]:
+        tips.append("Add your stream (Science/Commerce/Arts) for personalized content")
+    if not checks["city"]:
+        tips.append("Enable location to discover local opportunities")
+    if not checks["board"]:
+        tips.append("Add your education board (CBSE/ICSE/State) for tailored advice")
+    
+    # Level system
+    if percentage >= 90:
+        level = "Excellent"
+        emoji = "🏆"
+    elif percentage >= 70:
+        level = "Strong"
+        emoji = "⭐"
+    elif percentage >= 50:
+        level = "Good"
+        emoji = "👍"
+    elif percentage >= 30:
+        level = "Getting Started"
+        emoji = "🌱"
+    else:
+        level = "Just Beginning"
+        emoji = "🚀"
+    
+    return {
+        "user_id": user_id,
+        "percentage": percentage,
+        "level": level,
+        "emoji": emoji,
+        "filled_fields": filled,
+        "total_fields": total,
+        "checks": checks,
+        "tips": tips,
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# NOTIFICATIONS & REMINDERS
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/notifications/{user_id}")
+async def get_notifications(user_id: str):
+    """Get personalized notifications and reminders for a user"""
+    notifications = []
+    
+    # Get user profile for personalization
+    try:
+        cursor = await db.db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        user = await cursor.fetchone()
+        name = user[1] if user and len(user) > 1 else "Student"
+    except Exception:
+        name = "Student"
+    
+    # Check for pending weekly targets
+    try:
+        cursor = await db.db.execute(
+            "SELECT COUNT(*) FROM weekly_targets WHERE user_id = ? AND status != 'completed'",
+            (user_id,)
+        )
+        pending = (await cursor.fetchone())[0]
+        if pending > 0:
+            notifications.append({
+                "id": "pending_targets",
+                "type": "reminder",
+                "title": f"{pending} targets remaining this week",
+                "body": f"Hi {name}! You have {pending} unfinished targets. Complete them before Sunday to maintain your streak!",
+                "priority": "high",
+                "icon": "🎯",
+                "action": "weekly_targets",
+            })
+    except Exception:
+        pass
+    
+    # Streak reminder
+    try:
+        cursor = await db.db.execute(
+            "SELECT streak_count FROM user_streaks WHERE user_id = ?",
+            (user_id,)
+        )
+        streak = await cursor.fetchone()
+        if streak and streak[0] > 0:
+            notifications.append({
+                "id": "streak_reminder",
+                "type": "motivation",
+                "title": f"🔥 {streak[0]}-day streak!",
+                "body": f"Amazing {name}! Your {streak[0]}-day streak is on fire. Keep it going!",
+                "priority": "medium",
+                "icon": "🔥",
+                "action": "streak",
+            })
+    except Exception:
+        pass
+    
+    # Competition reminders
+    try:
+        cursor = await db.db.execute("SELECT * FROM competition_entries WHERE user_id = ?", (user_id,))
+        entries = await cursor.fetchall()
+        if entries:
+            notifications.append({
+                "id": "competition_update",
+                "type": "reminder",
+                "title": "Competition deadline approaching",
+                "body": f"You have {len(entries)} competition entries. Check your deadlines!",
+                "priority": "medium",
+                "icon": "🏆",
+                "action": "competitions",
+            })
+    except Exception:
+        pass
+    
+    # Daily tip notification
+    import datetime
+    hour = datetime.datetime.now().hour
+    if 7 <= hour <= 10:
+        notifications.append({
+            "id": "morning_tip",
+            "type": "tip",
+            "title": "Good morning, {name}! ☀️",
+            "body": "Start your day with 15 minutes of reading. It improves vocabulary and essay writing skills.",
+            "priority": "low",
+            "icon": "☀️",
+            "action": None,
+        })
+    elif 17 <= hour <= 20:
+        notifications.append({
+            "id": "evening_review",
+            "type": "tip",
+            "title": "Evening review time, {name} 📖",
+            "body": "Take 10 minutes to review what you learned today. Spaced repetition strengthens memory.",
+            "priority": "low",
+            "icon": "🌙",
+            "action": None,
+        })
+    
+    # Motivational message
+    notifications.append({
+        "id": "motivation",
+        "type": "motivation",
+        "title": "You're doing great!",
+        "body": "Every step you take brings you closer to your dream college. Keep pushing forward! 💪",
+        "priority": "low",
+        "icon": "💪",
+        "action": None,
+    })
+    
+    return {"notifications": notifications, "count": len(notifications)}
+
+
+@app.get("/api/daily-tips")
+async def get_daily_tips():
+    """Return daily tips for students"""
+    tips = [
+        {"category": "Academics", "tip": "Read for 30 minutes daily — it improves vocabulary and comprehension for essays.", "icon": "📚"},
+        {"category": "Writing", "tip": "Start your college essay with a specific moment, not a general statement.", "icon": "✍️"},
+        {"category": "Research", "tip": "Spend 15 minutes daily researching universities that match your profile.", "icon": "🔍"},
+        {"category": "Extracurriculars", "tip": "Quality over quantity — deep involvement in 2-3 activities beats surface-level participation in 10.", "icon": "🎯"},
+        {"category": "Health", "tip": "Sleep 7-8 hours. Studies show well-rested students perform 20% better on exams.", "icon": "💤"},
+        {"category": "Planning", "tip": "Every Sunday, review your week and plan 3 key goals for the next week.", "icon": "📋"},
+        {"category": "Social", "tip": "Join one new club or community this month to expand your network.", "icon": "🤝"},
+        {"category": "Finance", "tip": "Research 3 scholarships you qualify for before the end of this week.", "icon": "💰"},
+    ]
+    
+    # Rotate tips based on day of year
+    import datetime
+    day = datetime.datetime.now().timetuple().tm_yday
+    rotated = tips[day % len(tips):] + tips[:day % len(tips)]
+    
+    return {"tips": rotated[:3]}  # Return 3 tips daily
+
+
+@app.get("/api/achievements")
+async def get_achievements():
+    """Return all available achievements"""
+    achievements = [
+        {"id": "first_steps", "title": "First Steps", "description": "Complete your first mission", "icon": "🚀", "xp_reward": 50, "category": "onboarding"},
+        {"id": "week_warrior", "title": "Week Warrior", "description": "Complete 7 days in a row", "icon": "⚔️", "xp_reward": 200, "category": "streak"},
+        {"id": "essay_master", "title": "Essay Master", "description": "Write 5 essays", "icon": "✍️", "xp_reward": 300, "category": "writing"},
+        {"id": "research_ninja", "title": "Research Ninja", "description": "Complete 10 research tasks", "icon": "🥷", "xp_reward": 250, "category": "research"},
+        {"id": "community_hero", "title": "Community Hero", "description": "Log 20 volunteer hours", "icon": "🦸", "xp_reward": 400, "category": "service"},
+        {"id": "compete_champ", "title": "Compete Champion", "description": "Enter 3 competitions", "icon": "🏆", "xp_reward": 350, "category": "competitions"},
+        {"id": "profile_pro", "title": "Profile Pro", "description": "Complete 100% of profile", "icon": "⭐", "xp_reward": 500, "category": "profile"},
+        {"id": "polyglot", "title": "Polyglot", "description": "Learn basics of 2 languages", "icon": "🌍", "xp_reward": 150, "category": "skills"},
+        {"id": "night_owl", "title": "Night Owl", "description": "Study past 10 PM for 5 nights", "icon": "🦉", "xp_reward": 100, "category": "dedication"},
+        {"id": "early_bird", "title": "Early Bird", "description": "Start tasks before 7 AM for 5 days", "icon": "🐦", "xp_reward": 100, "category": "dedication"},
+        {"id": "social_butterfly", "title": "Social Butterfly", "description": "Connect with 5 peers", "icon": "🦋", "xp_reward": 150, "category": "social"},
+        {"id": "level_up", "title": "Level Up!", "description": "Reach Level 5", "icon": "📈", "xp_reward": 250, "category": "progress"},
+    ]
+    return {"achievements": achievements}
+
+
+@app.get("/api/users/{user_id}/stats")
+async def get_user_stats(user_id: str):
+    """Get aggregated user statistics"""
+    # Get user
+    cursor = await db.db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = await cursor.fetchone()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    try:
+
+        # Count weekly targets completed
+        try:
+            cursor = await db.db.execute(
+                "SELECT COUNT(*) as total, SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed FROM weekly_targets WHERE user_id = ?",
+                (user_id,)
+            )
+            targets = await cursor.fetchone()
+            total_targets = targets[0] if targets else 0
+            completed_targets = targets[1] if targets and targets[1] else 0
+        except Exception:
+            total_targets = 0
+            completed_targets = 0
+
+        # Count chat messages
+        try:
+            cursor = await db.db.execute("SELECT COUNT(*) FROM chat_messages WHERE user_id = ?", (user_id,))
+            msg_count = (await cursor.fetchone())[0]
+        except Exception:
+            msg_count = 0
+
+        # Count competition entries
+        try:
+            cursor = await db.db.execute("SELECT COUNT(*) FROM competition_entries WHERE user_id = ?", (user_id,))
+            comp_count = (await cursor.fetchone())[0]
+        except Exception:
+            comp_count = 0
+
+        return {
+            "user_id": user_id,
+            "total_targets": total_targets,
+            "completed_targets": completed_targets,
+            "target_completion_rate": round(completed_targets / total_targets * 100, 1) if total_targets > 0 else 0,
+            "chat_messages": msg_count,
+            "competition_entries": comp_count,
+            "achievements_unlocked": min(completed_targets // 2, 12),
+        }
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ACTIVITY LOG & ANALYTICS
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.post("/api/users/{user_id}/activity")
+async def log_activity(user_id: str, activity: dict):
+    """Log a user activity for analytics and streak tracking"""
+    try:
+        activity_type = activity.get("type", "unknown")
+        description = activity.get("description", "")
+        xp_earned = activity.get("xp_earned", 0)
+        
+        # Store in a simple table (create if not exists)
+        try:
+            await db.db.execute("""
+                CREATE TABLE IF NOT EXISTS activity_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    activity_type TEXT NOT NULL,
+                    description TEXT,
+                    xp_earned INTEGER DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+        except Exception:
+            pass
+        
+        await db.db.execute(
+            "INSERT INTO activity_log (user_id, activity_type, description, xp_earned) VALUES (?, ?, ?, ?)",
+            (user_id, activity_type, description, xp_earned)
+        )
+        await db.db.commit()
+        
+        return {"status": "logged", "activity_type": activity_type}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+@app.get("/api/users/{user_id}/activity")
+async def get_activity_history(user_id: str, limit: int = 20):
+    """Get recent activity history for a user"""
+    try:
+        try:
+            cursor = await db.db.execute(
+                "SELECT activity_type, description, xp_earned, created_at FROM activity_log WHERE user_id = ? ORDER BY created_at DESC LIMIT ?",
+                (user_id, limit)
+            )
+            rows = await cursor.fetchall()
+        except Exception:
+            rows = []
+        
+        activities = []
+        for row in rows:
+            activities.append({
+                "type": row[0],
+                "description": row[1],
+                "xp_earned": row[2],
+                "created_at": str(row[3]) if row[3] else None,
+            })
+        
+        return {"activities": activities, "count": len(activities)}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+
+# SCHOOL SEARCH and SCHOLARSHIPS
+
+@app.get('/api/schools/search')
+async def search_schools(q: str = '', state: str = ''):
+    schools_db = [
+        {'name': 'Delhi Public School R.K. Puram', 'city': 'New Delhi', 'state': 'Delhi', 'board': 'CBSE'},
+        {'name': 'Delhi Public School Vasant Kunj', 'city': 'New Delhi', 'state': 'Delhi', 'board': 'CBSE'},
+        {'name': 'The Shri Ram School', 'city': 'Gurgaon', 'state': 'Haryana', 'board': 'CBSE'},
+        {'name': 'DPS Bangalore North', 'city': 'Bangalore', 'state': 'Karnataka', 'board': 'CBSE'},
+        {'name': 'St. Xavier Collegiate School', 'city': 'Kolkata', 'state': 'West Bengal', 'board': 'ISC'},
+        {'name': 'Bombay Scottish School', 'city': 'Mumbai', 'state': 'Maharashtra', 'board': 'ICSE'},
+        {'name': 'Cathedral and John Connon School', 'city': 'Mumbai', 'state': 'Maharashtra', 'board': 'ICSE'},
+        {'name': 'La Martiniere for Boys', 'city': 'Kolkata', 'state': 'West Bengal', 'board': 'ISC'},
+        {'name': 'Vasant Valley School', 'city': 'New Delhi', 'state': 'Delhi', 'board': 'CBSE'},
+        {'name': 'The Doon School', 'city': 'Dehradun', 'state': 'Uttarakhand', 'board': 'CBSE'},
+        {'name': 'Mayo College', 'city': 'Ajmer', 'state': 'Rajasthan', 'board': 'CBSE'},
+        {'name': 'Scindia School', 'city': 'Gwalior', 'state': 'Madhya Pradesh', 'board': 'CBSE'},
+        {'name': 'Welham Boys School', 'city': 'Dehradun', 'state': 'Uttarakhand', 'board': 'CBSE'},
+        {'name': 'DAV Public School', 'city': 'Multiple', 'state': 'All India', 'board': 'CBSE'},
+        {'name': 'Amity International School', 'city': 'Noida', 'state': 'Uttar Pradesh', 'board': 'CBSE'},
+        {'name': 'Ryan International School', 'city': 'Mumbai', 'state': 'Maharashtra', 'board': 'CBSE'},
+        {'name': 'Modern School Barakhamba Road', 'city': 'New Delhi', 'state': 'Delhi', 'board': 'CBSE'},
+        {'name': 'PSBB Senior Secondary School', 'city': 'Chennai', 'state': 'Tamil Nadu', 'board': 'CBSE'},
+        {'name': 'Chinmaya Vidyalaya', 'city': 'Kochi', 'state': 'Kerala', 'board': 'CBSE'},
+        {'name': 'Bharatiya Vidya Bhavan', 'city': 'Multiple', 'state': 'All India', 'board': 'CBSE'},
+    ]
+    results = schools_db
+    if q:
+        q_lower = q.lower()
+        results = [s for s in results if q_lower in s['name'].lower() or q_lower in s['city'].lower()]
+    if state:
+        state_lower = state.lower()
+        results = [s for s in results if state_lower in s['state'].lower()]
+    return {'schools': results[:20], 'total': len(results)}
+
+
+@app.get("/api/leaderboard")
+async def get_leaderboard(period: str = "weekly"):
+    """Get leaderboard with mock data for demo + real user stats"""
+    # Mock leaderboard data (will be replaced with real data later)
+    leaderboard = [
+        {"rank": 1, "name": "Aarav Sharma", "xp": 2450, "level": 12, "streak": 21, "avatar": "🌟"},
+        {"rank": 2, "name": "Priya Patel", "xp": 2200, "level": 11, "streak": 18, "avatar": "⭐"},
+        {"rank": 3, "name": "Rohan Gupta", "xp": 2050, "level": 10, "streak": 15, "avatar": "🏆"},
+        {"rank": 4, "name": "Ananya Singh", "xp": 1900, "level": 10, "streak": 14, "avatar": "🎯"},
+        {"rank": 5, "name": "Arjun Mehta", "xp": 1800, "level": 9, "streak": 12, "avatar": "🔥"},
+        {"rank": 6, "name": "Kavya Nair", "xp": 1650, "level": 9, "streak": 11, "avatar": "💡"},
+        {"rank": 7, "name": "Vihaan Kumar", "xp": 1500, "level": 8, "streak": 10, "avatar": "🚀"},
+        {"rank": 8, "name": "Diya Reddy", "xp": 1400, "level": 8, "streak": 9, "avatar": "📚"},
+        {"rank": 9, "name": "Ishaan Joshi", "xp": 1300, "level": 7, "streak": 8, "avatar": "🎓"},
+        {"rank": 10, "name": "Saanvi Iyer", "xp": 1200, "level": 7, "streak": 7, "avatar": "✨"},
+        {"rank": 11, "name": "Aditya Verma", "xp": 1100, "level": 6, "streak": 6, "avatar": "💪"},
+        {"rank": 12, "name": "Riya Choudhary", "xp": 1000, "level": 6, "streak": 5, "avatar": "🌟"},
+        {"rank": 13, "name": "Kabir Malhotra", "xp": 900, "level": 5, "streak": 5, "avatar": "🎯"},
+        {"rank": 14, "name": "Meera Rao", "xp": 800, "level": 5, "streak": 4, "avatar": "🔥"},
+        {"rank": 15, "name": "Reyansh Tiwari", "xp": 700, "level": 4, "streak": 3, "avatar": "🚀"},
+    ]
+    
+    return {"leaderboard": leaderboard, "period": period, "total": len(leaderboard)}
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MENTOR TIPS & GOAL TRACKING
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/mentor-tips")
+async def get_mentor_tips(category: str = "all"):
+    """Get curated mentor tips for college admissions"""
+    tips = {
+        "essay": [
+            {"title": "Show Growth", "tip": "Admissions officers want to see how you've evolved. Don't just describe events — explain what you learned.", "mentor": "MIT Admissions Officer"},
+            {"title": "Be Specific", "tip": "Instead of 'I volunteered at a shelter', write 'Every Saturday morning, I spent 3 hours teaching reading to 8 children at Hope Shelter.'", "mentor": "Stanford Former Reader"},
+            {"title": "Voice Matters", "tip": "Your essay should sound like YOU, not a thesaurus. Use your natural speaking voice.", "mentor": "Yale Admissions"},
+        ],
+        "strategy": [
+            {"title": "Start Early", "tip": "Begin your college research in 10th grade. By 11th, you should have a preliminary college list.", "mentor": "IvyWise Counselor"},
+            {"title": "Demonstrated Interest", "tip": "Attend virtual info sessions, email professors, visit campuses if possible. Colleges track this.", "mentor": "College Counselor"},
+            {"title": "Balanced List", "tip": "Aim for 2-3 reach schools, 3-4 match schools, and 2-3 safety schools.", "mentor": "US Admissions Expert"},
+        ],
+        "india_specific": [
+            {"title": "Board Scores Matter", "tip": "For US/UK universities, your 10th and 12th board scores are critical. Aim for 90%+.", "mentor": "Study India Counselor"},
+            {"title": "JEE/NEET + Abroad", "tip": "Many Indian students prepare for JEE/NEET alongside college apps. Start planning early to avoid burnout.", "mentor": "Indian Admissions Coach"},
+            {"title": "Scholarships for Indians", "tip": "Look into Tata Scholarship (Cornell), Tata Trusts, Inlaks, Narotam Sekhsaria, and Kotak Kanya.", "mentor": "Financial Aid Expert"},
+        ],
+        "extracurriculars": [
+            {"title": "Depth Over Breadth", "tip": "Being president of 1 club is better than being a member of 10. Show leadership and impact.", "mentor": "Harvard Admissions"},
+            {"title": "Impact Metrics", "tip": "Quantify your achievements: 'Raised ₹2,5,000 for 50 underprivileged students' is better than 'Organized a fundraiser.'", "mentor": "Princeton Review"},
+        ],
+        "mental_health": [
+            {"title": "It's a Marathon", "tip": "College admissions is stressful. Take breaks, talk to friends, and remember: your worth is not defined by admissions decisions.", "mentor": "Student Wellness Expert"},
+            {"title": "Rejection is Normal", "tip": "Even the best students get rejected. Harvard rejects 96% of applicants. Don't take it personally.", "mentor": "College Counselor"},
+        ],
+    }
+    
+    import datetime
+    day = datetime.datetime.now().timetuple().tm_yday
+    
+    if category == "all":
+        # Return one from each category
+        result = []
+        for cat, cat_tips in tips.items():
+            tip = cat_tips[day % len(cat_tips)]
+            tip["category"] = cat
+            result.append(tip)
+        return {"tips": result}
+    
+    cat_tips = tips.get(category, tips["strategy"])
+    tip = cat_tips[day % len(cat_tips)]
+    tip["category"] = category
+    return {"tips": [tip]}
+
+
+@app.post("/api/users/{user_id}/goals")
+async def set_user_goals(user_id: str, goals: dict):
+    """Set weekly goals for a user"""
+    try:
+        target_xp = goals.get("target_xp", 200)
+        target_missions = goals.get("target_missions", 5)
+        target_essays = goals.get("target_essays", 2)
+        
+        try:
+            await db.db.execute("""
+                CREATE TABLE IF NOT EXISTS user_goals (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    target_xp INTEGER DEFAULT 200,
+                    target_missions INTEGER DEFAULT 5,
+                    target_essays INTEGER DEFAULT 2,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+        except Exception:
+            pass
+        
+        # Upsert: delete old goals and insert new
+        await db.db.execute("DELETE FROM user_goals WHERE user_id = ?", (user_id,))
+        await db.db.execute(
+            "INSERT INTO user_goals (user_id, target_xp, target_missions, target_essays) VALUES (?, ?, ?, ?)",
+            (user_id, target_xp, target_missions, target_essays)
+        )
+        await db.db.commit()
+        
+        return {"status": "saved", "target_xp": target_xp, "target_missions": target_missions, "target_essays": target_essays}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+@app.get("/api/users/{user_id}/goals")
+async def get_user_goals(user_id: str):
+    """Get user's weekly goals"""
+    try:
+        try:
+            cursor = await db.db.execute(
+                "SELECT target_xp, target_missions, target_essays FROM user_goals WHERE user_id = ? ORDER BY created_at DESC LIMIT 1",
+                (user_id,)
+            )
+            row = await cursor.fetchone()
+        except Exception:
+            row = None
+        
+        if row:
+            return {
+                "target_xp": row[0],
+                "target_missions": row[1],
+                "target_essays": row[2],
+            }
+        
+        # Default goals
+        return {"target_xp": 200, "target_missions": 5, "target_essays": 2}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
 @app.delete("/api/users/{user_id}")
 async def delete_user(user_id: str):
     """Delete a user and all associated data"""

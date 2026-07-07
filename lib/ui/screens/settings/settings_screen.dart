@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -254,7 +256,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: Theme.of(context).colorScheme.primary,
                 title: 'Terms of Service',
                 subtitle: 'Read our terms and conditions',
-                onTap: () => _showComingSoon(context),
+                onTap: () async {
+                  final uri = Uri.parse('https://profileforge.app/terms');
+                  if (await canLaunchUrl(uri)) await launchUrl(uri);
+                },
               ),
               _buildDivider(),
               _buildNavigationTile(
@@ -262,7 +267,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: Theme.of(context).colorScheme.primary,
                 title: 'Privacy Policy',
                 subtitle: 'How we handle your data',
-                onTap: () => _showComingSoon(context),
+                onTap: () async {
+                  final uri = Uri.parse('https://profileforge.app/privacy');
+                  if (await canLaunchUrl(uri)) await launchUrl(uri);
+                },
               ),
             ]),
             const SizedBox(height: 16),
@@ -275,7 +283,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: AppTheme.accentPurple,
                 title: 'Contact Us',
                 subtitle: 'support@profileforge.app',
-                onTap: () => _showComingSoon(context),
+                onTap: () async {
+                  final uri = Uri.parse('mailto:support@profileforge.app?subject=ProfileForge%20Support');
+                  if (await canLaunchUrl(uri)) await launchUrl(uri);
+                },
               ),
               _buildDivider(),
               _buildNavigationTile(
@@ -283,7 +294,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: AppTheme.errorRed,
                 title: 'Report a Bug',
                 subtitle: 'Help us improve ProfileForge',
-                onTap: () => _showComingSoon(context),
+                onTap: () async {
+                  final uri = Uri.parse('mailto:support@profileforge.app?subject=Bug%20Report&body=Describe%20the%20bug%3A%0A%0ASteps%20to%20reproduce%3A%0A%0A');
+                  if (await canLaunchUrl(uri)) await launchUrl(uri);
+                },
               ),
               _buildDivider(),
               _buildNavigationTile(
@@ -291,7 +305,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: AppTheme.accentGold,
                 title: 'Rate the App',
                 subtitle: 'Share your experience on the Play Store',
-                onTap: () => _showComingSoon(context),
+                onTap: () async {
+                  final uri = Uri.parse('market://details?id=com.profileforge.app');
+                  final webUri = Uri.parse('https://play.google.com/store/apps/details?id=com.profileforge.app');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  } else if (await canLaunchUrl(webUri)) {
+                    await launchUrl(webUri);
+                  }
+                },
               ),
             ]),
             const SizedBox(height: 32),
@@ -741,15 +763,52 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Text('Cancel', style: GoogleFonts.inter()),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Export feature coming soon', style: GoogleFonts.inter()),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-              );
+              try {
+                final prefs = await SharedPreferences.getInstance();
+                final data = {
+                  'exported_at': DateTime.now().toIso8601String(),
+                  'settings': {
+                    'weekly_reports': prefs.getBool('settings_weekly_reports'),
+                    'gps_enabled': prefs.getBool('gps_enabled'),
+                    'user_city': prefs.getString('user_city'),
+                    'latitude': prefs.getDouble('latitude'),
+                    'longitude': prefs.getDouble('longitude'),
+                  },
+                  'profile': {
+                    'name': prefs.getString('user_name'),
+                    'email': prefs.getString('user_email'),
+                    'grade': prefs.getInt('user_grade'),
+                    'board': prefs.getString('user_board'),
+                    'stream': prefs.getString('user_stream'),
+                  },
+                  'missions': {
+                    'xp': prefs.getInt('user_xp'),
+                    'level': prefs.getInt('user_level'),
+                    'streak': prefs.getInt('user_streak'),
+                  },
+                };
+                final jsonStr = JsonEncoder.withIndent('  ').convert(data);
+                // Copy to clipboard as a simple export mechanism
+                await Clipboard.setData(ClipboardData(text: jsonStr));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Profile data copied to clipboard!', style: GoogleFonts.inter()),
+                      backgroundColor: AppTheme.successGreen,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Export failed: $e')),
+                  );
+                }
+              }
             },
             child: Text('Export', style: GoogleFonts.inter()),
           ),

@@ -890,3 +890,248 @@ async def test_delete_user(client, test_user):
     data = resp.json()
     assert data["status"] == "deleted"
     assert data["user_id"] == test_user["id"]
+
+
+
+# ═══════════════════════════════════════════════
+# ACHIEVEMENTS & USER STATS TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_get_achievements(client):
+    """Test getting list of achievements"""
+    resp = await client.get("/api/achievements")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "achievements" in data
+    assert len(data["achievements"]) >= 10
+    first = data["achievements"][0]
+    assert "id" in first
+    assert "title" in first
+    assert "xp_reward" in first
+
+
+@pytest.mark.asyncio
+async def test_get_user_stats(client, test_user):
+    """Test getting user stats"""
+    resp = await client.get(f"/api/users/{test_user["id"]}/stats")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["user_id"] == test_user["id"]
+    assert "total_targets" in data
+    assert "completed_targets" in data
+    assert "target_completion_rate" in data
+    assert "chat_messages" in data
+    assert "competition_entries" in data
+    assert "achievements_unlocked" in data
+
+
+@pytest.mark.asyncio
+async def test_get_user_stats_not_found(client):
+    """Test stats for non-existent user"""
+    resp = await client.get("/api/users/nonexistent/stats")
+    assert resp.status_code == 404
+
+
+
+# ═══════════════════════════════════════════════
+# PROFILE STRENGTH & DAILY TIPS TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_profile_strength(client, test_user):
+    """Test profile strength calculation"""
+    resp = await client.get(f"/api/users/{test_user["id"]}/profile-strength")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "percentage" in data
+    assert "level" in data
+    assert "tips" in data
+    assert isinstance(data["checks"], dict)
+    assert 0 <= data["percentage"] <= 100
+
+
+@pytest.mark.asyncio
+async def test_daily_tips(client):
+    """Test daily tips endpoint"""
+    resp = await client.get("/api/daily-tips")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "tips" in data
+    assert len(data["tips"]) == 3
+    for tip in data["tips"]:
+        assert "category" in tip
+        assert "tip" in tip
+
+
+@pytest.mark.asyncio
+async def test_achievements_count(client):
+    """Test that we have at least 10 achievements"""
+    resp = await client.get("/api/achievements")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data["achievements"]) >= 10
+
+
+
+# ═══════════════════════════════════════════════
+# NOTIFICATIONS TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_get_notifications(client, test_user):
+    """Test getting notifications"""
+    resp = await client.get(f"/api/notifications/{test_user["id"]}")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "notifications" in data
+    assert "count" in data
+    assert isinstance(data["notifications"], list)
+    assert len(data["notifications"]) > 0
+    first = data["notifications"][0]
+    assert "id" in first
+    assert "title" in first
+    assert "body" in first
+    assert "priority" in first
+
+
+
+# ═══════════════════════════════════════════════
+# ACTIVITY & LEADERBOARD TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_log_activity(client, test_user):
+    """Test logging an activity"""
+    resp = await client.post(
+        f"/api/users/{test_user["id"]}/activity",
+        json={"type": "mission_complete", "description": "Completed essay draft", "xp_earned": 25}
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "logged"
+
+
+@pytest.mark.asyncio
+async def test_get_activity_history(client, test_user):
+    """Test getting activity history"""
+    # Log an activity first
+    await client.post(
+        f"/api/users/{test_user["id"]}/activity",
+        json={"type": "essay_written", "description": "Wrote Common App essay", "xp_earned": 50}
+    )
+    resp = await client.get(f"/api/users/{test_user["id"]}/activity")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "activities" in data
+    assert data["count"] > 0
+
+
+@pytest.mark.asyncio
+async def test_get_leaderboard(client):
+    """Test getting leaderboard"""
+    resp = await client.get("/api/leaderboard")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "leaderboard" in data
+    assert len(data["leaderboard"]) == 15
+    first = data["leaderboard"][0]
+    assert first["rank"] == 1
+    assert "name" in first
+    assert "xp" in first
+
+
+
+# ═══════════════════════════════════════════════
+# MENTOR TIPS & GOALS TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_mentor_tips_all(client):
+    """Test getting mentor tips for all categories"""
+    resp = await client.get("/api/mentor-tips")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "tips" in data
+    assert len(data["tips"]) == 5  # One from each category
+    for tip in data["tips"]:
+        assert "title" in tip
+        assert "tip" in tip
+        assert "category" in tip
+
+
+@pytest.mark.asyncio
+async def test_mentor_tips_specific(client):
+    """Test getting mentor tips for specific category"""
+    resp = await client.get("/api/mentor-tips?category=essay")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data["tips"]) == 1
+    assert data["tips"][0]["category"] == "essay"
+
+
+@pytest.mark.asyncio
+async def test_set_and_get_goals(client, test_user):
+    """Test setting and getting user goals"""
+    # Set goals
+    resp = await client.post(
+        f"/api/users/{test_user["id"]}/goals",
+        json={"target_xp": 300, "target_missions": 7, "target_essays": 3}
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "saved"
+    assert data["target_xp"] == 300
+    
+    # Get goals
+    resp = await client.get(f"/api/users/{test_user["id"]}/goals")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["target_xp"] == 300
+    assert data["target_missions"] == 7
+
+
+@pytest.mark.asyncio
+async def test_goals_default(client, test_user):
+    """Test getting default goals when none set"""
+    resp = await client.get(f"/api/users/{test_user["id"]}/goals")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["target_xp"] == 200  # Default
+    assert data["target_missions"] == 5  # Default
+
+
+
+@pytest.mark.asyncio
+async def test_school_search(client):
+    resp = await client.get('/api/schools/search?q=Delhi')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'schools' in data
+    assert len(data['schools']) > 0
+    assert 'Delhi' in data['schools'][0]['city'] or 'Delhi' in data['schools'][0]['name']
+
+
+@pytest.mark.asyncio
+async def test_school_search_all(client):
+    resp = await client.get('/api/schools/search')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data['schools']) == 20
+
+
+@pytest.mark.asyncio
+async def test_scholarships(client):
+    resp = await client.get('/api/scholarships')
+    assert resp.status_code == 200
+    data = resp.json()
+    # Existing endpoint returns list directly
+    assert isinstance(data, list)
+    assert len(data) >= 5
+    first = data[0]
+    assert 'name' in first

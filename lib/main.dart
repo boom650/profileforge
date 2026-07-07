@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ui/theme/app_theme.dart';
@@ -32,6 +33,26 @@ void main() async {
   );
 }
 
+ThemeMode _getThemeMode() {
+  // Read from SharedPreferences synchronously on first load
+  // The settings screen updates this via the provider
+  try {
+    final darkMode = _SharedPreferencesCache._darkMode;
+    if (darkMode == null) return ThemeMode.system;
+    return darkMode ? ThemeMode.dark : ThemeMode.light;
+  } catch (_) {
+    return ThemeMode.system;
+  }
+}
+
+class _SharedPreferencesCache {
+  static bool? _darkMode;
+  static Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    _darkMode = prefs.getBool('settings_dark_mode');
+  }
+}
+
 class ProfileForgeApp extends ConsumerWidget {
   const ProfileForgeApp({super.key});
 
@@ -45,7 +66,7 @@ class ProfileForgeApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: _getThemeMode(),
       home: ageStatus.when(
         data: (status) {
           // COPPA: Under 13 must go through age gate again

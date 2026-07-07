@@ -242,7 +242,7 @@ class WeeklyTargetsNotifier extends StateNotifier<WeeklyTargetsState> {
         final updatedList = state.targets.map((t) => t.id == updated.id ? updated : t).toList();
         state = state.copyWith(targets: updatedList);
       }
-    } catch (_) {}
+    } catch (e) { debugPrint('Error: $e'); }
   }
 
   Future<void> createTarget({
@@ -278,7 +278,7 @@ class WeeklyTargetsNotifier extends StateNotifier<WeeklyTargetsState> {
         final newTarget = WeeklyTarget.fromJson(jsonDecode(response.body));
         state = state.copyWith(targets: [...state.targets, newTarget]);
       }
-    } catch (_) {}
+    } catch (e) { debugPrint('Error: $e'); }
   }
 }
 

@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import '../../../config/api_config.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../settings/privacy_screen.dart';
 import '../essay/essay_coach_screen.dart';
+import '../leaderboard/leaderboard_screen.dart';
+import '../statistics/statistics_screen.dart';
+import '../profile/profile_edit_screen.dart';
 import '../settings/settings_screen.dart';
 import '../targets/weekly_targets_screen.dart';
 import '../../../providers/app_providers.dart';
@@ -176,6 +182,7 @@ class DashboardTab extends ConsumerWidget {
     final topSpikes = ref.watch(topSpikesProvider(3));
     final onboardingData = ref.watch(onboardingDataProvider);
     final profile = ref.watch(studentProfileProvider);
+    // Profile tab with edit functionality
     final feed = ref.watch(opportunityFeedProvider);
 
     // Compute dynamic greeting from user's name
@@ -250,11 +257,8 @@ class DashboardTab extends ConsumerWidget {
               tooltip: 'Notifications',
               onPressed: () {
                 HapticFeedback.lightImpact();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Coming soon'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
                 );
               },
             ),
@@ -565,6 +569,18 @@ class DashboardTab extends ConsumerWidget {
           ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
         ),
 
+
+
+        // Profile Completion Strength
+        SliverToBoxAdapter(
+          child: _ProfileStrengthCard(),
+        ),
+
+        // Daily Tip of the Day
+        SliverToBoxAdapter(
+          child: _DailyTipCard(),
+        ),
+
         // Location Permission Prompt
         SliverToBoxAdapter(
           child: _LocationPermissionPrompt(),
@@ -835,6 +851,238 @@ class DashboardTab extends ConsumerWidget {
 /// Shows a location permission prompt if not yet asked.
 /// Once enabled, opportunities auto-discover nearby NGOs & competitions.
 /// Supports both GPS and manual city entry.
+// ─── Daily Tip Card ──────────────────────────────────────────────────────────────
+// ─── Profile Strength Card ──────────────────────────────────────────────────────
+class _ProfileStrengthCard extends StatefulWidget {
+  @override
+  State<_ProfileStrengthCard> createState() => _ProfileStrengthCardState();
+}
+
+class _ProfileStrengthCardState extends State<_ProfileStrengthCard> {
+  Map<String, dynamic>? _data;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetch();
+  }
+
+  Future<void> _fetch() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('user_id') ?? '';
+      if (userId.isEmpty) {
+        if (mounted) setState(() => _loading = false);
+        return;
+      }
+      final url = Uri.parse('\$kApiBaseUrl/api/users/\$userId/profile-strength');
+      final resp = await http.get(url).timeout(const Duration(seconds: 5));
+      if (resp.statusCode == 200 && mounted) {
+        setState(() {
+          _data = jsonDecode(resp.body);
+          _loading = false;
+        });
+        return;
+      }
+    } catch (_) {}
+    if (mounted) setState(() => _loading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading || _data == null) return const SizedBox.shrink();
+
+    final pct = _data!['percentage'] ?? 0;
+    final level = _data!['level'] ?? '';
+    final emoji = _data!['emoji'] ?? '🚀';
+    final missing = (_data!['tips'] as List?) ?? [];
+
+    // Color based on completion
+    Color barColor;
+    if (pct >= 80) {
+      barColor = AppTheme.successGreen;
+    } else if (pct >= 50) {
+      barColor = AppTheme.warningAmber;
+    } else {
+      barColor = AppTheme.errorRed;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: barColor.withValues(alpha: 0.3),
+          ),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(emoji, style: const TextStyle(fontSize: 22)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Profile Strength: $level',
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        '\$pct% complete',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // Progress bar
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: LinearProgressIndicator(
+                value: pct / 100.0,
+                minHeight: 8,
+                backgroundColor: barColor.withValues(alpha: 0.1),
+                valueColor: AlwaysStoppedAnimation<Color>(barColor),
+              ),
+            ),
+            if (missing.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                missing.first,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppTheme.warningAmber,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ).animate().fadeIn(delay: 330.ms),
+    );
+  }
+}
+
+class _DailyTipCard extends StatefulWidget {
+  @override
+  State<_DailyTipCard> createState() => _DailyTipCardState();
+}
+
+class _DailyTipCardState extends State<_DailyTipCard> {
+  Map<String, dynamic>? _tip;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTip();
+  }
+
+  Future<void> _fetchTip() async {
+    try {
+      final url = Uri.parse('\$kApiBaseUrl/api/daily-tips');
+      final resp = await http.get(url).timeout(const Duration(seconds: 5));
+      if (resp.statusCode == 200) {
+        final data = jsonDecode(resp.body);
+        final tips = data['tips'] as List?;
+        if (tips != null && tips.isNotEmpty && mounted) {
+          setState(() {
+            _tip = tips[0];
+            _loading = false;
+          });
+          return;
+        }
+      }
+    } catch (_) {}
+    if (mounted) setState(() => _loading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading || _tip == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.accentPurple.withValues(alpha: 0.15),
+              AppTheme.accentTeal.withValues(alpha: 0.10),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.accentPurple.withValues(alpha: 0.3),
+          ),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _tip!['icon'] ?? '💡',
+              style: const TextStyle(fontSize: 28),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '💡 Daily Tip',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.accentPurple,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _tip!['category'] ?? '',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    _tip!['tip'] ?? '',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      height: 1.5,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.05),
+    );
+  }
+}
+
 class _LocationPermissionPrompt extends ConsumerStatefulWidget {
   const _LocationPermissionPrompt();
 
@@ -900,14 +1148,29 @@ class _LocationPermissionPromptState
           await prefs.setDouble('latitude', location.latitude);
           await prefs.setDouble('longitude', location.longitude);
 
-          // Reverse geocode to get city name
-          // For now, we'll use a placeholder
-          await prefs.setString('user_city', 'Your City');
+          // Reverse geocode to get city name via Nominatim (free, no API key)
+          String cityName = 'Your City';
+          try {
+            final geoUrl = Uri.parse(
+                'https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}&zoom=10');
+            final geoResp = await http.get(geoUrl, headers: {'User-Agent': 'ProfileForge/1.0'});
+            if (geoResp.statusCode == 200) {
+              final geoData = jsonDecode(geoResp.body);
+              cityName = geoData['address']?['city']
+                  ?? geoData['address']?['town']
+                  ?? geoData['address']?['village']
+                  ?? geoData['address']?['county']
+                  ?? 'Your City';
+            }
+          } catch (_) {
+            // Geocoding failed — use lat/lng as fallback
+          }
+          await prefs.setString('user_city', cityName);
 
           if (mounted) {
             setState(() {
               _gpsEnabled = true;
-              _currentCity = 'Your City';
+              _currentCity = cityName;
             });
           }
 
@@ -3373,14 +3636,21 @@ class ProfileTab extends ConsumerWidget {
             style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
+            icon: const Icon(Icons.analytics_rounded),
+            tooltip: 'Statistics',
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const StatisticsScreen()),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.edit_rounded),
             onPressed: () {
               HapticFeedback.lightImpact();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Profile editing coming soon'),
-                  behavior: SnackBarBehavior.floating,
-                ),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ProfileEditScreen()),
               );
             },
           ),
@@ -3558,31 +3828,9 @@ class ProfileTab extends ConsumerWidget {
                   },
                 ),
                 _SettingsRow(
-                  icon: Icons.location_on_rounded,
-                  title: 'Location Privacy',
-                  subtitle: 'Precise location stays on device',
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                    );
-                  },
-                ),
-                _SettingsRow(
-                  icon: Icons.backup_rounded,
-                  title: 'Backup & Sync',
-                  subtitle: 'Encrypted backup to cloud',
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                    );
-                  },
-                ),
-                _SettingsRow(
                   icon: Icons.dark_mode_rounded,
-                  title: 'Appearance',
-                  subtitle: 'Dark mode, themes, skin effects',
+                  title: 'Appearance & Language',
+                  subtitle: 'Dark mode, themes, regional languages',
                   onTap: () {
                     HapticFeedback.lightImpact();
                     Navigator.of(context).push(
@@ -3591,9 +3839,9 @@ class ProfileTab extends ConsumerWidget {
                   },
                 ),
                 _SettingsRow(
-                  icon: Icons.language_rounded,
-                  title: 'Language',
-                  subtitle: 'English, Hindi, and regional languages',
+                  icon: Icons.storage_rounded,
+                  title: 'Data & Privacy',
+                  subtitle: 'Export data, privacy settings, terms',
                   onTap: () {
                     HapticFeedback.lightImpact();
                     Navigator.of(context).push(
