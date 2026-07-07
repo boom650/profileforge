@@ -912,18 +912,18 @@ class _EssayCoachScreenState extends ConsumerState<EssayCoachScreen>
 
           // ── Platform Tabs ──
           if (promptsState.status == EssayPromptsStatus.loaded &&
-              platforms.isNotEmpty)
+              promptsState.platforms.isNotEmpty)
             TabBar(
               controller: _tabController,
               isScrollable: true,
               tabAlignment: TabAlignment.start,
               dividerHeight: 0,
               indicatorPadding: const EdgeInsets.only(bottom: 2),
-              tabs: platforms.map((p) => Tab(text: p)).toList(),
+              tabs: promptsState.platforms.map((p) => Tab(text: p)).toList(),
             ),
 
           if (promptsState.status == EssayPromptsStatus.loaded &&
-              platforms.isNotEmpty)
+              promptsState.platforms.isNotEmpty)
             const SizedBox(height: 4),
         ],
       ),
