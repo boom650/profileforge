@@ -50,6 +50,25 @@ class OnboardingData {
   final Set<String> targetCountries;
   final List<String> targetUniversities;
 
+  // Screen 10: School Timetable
+  final String? schoolStartTime;
+  final String? schoolEndTime;
+  final bool hasCoaching;
+  final String? coachingStartTime;
+  final String? coachingEndTime;
+  final bool hasCommute;
+  final String? commuteDuration;
+
+  // Screen 11: Free Slots
+  final int freeSlotsWeekdayHours;
+  final int freeSlotsWeekendHours;
+  final bool freeSlotsConfirmed;
+
+  // Screen 12: School Frequency
+  final int? schoolDaysPerWeek;
+  final Set<String> schoolDays;
+  final bool hasSaturdaySchool;
+
   const OnboardingData({
     this.name = '',
     this.board,
@@ -59,6 +78,19 @@ class OnboardingData {
     this.targetMajor,
     this.targetCountries = const {},
     this.targetUniversities = const [],
+    this.schoolStartTime,
+    this.schoolEndTime,
+    this.hasCoaching = false,
+    this.coachingStartTime,
+    this.coachingEndTime,
+    this.hasCommute = true,
+    this.commuteDuration,
+    this.freeSlotsWeekdayHours = 2,
+    this.freeSlotsWeekendHours = 5,
+    this.freeSlotsConfirmed = false,
+    this.schoolDaysPerWeek,
+    this.schoolDays = const {},
+    this.hasSaturdaySchool = false,
   });
 
   OnboardingData copyWith({
@@ -70,6 +102,19 @@ class OnboardingData {
     String? targetMajor,
     Set<String>? targetCountries,
     List<String>? targetUniversities,
+    String? schoolStartTime,
+    String? schoolEndTime,
+    bool? hasCoaching,
+    String? coachingStartTime,
+    String? coachingEndTime,
+    bool? hasCommute,
+    String? commuteDuration,
+    int? freeSlotsWeekdayHours,
+    int? freeSlotsWeekendHours,
+    bool? freeSlotsConfirmed,
+    int? schoolDaysPerWeek,
+    Set<String>? schoolDays,
+    bool? hasSaturdaySchool,
   }) {
     return OnboardingData(
       name: name ?? this.name,
@@ -80,6 +125,19 @@ class OnboardingData {
       targetMajor: targetMajor ?? this.targetMajor,
       targetCountries: targetCountries ?? this.targetCountries,
       targetUniversities: targetUniversities ?? this.targetUniversities,
+      schoolStartTime: schoolStartTime ?? this.schoolStartTime,
+      schoolEndTime: schoolEndTime ?? this.schoolEndTime,
+      hasCoaching: hasCoaching ?? this.hasCoaching,
+      coachingStartTime: coachingStartTime ?? this.coachingStartTime,
+      coachingEndTime: coachingEndTime ?? this.coachingEndTime,
+      hasCommute: hasCommute ?? this.hasCommute,
+      commuteDuration: commuteDuration ?? this.commuteDuration,
+      freeSlotsWeekdayHours: freeSlotsWeekdayHours ?? this.freeSlotsWeekdayHours,
+      freeSlotsWeekendHours: freeSlotsWeekendHours ?? this.freeSlotsWeekendHours,
+      freeSlotsConfirmed: freeSlotsConfirmed ?? this.freeSlotsConfirmed,
+      schoolDaysPerWeek: schoolDaysPerWeek ?? this.schoolDaysPerWeek,
+      schoolDays: schoolDays ?? this.schoolDays,
+      hasSaturdaySchool: hasSaturdaySchool ?? this.hasSaturdaySchool,
     );
   }
 }
@@ -103,6 +161,19 @@ class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
       'targetMajor': state.targetMajor,
       'targetCountries': state.targetCountries.toList(),
       'targetUniversities': state.targetUniversities,
+      'schoolStartTime': state.schoolStartTime,
+      'schoolEndTime': state.schoolEndTime,
+      'hasCoaching': state.hasCoaching,
+      'coachingStartTime': state.coachingStartTime,
+      'coachingEndTime': state.coachingEndTime,
+      'hasCommute': state.hasCommute,
+      'commuteDuration': state.commuteDuration,
+      'freeSlotsWeekdayHours': state.freeSlotsWeekdayHours,
+      'freeSlotsWeekendHours': state.freeSlotsWeekendHours,
+      'freeSlotsConfirmed': state.freeSlotsConfirmed,
+      'schoolDaysPerWeek': state.schoolDaysPerWeek,
+      'schoolDays': state.schoolDays.toList(),
+      'hasSaturdaySchool': state.hasSaturdaySchool,
     };
     await prefs.setString(_key, jsonEncode(data));
   }
@@ -125,6 +196,19 @@ class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
         targetMajor: data['targetMajor'] as String?,
         targetCountries: Set<String>.from(data['targetCountries'] as List<dynamic>? ?? []),
         targetUniversities: List<String>.from(data['targetUniversities'] as List<dynamic>? ?? []),
+        schoolStartTime: data['schoolStartTime'] as String?,
+        schoolEndTime: data['schoolEndTime'] as String?,
+        hasCoaching: data['hasCoaching'] as bool? ?? false,
+        coachingStartTime: data['coachingStartTime'] as String?,
+        coachingEndTime: data['coachingEndTime'] as String?,
+        hasCommute: data['hasCommute'] as bool? ?? true,
+        commuteDuration: data['commuteDuration'] as String?,
+        freeSlotsWeekdayHours: data['freeSlotsWeekdayHours'] as int? ?? 2,
+        freeSlotsWeekendHours: data['freeSlotsWeekendHours'] as int? ?? 5,
+        freeSlotsConfirmed: data['freeSlotsConfirmed'] as bool? ?? false,
+        schoolDaysPerWeek: data['schoolDaysPerWeek'] as int?,
+        schoolDays: Set<String>.from(data['schoolDays'] as List<dynamic>? ?? []),
+        hasSaturdaySchool: data['hasSaturdaySchool'] as bool? ?? false,
       );
     } catch (_) {
       // Silently ignore — fresh start if corrupt
@@ -179,6 +263,59 @@ class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
     _save();
   }
 
+  // ── Screen 10: School Timetable ──────────────────────────────────────────
+
+  void updateSchoolTimetable({
+    String? schoolStartTime,
+    String? schoolEndTime,
+    bool? hasCoaching,
+    String? coachingStartTime,
+    String? coachingEndTime,
+    bool? hasCommute,
+    String? commuteDuration,
+  }) {
+    state = state.copyWith(
+      schoolStartTime: schoolStartTime,
+      schoolEndTime: schoolEndTime,
+      hasCoaching: hasCoaching,
+      coachingStartTime: coachingStartTime,
+      coachingEndTime: coachingEndTime,
+      hasCommute: hasCommute,
+      commuteDuration: commuteDuration,
+    );
+    _save();
+  }
+
+  // ── Screen 11: Free Slots ────────────────────────────────────────────────
+
+  void updateFreeSlots({
+    int? weekdayHours,
+    int? weekendHours,
+    bool? confirmed,
+  }) {
+    state = state.copyWith(
+      freeSlotsWeekdayHours: weekdayHours,
+      freeSlotsWeekendHours: weekendHours,
+      freeSlotsConfirmed: confirmed,
+    );
+    _save();
+  }
+
+  // ── Screen 12: School Frequency ──────────────────────────────────────────
+
+  void updateSchoolFrequency({
+    int? daysPerWeek,
+    Set<String>? schoolDays,
+    bool? hasSaturdaySchool,
+  }) {
+    state = state.copyWith(
+      schoolDaysPerWeek: daysPerWeek,
+      schoolDays: schoolDays,
+      hasSaturdaySchool: hasSaturdaySchool,
+    );
+    _save();
+  }
+
   void reset() async {
     state = const OnboardingData();
     final prefs = await SharedPreferences.getInstance();
@@ -193,6 +330,28 @@ final onboardingDataProvider =
 
 /// Converts accumulated onboarding data into a StudentProfile.
 StudentProfile buildStudentProfileFromOnboarding(OnboardingData data) {
+  // Build a WeeklySchedule from onboarding timetable data
+  final schedule = _buildScheduleFromOnboarding(data);
+
+  // Compute coaching hours per week from timetable
+  int coachingHrsPerWeek = 0;
+  if (data.hasCoaching &&
+      data.coachingStartTime != null &&
+      data.coachingEndTime != null) {
+    final startParts = data.coachingStartTime!.split(':');
+    final endParts = data.coachingEndTime!.split(':');
+    if (startParts.length == 2 && endParts.length == 2) {
+      final startMin =
+          int.parse(startParts[0]) * 60 + int.parse(startParts[1]);
+      final endMin = int.parse(endParts[0]) * 60 + int.parse(endParts[1]);
+      final dailyMins = endMin - startMin;
+      if (dailyMins > 0) {
+        final daysPerWeek = data.schoolDaysPerWeek ?? 5;
+        coachingHrsPerWeek = ((dailyMins * daysPerWeek) / 60).round();
+      }
+    }
+  }
+
   return StudentProfile(
     id: const Uuid().v4(),
     name: data.name.trim(),
@@ -204,7 +363,7 @@ StudentProfile buildStudentProfileFromOnboarding(OnboardingData data) {
     subjects: data.subjects,
     tenthPercentage: 0.0,
     coachingInstitute: '',
-    coachingHoursPerWeek: 0,
+    coachingHoursPerWeek: coachingHrsPerWeek,
     satScore: null,
     ieltsScore: null,
     targetCountries: data.targetCountries.toList(),
@@ -213,10 +372,59 @@ StudentProfile buildStudentProfileFromOnboarding(OnboardingData data) {
     matchUniversities: [],
     safetyUniversities: [],
     activities: [],
-    schedule: WeeklySchedule.empty(),
+    schedule: schedule,
     motivation: MotivationProfile.empty(),
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
+  );
+}
+
+/// Builds a WeeklySchedule from onboarding timetable + free slots data.
+WeeklySchedule _buildScheduleFromOnboarding(OnboardingData data) {
+  final schedule = <String, List<TimeBlock>>{};
+  final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  if (data.hasSaturdaySchool || (data.schoolDaysPerWeek != null && data.schoolDaysPerWeek! > 5)) {
+    days.add('Saturday');
+  }
+
+  final schoolStart = data.schoolStartTime ?? '07:30';
+  final schoolEnd = data.schoolEndTime ?? '14:00';
+  final hasCoaching = data.hasCoaching;
+  final coachingStart = data.coachingStartTime ?? '15:00';
+  final coachingEnd = data.coachingEndTime ?? '18:00';
+
+  final u = const Uuid();
+
+  for (final day in days) {
+    final blocks = <TimeBlock>[
+      TimeBlock(
+        id: u.v4(),
+        label: 'School',
+        startTime: schoolStart,
+        endTime: schoolEnd,
+        type: TimeBlockType.school,
+        isFree: false,
+      ),
+    ];
+
+    if (hasCoaching) {
+      blocks.add(TimeBlock(
+        id: u.v4(),
+        label: 'Coaching',
+        startTime: coachingStart,
+        endTime: coachingEnd,
+        type: TimeBlockType.coaching,
+        isFree: false,
+      ));
+    }
+
+    schedule[day] = blocks;
+  }
+
+  return WeeklySchedule(
+    schedule: schedule,
+    discretionaryHoursWeekday: data.freeSlotsWeekdayHours,
+    discretionaryHoursWeekend: data.freeSlotsWeekendHours,
   );
 }
 

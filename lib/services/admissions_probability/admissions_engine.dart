@@ -442,10 +442,14 @@ class AdmissionsEngine {
   /// Add Gaussian noise to a value
   double _addNoise(double value, double noiseLevel) {
     // Box-Muller transform for Gaussian noise
+    // Guard against log(0) by ensuring u1 > 0
     double u1 = _random.nextDouble();
+    while (u1 == 0.0) {
+      u1 = _random.nextDouble();
+    }
     double u2 = _random.nextDouble();
     double noise = sqrt(-2 * log(u1)) * cos(2 * pi * u2);
-    
+
     double noisyValue = value + (noise * noiseLevel * value);
     return noisyValue.clamp(0.0, double.infinity);
   }
@@ -491,6 +495,97 @@ class AdmissionsEngine {
 /// Predefined universities for demo
 class UniversityDatabase {
   static final List<UniversityInfo> universities = [
+    // ── Indian Institutes of Excellence ──
+    const UniversityInfo(
+      name: 'IIT Bombay',
+      country: 'India',
+      tier: UniversityTier.ivyLeague,
+      acceptanceRate: 0.02,
+      averageGPA: 3.95,
+      averageSAT: 1550,
+      selectivityModifier: 0.70,
+    ),
+    const UniversityInfo(
+      name: 'IIT Delhi',
+      country: 'India',
+      tier: UniversityTier.ivyLeague,
+      acceptanceRate: 0.03,
+      averageGPA: 3.93,
+      averageSAT: 1530,
+      selectivityModifier: 0.72,
+    ),
+    const UniversityInfo(
+      name: 'IIT Madras',
+      country: 'India',
+      tier: UniversityTier.ivyLeague,
+      acceptanceRate: 0.03,
+      averageGPA: 3.92,
+      averageSAT: 1520,
+      selectivityModifier: 0.73,
+    ),
+    const UniversityInfo(
+      name: 'IISc Bangalore',
+      country: 'India',
+      tier: UniversityTier.ivyLeague,
+      acceptanceRate: 0.04,
+      averageGPA: 3.90,
+      averageSAT: 1500,
+      selectivityModifier: 0.75,
+    ),
+    const UniversityInfo(
+      name: 'BITS Pilani',
+      country: 'India',
+      tier: UniversityTier.top20,
+      acceptanceRate: 0.12,
+      averageGPA: 3.85,
+      averageSAT: 1450,
+      selectivityModifier: 0.85,
+    ),
+    const UniversityInfo(
+      name: 'IIT Kanpur',
+      country: 'India',
+      tier: UniversityTier.top20,
+      acceptanceRate: 0.05,
+      averageGPA: 3.88,
+      averageSAT: 1480,
+      selectivityModifier: 0.80,
+    ),
+    const UniversityInfo(
+      name: 'NIT Trichy',
+      country: 'India',
+      tier: UniversityTier.top50,
+      acceptanceRate: 0.08,
+      averageGPA: 3.80,
+      averageSAT: 1400,
+      selectivityModifier: 0.88,
+    ),
+    const UniversityInfo(
+      name: 'DU (Delhi University)',
+      country: 'India',
+      tier: UniversityTier.top50,
+      acceptanceRate: 0.25,
+      averageGPA: 3.70,
+      averageSAT: 1350,
+      selectivityModifier: 0.90,
+    ),
+    const UniversityInfo(
+      name: 'VIT Vellore',
+      country: 'India',
+      tier: UniversityTier.top100,
+      acceptanceRate: 0.40,
+      averageGPA: 3.60,
+      averageSAT: 1250,
+      selectivityModifier: 0.93,
+    ),
+    const UniversityInfo(
+      name: 'SRM University',
+      country: 'India',
+      tier: UniversityTier.safety,
+      acceptanceRate: 0.65,
+      averageGPA: 3.50,
+      averageSAT: 1150,
+      selectivityModifier: 1.0,
+    ),
     // Ivy League
     const UniversityInfo(
       name: 'Harvard University',
@@ -578,6 +673,16 @@ class UniversityDatabase {
       selectivityModifier: 1.0,
     ),
   ];
+
+  /// Filter universities by country
+  static List<UniversityInfo> getByCountry(String country) {
+    return universities.where((u) => u.country.toLowerCase() == country.toLowerCase()).toList();
+  }
+
+  /// Get all unique countries
+  static List<String> get countries {
+    return universities.map((u) => u.country).toSet().toList()..sort();
+  }
 }
 
 // Note: Providers are defined in app_providers.dart to avoid duplication

@@ -27,6 +27,16 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
   String? _selectedMajor;
   final Set<String> _selectedCountries = {};
 
+  /// Preset major categories for quick chip selection
+  static const List<_MajorPreset> _presetMajors = [
+    _MajorPreset('Computer Science', Icons.computer_rounded, Color(0xFF3B82F6)),
+    _MajorPreset('Engineering', Icons.precision_manufacturing_rounded, Color(0xFF8B5CF6)),
+    _MajorPreset('Medicine', Icons.local_hospital_rounded, Color(0xFFEF4444)),
+    _MajorPreset('Business', Icons.business_center_rounded, Color(0xFFF59E0B)),
+    _MajorPreset('Arts & Humanities', Icons.palette_rounded, Color(0xFFEC4899)),
+    _MajorPreset('Law', Icons.gavel_rounded, Color(0xFF06B6D4)),
+  ];
+
   final reachUnis = ['MIT', 'Stanford', 'Harvard', 'Princeton', 'Oxford', 'Cambridge'];
   final matchUnis = ['Yale', 'Columbia', 'UCLA', 'UCL', 'Edinburgh', 'UofT'];
   final safetyUnis = ['UCSD', 'Purdue', 'UIUC', 'McGill', 'Melbourne', 'Waterloo'];
@@ -34,7 +44,6 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
   @override
   void initState() {
     super.initState();
-    // Restore previously saved onboarding data
     final existingData = ref.read(onboardingDataProvider);
     if (existingData.targetMajor != null && existingData.targetMajor!.isNotEmpty) {
       _selectedMajor = existingData.targetMajor;
@@ -44,7 +53,6 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
     }
   }
 
-  /// Save current goals data to the onboarding data provider.
   void _saveToProvider() {
     final notifier = ref.read(onboardingDataProvider.notifier);
     notifier.updateTargetMajor(_selectedMajor);
@@ -63,8 +71,6 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
         key: Screen3Goals.formKey,
         onChanged: () {
           _saveToProvider();
-          // Don't call form.validate() here — that shows errors on every keystroke.
-          // Instead, check validity silently by reading field values.
           final major = _selectedMajor;
           final countries = _selectedCountries;
           Screen3Goals.isFormValid =
@@ -77,29 +83,122 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              Text(
-                'Your Goals',
-                style: GoogleFonts.inter(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textPrimary,
-                  letterSpacing: -0.5,
-                  height: 1.2,
-                ),
+              // Header with gradient icon
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppTheme.accentGold, AppTheme.accentOrange],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.flag_rounded, color: Colors.white, size: 22),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Your Goals',
+                          style: GoogleFonts.inter(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.textPrimary,
+                            letterSpacing: -0.5,
+                            height: 1.2,
+                          ),
+                        ),
+                        Text(
+                          'Where do you want to go? This shapes your entire strategy.',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: AppTheme.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ).animate().fadeIn().slideX(begin: -0.2),
-              const SizedBox(height: 8),
+              const SizedBox(height: 28),
+
+              // ── Target Major: Quick Preset Chips ──────────────────────
               Text(
-                'Where do you want to go? This shapes your entire strategy.',
+                'Intended Major',
                 style: GoogleFonts.inter(
                   fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: AppTheme.textSecondary,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.textPrimary,
                 ),
-              ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2),
-              const SizedBox(height: 28),
-              // Target Major
+              ).animate().fadeIn(delay: 150.ms),
+              const SizedBox(height: 4),
+              Text(
+                'Pick a field of study — or choose "Other" and type your own',
+                style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textMuted),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ..._presetMajors.asMap().entries.map((entry) {
+                    final preset = entry.value;
+                    final isSelected = _selectedMajor == preset.label;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() => _selectedMajor = preset.label);
+                        _saveToProvider();
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? preset.color.withValues(alpha: 0.15)
+                              : AppTheme.surfaceLight,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected ? preset.color : AppTheme.textMuted.withValues(alpha: 0.2),
+                            width: isSelected ? 2 : 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(preset.icon, size: 16, color: preset.color),
+                            const SizedBox(width: 6),
+                            Text(
+                              preset.label,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: isSelected ? preset.color : AppTheme.textPrimary,
+                              ),
+                            ),
+                            if (isSelected) ...[
+                              const SizedBox(width: 4),
+                              Icon(Icons.check_circle, size: 14, color: preset.color),
+                            ],
+                          ],
+                        ),
+                      )
+                          .animate()
+                          .fadeIn(delay: Duration(milliseconds: 200 + entry.key * 50))
+                          .scale(begin: const Offset(0.85, 0.85)),
+                    );
+                  }),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Full dropdown for "Other" or precise selection
               _ValidatedDropdownField(
-                label: 'Intended Major',
+                label: 'Or select a specific major',
                 value: _selectedMajor,
                 items: [
                   'Computer Science', 'Data Science', 'AI/ML', 'Electrical Engineering',
@@ -109,11 +208,10 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                   'International Relations', 'Environmental Science', 'Architecture',
                   'Journalism', 'Communications', 'Law', 'Nursing',
                 ],
-                delay: 200,
+                delay: 300,
                 onChanged: (val) {
                   setState(() => _selectedMajor = val);
                   _saveToProvider();
-                  // Re-validate form on change
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     final form = Screen3Goals.formKey.currentState;
                     if (form != null) {
@@ -128,39 +226,37 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
-              // Target Countries
+              const SizedBox(height: 24),
+
+              // ── Target Countries ──────────────────────────────────────
               Text(
                 'Target Countries',
                 style: GoogleFonts.inter(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: AppTheme.textPrimary,
                 ),
-              ).animate().fadeIn(delay: 300.ms),
+              ).animate().fadeIn(delay: 350.ms),
               const SizedBox(height: 4),
               Text(
                 'Select at least one country',
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  color: AppTheme.textMuted,
-                ),
+                style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textMuted),
               ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _CountryChip(label: '🇺🇸 US', delay: 350, selected: _selectedCountries.contains('US'), onTap: () => _toggleCountry('US')),
-                  _CountryChip(label: '🇬🇧 UK', delay: 380, selected: _selectedCountries.contains('UK'), onTap: () => _toggleCountry('UK')),
-                  _CountryChip(label: '🇨🇦 Canada', delay: 410, selected: _selectedCountries.contains('Canada'), onTap: () => _toggleCountry('Canada')),
-                  _CountryChip(label: '🇦🇺 Australia', delay: 440, selected: _selectedCountries.contains('Australia'), onTap: () => _toggleCountry('Australia')),
-                  _CountryChip(label: '🇪🇺 Europe', delay: 470, selected: _selectedCountries.contains('Europe'), onTap: () => _toggleCountry('Europe')),
-                  _CountryChip(label: '🇸🇬 Singapore', delay: 500, selected: _selectedCountries.contains('Singapore'), onTap: () => _toggleCountry('Singapore')),
-                  _CountryChip(label: '🇭🇰 Hong Kong', delay: 530, selected: _selectedCountries.contains('Hong Kong'), onTap: () => _toggleCountry('Hong Kong')),
+                  _CountryChip(label: '🇺🇸 US', delay: 400, selected: _selectedCountries.contains('US'), onTap: () => _toggleCountry('US')),
+                  _CountryChip(label: '🇬🇧 UK', delay: 430, selected: _selectedCountries.contains('UK'), onTap: () => _toggleCountry('UK')),
+                  _CountryChip(label: '🇨🇦 Canada', delay: 460, selected: _selectedCountries.contains('Canada'), onTap: () => _toggleCountry('Canada')),
+                  _CountryChip(label: '🇦🇺 Australia', delay: 490, selected: _selectedCountries.contains('Australia'), onTap: () => _toggleCountry('Australia')),
+                  _CountryChip(label: '🇪🇺 Europe', delay: 520, selected: _selectedCountries.contains('Europe'), onTap: () => _toggleCountry('Europe')),
+                  _CountryChip(label: '🇸🇬 Singapore', delay: 550, selected: _selectedCountries.contains('Singapore'), onTap: () => _toggleCountry('Singapore')),
+                  _CountryChip(label: '🇭🇰 Hong Kong', delay: 580, selected: _selectedCountries.contains('Hong Kong'), onTap: () => _toggleCountry('Hong Kong')),
                 ],
               ),
-              // Hidden validator for country selection — participates in Form validation
+              // Hidden validator
               FormField<String>(
                 validator: (_) {
                   if (_selectedCountries.isEmpty) {
@@ -179,30 +275,28 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                     : const SizedBox.shrink(),
               ),
               const SizedBox(height: 28),
-              // Target Universities
+
+              // ── Target Universities ──────────────────────────────────
               Text(
                 'Pick 3 Target Universities',
                 style: GoogleFonts.inter(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: AppTheme.textPrimary,
                 ),
-              ).animate().fadeIn(delay: 550.ms),
-              const SizedBox(height: 8),
+              ).animate().fadeIn(delay: 600.ms),
+              const SizedBox(height: 4),
               Text(
                 'One from each tier — we\'ll calculate admission probability',
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: AppTheme.textMuted,
-                ),
-              ).animate().fadeIn(delay: 570.ms),
+                style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textMuted),
+              ),
               const SizedBox(height: 16),
               _UniversityTierSection(
                 title: '🎯 Reach (Dream)',
                 subtitle: '10-20% baseline — aim high',
                 color: const Color(0xFF8B5CF6),
                 universities: reachUnis,
-                delay: 600,
+                delay: 650,
               ),
               const SizedBox(height: 16),
               _UniversityTierSection(
@@ -210,7 +304,7 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                 subtitle: '40-60% baseline — your sweet spot',
                 color: const Color(0xFF3B82F6),
                 universities: matchUnis,
-                delay: 700,
+                delay: 750,
               ),
               const SizedBox(height: 16),
               _UniversityTierSection(
@@ -218,19 +312,19 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                 subtitle: '70%+ baseline — solid options',
                 color: const Color(0xFF10B981),
                 universities: safetyUnis,
-                delay: 800,
+                delay: 850,
               ),
               const SizedBox(height: 24),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppTheme.accentGold.withValues(alpha: 0.1), AppTheme.accentGold.withValues(alpha: 0.05)],
+                    colors: [AppTheme.accentGold.withValues(alpha: 0.08), AppTheme.accentGold.withValues(alpha: 0.03)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppTheme.accentGold.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppTheme.accentGold.withValues(alpha: 0.25)),
                 ),
                 child: Row(
                   children: [
@@ -247,7 +341,7 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
                     ),
                   ],
                 ),
-              ).animate().fadeIn(delay: 900.ms),
+              ).animate().fadeIn(delay: 950.ms),
               const SizedBox(height: 24),
             ],
           ),
@@ -265,7 +359,6 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
       }
     });
     _saveToProvider();
-    // Re-validate entire form (including country FormField) on change
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final form = Screen3Goals.formKey.currentState;
       if (form != null) {
@@ -276,7 +369,18 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
   }
 }
 
-/// A helper widget that listens to form validation changes and calls [onChanged].
+// ── Major Preset Model ─────────────────────────────────────────────────────
+
+class _MajorPreset {
+  final String label;
+  final IconData icon;
+  final Color color;
+
+  const _MajorPreset(this.label, this.icon, this.color);
+}
+
+// ── Helper Widgets ─────────────────────────────────────────────────────────
+
 class _FormValidationListener extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final ValueChanged<bool> onChanged;
@@ -296,8 +400,6 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   @override
   void initState() {
     super.initState();
-    // Validate form on init (after first frame) to check if restored data makes it valid.
-    // This ensures Continue button works when navigating back.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final form = widget.formKey.currentState;
       if (form != null && mounted) {
@@ -339,12 +441,12 @@ class _CountryChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? AppTheme.primaryBlue.withValues(alpha: 0.2)
-              : AppTheme.primaryBlue.withValues(alpha: 0.1),
+              : AppTheme.primaryBlue.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected
                 ? AppTheme.primaryBlue
-                : AppTheme.primaryBlue.withValues(alpha: 0.3),
+                : AppTheme.primaryBlue.withValues(alpha: 0.2),
             width: selected ? 2 : 1,
           ),
         ),
@@ -360,13 +462,16 @@ class _CountryChip extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: selected ? AppTheme.primaryBlue : AppTheme.primaryBlue,
+                color: AppTheme.primaryBlue,
               ),
             ),
           ],
         ),
       ),
-    ).animate().fadeIn(delay: Duration(milliseconds: delay)).scale(begin: const Offset(0.8, 0.8));
+    )
+        .animate()
+        .fadeIn(delay: Duration(milliseconds: delay))
+        .scale(begin: const Offset(0.8, 0.8));
   }
 }
 
@@ -421,9 +526,9 @@ class _UniversityTierSection extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
+                color: color.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: color.withValues(alpha: 0.3)),
+                border: Border.all(color: color.withValues(alpha: 0.25)),
               ),
               child: Text(
                 uni,

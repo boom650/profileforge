@@ -255,11 +255,177 @@ class ApiService {
     final response = await _client.get(
       Uri.parse('$backendUrl/api/opportunities/search?city=$city'),
     );
-
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(jsonDecode(response.body));
     } else {
       throw Exception('Failed to search opportunities');
     }
   }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CHAT ENDPOINTS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Send a chat message to the Hermes AI coach
+  Future<Map<String, dynamic>> sendChatMessage({
+    required String userId,
+    required String message,
+    String? context,
+    String? conversationId,
+  }) async {
+    final response = await _client.post(
+      Uri.parse('$backendUrl/api/chat'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'user_id': userId,
+        'message': message,
+        'context': context,
+        'conversation_id': conversationId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Chat failed: ${response.body}');
+    }
+  }
+
+  /// Get chat conversation history
+  Future<Map<String, dynamic>> getChatHistory(String conversationId) async {
+    final response = await _client.get(
+      Uri.parse('$backendUrl/api/chat/$conversationId/history'),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch chat history');
+    }
+  }
+
+  /// List all conversations for a user
+  Future<List<Map<String, dynamic>>> listConversations(String userId) async {
+    final response = await _client.get(
+      Uri.parse('$backendUrl/api/chat/conversations/$userId'),
+    );
+
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to list conversations');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WEEKLY TARGETS ENDPOINTS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Create a new weekly target
+  Future<Map<String, dynamic>> createWeeklyTarget({
+    required String userId,
+    required String title,
+    String? description,
+    String? category,
+    String? milestoneType,
+    String? pillar,
+    int xpReward = 25,
+    String? dueDate,
+    bool generateResearchMilestones = false,
+    String? paperTitle,
+  }) async {
+    final response = await _client.post(
+      Uri.parse('$backendUrl/api/weekly-targets'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'user_id': userId,
+        'title': title,
+        'description': description,
+        'category': category,
+        'milestone_type': milestoneType ?? 'standard',
+        'pillar': pillar,
+        'xp_reward': xpReward,
+        'due_date': dueDate,
+        'generate_research_milestones': generateResearchMilestones,
+        'paper_title': paperTitle,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to create target');
+    }
+  }
+
+  /// Get weekly targets for a user
+  Future<Map<String, dynamic>> getWeeklyTargets(String userId, {
+    int? week,
+    int? year,
+  }) async {
+    var uri = Uri.parse('$backendUrl/api/weekly-targets/$userId');
+    final params = <String, String>{};
+    if (week != null) params['week'] = week.toString();
+    if (year != null) params['year'] = year.toString();
+    if (params.isNotEmpty) {
+      uri = uri.replace(queryParameters: params);
+    }
+
+    final response = await _client.get(uri);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch weekly targets');
+    }
+  }
+
+  /// Update a weekly target's status
+  Future<Map<String, dynamic>> updateTargetStatus(
+      String targetId, String status) async {
+    final response = await _client.put(
+      Uri.parse('$backendUrl/api/weekly-targets/$targetId/status'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(status),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to update target status');
+    }
+  }
+
+  /// Get all research milestones for a user
+  Future<List<Map<String, dynamic>>> getResearchMilestones(String userId) async {
+    final response = await _client.get(
+      Uri.parse('$backendUrl/api/research-milestones/$userId'),
+    );
+
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to fetch milestones');
+    }
+  }
+
+  /// Update a research milestone's status
+  Future<Map<String, dynamic>> updateMilestone(
+      String milestoneId, String status, {String? notes}) async {
+    final response = await _client.put(
+      Uri.parse('$backendUrl/api/research-milestones/$milestoneId'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'status': status,
+        'notes': notes,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to update milestone');
+    }
+  }
+}
 }

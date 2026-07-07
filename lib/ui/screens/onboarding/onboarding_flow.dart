@@ -5,10 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../../providers/app_providers.dart';
+import '../../../services/api_service.dart';
 import 'screen1_welcome.dart';
 import 'screen2_quick_profile.dart';
 import 'screen3_goals.dart';
 import 'screen4_activities.dart';
+import 'screen10_school_timetable.dart';
+import 'screen11_free_slots.dart';
+import 'screen12_school_frequency.dart';
 import 'screen9_roadmap.dart';
 
 class OnboardingFlow extends ConsumerStatefulWidget {
@@ -21,8 +25,9 @@ class OnboardingFlow extends ConsumerStatefulWidget {
 class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final int _totalPages = 5;
+  final int _totalPages = 8;
   late final List<Widget> _screens;
+  bool _isCompleting = false;
 
   @override
   void initState() {
@@ -41,6 +46,15 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         if (mounted) setState(() {});
       }),
       const Screen4Activities(),
+      Screen10SchoolTimetable(onFormChanged: () {
+        if (mounted) setState(() {});
+      }),
+      Screen11FreeSlots(onFormChanged: () {
+        if (mounted) setState(() {});
+      }),
+      Screen12SchoolFrequency(onFormChanged: () {
+        if (mounted) setState(() {});
+      }),
       const Screen9Roadmap(),
     ];
   }
@@ -60,17 +74,20 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
         return Screen3Goals.isFormValid;
       case 3: // Screen4Activities (display only, always valid)
         return true;
+      case 4: // Screen10SchoolTimetable (school start/end required)
+        return Screen10SchoolTimetable.isFormValid;
+      case 5: // Screen11FreeSlots (always valid — confirmation)
+        return true;
+      case 6: // Screen12SchoolFrequency (days per week required)
+        return Screen12SchoolFrequency.isFormValid;
       default:
-        // Pages without form validation (welcome, roadmap) are always valid
         return true;
     }
   }
 
   void _nextPage() {
     if (_currentPage < _totalPages - 1) {
-      // Check form validation for pages with forms
       if (!_isCurrentPageValid()) {
-        // Trigger validation display by validating the form
         _triggerCurrentPageValidation();
         return;
       }
@@ -112,40 +129,75 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
     }
   }
 
+  /// Complete onboarding: save data, create user via API, store profile, navigate.
   void _completeOnboarding() async {
-    // 1. Read accumulated onboarding data
-    final onboardingData = ref.read(onboardingDataProvider);
+    if (_isCompleting) return; // prevent double-tap
+    setState(() => _isCompleting = true);
 
-    // Safety: assert minimum completeness (name required, rest optional but warned)
-    assert(onboardingData.name.isNotEmpty,
-        'Onboarding completed without a name — should not happen');
-    debugPrint(
-      '[Onboarding] Completing: name=${onboardingData.name}, '
-      'board=${onboardingData.board}, countries=${onboardingData.targetCountries.length}, '
-      'universities=${onboardingData.targetUniversities.length}, '
-      'subjects=${onboardingData.subjects.length}',
-    );
+    try {
+      // 1. Read accumulated onboarding data
+      final onboardingData = ref.read(onboardingDataProvider);
+      debugPrint(
+        '[Onboarding] Completing: name=${onboardingData.name}, '
+        'board=${onboardingData.board}, countries=${onboardingData.targetCountries.length}, '
+        'subjects=${onboardingData.subjects.length}',
+      );
 
-    // 2. Build a StudentProfile from the onboarding data
-    final profile = buildStudentProfileFromOnboarding(onboardingData);
+      // 2. Build a StudentProfile from the onboarding data
+      final profile = buildStudentProfileFromOnboarding(onboardingData);
 
-    // 3. Set the profile in the Riverpod provider (in-memory for the rest of the app)
-    ref.read(studentProfileProvider.notifier).setProfile(profile);
+      // 3. Create user via backend API (best-effort — don't block onboarding)
+      try {
+        final apiService = ref.read(apiServiceProvider);
+        final userResult = await apiService.createUser(
+          name: profile.name,
+          grade: profile.grade,
+          board: profile.board,
+          stream: profile.stream,
+        );
+        debugPrint('[Onboarding] User created on backend: $userResult');
+      } catch (e) {
+        // API is optional — app works offline
+        debugPrint('[Onboarding] API user creation failed (offline mode): $e');
+      }
 
-    // 4. Mark onboarding as completed (persists to SharedPreferences)
-    final setCompleted = ref.read(setOnboardingCompletedProvider);
-    await setCompleted(true);
+      // 4. Set the profile in the Riverpod provider (in-memory for the rest of the app)
+      ref.read(studentProfileProvider.notifier).setProfile(profile);
 
-    // 6. Reset onboarding data (no longer needed in memory)
-    ref.read(onboardingDataProvider.notifier).reset();
-    // The provider change will trigger main.dart to rebuild and show HomeScreen
+      // 5. Mark onboarding as completed (persists to SharedPreferences)
+      final setCompleted = ref.read(setOnboardingCompletedProvider);
+      await setCompleted(true);
+
+      // 6. Persist onboarding profile to the database provider
+      try {
+        final persist = ref.read(persistOnboardingProfileProvider);
+        await persist(profile);
+      } catch (e) {
+        debugPrint('[Onboarding] Profile persist warning: $e');
+      }
+
+      // 7. Reset onboarding data (no longer needed in memory)
+      ref.read(onboardingDataProvider.notifier).reset();
+
+      // The provider change will trigger main.dart to rebuild and show HomeScreen
+      debugPrint('[Onboarding] Onboarding completed successfully!');
+    } catch (e) {
+      debugPrint('[Onboarding] Error completing onboarding: $e');
+      // Still mark onboarding as completed even if there's an error
+      try {
+        final setCompleted = ref.read(setOnboardingCompletedProvider);
+        await setCompleted(true);
+      } catch (_) {}
+    } finally {
+      if (mounted) setState(() => _isCompleting = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final bool canProceed = _isCurrentPageValid();
     final bool isLastPage = _currentPage == _totalPages - 1;
-    final bool hasForm = _currentPage == 1 || _currentPage == 2;
+    final bool hasForm = _currentPage == 1 || _currentPage == 2 || _currentPage == 4 || _currentPage == 6;
 
     return Scaffold(
       body: SafeArea(
@@ -162,8 +214,8 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                       margin: EdgeInsets.only(right: index < _totalPages - 1 ? 4 : 0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: index <= _currentPage 
-                            ? AppTheme.primaryBlue 
+                        color: index <= _currentPage
+                            ? AppTheme.primaryBlue
                             : AppTheme.primaryBlue.withValues(alpha: 0.15),
                       ),
                     ).animate().scaleX(
@@ -246,7 +298,7 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                   if (_currentPage > 0)
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () { HapticFeedback.lightImpact(); _previousPage(); },
+                        onPressed: _isCompleting ? null : () { HapticFeedback.lightImpact(); _previousPage(); },
                         child: const Text('Back'),
                       ),
                     ),
@@ -254,16 +306,27 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                   Expanded(
                     flex: _currentPage > 0 ? 1 : 1,
                     child: ElevatedButton(
-                      onPressed: (canProceed || isLastPage) ? () { HapticFeedback.mediumImpact(); _nextPage(); } : null,
+                      onPressed: (canProceed || isLastPage) && !_isCompleting
+                          ? () { HapticFeedback.mediumImpact(); _nextPage(); }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         backgroundColor: AppTheme.primaryBlue,
                         disabledBackgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.4),
                       ),
-                      child: Text(
-                        isLastPage ? 'Begin Journey' : 'Continue',
-                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
+                      child: _isCompleting
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              isLastPage ? 'Begin Journey 🚀' : 'Continue',
+                              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
                     ).animate().scale(delay: 300.ms, curve: Curves.easeOutBack),
                   ),
                 ],

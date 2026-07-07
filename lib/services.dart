@@ -8,3 +8,4 @@ export 'services/overpass_service.dart';
 export 'services/ngo_darpan_service.dart';
 export 'services/competition_calendar_service.dart';
 export 'services/opportunity_feed.dart';
+export 'services/chat_service.dart';

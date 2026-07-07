@@ -146,8 +146,6 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
         key: Screen2QuickProfile.formKey,
         onChanged: () {
           _saveToProvider();
-          // Don't call form.validate() here — that shows errors on every keystroke.
-          // Instead, check validity silently by reading field values.
           final name = _nameController.text.trim();
           final board = _selectedBoard;
           final stream = _selectedStream;
@@ -162,27 +160,48 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              Text(
-                'Quick Profile',
-                style: GoogleFonts.inter(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textPrimary,
-                  letterSpacing: -0.5,
-                  height: 1.2,
-                ),
+              // Header with completion indicator
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.gradientPrimary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.person_rounded, color: Colors.white, size: 22),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quick Profile',
+                          style: GoogleFonts.inter(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.textPrimary,
+                            letterSpacing: -0.5,
+                            height: 1.2,
+                          ),
+                        ),
+                        Text(
+                          'Takes 30 seconds — shapes your entire strategy',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: AppTheme.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ).animate().fadeIn().slideX(begin: -0.2),
-              const SizedBox(height: 8),
-              Text(
-                'Tell us about yourself — this takes 30 seconds',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: AppTheme.textSecondary,
-                ),
-              ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2),
-              const SizedBox(height: 32),
-              // Name field
+              const SizedBox(height: 28),
+              // Name field with validation feedback
               _ValidatedInputField(
                 controller: _nameController,
                 label: 'Your Name',
@@ -264,18 +283,46 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
                 },
               ),
               const SizedBox(height: 24),
+              // Completion status badge
+              _CompletionBadge(
+                name: _nameController.text.trim(),
+                board: _selectedBoard,
+                stream: _selectedStream,
+                grade: _selectedGrade,
+              ),
+              const SizedBox(height: 24),
               // 3 Key Subject Scores
-              Text(
-                'Top 3 Subject Scores (Optional)',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
-                ),
+              Row(
+                children: [
+                  Text(
+                    'Subject Scores',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppTheme.successGreen.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'Optional',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.successGreen,
+                      ),
+                    ),
+                  ),
+                ],
               ).animate().fadeIn(delay: 450.ms),
               const SizedBox(height: 4),
               Text(
-                'Optional — add your strongest subjects',
+                'Add your strongest subjects — helps calculate academic probability',
                 style: GoogleFonts.inter(
                   fontSize: 12,
                   color: AppTheme.textMuted,
@@ -307,11 +354,11 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
               ),
               const SizedBox(height: 24),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryBlue.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.2)),
+                  border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.15)),
                 ),
                 child: Row(
                   children: [
@@ -319,7 +366,7 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'We\'ll ask for SAT/IELTS scores later when relevant to your targets.',
+                        'SAT/IELTS scores will be asked later when relevant to your targets.',
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           color: AppTheme.primaryBlue,
@@ -335,6 +382,82 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
         ),
       ),
     );
+  }
+}
+
+/// Shows a mini completion badge so the user knows their progress.
+class _CompletionBadge extends StatelessWidget {
+  final String name;
+  final String? board;
+  final String? stream;
+  final String? grade;
+
+  const _CompletionBadge({
+    required this.name,
+    this.board,
+    this.stream,
+    this.grade,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final fields = [name.isNotEmpty, board != null, stream != null, grade != null];
+    final filled = fields.where((f) => f).length;
+    final total = fields.length;
+    final progress = filled / total;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: progress >= 1.0
+            ? AppTheme.successGreen.withValues(alpha: 0.06)
+            : AppTheme.primaryBlue.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: progress >= 1.0
+              ? AppTheme.successGreen.withValues(alpha: 0.2)
+              : AppTheme.primaryBlue.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                progress >= 1.0 ? Icons.check_circle_rounded : Icons.info_outline_rounded,
+                size: 16,
+                color: progress >= 1.0 ? AppTheme.successGreen : AppTheme.primaryBlue,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  progress >= 1.0
+                      ? 'Profile complete! Your admissions odds will be calculated.'
+                      : '$filled/$total fields filled — complete all for best results',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: progress >= 1.0 ? AppTheme.successGreen : AppTheme.primaryBlue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (progress < 1.0) ...[
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: progress,
+                backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                color: AppTheme.primaryBlue,
+                minHeight: 3,
+              ),
+            ),
+          ],
+        ],
+      ),
+    ).animate().fadeIn(delay: 250.ms);
   }
 }
 
@@ -358,8 +481,6 @@ class _FormValidationListenerState extends State<_FormValidationListener> {
   @override
   void initState() {
     super.initState();
-    // Validate form on init (after first frame) to check if restored data makes it valid.
-    // This ensures Continue button works when navigating back.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final form = widget.formKey.currentState;
       if (form != null && mounted) {
@@ -406,11 +527,10 @@ class _SubjectScoreRow extends StatelessWidget {
             prefixIcon: Icons.book_rounded,
             delay: delay,
             validator: (value) {
-              // Subject is optional — only validate if either name or score is filled
               final scoreValue = scoreController.text.trim();
               if (value == null || value.trim().isEmpty) {
                 if (scoreValue.isNotEmpty) return 'Name needed with score';
-                return null; // Both empty = skip subject
+                return null;
               }
               return null;
             },
@@ -436,11 +556,10 @@ class _SubjectScoreRow extends StatelessWidget {
             ),
             style: GoogleFonts.inter(fontSize: 16, color: AppTheme.textPrimary),
             validator: (value) {
-              // Score is optional — only validate if name is filled
               final nameValue = nameController.text.trim();
               if (value == null || value.trim().isEmpty) {
                 if (nameValue.isNotEmpty) return 'Score needed';
-                return null; // Empty = skip subject
+                return null;
               }
               final score = int.tryParse(value.trim());
               if (score == null) {

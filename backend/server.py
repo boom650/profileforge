@@ -1,9 +1,10 @@
 """
 ProfileForge Backend Server
 FastAPI-based backend for the Flutter app
-Handles: Users, Location, Tasks, Document Evaluation, XP/Gamification
+Handles: Users, Location, Tasks, Document Evaluation, XP/Gamification, Chat, Weekly Targets
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -22,6 +23,11 @@ from models.task import Task, TaskCreate, TaskStatus
 from models.evaluation import EvaluationRequest, EvaluationResult
 from models.xp import XPTransaction, XPResult
 from models.course import CourseCreate, CertificateSubmit
+from models.chat import ChatRequest, ChatResponse
+from models.weekly_targets import (
+    CreateWeeklyTargetRequest, UpdateMilestoneRequest,
+    MilestoneStatus, WeeklyTarget,
+)
 from services.database import Database
 from services.evaluation import EvaluationService
 from services.tasks import TaskService
@@ -30,12 +36,36 @@ from services.location import LocationService
 from services.courses import CourseService
 from services.ai_evaluation import AIEvaluationService
 from services.gemini_client import get_gemini
+from services.chat import chat_service
+from services.weekly_targets import WeeklyTargetsService
+from services.university import university_service
+from models.university import UniversityMatchRequest
+from services.notification_service import notification_service
+from services.essay_service import essay_service
+from services.scholarship_service import scholarship_service
 
 # Initialize FastAPI app
+# ═══════════════════════════════════════════════════════════════════════════
+# LIFESPAN (replaces deprecated on_event)
+# ═══════════════════════════════════════════════════════════════════════════
+
+@asynccontextmanager
+async def lifespan(app):
+    """Startup and shutdown lifecycle."""
+    await db.initialize()
+    await weekly_targets_service.ensure_tables()
+    print("✅ ProfileForge API started with Chat + Weekly Targets")
+    yield
+    await db.close()
+    await chat_service.close()
+    print("🛑 ProfileForge API stopped")
+
+
 app = FastAPI(
     title="ProfileForge API",
     description="Backend for ProfileForge - AI CV Builder",
-    version="1.0.0"
+    version="2.0.0",
+    lifespan=lifespan,
 )
 
 # CORS middleware - allow Flutter app
@@ -55,6 +85,7 @@ xp_service = XPService(db)
 location_service = LocationService(db)
 course_service = CourseService(db)
 ai_eval = AIEvaluationService()
+weekly_targets_service = WeeklyTargetsService(db)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -229,8 +260,7 @@ async def evaluate_document(
 
 @app.post("/api/evaluate/text")
 async def evaluate_text(body: dict):
-    """Evaluate text content against task criteria.
-    Accepts JSON body: {"user_id": "...", "task_id": "...", "content": "..."}"""
+    """Evaluate text content against task criteria."""
     user_id = body.get("user_id", "")
     task_id = body.get("task_id", "")
     text = body.get("content", "")
@@ -378,7 +408,6 @@ async def create_course(course_id: str, course: CourseCreate):
 @app.post("/api/courses/{user_id}/enroll/{course_id}")
 async def enroll_in_course(user_id: str, course_id: str):
     """Enroll user in a free course"""
-    # Verify course exists
     course = await course_service.get_course(course_id)
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
@@ -417,10 +446,8 @@ async def complete_course(user_id: str, course_id: str):
     if not enrollment:
         raise HTTPException(status_code=404, detail="Not enrolled in this course")
     
-    # Complete enrollment
     result = await course_service.complete_enrollment(user_id, course_id)
     
-    # Award XP
     xp_result = await xp_service.award_xp(
         user_id=user_id,
         amount=course.xp_reward,
@@ -439,6 +466,117 @@ async def complete_course(user_id: str, course_id: str):
 async def get_course_stats(user_id: str):
     """Get course completion stats for a user"""
     return await course_service.get_user_stats(user_id)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CHAT ENDPOINTS — Connect to Hermes via bridge
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.post("/api/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    """
+    Send a message to the Hermes AI coach via the bridge server.
+    
+    The message is forwarded to the bridge (localhost:8090), which processes it
+    and returns a coaching response. Conversation history is maintained per session.
+    
+    Context options:
+    - "essay_review": Essay writing and Common App guidance
+    - "task_help": Help completing a specific ProfileForge task
+    - "research_guidance": Research paper methodology and planning
+    - "competition_prep": Olympiad/competition preparation
+    - "general": General college admissions advice
+    """
+    try:
+        response = await chat_service.send_message(request)
+        return response
+    except Exception as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Chat service unavailable: {str(e)}. The Hermes agent may be offline."
+        )
+
+
+@app.get("/api/chat/{conversation_id}/history")
+async def get_chat_history(conversation_id: str):
+    """Get the full conversation history for a chat session."""
+    history = await chat_service.get_conversation_history(conversation_id)
+    if not history:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return history
+
+
+@app.get("/api/chat/conversations/{user_id}")
+async def list_user_conversations(user_id: str):
+    """List all chat conversations for a user."""
+    return await chat_service.list_conversations(user_id)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# WEEKLY TARGETS & RESEARCH MILESTONES
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.post("/api/weekly-targets", response_model=WeeklyTarget)
+async def create_weekly_target(request: CreateWeeklyTargetRequest):
+    """
+    Create a new weekly target.
+    
+    Set `generate_research_milestones=True` and provide a `paper_title`
+    to auto-generate the 8-step research paper pipeline:
+      1. Topic Selection → 2. Literature Review → 3. Methodology →
+      4. Data Collection → 5. Draft v1 → 6. Peer Review →
+      7. Revision → 8. Submission
+    """
+    return await weekly_targets_service.create_target(request)
+
+
+@app.get("/api/weekly-targets/{user_id}")
+async def get_weekly_targets(
+    user_id: str,
+    week: Optional[int] = None,
+    year: Optional[int] = None,
+):
+    """Get all targets for a user in a given week (defaults to current week)."""
+    return await weekly_targets_service.get_weekly_targets(user_id, week, year)
+
+
+@app.put("/api/weekly-targets/{target_id}/status")
+async def update_target_status(target_id: str, status: MilestoneStatus):
+    """Update a weekly target's status (not_started → in_progress → completed)."""
+    target = await weekly_targets_service.update_target_status(target_id, status)
+    if not target:
+        raise HTTPException(status_code=404, detail="Target not found")
+    return target
+
+
+@app.delete("/api/weekly-targets/{target_id}")
+async def delete_target(target_id: str):
+    """Delete a weekly target and its associated milestones."""
+    deleted = await weekly_targets_service.delete_target(target_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Target not found")
+    return {"status": "deleted"}
+
+
+@app.get("/api/research-milestones/{user_id}")
+async def get_research_milestones(user_id: str):
+    """Get all research paper milestones for a user."""
+    return await weekly_targets_service.get_all_milestones(user_id)
+
+
+@app.put("/api/research-milestones/{milestone_id}")
+async def update_milestone(milestone_id: str, req: UpdateMilestoneRequest):
+    """
+    Update a research milestone's status.
+    
+    When a milestone is completed, the parent target's progress is
+    automatically recalculated. Complete all 8 milestones to finish
+    the research paper pipeline (100% progress).
+    """
+    milestone = await weekly_targets_service.update_milestone(milestone_id, req)
+    if not milestone:
+        raise HTTPException(status_code=404, detail="Milestone not found")
+    return milestone
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -494,21 +632,143 @@ async def get_opportunities(user_id: str):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# STARTUP/SHUTDOWN
+# UNIVERSITY MATCHER
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.on_event("startup")
-async def startup():
-    """Initialize database on startup"""
-    await db.initialize()
-    print("✅ ProfileForge API started")
+@app.get("/api/universities")
+async def list_universities(country: Optional[str] = None, max_tuition: Optional[int] = None):
+    """List all universities, optionally filtered by country or budget"""
+    return university_service.search(country=country, max_tuition=max_tuition)
 
 
-@app.on_event("shutdown")
-async def shutdown():
-    """Cleanup on shutdown"""
-    await db.close()
-    print("🛑 ProfileForge API stopped")
+@app.get("/api/universities/{uni_id}")
+async def get_university(uni_id: str):
+    """Get details for a specific university"""
+    uni = university_service.get_by_id(uni_id)
+    if not uni:
+        raise HTTPException(status_code=404, detail="University not found")
+    return uni
+
+
+@app.post("/api/universities/match")
+async def match_universities(request: UniversityMatchRequest):
+    """Find best-fit universities based on student profile"""
+    interests = request.interests.split(",") if request.interests else None
+    return university_service.match(
+        gpa=request.gpa,
+        sat=request.sat_score,
+        country=request.country_preference,
+        budget=request.budget_max_usd,
+        interests=interests,
+    )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# NOTIFICATIONS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/notifications/{user_id}/daily")
+async def get_daily_reminder(user_id: str):
+    """Get a context-aware daily reminder for the user"""
+    context = {
+        "tasks_remaining": 3,
+        "probability": 65,
+        "top_task": "Complete your weekly target",
+        "streak": 5,
+    }
+    return notification_service.get_daily_reminder(user_id, context)
+
+
+@app.get("/api/notifications/{user_id}/weekly")
+async def get_weekly_report(user_id: str):
+    """Get weekly summary report"""
+    stats = {
+        "week_number": 1,
+        "targets_completed": 2,
+        "targets_total": 5,
+        "xp_earned": 50,
+        "xp_available": 200,
+        "probability": 65,
+        "probability_change": 3,
+        "streak": 5,
+        "level": 3,
+        "xp_total": 350,
+        "next_week_tasks": [
+            "Complete 3 weekly targets",
+            "Work on research paper methodology",
+            "Write 300 words of Common App essay",
+        ],
+    }
+    return notification_service.get_weekly_report(user_id, stats)
+
+
+@app.post("/api/notifications/{user_id}/competition-alert")
+async def get_competition_alert(user_id: str, competition: str = "KVPY",
+                                 days_left: int = 14):
+    """Get competition registration alert"""
+    return notification_service.get_competition_alert(user_id, competition, days_left)
+
+
+@app.get("/api/notifications/{user_id}/streak")
+async def get_streak_reminder(user_id: str, streak: int = 5):
+    """Get streak-based reminder"""
+    return notification_service.get_streak_reminder(user_id, streak)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SCHOLARSHIPS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/scholarships")
+async def list_scholarships(country: Optional[str] = None):
+    """List all scholarships, optionally filtered by country"""
+    return scholarship_service.get_all(country=country)
+
+
+@app.get("/api/search-scholarships/{query}")
+async def search_scholarships(query: str):
+    """Search scholarships by name, country, or description"""
+    return scholarship_service.search(query)
+
+
+@app.get("/api/indian-scholarships")
+async def get_indian_scholarships():
+    """Get scholarships relevant to Indian students"""
+    return scholarship_service.get_for_indian_student()
+
+
+@app.get("/api/scholarships/{scholarship_id}")
+async def get_scholarship(scholarship_id: str):
+    """Get a specific scholarship"""
+    s = scholarship_service.get_by_id(scholarship_id)
+    if not s:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    return s
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ESSAY PROMPTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/essay/prompts")
+async def list_essay_prompts(platform: Optional[str] = None):
+    """List all essay prompts, optionally filtered by platform"""
+    return essay_service.get_all(platform=platform)
+
+
+@app.get("/api/essay-indian-tips/{platform}")
+async def get_indian_student_tips(platform: str = "common_app"):
+    """Get essay prompts with enhanced tips for Indian students"""
+    return essay_service.get_for_indian_student(platform)
+
+
+@app.get("/api/essay/prompts/{prompt_id}")
+async def get_essay_prompt(prompt_id: str):
+    """Get a specific essay prompt with tips"""
+    prompt = essay_service.get_by_id(prompt_id)
+    if not prompt:
+        raise HTTPException(status_code=404, detail="Prompt not found")
+    return prompt
 
 
 if __name__ == "__main__":
