@@ -979,7 +979,7 @@ class _UniversityDetailSheet extends StatelessWidget {
         _buildStatTile(
           'Tuition/Year',
           university.tuitionUsd > 0
-              ? '\\$${university.tuitionUsd.toStringAsFixed(0)}'
+              ? '\$' + university.tuitionUsd.toStringAsFixed(0)
               : 'N/A',
           Colors.teal,
           context,
