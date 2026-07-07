@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../settings/privacy_screen.dart';
+import '../essay/essay_coach_screen.dart';
 import '../settings/settings_screen.dart';
 import '../targets/weekly_targets_screen.dart';
 import '../../../providers/app_providers.dart';
@@ -548,13 +549,13 @@ class DashboardTab extends ConsumerWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _QuickActionButton(
-                    icon: Icons.settings_rounded,
-                    label: 'Settings',
-                    color: AppTheme.accentTeal,
+                    icon: Icons.edit_note_rounded,
+                    label: 'Essay Coach',
+                    color: AppTheme.warningAmber,
                     onTap: () {
                       HapticFeedback.lightImpact();
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                        MaterialPageRoute(builder: (_) => const EssayCoachScreen()),
                       );
                     },
                   ),

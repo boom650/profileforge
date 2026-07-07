@@ -771,6 +771,95 @@ async def get_essay_prompt(prompt_id: str):
     return prompt
 
 
+@app.post("/api/essay/review")
+async def review_essay(request: dict):
+    """Review an essay draft and provide feedback"""
+    essay_text = request.get("essay", "")
+    prompt_id = request.get("prompt_id", "")
+    word_limit = request.get("word_limit", 650)
+
+    if not essay_text.strip():
+        raise HTTPException(status_code=400, detail="Essay text is required")
+
+    word_count = len(essay_text.split())
+
+    # Basic analysis
+    feedback = {
+        "word_count": word_count,
+        "word_limit": word_limit,
+        "within_limit": word_count <= word_limit,
+        "utilization_pct": round(word_count / word_limit * 100, 1) if word_limit > 0 else 0,
+        "paragraph_count": len([p for p in essay_text.split("\n\n") if p.strip()]),
+        "sentence_count": essay_text.count(".") + essay_text.count("!") + essay_text.count("?"),
+        "avg_sentence_length": 0,
+        "tips": [],
+        "strengths": [],
+        "improvements": [],
+    }
+
+    if feedback["sentence_count"] > 0:
+        feedback["avg_sentence_length"] = round(word_count / feedback["sentence_count"])
+
+    # Content analysis
+    words = essay_text.lower().split()
+    word_set = set(words)
+
+    # Check for weak words
+    weak_words = {"very", "really", "quite", "somewhat", "basically", "actually", "just", "thing", "stuff", "nice", "good", "bad"}
+    found_weak = word_set & weak_words
+    if found_weak:
+        feedback["improvements"].append(f"Consider replacing weak words: {', '.join(found_weak)}")
+
+    # Check for first person variety
+    i_count = words.count("i")
+    if i_count > 15 and word_count > 100:
+        feedback["improvements"].append(f"'I' appears {i_count} times — try varying sentence structure")
+
+    # Check for hook
+    first_30 = " ".join(words[:30])
+    if any(first_30.startswith(w) for w in ["my name is", "i am", "i was", "i have", "i went", "i like"]):
+        feedback["improvements"].append("Opening may be too generic — consider a more attention-grabbing hook")
+
+    # Check for storytelling
+    story_words = {"then", "suddenly", "however", "meanwhile", "finally", "afterward", "realized"}
+    if word_set & story_words:
+        feedback["strengths"].append("Good use of narrative transitions")
+
+    # Check for sensory language
+    sensory = {"see", "heard", "felt", "smelled", "tasted", "touch", "sound", "smell", "taste", "color", "bright", "dark"}
+    if word_set & sensory:
+        feedback["strengths"].append("Nice use of sensory language — keeps the reader engaged")
+
+    # Check for show don't tell
+    telling = {"important", "learned", "grew", "developed", "became", "understood"}
+    showing = {"instead", "decided", "chose", "stood", "walked", "built", "created", "wrote"}
+    if word_set & telling and not (word_set & showing):
+        feedback["improvements"].append("Try showing through actions rather than telling (e.g., 'I stood up' vs 'I learned bravery')")
+
+    # Word utilization feedback
+    if feedback["utilization_pct"] < 60:
+        feedback["improvements"].append(f"Only {feedback['utilization_pct']}% of word limit used — expand your story")
+    elif feedback["within_limit"]:
+        feedback["strengths"].append(f"Good word count: {word_count}/{word_limit} ({feedback['utilization_pct']}%)")
+    else:
+        feedback["improvements"].append(f"Over word limit by {word_count - word_limit} words — trim for a tighter narrative")
+
+    # Sentence variety
+    if feedback["avg_sentence_length"] > 30:
+        feedback["improvements"].append("Average sentence length is high — try mixing short punchy sentences with longer ones")
+    elif feedback["avg_sentence_length"] > 0:
+        feedback["strengths"].append("Good sentence variety")
+
+    if not feedback["tips"]:
+        feedback["tips"] = [
+            "Read your essay aloud to catch awkward phrasing",
+            "Have someone unfamiliar with your story read it — does it make sense?",
+            "The best essays often start in the middle of the action, not at the beginning",
+        ]
+
+    return feedback
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "server:app",

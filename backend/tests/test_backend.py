@@ -787,3 +787,91 @@ async def test_evaluate_text_with_numbers(client, test_user):
     data = resp.json()
     assert data["score"] >= 0.6  # Should be approved with numbers
     assert data["status"] == "approved"
+
+
+# ═══════════════════════════════════════════════
+# ESSAY REVIEW TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_essay_review_basic(client):
+    """Test basic essay review endpoint"""
+    resp = await client.post("/api/essay/review", json={
+        "essay": "The smell of cardamom fills my grandmother's kitchen. I was seven when I first learned to cook.",
+        "prompt_id": "common_1",
+        "word_limit": 650,
+    })
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["word_count"] == 17
+    assert data["word_limit"] == 650
+    assert data["within_limit"] is True
+    assert "strengths" in data
+    assert "improvements" in data
+    assert "tips" in data
+
+
+@pytest.mark.asyncio
+async def test_essay_review_over_limit(client):
+    """Test essay review when over word limit"""
+    essay = " ".join(["word"] * 700)
+    resp = await client.post("/api/essay/review", json={
+        "essay": essay,
+        "prompt_id": "common_1",
+        "word_limit": 650,
+    })
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["within_limit"] is False
+    assert data["word_count"] == 700
+    # Should have improvement about being over limit
+    over_msgs = [i for i in data["improvements"] if "limit" in i.lower()]
+    assert len(over_msgs) > 0
+
+
+@pytest.mark.asyncio
+async def test_essay_review_weak_words(client):
+    """Test detection of weak words"""
+    resp = await client.post("/api/essay/review", json={
+        "essay": "This was very really quite a good and nice thing that I just basically did.",
+        "prompt_id": "common_1",
+        "word_limit": 650,
+    })
+    assert resp.status_code == 200
+    data = resp.json()
+    weak_msgs = [i for i in data["improvements"] if "weak" in i.lower()]
+    assert len(weak_msgs) > 0
+
+
+@pytest.mark.asyncio
+async def test_essay_review_empty(client):
+    """Test empty essay returns 400"""
+    resp = await client.post("/api/essay/review", json={
+        "essay": "",
+        "prompt_id": "common_1",
+        "word_limit": 650,
+    })
+    assert resp.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_essay_prompts(client):
+    """Test essay prompts listing"""
+    resp = await client.get("/api/essay/prompts")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data) >= 1
+    assert "text" in data[0]
+    assert "word_limit" in data[0]
+
+
+@pytest.mark.asyncio
+async def test_essay_prompt_by_id(client):
+    """Test getting a specific essay prompt"""
+    resp = await client.get("/api/essay/prompts/common_1")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["id"] == "common_1"
+    assert "tips" in data
+    assert "indian_student_tips" in data
