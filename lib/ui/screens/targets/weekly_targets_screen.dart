@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../config/api_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../theme/app_theme.dart';
 import '../../../providers/app_providers.dart';
 
-const String apiBase = 'http://localhost:8081';
+final String apiBase = kApiBaseUrl;
 
 // ─── Models ──────────────────────────────────────────────────────────────────
 

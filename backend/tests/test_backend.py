@@ -875,3 +875,18 @@ async def test_essay_prompt_by_id(client):
     assert data["id"] == "common_1"
     assert "tips" in data
     assert "indian_student_tips" in data
+
+
+# ═══════════════════════════════════════════════
+# USER DELETION TESTS
+# ═══════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_delete_user(client, test_user):
+    """Test deleting a user and all data"""
+    resp = await client.delete(f"/api/users/{test_user['id']}")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "deleted"
+    assert data["user_id"] == test_user["id"]

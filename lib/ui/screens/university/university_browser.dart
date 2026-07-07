@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
+import '../../config/api_config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +11,7 @@ import 'package:http/http.dart' as http;
 import '../../theme/app_theme.dart';
 import 'university_matcher.dart';
 
-const String apiBase = 'http://localhost:8081';
+final String apiBase = kApiBaseUrl;
 
 // ─── Data Model ──────────────────────────────────────────────────────────────
 
@@ -889,21 +891,23 @@ class _UniversityDetailSheet extends StatelessWidget {
                       _buildSectionTitle('Website', Icons.language_rounded, context),
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () {
-                          // Would launch URL — show snackbar for now
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Opening ${university.website}',
-                                style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              backgroundColor: AppTheme.successGreen,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                          );
+                        onTap: () async {
+                          final uri = Uri.parse(
+                              university.website!.startsWith('http')
+                                  ? university.website!
+                                  : 'https://${university.website}');
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Could not open ${university.website}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
                         },
                         child: Container(
                           width: double.infinity,

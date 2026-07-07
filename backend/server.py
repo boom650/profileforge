@@ -860,6 +860,32 @@ async def review_essay(request: dict):
     return feedback
 
 
+
+
+@app.delete("/api/users/{user_id}")
+async def delete_user(user_id: str):
+    """Delete a user and all associated data"""
+    tables = [
+        "weekly_targets", "chat_messages", "competition_entries",
+        "research_milestones", "opportunities", "gamification",
+    ]
+    deleted = []
+    errors = []
+    for table in tables:
+        try:
+            await db.db.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+            deleted.append(table)
+        except Exception:
+            errors.append(table)
+    try:
+        await db.db.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        deleted.append("users")
+    except Exception as e:
+        errors.append(f"users: {e}")
+    await db.db.commit()
+    return {"status": "deleted", "user_id": user_id, "tables_cleaned": deleted, "skipped": errors}
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "server:app",

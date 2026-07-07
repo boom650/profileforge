@@ -1,6 +1,7 @@
 // Essay Coach Screen - Common App & Coalition essay guidance with Indian student tips
 
 import 'dart:convert';
+import '../../config/api_config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 
 // ─── API Config ──────────────────────────────────────────────────────────────
-const String _kApiBaseUrl = 'http://localhost:8080';
+final String _kApiBaseUrl = kApiBaseUrl;
 
 // ─── Essay Prompt Model ──────────────────────────────────────────────────────
 class EssayPrompt {

@@ -2,11 +2,12 @@
 /// Handles communication between Flutter app and backend server
 
 import 'dart:convert';
+import '../config/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Backend URL - localhost for local server
-const String backendUrl = 'http://localhost:8080';
+final String backendUrl = kApiBaseUrl;
 
 /// API Service Provider
 final apiServiceProvider = Provider<ApiService>((ref) {

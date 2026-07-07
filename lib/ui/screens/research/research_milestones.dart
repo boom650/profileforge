@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../config/api_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 
-const String _apiBase = 'http://localhost:8081';
+final String _apiBase = kApiBaseUrl;
 
 // ─── Milestone model ─────────────────────────────────────────────────────────
 enum MilestoneStatus { notStarted, inProgress, completed }
