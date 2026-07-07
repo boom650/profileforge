@@ -27,7 +27,7 @@ class WeeklyTarget {
   final String? dueDate;
   final String? completedAt;
   final int progressPct;
-  final List<ResearchMilestone>? milestones;
+  final List<TargetMilestone>? milestones;
 
   const WeeklyTarget({
     required this.id,
@@ -64,7 +64,7 @@ class WeeklyTarget {
       completedAt: json['completed_at']?.toString(),
       progressPct: json['progress_pct'] is int ? json['progress_pct'] : 0,
       milestones: json['milestones'] != null
-          ? (json['milestones'] as List).map((m) => ResearchMilestone.fromJson(m)).toList()
+          ? (json['milestones'] as List).map((m) => TargetMilestone.fromJson(m)).toList()
           : null,
     );
   }
@@ -89,19 +89,19 @@ class WeeklyTarget {
   }
 }
 
-class ResearchMilestone {
+class TargetMilestone {
   final String id;
   final String title;
   final bool completed;
 
-  const ResearchMilestone({
+  const TargetMilestone({
     required this.id,
     required this.title,
     this.completed = false,
   });
 
-  factory ResearchMilestone.fromJson(Map<String, dynamic> json) {
-    return ResearchMilestone(
+  factory TargetMilestone.fromJson(Map<String, dynamic> json) {
+    return TargetMilestone(
       id: json['id']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
       completed: json['completed'] == true,
