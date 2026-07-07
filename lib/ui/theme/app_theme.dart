@@ -28,7 +28,6 @@ class AppTheme {
   static const Color secondary = Color(0xFFF59E0B); // Molten Amber
   static const Color accent = Color(0xFF7C3AED); // Electric Violet
   static const Color accentPurple = Color(0xFF7C3AED);
-  static const Color accentPurple = Color(0xFF7C3AED);
   static const Color success = Color(0xFF059669); // Emerald
   static const Color warning = Color(0xFFD97706); // Amber
   static const Color error = Color(0xFFE11D48); // Rose
