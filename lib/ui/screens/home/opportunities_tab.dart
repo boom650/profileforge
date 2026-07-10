@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../../models/opportunity_feed.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 /// Opportunities tab — real discovery using free APIs.
 /// Finds NGOs, nearby places, and competitions via Overpass, NGO Darpan, etc.

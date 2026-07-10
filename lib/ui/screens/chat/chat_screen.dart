@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../../services/chat_service.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CHAT STATE NOTIFIER

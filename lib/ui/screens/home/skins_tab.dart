@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../../models/gamification/skins.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 /// Skins tab — gallery of unlockable visual identities.
 class SkinsTab extends ConsumerWidget {

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../../models/gamification/missions.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 import '../../widgets/celebration_overlay.dart';
 import 'widgets/shared_widgets.dart';
 

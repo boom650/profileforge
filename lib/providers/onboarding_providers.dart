@@ -4,7 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 import '../models/onboarding/onboarding_data.dart';
+import '../models/student_profile.dart';
+import '../models/student_profile.dart' show TimeBlock, TimeBlockType, WeeklySchedule, MotivationProfile;
+import 'profile_providers.dart';
 
 final onboardingCompletedProvider = StateProvider<bool>((ref) {
   return false;
@@ -191,3 +195,113 @@ final onboardingDataProvider =
     StateNotifierProvider<OnboardingDataNotifier, OnboardingData>(
   (ref) => OnboardingDataNotifier(),
 );
+
+/// Converts accumulated onboarding data into a StudentProfile.
+StudentProfile buildStudentProfileFromOnboarding(OnboardingData data) {
+  // Build a WeeklySchedule from onboarding timetable data
+  final schedule = _buildScheduleFromOnboarding(data);
+
+  // Compute coaching hours per week from timetable
+  int coachingHrsPerWeek = 0;
+  if (data.hasCoaching &&
+      data.coachingStartTime != null &&
+      data.coachingEndTime != null) {
+    final startParts = data.coachingStartTime!.split(':');
+    final endParts = data.coachingEndTime!.split(':');
+    if (startParts.length == 2 && endParts.length == 2) {
+      final startMin =
+          int.parse(startParts[0]) * 60 + int.parse(startParts[1]);
+      final endMin = int.parse(endParts[0]) * 60 + int.parse(endParts[1]);
+      final dailyMins = endMin - startMin;
+      if (dailyMins > 0) {
+        final daysPerWeek = data.schoolDaysPerWeek ?? 5;
+        coachingHrsPerWeek = ((dailyMins * daysPerWeek) / 60).round();
+      }
+    }
+  }
+
+  return StudentProfile(
+    id: const Uuid().v4(),
+    name: data.name.trim(),
+    email: '',
+    phone: '',
+    board: data.board,
+    stream: data.stream,
+    grade: data.grade ?? 11,
+    subjects: data.subjects,
+    tenthPercentage: 0.0,
+    coachingInstitute: '',
+    coachingHoursPerWeek: coachingHrsPerWeek,
+    satScore: null,
+    ieltsScore: null,
+    targetCountries: data.targetCountries.toList(),
+    targetMajor: data.targetMajor ?? '',
+    reachUniversities: data.targetUniversities,
+    matchUniversities: [],
+    safetyUniversities: [],
+    activities: [],
+    schedule: schedule,
+    motivation: MotivationProfile.empty(),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
+}
+
+/// Builds a WeeklySchedule from onboarding timetable + free slots data.
+WeeklySchedule _buildScheduleFromOnboarding(OnboardingData data) {
+  final schedule = <String, List<TimeBlock>>{};
+  final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  if (data.hasSaturdaySchool || (data.schoolDaysPerWeek != null && data.schoolDaysPerWeek! > 5)) {
+    days.add('Saturday');
+  }
+
+  final schoolStart = data.schoolStartTime ?? '07:30';
+  final schoolEnd = data.schoolEndTime ?? '14:00';
+  final hasCoaching = data.hasCoaching;
+  final coachingStart = data.coachingStartTime ?? '15:00';
+  final coachingEnd = data.coachingEndTime ?? '18:00';
+
+  final u = const Uuid();
+
+  for (final day in days) {
+    final blocks = <TimeBlock>[
+      TimeBlock(
+        id: u.v4(),
+        label: 'School',
+        startTime: schoolStart,
+        endTime: schoolEnd,
+        type: TimeBlockType.school,
+        isFree: false,
+      ),
+    ];
+
+    if (hasCoaching) {
+      blocks.add(TimeBlock(
+        id: u.v4(),
+        label: 'Coaching',
+        startTime: coachingStart,
+        endTime: coachingEnd,
+        type: TimeBlockType.coaching,
+        isFree: false,
+      ));
+    }
+
+    schedule[day] = blocks;
+  }
+
+  return WeeklySchedule(
+    schedule: schedule,
+    discretionaryHoursWeekday: data.freeSlotsWeekdayHours,
+    discretionaryHoursWeekend: data.freeSlotsWeekendHours,
+  );
+}
+
+/// Provider that persists the onboarding profile to the database and sets
+/// the in-memory student profile provider.
+final persistOnboardingProfileProvider =
+    Provider<Future<void> Function(StudentProfile)>((ref) {
+  return (StudentProfile profile) async {
+    // Set the in-memory provider so the rest of the app can use it immediately
+    ref.read(studentProfileProvider.notifier).setProfile(profile);
+  };
+});

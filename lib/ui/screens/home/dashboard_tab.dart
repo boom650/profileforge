@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 import '../../../models/student_profile.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../models/gamification/skins.dart';

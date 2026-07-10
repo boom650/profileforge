@@ -476,16 +476,30 @@ class Database:
         new_level = (new_total // 100) + 1  # Level up every 100 XP
         
         # Update pillar XP
-        # Validate pillar against whitelist (already done above)
-        pillar_column = f"{pillar}_xp"
         new_pillar_xp = current.get(f"{pillar}_xp", 0) + amount
         
-        # Update XP state - pillar_column is validated against whitelist
-        await self.db.execute(f"""
+        # Update XP state using parameterized query with CASE for pillar-specific column
+        await self.db.execute("""
             UPDATE xp_state 
-            SET total_xp=?, level=?, {pillar_column}=?, updated_at=?
+            SET total_xp=?, level=?, 
+                academics_xp = CASE WHEN ?='academics' THEN ? ELSE academics_xp END,
+                research_xp = CASE WHEN ?='research' THEN ? ELSE research_xp END,
+                leadership_xp = CASE WHEN ?='leadership' THEN ? ELSE leadership_xp END,
+                creativity_xp = CASE WHEN ?='creativity' THEN ? ELSE creativity_xp END,
+                community_xp = CASE WHEN ?='community' THEN ? ELSE community_xp END,
+                evidence_xp = CASE WHEN ?='evidence' THEN ? ELSE evidence_xp END,
+                consistency_xp = CASE WHEN ?='consistency' THEN ? ELSE consistency_xp END,
+                updated_at=?
             WHERE user_id=?
-        """, (new_total, new_level, new_pillar_xp, now, user_id))
+        """, (new_total, new_level, 
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              pillar, new_pillar_xp,
+              now, user_id))
         
         # Record transaction
         tx_id = str(uuid.uuid4())

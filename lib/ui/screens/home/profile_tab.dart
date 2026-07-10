@@ -5,7 +5,7 @@ import '../../theme/app_theme.dart';
 import '../../../models/student_profile.dart';
 import '../../../models/gamification/skins.dart';
 import '../../../models/opportunity_feed.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 import '../settings/settings_screen.dart';
 import '../privacy/privacy_screen.dart';
 import 'widgets/shared_widgets.dart';
