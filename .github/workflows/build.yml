@@ -3,19 +3,26 @@ name: Build ProfileForge APK
 on:
   push:
     branches: ["master", "main"]
+  pull_request:
+    branches: ["master", "main"]
   workflow_dispatch:
 
+env:
+  FLUTTER_VERSION: '3.44.4'
+  JAVA_VERSION: '17'
+
 jobs:
-  build:
+  lint-and-test:
+    name: Lint & Test
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.4'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
 
@@ -23,15 +30,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
-
-      - name: Regenerate Android platform
-        run: |
-          rm -rf android/
-          flutter create --project-name profileforge --platforms android .
-
-      - name: Enable core library desugaring
-        run: python3 scripts/fix_desugaring.py
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
 
       - name: Get dependencies
         run: flutter pub get
@@ -39,12 +39,150 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK
-        run: flutter build apk --debug
+      - name: Analyze (flutter analyze)
+        run: flutter analyze --fatal-infos
 
-      - name: Upload APK
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: profileforge-apk
+          name: coverage-report
+          path: coverage/lcov.info
+
+  build-matrix:
+    name: Build (${{ matrix.channel }})
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      matrix:
+        channel: [stable, beta]
+        include:
+          - channel: stable
+            flutter-version: '3.44.4'
+          - channel: beta
+            flutter-version: '3.29.0-0.1.pre'
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.flutter-version }}
+          channel: ${{ matrix.channel }}
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build APK (debug)
+        run: flutter build apk --debug
+
+      - name: Build APK (release)
+        run: flutter build apk --release --split-per-abi
+
+      - name: Build App Bundle (AAB)
+        run: flutter build appbundle --release
+
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-debug-${{ matrix.channel }}
           path: build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error
+
+      - name: Upload release APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-release-${{ matrix.channel }}
+          path: build/app/outputs/flutter-apk/*.apk
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: aab-${{ matrix.channel }}
+          path: build/app/outputs/bundle/release/*.aab
+
+  build-web:
+    name: Build Web
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build web
+        run: flutter build web --release --web-renderer canvaskit
+
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/**
+
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio httpx
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          pytest -v
+
+  notify:
+    name: Notify
+    needs: [build-matrix, build-web, backend-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check status
+        run: |
+          if [[ "${{ needs.lint-and-test.result }}" != "success" ]] || \
+             [[ "${{ needs.build-matrix.result }}" != "success" ]] || \
+             [[ "${{ needs.build-web.result }}" != "success" ]] || \
+             [[ "${{ needs.backend-test.result }}" != "success" ]]; then
+            echo "Some jobs failed"
+            exit 1
+          else
+            echo "All jobs passed!"
+          fi
