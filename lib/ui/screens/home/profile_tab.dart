@@ -116,6 +116,7 @@ class ProfileTab extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.analytics_rounded),
             tooltip: 'Statistics',
+            semanticLabel: 'Open statistics',
             onPressed: () {
               HapticFeedback.lightImpact();
               Navigator.of(context).push(
@@ -125,6 +126,7 @@ class ProfileTab extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.edit_rounded),
+            semanticLabel: 'Edit profile',
             onPressed: () {
               HapticFeedback.lightImpact();
               Navigator.of(context).push(
@@ -303,6 +305,7 @@ class ProfileTab extends ConsumerWidget {
                       MaterialPageRoute(builder: (_) => const SettingsScreen()),
                     );
                   },
+                  semanticLabel: 'Open notifications settings',
                 ),
                 _SettingsRow(
                   icon: Icons.dark_mode_rounded,
@@ -314,6 +317,7 @@ class ProfileTab extends ConsumerWidget {
                       MaterialPageRoute(builder: (_) => const SettingsScreen()),
                     );
                   },
+                  semanticLabel: 'Open appearance and language settings',
                 ),
                 _SettingsRow(
                   icon: Icons.storage_rounded,
@@ -325,6 +329,7 @@ class ProfileTab extends ConsumerWidget {
                       MaterialPageRoute(builder: (_) => const SettingsScreen()),
                     );
                   },
+                  semanticLabel: 'Open data and privacy settings',
                 ),
                 _SettingsRow(
                   icon: Icons.shield_rounded,
@@ -333,6 +338,7 @@ class ProfileTab extends ConsumerWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const PrivacyScreen()),
                   ),
+                  semanticLabel: 'Open privacy and data settings',
                 ),
                 _SettingsRow(
                   icon: Icons.help_rounded,
@@ -650,17 +656,19 @@ class _SettingsRow extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final String? semanticLabel;
 
   const _SettingsRow({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.semanticLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    Widget child = InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
@@ -697,5 +705,13 @@ class _SettingsRow extends StatelessWidget {
         ),
       ),
     );
+    if (semanticLabel != null) {
+      child = Semantics(
+        label: semanticLabel,
+        button: true,
+        child: child,
+      );
+    }
+    return child;
   }
 }
