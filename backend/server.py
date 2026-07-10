@@ -48,6 +48,19 @@ from services.courses import CourseService
 from services.ai_evaluation import AIEvaluationService
 from services.gemini_client import get_gemini
 from services.chat import chat_service
+
+# Auth dependency stub - replace with real JWT validation
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer(auto_error=False)
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Extract and validate user from JWT token. Stub for now - returns user_id from token."""
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    # TODO: Validate JWT token and extract user_id
+    # For now, assume token is user_id
+    return credentials.credentials
 from services.weekly_targets import WeeklyTargetsService
 from services.university import university_service
 from models.university import UniversityMatchRequest
