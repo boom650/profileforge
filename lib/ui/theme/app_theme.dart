@@ -7,12 +7,12 @@ class AppTheme {
   static const Color primaryBlue = Color(0xFF4338CA);
   static const Color primaryBlueLight = Color(0xFF6366F1);
   // Secondary: Molten Amber — connects to "forge" metaphor
-  static const Color accentGold = Color(0xFFF59E0B);
+  static const Color accentGold = Color(0xFFD97706);
   static const Color accentSilver = Color(0xFFC0C0C0);
   static const Color accentBronze = Color(0xFFCD7F32);
   // Status colors
-  static const Color successGreen = Color(0xFF059669); // Emerald
-  static const Color errorRed = Color(0xFFE11D48); // Rose
+  static const Color successGreen = Color(0xFF047857); // Emerald
+  static const Color errorRed = Color(0xFFC0003A); // Rose
   static const Color warningAmber = Color(0xFFD97706);
   // Surfaces — warm, not Tailwind defaults
   static const Color surfaceWhite = Color(0xFFFDF8F3); // Warm White
@@ -21,7 +21,7 @@ class AppTheme {
   // Text colors
   static const Color textPrimary = Color(0xFF1E293B);
   static const Color textSecondary = Color(0xFF64748B);
-  static const Color textMuted = Color(0xFF94A3B8);
+  static const Color textMuted = Color(0xFF7C8DA4);
 
   // ── Semantic aliases ────────────────────────────────────────────────────
   static const Color primary = Color(0xFF4338CA); // Deep Indigo
