@@ -19,7 +19,7 @@ class Screen2Consent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'How we personalize\nyour missions',
             style: GoogleFonts.inter(
@@ -80,7 +80,7 @@ class Screen2Consent extends StatelessWidget {
               ],
             ),
           ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2),
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'Your data. Your control.\nAlways.',
             textAlign: TextAlign.center,

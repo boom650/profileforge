@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 /// Screen 10: School Timetable — collect school hours, coaching/tuition,
 /// and commute info so we can compute free slots for missions.
@@ -105,7 +105,7 @@ class _Screen10SchoolTimetableState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'School\nTimetable',
             style: GoogleFonts.inter(

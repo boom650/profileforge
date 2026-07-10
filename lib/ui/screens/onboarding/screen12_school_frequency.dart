@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 /// Screen 12: School Frequency — select how many days per week the
 /// student attends school, and which days.
@@ -96,7 +96,7 @@ class _Screen12SchoolFrequencyState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'School\nFrequency',
             style: GoogleFonts.inter(

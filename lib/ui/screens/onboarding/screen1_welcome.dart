@@ -105,7 +105,7 @@ class _WelcomeContent extends StatelessWidget {
                   .scale(delay: 200.ms, duration: 800.ms, curve: Curves.elasticOut)
                   .then(delay: 400.ms)
                   .shimmer(duration: 1200.ms),
-              const SizedBox(height: 40),
+              const SizedBox(height: AppTheme.spacingXxl),
               // Main headline
               Text(
                 'Your Dream\nUniversity\nAwaits.',
@@ -173,7 +173,7 @@ class _WelcomeContent extends StatelessWidget {
                 color: AppTheme.accentOrange,
                 delay: 1100,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: AppTheme.spacingXxl),
               // Privacy badge
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

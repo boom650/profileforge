@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 class Screen3Goals extends ConsumerStatefulWidget {
   const Screen3Goals({super.key, this.onFormChanged});
@@ -82,7 +82,7 @@ class _Screen3GoalsState extends ConsumerState<Screen3Goals> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: AppTheme.spacingXxl),
               // Header with gradient icon
               Row(
                 children: [

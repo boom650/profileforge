@@ -13,7 +13,7 @@ class Screen3LocationSchool extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'Home Location\n& School',
             style: GoogleFonts.inter(

@@ -70,7 +70,7 @@ class _Screen4AcademicProfileState extends State<Screen4AcademicProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: AppTheme.spacingXxl),
               Text(
                 'Academic Profile',
                 style: GoogleFonts.inter(

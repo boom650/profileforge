@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 /// Screen 11: Free Slots — shows computed available time based on the
 /// timetable entered in Screen 10. User can confirm or adjust.
@@ -55,7 +55,7 @@ class _Screen11FreeSlotsState extends ConsumerState<Screen11FreeSlots> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'Your Free\nSlots',
             style: GoogleFonts.inter(

@@ -20,7 +20,7 @@ class Screen8MotivationPersonality extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'What Drives You?',
             style: GoogleFonts.inter(

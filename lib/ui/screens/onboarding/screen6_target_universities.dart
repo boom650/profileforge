@@ -52,7 +52,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: AppTheme.spacingXxl),
           Text(
             'Target Universities',
             style: GoogleFonts.inter(

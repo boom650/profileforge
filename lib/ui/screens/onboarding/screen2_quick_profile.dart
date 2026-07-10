@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 class Screen2QuickProfile extends ConsumerStatefulWidget {
   const Screen2QuickProfile({super.key, this.onFormChanged});
@@ -159,7 +159,7 @@ class _Screen2QuickProfileState extends ConsumerState<Screen2QuickProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: AppTheme.spacingXxl),
               // Header with completion indicator
               Row(
                 children: [
