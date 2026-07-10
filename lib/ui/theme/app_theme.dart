@@ -44,6 +44,14 @@ class AppTheme {
   static const Color categoryEmerald = Color(0xFF10B981); // Emerald
   static const Color categoryPink = Color(0xFFEC4899);    // Pink
 
+  // ── Spacing constants (8px base grid) ───────────────────────────────────
+  static const double spacingXs = 4.0;
+  static const double spacingSm = 8.0;
+  static const double spacingMd = 16.0;
+  static const double spacingLg = 24.0;
+  static const double spacingXl = 32.0;
+  static const double spacingXxl = 40.0; // Header spacing
+
   // ── Gradients ───────────────────────────────────────────────────────────
   static const LinearGradient gradientPrimary = LinearGradient(
     colors: [Color(0xFF4338CA), Color(0xFF7C3AED)], // Deep Indigo → Electric Violet
