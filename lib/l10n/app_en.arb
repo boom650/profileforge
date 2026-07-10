@@ -3,5 +3,650 @@
   "appTitle": "ProfileForge",
   "@appTitle": {
     "description": "The title of the application"
+  },
+  "dashboardTabTitle": "Dashboard",
+  "@dashboardTabTitle": {
+    "description": "Dashboard tab label"
+  },
+  "missionsTabTitle": "Missions",
+  "@missionsTabTitle": {
+    "description": "Missions tab label"
+  },
+  "opportunitiesTabTitle": "Opportunities",
+  "@opportunitiesTabTitle": {
+    "description": "Opportunities tab label"
+  },
+  "skinsTabTitle": "Skins",
+  "@skinsTabTitle": {
+    "description": "Skins tab label"
+  },
+  "profileTabTitle": "Profile",
+  "@profileTabTitle": {
+    "description": "Profile tab label"
+  },
+  "aboutProfileForge": "About ProfileForge",
+  "@aboutProfileForge": {
+    "description": "About dialog title"
+  },
+  "academic": "Academic",
+  "@academic": {
+    "description": "Academic category"
+  },
+  "activities": "Activities",
+  "@activities": {
+    "description": "Activities section"
+  },
+  "admissionsTargetedMissions": "Admissions-targeted missions based on your target universities",
+  "@admissionsTargetedMissions": {
+    "description": "Missions description"
+  },
+  "afterSchoolCoachingHours": "After school + coaching, how many hours can you spare?",
+  "@afterSchoolCoachingHours": {
+    "description": "Coaching hours question"
+  },
+  "ageVerification": "Age Verification",
+  "@ageVerification": {
+    "description": "Age verification screen title"
+  },
+  "aiProbabilityEngine": "AI Probability Engine",
+  "@aiProbabilityEngine": {
+    "description": "AI engine label"
+  },
+  "all": "All",
+  "@all": {
+    "description": "All filter option"
+  },
+  "allDataDeleted": "All data has been permanently deleted.",
+  "@allDataDeleted": {
+    "description": "Data deletion confirmation"
+  },
+  "allDataLocal": "All data stays on your device (local SQLite)",
+  "@allDataLocal": {
+    "description": "Data storage info"
+  },
+  "allPersonalDataEncrypted": "All personal data is encrypted with AES-256",
+  "@allPersonalDataEncrypted": {
+    "description": "Encryption info"
+  },
+  "allStatus": "All Status",
+  "@allStatus": {
+    "description": "All status filter"
+  },
+  "alreadyCheckedIn": "Already checked in today! ✅",
+  "@alreadyCheckedIn": {
+    "description": "Check-in already done"
+  },
+  "annualBudget": "Annual Budget",
+  "@annualBudget": {
+    "description": "Budget field"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button"
+  },
+  "applyPreset": "Apply Preset",
+  "@applyPreset": {
+    "description": "Apply preset button"
+  },
+  "artMusicPractice": "Art/Music Practice",
+  "@artMusicPractice": {
+    "description": "Art practice activity"
+  },
+  "askAboutColleges": "Ask about colleges, essays, profile...",
+  "@askAboutColleges": {
+    "description": "Chat placeholder"
+  },
+  "atlLabAccess": "ATL Lab access",
+  "@atlLabAccess": {
+    "description": "ATL lab access"
+  },
+  "atlLabs": "ATL Labs",
+  "@atlLabs": {
+    "description": "ATL Labs category"
+  },
+  "autoDetectLocation": "Auto-detect from location",
+  "@autoDetectLocation": {
+    "description": "Auto-detect location option"
+  },
+  "autoDetectSchool": "Auto-detect or manually select your school",
+  "@autoDetectSchool": {
+    "description": "School detection option"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button"
+  },
+  "bestStreak": "Best Streak",
+  "@bestStreak": {
+    "description": "Best streak label"
+  },
+  "board": "Board",
+  "@board": {
+    "description": "Education board"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "capstoneProjectProposal": "Capstone Project Proposal",
+  "@capstoneProjectProposal": {
+    "description": "Capstone project"
+  },
+  "checkInFailed": "Check-in failed. Try again.",
+  "@checkInFailed": {
+    "description": "Check-in failure message"
+  },
+  "city": "City",
+  "@city": {
+    "description": "City field"
+  },
+  "claim": "Claim",
+  "@claim": {
+    "description": "Claim button"
+  },
+  "claimXp": "Claim XP",
+  "@claimXp": {
+    "description": "Claim XP button"
+  },
+  "claimedXpReward": "Claimed ${mission.xpReward} XP reward! 🎉",
+  "@claimedXpReward": {
+    "description": "XP claimed message",
+    "placeholders": {
+      "mission_xpReward": {}
+    }
+  },
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear button"
+  },
+  "clearAllData": "Clear all data and start fresh",
+  "@clearAllData": {
+    "description": "Clear all data option"
+  },
+  "clearChat": "Clear chat",
+  "@clearChat": {
+    "description": "Clear chat option"
+  },
+  "clubEnrollmentLetters": "Club enrollment, teacher intro letters, first research idea",
+  "@clubEnrollmentLetters": {
+    "description": "Club enrollment description"
+  },
+  "clubSchedules": "Club schedules",
+  "@clubSchedules": {
+    "description": "Club schedules"
+  },
+  "coaching": "Coaching",
+  "@coaching": {
+    "description": "Coaching category"
+  },
+  "coachingTuition": "Coaching / Tuition",
+  "@coachingTuition": {
+    "description": "Coaching tuition"
+  },
+  "coachingHoursWeek": "Coaching Hours/Week",
+  "@coachingHoursWeek": {
+    "description": "Coaching hours per week"
+  },
+  "coachingInstitute": "Coaching Institute",
+  "@coachingInstitute": {
+    "description": "Coaching institute field"
+  },
+  "comingSoon": "Coming soon",
+  "@comingSoon": {
+    "description": "Coming soon label"
+  },
+  "commonAppDraft": "Common App Draft",
+  "@commonAppDraft": {
+    "description": "Common App draft"
+  },
+  "commonMistakesToAvoid": "Common Mistakes to Avoid",
+  "@commonMistakesToAvoid": {
+    "description": "Mistakes to avoid"
+  },
+  "commute": "Commute",
+  "@commute": {
+    "description": "Commute section"
+  },
+  "competitionAlerts": "Competition Alerts",
+  "@competitionAlerts": {
+    "description": "Competition alerts"
+  },
+  "competitionSaved": "Competition saved",
+  "@competitionSaved": {
+    "description": "Competition saved confirmation"
+  },
+  "competitions": "Competitions",
+  "@competitions": {
+    "description": "Competitions section"
+  },
+  "complete": "Complete",
+  "@complete": {
+    "description": "Complete status"
+  },
+  "completeActivityProfile": "Complete an Activity Profile",
+  "@completeActivityProfile": {
+    "description": "Complete activity profile"
+  },
+  "completeApplicationPortfolio": "Complete Application Portfolio",
+  "@completeApplicationPortfolio": {
+    "description": "Complete application portfolio"
+  },
+  "completeMissionsEarnXp": "Complete missions and earn XP to climb\\nthe leaderboard!",
+  "@completeMissionsEarnXp": {
+    "description": "Leaderboard encouragement"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button"
+  },
+  "connectWithMentor": "Connect with a Mentor",
+  "@connectWithMentor": {
+    "description": "Mentor connection"
+  },
+  "contact": "Contact",
+  "@contact": {
+    "description": "Contact section"
+  },
+  "contactInfoSaved": "Contact info saved",
+  "@contactInfoSaved": {
+    "description": "Contact saved confirmation"
+  },
+  "contactUs": "Contact Us",
+  "@contactUs": {
+    "description": "Contact us link"
+  },
+  "couldNotOpenWebsite": "Could not open ${university.website}",
+  "@couldNotOpenWebsite": {
+    "description": "Website open failure",
+    "placeholders": {
+      "university_website": {}
+    }
+  },
+  "courses": "Courses",
+  "@courses": {
+    "description": "Courses section"
+  },
+  "createWeeklyPlan": "Create Weekly Plan",
+  "@createWeeklyPlan": {
+    "description": "Create weekly plan button"
+  },
+  "createYourFirstTarget": "Create Your First Target",
+  "@createYourFirstTarget": {
+    "description": "Create target button"
+  },
+  "creative": "Creative",
+  "@creative": {
+    "description": "Creative category"
+  },
+  "creativeWritingSprint": "Creative Writing Sprint",
+  "@creativeWritingSprint": {
+    "description": "Creative writing sprint"
+  },
+  "cs50": "CS50: Introduction to Computer Science",
+  "@cs50": {
+    "description": "CS50 course"
+  },
+  "culturalEngagementVisit": "Cultural Engagement Visit",
+  "@culturalEngagementVisit": {
+    "description": "Cultural engagement visit"
+  },
+  "currentStatus": "Current Status",
+  "@currentStatus": {
+    "description": "Current status label"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Custom option"
+  },
+  "dailyCheckin": "Daily Check-in",
+  "@dailyCheckin": {
+    "description": "Daily check-in"
+  },
+  "dailyReminders": "Daily Reminders",
+  "@dailyReminders": {
+    "description": "Daily reminders setting"
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode setting"
+  },
+  "darkModeThemesLanguages": "Dark mode, themes, regional languages",
+  "@darkModeThemesLanguages": {
+    "description": "Appearance & language description"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard screen"
+  },
+  "dataAndPrivacy": "Data & Privacy",
+  "@dataAndPrivacy": {
+    "description": "Data & privacy section"
+  },
+  "dataEncryption": "Data Encryption",
+  "@dataEncryption": {
+    "description": "Data encryption setting"
+  },
+  "dataRetentionPolicy": "Data Retention Policy",
+  "@dataRetentionPolicy": {
+    "description": "Data retention policy"
+  },
+  "dataStorage": "Data Storage",
+  "@dataStorage": {
+    "description": "Data storage setting
+  },
+  "dataViewerComingSoon": "Data viewer coming soon",
+  "@dataViewerComingSoon": {
+    "description": "Data viewer placeholder"
+  },
+  "debatePreparation": "Debate Preparation",
+  "@debatePreparation": {
+    "description": "Debate preparation activity"
+  },
+  "decisionDay": "Decision Day",
+  "@decisionDay": {
+    "description": "Decision day label"
+  },
+  "deepDiveResearch": "Deep dive into research, competitions, or leadership roles",
+  "@deepDiveResearch": {
+    "description": "Deep dive description"
+  },
+  "deleteAccountAllData": "Delete Account & All Data",
+  "@deleteAccountAllData": {
+    "description": "Delete account option"
+  },
+  "deleteEverything": "Delete Everything",
+  "@deleteEverything": {
+    "description": "Delete everything confirmation"
+  },
+  "details": "Details",
+  "@details": {
+    "description": "Details button"
+  },
+  "doYouAttendCoaching": "Do you attend coaching classes after school?",
+  "@doYouAttendCoaching": {
+    "description": "Coaching attendance question"
+  },
+  "documentToday": "Document Today",
+  "@documentToday": {
+    "description": "Document today action"
+  },
+  "downloadCopyOfData": "Download a copy of your data",
+  "@downloadCopyOfData": {
+    "description": "Download data action"
+  },
+  "draftSaved": "Draft saved",
+  "@draftSaved": {
+    "description": "Draft saved confirmation"
+  },
+  "dream": "Dream",
+  "@dream": {
+    "description": "Dream university category"
+  },
+  "eg1450": "e.g., 1450",
+  "@eg1450": {
+    "description": "SAT score example"
+  },
+  "eg20": "e.g., 20",
+  "@eg20": {
+    "description": "ACT score example"
+  },
+  "eg38": "e.g., 3.8",
+  "@eg38": {
+    "description": "GPA example"
+  },
+  "eg75": "e.g., 7.5",
+  "@eg75": {
+    "description": "IELTS example"
+  },
+  "eg94": "e.g., 94.2%",
+  "@eg94": {
+    "description": "Percentage example"
+  },
+  "egAarav": "e.g., Aarav Patel",
+  "@egAarav": {
+    "description": "Name example"
+  },
+  "egAllen": "e.g., Allen, Aakash, FIITJEE",
+  "@egAllen": {
+    "description": "Coaching institute example"
+  },
+  "earnSkinsNotCoins": "Earn Skins, Not Boring Coins",
+  "@earnSkinsNotCoins": {
+    "description": "Gamification tagline"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile action"
+  },
+  "emailAddress": "Email Address",
+  "@emailAddress": {
+    "description": "Email field"
+  },
+  "enableLocation": "Enable Location",
+  "@enableLocation": {
+    "description": "Enable location button"
+  },
+  "end": "End",
+  "@end": {
+    "description": "End time label"
+  },
+  "englishComposition": "English Composition",
+  "@englishComposition": {
+    "description": "English composition course"
+  },
+  "enterCityFindOpportunities": "Enter your city to find nearby opportunities",
+  "@enterCityFindOpportunities": {
+    "description": "City search hint"
+  },
+  "errorDeletingData": "Error deleting data: $e",
+  "@errorDeletingData": {
+    "description": "Delete error message",
+    "placeholders": {
+      "e": {}
+    }
+  },
+  "errorTryAgain": "Error. Try again.",
+  "@errorTryAgain": {
+    "description": "Generic error message"
+  },
+  "errorOccurred": "Error: $error",
+  "@errorOccurred": {
+    "description": "Error with detail",
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "errorResponse": "Error: ${response.body}",
+  "@errorResponse": {
+    "description": "API error response",
+    "placeholders": {
+      "response_body": {}
+    }
+  },
+  "essayCoach": "Essay Coach",
+  "@essayCoach": {
+    "description": "Essay coach feature"
+  },
+  "essayDraftsRecommendations": "Essay drafts, recommendation requests, final probability push",
+  "@essayDraftsRecommendations": {
+    "description": "Essay phase description"
+  },
+  "essayWritingPractice": "Essay Writing Practice",
+  "@essayWritingPractice": {
+    "description": "Essay writing practice"
+  },
+  "examplesGoodHooks": "Examples of Good Hooks",
+  "@examplesGoodHooks": {
+    "description": "Good hooks examples"
+  },
+  "explore": "Explore",
+  "@explore": {
+    "description": "Explore action"
+  },
+  "export": "Export",
+  "@export": {
+    "description": "Export action
+  },
+  "exportDataPrivacyTerms": "Export data, privacy settings, terms",
+  "@exportDataPrivacyTerms": {
+    "description": "Export/privacy/terms group"
+  },
+  "exportFailed": "Export failed: $e",
+  "@exportFailed": {
+    "description": "Export failure",
+    "placeholders": {
+      "e": {}
+    }
+  },
+  "exportFeatureComingSoon": "Export feature coming soon",
+  "@exportFeatureComingSoon": {
+    "description": "Export feature placeholder"
+  },
+  "exportProfileData": "Export Profile Data",
+  "@exportProfileData": {
+    "description": "Export profile data"
+  },
+  "exportYourData": "Export Your Data",
+  "@exportYourData": {
+    "description": "Export your data action"
+  },
+  "failedToClaimXp": "Failed to claim XP",
+  "@failedToClaimXp": {
+    "description": "Claim XP failure"
+  },
+  "failedToCompleteMission": "Failed to complete mission",
+  "@failedToCompleteMission": {
+    "description": "Mission failure"
+  },
+  "failedToSave": "Failed to save: $e",
+  "@failedToSave": {
+    "description": "Save failure",
+    "placeholders": {
+      "e": {}
+    }
+  },
+  "faqContactFeedback": "FAQ, contact, feedback",
+  "@faqContactFeedback": {
+    "description": "FAQ/contact/feedback group"
+  },
+  "findNearby": "Find Nearby",
+  "@findNearby": {
+    "description": "Find nearby action"
+  },
+  "flexibleTiming": "Flexible timing",
+  "@flexibleTiming": {
+    "description": "Flexible timing option"
+  },
+  "focusedStudySession": "Focused Study Session",
+  "@focusedStudySession": {
+    "description": "Focused study session"
+  },
+  "forParents": "For Parents",
+  "@forParents": {
+    "description": "For parents section
+  },
+  "freezes": "Freezes",
+  "@freezes": {
+    "description": "Streak freezes
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Full name field"
+  },
+  "fundamentalsDigitalMarketing": "Fundamentals of Digital Marketing",
+  "@fundamentalsDigitalMarketing": {
+    "description": "Digital marketing course"
+  },
+  "gallery": "Gallery",
+  "@gallery": {
+    "description": "Gallery section
+  },
+  "getRemindedCheckin": "Get reminded to check in every day",
+  "@getRemindedCheckin": {
+    "description": "Daily reminder description
+  },
+  "gettingStarted": "Getting Started",
+  "@gettingStarted": {
+    "description": "Getting started section
+  },
+  "goBack": "Go back",
+  "@goBack": {
+    "description": "Go back action
+  },
+  "googleDataAnalytics": "Google Data Analytics",
+  "@googleDataAnalytics": {
+    "description": "Google Data Analytics course
+  },
+  "googleUxDesign": "Google UX Design Certificate",
+  "@googleUxDesign": {
+    "description": "Google UX Design certificate
+  },
+  "gpaUniversity": "GPA: ${university.averageGPA}",
+  "@gpaUniversity": {
+    "description": "University GPA
+  },
+  "grade": "Grade",
+  "@grade": {
+    "description": "Grade field
+  },
+  "habitFormed": "Habit Formed",
+  "@habitFormed": {
+    "description": "Habit formed milestone
+  },
+  "halfYearHero": "Half Year Hero",
+  "@halfYearHero": {
+    "description": "Half year hero milestone
+  },
+  "helpAndSupport": "Help & Support",
+  "@helpAndSupport": {
+    "description": "Help & support section
+  },
+  "helpPeerSucceed": "Help a Peer Succeed",
+  "@helpPeerSucceed": {
+    "description": "Help peer action
+  },
+  "helpCenterComingSoon": "Help center coming soon",
+  "@helpCenterComingSoon": {
+    "description": "Help center placeholder
+  },
+  "helpUsImprove": "Help us improve ProfileForge",
+  "@helpUsImprove": {
+    "description": "Feedback request
+  },
+  "homeLocation": "Home Location",
+  "@homeLocation": {
+    "description": "Home location field
+  },
+  "howLongCommute": "How long is your daily commute (one way)?",
+  "@howLongCommute": {
+    "description": "Commute time question
+  },
+  "howWeHandleData": "How we handle your data",
+  "@howWeHandleData": {
+    "description": "Data handling description
+  },
+  "hyperLocalOpportunities": "Hyper-Local Opportunities",
+  "@hyperLocalOpportunities": {
+    "description": "Hyper-local opportunities
+  },
+  "ieltsScore": "IELTS Score",
+  "@ieltsScore": {
+    "description": "IELTS score field
+  },
+  "inSchoolClubsTeachers": "In-school clubs, teachers, facilities mapped to free periods",
+  "@inSchoolClubsTeachers": {
+    "description": "In-school clubs description
+  },
+  "insights": "Insights",
+  "@insights": {
+    "description": "Insights section
+  },
+  "intendedMajor": "Intended Major",
+  "@intendedMajor": {
+    "description": "Intended major field
+  },
+  "interests": "Interests",
+  "@interests": {
+    "description": "Interests section
   }
 }

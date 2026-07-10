@@ -25,12 +25,12 @@ class AppTheme {
 
   // ── Semantic aliases ────────────────────────────────────────────────────
   static const Color primary = Color(0xFF4338CA); // Deep Indigo
-  static const Color secondary = Color(0xFFF59E0B); // Molten Amber
+  static const Color secondary = Color(0xFFD97706); // Molten Amber
   static const Color accent = Color(0xFF7C3AED); // Electric Violet
   static const Color accentPurple = Color(0xFF7C3AED);
-  static const Color success = Color(0xFF059669); // Emerald
-  static const Color warning = Color(0xFFD97706); // Amber
-  static const Color error = Color(0xFFE11D48); // Rose
+  static const Color success = Color(0xFF047857); // Emerald (WCAG AA)
+  static const Color warning = Color(0xFFD97706); // Amber (WCAG AA)
+  static const Color error = Color(0xFFC0003A); // Rose (WCAG AA)
 
   // ── Additional palette colors ───────────────────────────────────────────
   static const Color primaryPurple = Color(0xFF7C3AED); // Electric Violet
