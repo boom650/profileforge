@@ -152,32 +152,52 @@ class _MissionList extends ConsumerWidget {
     final pending = missions.where((m) => !m.isCompleted).toList();
     final completed = missions.where((m) => m.isCompleted).toList();
 
-    return ListView(
+    // Compute the flat index ranges so only on-screen items are built.
+    final hasSummary = missions.isNotEmpty;
+    final hasCompletedHeader = completed.isNotEmpty;
+    var itemCount = (hasSummary ? 1 : 0) + pending.length;
+    if (hasCompletedHeader) {
+      // +1 for the "COMPLETED" header, +1 for the spacer above it.
+      itemCount += 1 + completed.length + 1;
+    }
+
+    return ListView.builder(
       padding: const EdgeInsets.all(20),
-      children: [
-        // Summary bar
-        if (missions.isNotEmpty) ...[
-          MissionProgressBar(completed: completed.length, total: missions.length),
-          const SizedBox(height: 16),
-        ],
-        // Pending missions
-        ...pending.map((m) => MissionListTile(mission: m)),
-        // Completed missions
-        if (completed.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text(
-            'COMPLETED',
-            style: GoogleFonts.inter(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: context.textMuted,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const SizedBox(height: 8),
-          ...completed.map((m) => MissionListTile(mission: m)),
-        ],
-      ],
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        var i = index;
+        if (hasSummary) {
+          if (i == 0) {
+            return MissionProgressBar(
+                completed: completed.length, total: missions.length);
+          }
+          i -= 1;
+          if (i == 0) return const SizedBox(height: 16);
+          i -= 1;
+        }
+        if (i < pending.length) {
+          return MissionListTile(mission: pending[i]);
+        }
+        i -= pending.length;
+        if (hasCompletedHeader) {
+          if (i == 0) return const SizedBox(height: 16);
+          i -= 1;
+          if (i == 0) {
+            return Text(
+              'COMPLETED',
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: context.textMuted,
+                letterSpacing: 1.2,
+              ),
+            );
+          }
+          i -= 1;
+          return MissionListTile(mission: completed[i]);
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }

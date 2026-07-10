@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Data ────────────────────────────────────────────────────────────────
 
 class LeaderboardEntry {
   final int rank;
@@ -21,25 +21,69 @@ class LeaderboardEntry {
   });
 }
 
+/// Pagination controller for infinite scroll / load more.
+class PaginationController {
+  int page = 1;
+  final int pageSize;
+  bool hasMore = true;
+  bool isLoading = false;
+
+  PaginationController({this.pageSize = 20});
+
+  void reset() {
+    page = 1;
+    hasMore = true;
+  }
+
+  void loadMore() {
+    if (!hasMore || isLoading) return;
+    page++;
+  }
+}
+
 final leaderboardTabProvider = StateProvider<int>((ref) => 0);
-final leaderboardProvider = Provider<List<LeaderboardEntry>>((ref) {
-  final tab = ref.watch(leaderboardTabProvider);
+
+final paginationProvider = StateProvider.autoDispose<PaginationController>((ref) {
+  return PaginationController(pageSize: 20);
+});
+
+/// Generates a page of leaderboard entries on demand.
+List<LeaderboardEntry> _generatePage(int tab, int page, int pageSize) {
   const names = [
     'Aarav','Vivaan','Aditya','Arjun','Sai','Reyansh','Krishna',
     'Ishaan','Shaurya','Advaith','Vihaan','Arin','Darsh','Kabir',
     'Ayaan','Dhruv','Rohan','Kiran','Meera','Priya',
+    'Arnav','Atharv','Kiaan','Aadi','Vivaan','Rudra','Aarush',
+    'Vihaan','Dhruv','Aditya','Ishaan',
   ];
   const allTimeXp = [12450,11200,10800,9750,9200,8900,8350,7800,7400,6950,
-    6500,6100,5750,5300,4900,4500,4100,3700,3300,2900];
+    6500,6100,5750,5300,4900,4500,4100,3700,3300,2900,
+    2600,2300,2000,1800,1600,1450,1300,1200];
   const weeklyXp = [2450,2100,1950,1800,1650,1500,1350,1200,1100,950,
-    850,750,650,550,480,400,350,300,250,200];
+    850,750,650,550,480,400,350,300,250,200,
+    180,160,145,130,120,110,100,90];
   final xpList = tab == 0 ? weeklyXp : allTimeXp;
-  return List.generate(20, (i) => LeaderboardEntry(
-    rank: i + 1, name: names[i], xp: xpList[i],
-    level: (xpList[i] ~/ (tab == 0 ? 150 : 800)) + 1,
-    streak: 20 - i + (tab == 0 ? 2 : 5),
-    isCurrentUser: names[i] == 'Aarav',
-  ));
+  final start = (page - 1) * pageSize;
+  final end = (start + pageSize).clamp(0, xpList.length);
+  if (start >= xpList.length) return [];
+  return List.generate(end - start, (i) {
+    final idx = start + i;
+    return LeaderboardEntry(
+      rank: idx + 1,
+      name: names[idx % names.length],
+      xp: xpList[idx],
+      level: (xpList[idx] ~/ (tab == 0 ? 150 : 800)) + 1,
+      streak: xpList.length - idx + (tab == 0 ? 2 : 5),
+      isCurrentUser: names[idx % names.length] == 'Aarav',
+    );
+  });
+}
+
+final leaderboardProvider = Provider.family<List<LeaderboardEntry>, int>((ref, page) {
+  final tab = ref.watch(leaderboardTabProvider);
+  final controller = ref.watch(paginationProvider);
+  controller.pageSize = 20;
+  return _generatePage(tab, page, controller.pageSize);
 });
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
@@ -75,7 +119,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     final user = entries.firstWhere((e) => e.isCurrentUser, orElse: () => entries.first);
 
     return Scaffold(
-      backgroundColor: dark ? AppTheme.surfaceDark : const Color(0xFFF8F5F0),
+      backgroundColor: dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite,
       body: Column(children: [
         _header(context, dark, user),
         _tabs(context, dark),
@@ -97,12 +141,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   Widget _header(BuildContext ctx, bool dark, LeaderboardEntry user) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: dark
-            ? const LinearGradient(colors: [Color(0xFF1A1040), AppTheme.surfaceDark],
-                begin: Alignment.topLeft, end: Alignment.bottomRight)
-            : AppTheme.gradientPrimary,
-      ),
+      decoration: BoxDecoration(gradient: dark ? AppTheme.gradientPrimaryDark : AppTheme.gradientPrimary),
       child: SafeArea(bottom: false, child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
         child: Column(children: [
@@ -120,17 +159,18 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppTheme.surfaceWhite.withOpacity(0.15),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
+              border: Border.all(color: AppTheme.surfaceWhite.withOpacity(0.25)),
             ),
             child: Row(children: [
               Container(
                 width: 48, height: 48,
                 decoration: BoxDecoration(
                   gradient: AppTheme.gradientGold, shape: BoxShape.circle,
-                  boxShadow: [BoxShadow(color: AppTheme.accentGold.withValues(alpha: 0.4),
-                    blurRadius: 12, offset: const Offset(0, 4))],
+                  boxShadow: [BoxShadow(color: AppTheme.accentGold.withOpacity(0.4),
+                    blurRadius: 12, offset: const Offset(0, 4),
+                    spreadRadius: -4)],
                 ),
                 child: Center(child: Text('#${user.rank}',
                   style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white))),
@@ -140,16 +180,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(user.name, style: GoogleFonts.inter(
-                    fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white)),
+                    fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.surfaceWhite)),
                   const SizedBox(height: 2),
                   Text('Your rank this week', style: GoogleFonts.inter(
-                    fontSize: 12, color: Colors.white.withValues(alpha: 0.7))),
+                    fontSize: 12, color: AppTheme.surfaceWhite.withOpacity(0.7))),
                 ],
               )),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20)),
+                  color: AppTheme.surfaceWhite.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
                 child: Row(children: [
                   const Icon(Icons.bolt_rounded, color: AppTheme.accentGold, size: 18),
                   const SizedBox(width: 4),
@@ -168,19 +208,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   Widget _tabs(BuildContext ctx, bool dark) {
     return Container(
-      color: dark ? AppTheme.surfaceDark : const Color(0xFFF8F5F0),
-      child: TabBar(
-        controller: _tab, isScrollable: false,
-        labelColor: AppTheme.accentPurple,
-        unselectedLabelColor: dark ? const Color(0xFF94A3B8) : AppTheme.textSecondary,
-        indicatorColor: AppTheme.accentPurple, indicatorWeight: 3,
-        indicatorSize: TabBarIndicatorSize.label,
-        labelStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700),
-        unselectedLabelStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w500),
-        dividerColor: dark ? const Color(0xFF334155) : const Color(0xFFE2D5C8),
-        dividerHeight: 1,
-        tabs: const [Tab(text: 'This Week'), Tab(text: 'All Time')],
-      ),
+      color: dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite,
+      child: TabBar(controller: _tab, tabs: const [Tab(text: 'This Week'), Tab(text: 'All Time')]),
     );
   }
 
@@ -189,7 +218,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   Widget _list(BuildContext ctx, bool dark, List<LeaderboardEntry> entries) {
     final top3 = entries.take(3).toList();
     final rest = entries.skip(3).toList();
-    final textMuted = dark ? const Color(0xFF64748B) : AppTheme.textMuted;
 
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
@@ -198,11 +226,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         SliverToBoxAdapter(child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Container(height: 1, decoration: BoxDecoration(gradient: LinearGradient(
-            colors: [Colors.transparent,
-              (dark ? const Color(0xFF334155) : const Color(0xFFE2D5C8)).withValues(alpha: 0.6),
-              Colors.transparent]))),
+            colors: [
+              Colors.transparent,
+              (dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite).withOpacity(0.6),
+              Colors.transparent
+            ]
+          ))),
         )),
-        SliverToBoxAdapter(child: _columnHeaders(textMuted)),
+        SliverToBoxAdapter(child: _columnHeaders(dark ? AppTheme.textMuted : AppTheme.textSecondary)),
         SliverList(delegate: SliverChildBuilderDelegate(
           (ctx, i) => _row(ctx, dark, rest[i])
               .animate().fadeIn(delay: Duration(milliseconds: 60 * (i + 3)), duration: 300.ms)
@@ -255,8 +286,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   Widget _podiumCard(BuildContext ctx, bool dark, LeaderboardEntry e, Color medal,
       double h, String emoji, {bool isFirst = false, required int delay}) {
-    final bg = dark ? const Color(0xFF1E293B) : Colors.white;
+    final bg = dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
     final hlBorder = e.isCurrentUser ? AppTheme.accentPurple : medal;
+    final cardDecoration = BoxDecoration(
+      color: bg,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      border: Border.all(color: hlBorder.withOpacity(e.isCurrentUser ? 0.8 : 0.3), width: e.isCurrentUser ? 2 : 1),
+      boxShadow: isFirst ? [BoxShadow(color: medal.withOpacity(0.15), blurRadius: 20, offset: const Offset(0, 4))] : null,
+    );
 
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
@@ -280,19 +317,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       const SizedBox(height: 14),
       Text(e.name, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700,
         color: dark ? Colors.white : AppTheme.textPrimary), maxLines: 1, overflow: TextOverflow.ellipsis),
-      const SizedBox(height: 2),
-      Text('${e.xp} XP', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: medal)),
-      const SizedBox(height: 6),
-      Container(
-        width: double.infinity, height: h,
-        decoration: BoxDecoration(
-          color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          border: Border.all(color: hlBorder.withValues(alpha: e.isCurrentUser ? 0.8 : 0.3), width: e.isCurrentUser ? 2 : 1),
-          boxShadow: isFirst ? [BoxShadow(color: medal.withValues(alpha: 0.15), blurRadius: 20, offset: const Offset(0, 4))] : null,
-        ),
+      const SizedBox(height: 4),
+      Text('${e.xp} XP', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: medal)),
+      const SizedBox(height: 8),
+      Container(width: double.infinity, height: h, decoration: cardDecoration,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text('#${e.rank}', style: GoogleFonts.inter(fontSize: isFirst ? 28 : 24,
-            fontWeight: FontWeight.w800, color: medal.withValues(alpha: 0.25))),
+            fontWeight: FontWeight.w800, color: medal)),
           if (e.isCurrentUser) Container(
             margin: const EdgeInsets.only(top: 4),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -309,21 +340,21 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   Widget _row(BuildContext ctx, bool dark, LeaderboardEntry e) {
     final isUser = e.isCurrentUser;
-    final bg = dark ? const Color(0xFF1E293B) : Colors.white;
-    final border = dark ? const Color(0xFF334155) : const Color(0xFFE2D5C8);
-    final textPri = dark ? Colors.white : AppTheme.textPrimary;
-    final textSec = dark ? const Color(0xFF94A3B8) : AppTheme.textSecondary;
+    final bg = dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
+    final border = dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
+    final textPri = dark ? AppTheme.textPrimary : AppTheme.textPrimary;
+    final textSec = dark ? AppTheme.textSecondary : AppTheme.textSecondary;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isUser ? AppTheme.accentPurple.withValues(alpha: dark ? 0.12 : 0.08) : bg,
+        color: isUser ? AppTheme.accentPurple.withOpacity(dark ? 0.15 : 0.1) : bg,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isUser ? AppTheme.accentPurple.withValues(alpha: 0.5) : border,
+          color: isUser ? AppTheme.accentPurple.withOpacity(0.6) : border,
           width: isUser ? 1.5 : 1),
-        boxShadow: isUser ? [BoxShadow(color: AppTheme.accentPurple.withValues(alpha: 0.1),
+        boxShadow: isUser ? [BoxShadow(color: AppTheme.accentPurple.withOpacity(0.15),
           blurRadius: 12, offset: const Offset(0, 4))] : null,
       ),
       child: Row(children: [
@@ -332,9 +363,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         const SizedBox(width: 10),
         Container(
           width: 40, height: 40,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [_avatarColor(e.name).withValues(alpha: 0.9), _avatarColor(e.name)]),
-            shape: BoxShape.circle),
+          decoration: BoxDecoration(gradient: _avatarGradient(e.name), shape: BoxShape.circle),
           child: Center(child: Text(e.name[0], style: GoogleFonts.inter(
             fontSize: 17, fontWeight: FontWeight.w700, color: Colors.white))),
         ),
@@ -360,7 +389,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         SizedBox(width: 52, child: Center(child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: dark ? const Color(0xFF334155).withValues(alpha: 0.5) : const Color(0xFFF1F5F9),
+            color: dark ? AppTheme.surfaceDark.withOpacity(0.5) : AppTheme.surfaceLight,
             borderRadius: BorderRadius.circular(8)),
           child: Text('${e.level}', style: GoogleFonts.inter(
             fontSize: 13, fontWeight: FontWeight.w700, color: textSec))))),
@@ -393,7 +422,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           color: dark ? Colors.white : AppTheme.textPrimary)),
         const SizedBox(height: 8),
         Text('Complete missions and earn XP to climb\nthe leaderboard!', textAlign: TextAlign.center,
-          style: GoogleFonts.inter(fontSize: 14, color: dark ? const Color(0xFF94A3B8) : AppTheme.textSecondary, height: 1.5)),
+          style: GoogleFonts.inter(fontSize: 14, color: dark ? AppTheme.textMuted : AppTheme.textSecondary, height: 1.5)),
         const SizedBox(height: 24),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -409,11 +438,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   String _formatXp(int xp) => xp >= 10000 ? '${(xp / 1000).toStringAsFixed(1)}k' : xp.toString();
 
   Color _avatarColor(String name) {
-    const colors = [
-      AppTheme.primaryBlue, AppTheme.accentPurple, AppTheme.accentTeal,
-      AppTheme.accentOrange, AppTheme.successGreen,
-      Color(0xFFDB2777), Color(0xFF0891B2), Color(0xFFDC2626),
-    ];
-    return colors[name.hashCode.abs() % colors.length];
+    return AppTheme.categoryColors.values.toList()[name.hashCode.abs() % AppTheme.categoryColors.length];
+  }
+
+  LinearGradient _avatarGradient(String name) {
+    final color = _avatarColor(name);
+    return LinearGradient(
+        colors: [color.withOpacity(0.9), color],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight);
   }
 }
+

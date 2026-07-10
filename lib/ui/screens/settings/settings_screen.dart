@@ -191,7 +191,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             _buildSettingsCard([
               _buildSwitchTile(
                 icon: Icons.dark_mode_rounded,
-                iconColor: const Color(0xFF6366F1),
+                iconColor: AppTheme.primaryBlueLight,
                 title: 'Dark Mode',
                 subtitle: 'Use dark theme across the app',
                 value: settings.darkMode,
@@ -213,7 +213,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             _buildSettingsCard([
               _buildNavigationTile(
                 icon: Icons.download_rounded,
-                iconColor: const Color(0xFF0891B2),
+                iconColor: AppTheme.categoryColors['research']!,
                 title: 'Export Profile Data',
                 subtitle: 'Download a copy of your data',
                 onTap: () => _showExportDialog(context),

@@ -156,11 +156,11 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? const Color(0xFF0F172A) : const Color(0xFFF5F0EB);
-    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
-    final textPrimary = isDark ? const Color(0xFFF1F5F9) : const Color(0xFF1E293B);
-    final textSecondary = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
-    final border = isDark ? const Color(0xFF334155) : const Color(0xFFE2D5C8);
+    final bg = isDark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
+    final cardBg = isDark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
+    final textPrimary = isDark ? AppTheme.textPrimary : AppTheme.textPrimary;
+    final textSecondary = isDark ? AppTheme.textSecondary : AppTheme.textSecondary;
+    final border = isDark ? AppTheme.surfaceDark : AppTheme.surfaceWhite;
 
     return Scaffold(
       backgroundColor: bg,
@@ -483,46 +483,32 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       children: [
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: _isSaving ? null : () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.close_rounded, size: 18),
-            label: Text('Cancel',
-                style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFFF1F5F9)
-                  : AppTheme.textSecondary,
-              side: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const Color(0xFF334155)
-                      : const Color(0xFFE2D5C8),
-                  width: 1.5),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
+                onPressed: _isSaving ? null : () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close_rounded, size: 18),
+                label: Text('Cancel', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: textSecondary,
+                  side: BorderSide(color: border, width: 1.5),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
+            const SizedBox(width: 12),
         const SizedBox(width: 14),
         Expanded(
           child: ElevatedButton.icon(
             onPressed: _isSaving ? null : _saveProfile,
             icon: _isSaving
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white))
-                : const Icon(Icons.save_rounded, size: 18),
-            label: Text(_isSaving ? 'Saving...' : 'Save Profile',
-                style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.accentPurple,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
-              elevation: 0,
-            ),
+                ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                : const Icon(Icons.check_rounded, size: 18),
+            label: Text(_isSaving ? 'Saving...' : 'Save Changes'),
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+          ),
+        ),
+      ],
           ),
         ),
       ],

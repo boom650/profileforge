@@ -225,46 +225,53 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
   }
 
   Widget _buildScholarshipList() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _scholarshipCard(
+    final scholarships = <_Scholarship>[
+      _Scholarship(
           name: 'National Merit Scholarship',
           provider: 'Government of India',
           amount: '₹50,000/year',
           deadline: 'Rolling',
           category: 'Need-based',
           icon: Icons.account_balance_rounded,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        _scholarshipCard(
+          color: Theme.of(context).colorScheme.primary),
+      _Scholarship(
           name: 'INSPIRE Scholarship',
           provider: 'DST, Government of India',
           amount: '₹80,000/year',
           deadline: 'Check portal',
           category: 'Merit-based',
           icon: Icons.lightbulb_rounded,
-          color: AppTheme.accentOrange,
-        ),
-        _scholarshipCard(
+          color: AppTheme.accentOrange),
+      _Scholarship(
           name: 'NTSE Scholarship',
           provider: 'NCERT',
           amount: '₹2,000/month',
           deadline: 'Oct-Nov annually',
           category: 'Talent Search',
           icon: Icons.psychology_rounded,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-        _scholarshipCard(
+          color: Theme.of(context).colorScheme.tertiary),
+      _Scholarship(
           name: 'KVPY Fellowship',
           provider: 'DST, Government of India',
           amount: '₹84,000/year',
           deadline: 'Sept annually',
           category: 'Research',
           icon: Icons.science_rounded,
-          color: AppTheme.accentTeal,
-        ),
-      ],
+          color: AppTheme.accentTeal),
+    ];
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: scholarships.length,
+      itemBuilder: (context, index) => _scholarshipCard(
+        name: scholarships[index].name,
+        provider: scholarships[index].provider,
+        amount: scholarships[index].amount,
+        deadline: scholarships[index].deadline,
+        category: scholarships[index].category,
+        icon: scholarships[index].icon,
+        color: scholarships[index].color,
+      ),
     );
   }
 
@@ -380,33 +387,89 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
         feed.competitions.isNotEmpty;
     if (!hasData) return _buildEmptyState();
 
-    return ListView(
+    // Build a flat list of sections & items for ListView.builder
+    final sections = <_AllTabSection>[];
+
+    if (feed.openNow.isNotEmpty) {
+      sections.add(_AllTabSection(
+        header: _AllTabHeader(
+          title: '🟢 Registration Open',
+          count: '${feed.openNow.length} competitions',
+        ),
+        items: feed.openNow.take(3).map((c) => _AllTabItem.competition(c)).toList(),
+      ));
+    }
+    if (feed.ngos.isNotEmpty) {
+      sections.add(_AllTabSection(
+        header: _AllTabHeader(
+          title: '🏢 NGOs in ${feed.cityName ?? "your area"}',
+          count: '${feed.ngos.length} found',
+        ),
+        items: feed.ngos.take(3).map((n) => _AllTabItem.ngo(n)).toList(),
+      ));
+    }
+    if (feed.nearbyPlaces.isNotEmpty) {
+      sections.add(_AllTabSection(
+        header: _AllTabHeader(
+          title: '📍 Nearby Places',
+          count: '${feed.nearbyPlaces.length} found',
+        ),
+        items: feed.nearbyPlaces.take(3).map((p) => _AllTabItem.place(p)).toList(),
+      ));
+    }
+    if (feed.competitions.isNotEmpty) {
+      sections.add(_AllTabSection(
+        header: _AllTabHeader(
+          title: '🏆 All Competitions',
+          count: '${feed.competitions.length} available',
+        ),
+        items: feed.competitions.take(5).map((c) => _AllTabItem.competition(c)).toList(),
+      ));
+    }
+
+    final itemCount = sections.fold<int>(0, (sum, s) => sum + 1 + s.items.length + 1); // header + items + spacer
+
+    return ListView.builder(
       padding: const EdgeInsets.all(16),
-      children: [
-        if (feed.openNow.isNotEmpty) ...[
-          _sectionHeader(
-              '🟢 Registration Open', '${feed.openNow.length} competitions'),
-          ...feed.openNow.take(3).map((c) => _compTile(c)),
-          const SizedBox(height: 20),
-        ],
-        if (feed.ngos.isNotEmpty) ...[
-          _sectionHeader('🏢 NGOs in ${feed.cityName ?? "your area"}',
-              '${feed.ngos.length} found'),
-          ...feed.ngos.take(3).map((n) => _ngoTile(n)),
-          const SizedBox(height: 20),
-        ],
-        if (feed.nearbyPlaces.isNotEmpty) ...[
-          _sectionHeader(
-              '📍 Nearby Places', '${feed.nearbyPlaces.length} found'),
-          ...feed.nearbyPlaces.take(3).map((p) => _placeTile(p)),
-          const SizedBox(height: 20),
-        ],
-        if (feed.competitions.isNotEmpty) ...[
-          _sectionHeader(
-              '🏆 All Competitions', '${feed.competitions.length} available'),
-          ...feed.competitions.take(5).map((c) => _compTile(c)),
-        ],
-      ],
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        var i = index;
+        for (final section in sections) {
+          if (i == 0) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(section.header.title,
+                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600)),
+                  Text(section.header.count,
+                      style: GoogleFonts.inter(
+                          fontSize: 11, color: Theme.of(context).colorScheme.outline)),
+                ],
+              ),
+            );
+          }
+          i -= 1;
+          if (i < section.items.length) {
+            final item = section.items[i];
+            switch (item.type) {
+              case _AllTabItemType.competition:
+                return _compTile(item.competition!);
+              case _AllTabItemType.ngo:
+                return _ngoTile(item.ngo!);
+              case _AllTabItemType.place:
+                return _placeTile(item.place!);
+            }
+          }
+          i -= section.items.length;
+          if (i == 0) {
+            return const SizedBox(height: 20);
+          }
+          i -= 1;
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 
@@ -763,13 +826,62 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
 }
 
 /// Data class for the horizontal opportunity cards in DashboardTab.
-class _OpportunityData {
-  final String title;
-  final String type;
-  final int tier;
-  final String distance;
-  final double matchScore;
+class _AllTabItemType {
+  static const competition = _AllTabItemType._('competition');
+  static const ngo = _AllTabItemType._('ngo');
+  static const place = _AllTabItemType._('place');
+  final String name;
+  const _AllTabItemType._(this.name);
+}
 
-  const _OpportunityData(
-      this.title, this.type, this.tier, this.distance, this.matchScore);
+class _AllTabItem {
+  final _AllTabItemType type;
+  final Competition? competition;
+  final NGO? ngo;
+  final NearbyPlace? place;
+
+  const _AllTabItem.competition(this.competition)
+      : type = _AllTabItemType.competition,
+        ngo = null,
+        place = null;
+  const _AllTabItem.ngo(this.ngo)
+      : type = _AllTabItemType.ngo,
+        competition = null,
+        place = null;
+  const _AllTabItem.place(this.place)
+      : type = _AllTabItemType.place,
+        competition = null,
+        ngo = null;
+}
+
+class _AllTabHeader {
+  final String title;
+  final String count;
+  const _AllTabHeader({required this.title, required this.count});
+}
+
+class _AllTabSection {
+  final _AllTabHeader header;
+  final List<_AllTabItem> items;
+  const _AllTabSection({required this.header, required this.items});
+}
+
+class _Scholarship {
+  final String name;
+  final String provider;
+  final String amount;
+  final String deadline;
+  final String category;
+  final IconData icon;
+  final Color color;
+
+  const _Scholarship({
+    required this.name,
+    required this.provider,
+    required this.amount,
+    required this.deadline,
+    required this.category,
+    required this.icon,
+    required this.color,
+  });
 }

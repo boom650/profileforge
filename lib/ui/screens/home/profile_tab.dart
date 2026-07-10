@@ -250,13 +250,12 @@ class ProfileTab extends ConsumerWidget {
               children: targetUniRows.isNotEmpty
                   ? targetUniRows
                   : [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                             horizontal: 20, vertical: 12),
                         child: Text(
                           'Complete onboarding to set target universities',
-                          style: GoogleFonts.inter(
-                              fontSize: 13, color: context.textMuted),
+                          style: TextStyle(fontSize: 13),
                         ),
                       ),
                     ],
@@ -271,20 +270,18 @@ class ProfileTab extends ConsumerWidget {
                       final cat = entry.key;
                       final count = entry.value;
                       final xpVal = categoryXP[cat] ?? 0;
-                      final colorKey = _categoryColorKey(cat);
                       final displayCat =
                           cat.name[0].toUpperCase() + cat.name.substring(1);
                       return _ActivitySummaryRow(
                           category: displayCat, count: count, xp: xpVal);
                     }).toList()
                   : [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                             horizontal: 20, vertical: 12),
                         child: Text(
                           'Add activities in onboarding to see your summary',
-                          style: GoogleFonts.inter(
-                              fontSize: 13, color: context.textMuted),
+                          style: TextStyle(fontSize: 13),
                         ),
                       ),
                     ],
@@ -380,6 +377,7 @@ class ProfileTab extends ConsumerWidget {
       ),
     );
   }
+  }
 
   IconData _getIconForSkinTier(SkinTier tier) {
     switch (tier) {
@@ -410,7 +408,7 @@ class _StatItem extends StatelessWidget {
   final String label;
   final String value;
 
-  const _StatItem({required this.label, required this.value});
+  const _StatItem({required this.label, required this.value, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -446,6 +444,7 @@ class _ProfileQuickStat extends StatelessWidget {
     required this.value,
     required this.label,
     required this.color,
+    super.key,
   });
 
   @override
@@ -488,8 +487,12 @@ class _SectionCard extends StatelessWidget {
   final IconData? icon;
   final List<Widget> children;
 
-  const _SectionCard(
-      {required this.title, this.icon, required this.children});
+  const _SectionCard({
+    required this.title,
+    this.icon,
+    required this.children,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

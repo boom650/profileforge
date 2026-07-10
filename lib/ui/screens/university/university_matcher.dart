@@ -68,13 +68,13 @@ class MatchResult {
 Color _classificationColor(String classification) {
   switch (classification.toLowerCase()) {
     case 'safety':
-      return const Color(0xFF16A34A); // Green
+      return AppTheme.successGreen;
     case 'target':
-      return const Color(0xFF2563EB); // Blue
+      return AppTheme.primaryBlue;
     case 'reach':
-      return const Color(0xFFF97316); // Orange
+      return AppTheme.accentOrange;
     case 'dream':
-      return const Color(0xFFDC2626); // Red
+      return AppTheme.errorRed;
     default:
       return AppTheme.primary;
   }
@@ -295,7 +295,7 @@ class _UniversityMatcherScreenState
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF4338CA), Color(0xFF7C3AED)],
+                colors: [AppTheme.primaryBlue, AppTheme.accentPurple],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -803,10 +803,10 @@ class _UniversityMatcherScreenState
       margin: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF4338CA), Color(0xFF7C3AED)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+                        colors: [AppTheme.primaryBlue, AppTheme.accentPurple],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -830,13 +830,13 @@ class _UniversityMatcherScreenState
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildSummaryBadge('Safety', safety, const Color(0xFF16A34A)),
+              _buildSummaryBadge('Safety', safety, AppTheme.successGreen),
               const SizedBox(width: 8),
-              _buildSummaryBadge('Target', target, const Color(0xFF2563EB)),
+              _buildSummaryBadge('Target', target, AppTheme.primaryBlue),
               const SizedBox(width: 8),
-              _buildSummaryBadge('Reach', reach, const Color(0xFFF97316)),
+              _buildSummaryBadge('Reach', reach, AppTheme.accentOrange),
               const SizedBox(width: 8),
-              _buildSummaryBadge('Dream', dream, const Color(0xFFDC2626)),
+              _buildSummaryBadge('Dream', dream, AppTheme.errorRed),
             ],
           ),
         ],

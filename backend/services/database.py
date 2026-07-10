@@ -28,6 +28,21 @@ class Database:
         # Enable WAL mode for better concurrency
         await self.db.execute("PRAGMA journal_mode=WAL")
         
+        # Enable foreign key constraints
+        await self.db.execute("PRAGMA foreign_keys=ON")
+        
+        # Create migration version table
+        await self.db.execute("""
+            CREATE TABLE IF NOT EXISTS schema_migrations (
+                version INTEGER PRIMARY KEY,
+                applied_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                description TEXT
+            )
+        """)
+        
+        # Run pending migrations
+        await self._run_migrations()
+        
         # Create tables
         await self._create_tables()
         print(f"✅ Database initialized at {self.db_path}")
@@ -63,8 +78,8 @@ class Database:
                 description TEXT,
                 category TEXT,
                 pillar TEXT,
-                difficulty INTEGER DEFAULT 1,
-                xp_reward INTEGER DEFAULT 10,
+                difficulty INTEGER DEFAULT 1 CHECK(difficulty >= 0),
+                xp_reward INTEGER DEFAULT 10 CHECK(xp_reward >= 0),
                 status TEXT DEFAULT 'pending',
                 due_date TEXT,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -78,9 +93,9 @@ class Database:
             CREATE TABLE IF NOT EXISTS xp_transactions (
                 id TEXT PRIMARY KEY,
                 user_id TEXT NOT NULL,
-                amount INTEGER NOT NULL,
+                amount INTEGER NOT NULL CHECK(amount != 0),
                 source TEXT,
-                pillar TEXT,
+                pillar TEXT CHECK(pillar IN ('academics', 'research', 'leadership', 'creativity', 'community', 'evidence', 'consistency')),
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
@@ -90,16 +105,16 @@ class Database:
         await self.db.execute("""
             CREATE TABLE IF NOT EXISTS xp_state (
                 user_id TEXT PRIMARY KEY,
-                total_xp INTEGER DEFAULT 0,
-                level INTEGER DEFAULT 1,
-                academics_xp INTEGER DEFAULT 0,
-                research_xp INTEGER DEFAULT 0,
-                leadership_xp INTEGER DEFAULT 0,
-                creativity_xp INTEGER DEFAULT 0,
-                community_xp INTEGER DEFAULT 0,
-                evidence_xp INTEGER DEFAULT 0,
-                consistency_xp INTEGER DEFAULT 0,
-                streak_days INTEGER DEFAULT 0,
+                total_xp INTEGER DEFAULT 0 CHECK(total_xp >= 0),
+                level INTEGER DEFAULT 1 CHECK(level >= 1),
+                academics_xp INTEGER DEFAULT 0 CHECK(academics_xp >= 0),
+                research_xp INTEGER DEFAULT 0 CHECK(research_xp >= 0),
+                leadership_xp INTEGER DEFAULT 0 CHECK(leadership_xp >= 0),
+                creativity_xp INTEGER DEFAULT 0 CHECK(creativity_xp >= 0),
+                community_xp INTEGER DEFAULT 0 CHECK(community_xp >= 0),
+                evidence_xp INTEGER DEFAULT 0 CHECK(evidence_xp >= 0),
+                consistency_xp INTEGER DEFAULT 0 CHECK(consistency_xp >= 0),
+                streak_days INTEGER DEFAULT 0 CHECK(streak_days >= 0),
                 last_active TEXT,
                 updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
@@ -113,7 +128,7 @@ class Database:
                 user_id TEXT NOT NULL,
                 skin_id TEXT NOT NULL,
                 unlocked_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                equipped INTEGER DEFAULT 0,
+                equipped INTEGER DEFAULT 0 CHECK(equipped IN (0, 1)),
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
@@ -126,9 +141,9 @@ class Database:
                 task_id TEXT,
                 file_type TEXT,
                 filename TEXT,
-                status TEXT,
+                status TEXT CHECK(status IN ('pending', 'processing', 'completed', 'failed')),
                 feedback TEXT,
-                score REAL,
+                score REAL CHECK(score >= 0 AND score <= 100),
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
@@ -143,11 +158,11 @@ class Database:
                 provider TEXT,
                 url TEXT,
                 category TEXT,
-                pillar TEXT DEFAULT 'academics',
-                difficulty INTEGER DEFAULT 1,
-                xp_reward INTEGER DEFAULT 50,
+                pillar TEXT DEFAULT 'academics' CHECK(pillar IN ('academics', 'research', 'leadership', 'creativity', 'community', 'evidence', 'consistency')),
+                difficulty INTEGER DEFAULT 1 CHECK(difficulty >= 1 AND difficulty <= 5),
+                xp_reward INTEGER DEFAULT 50 CHECK(xp_reward >= 0),
                 estimated_hours REAL,
-                certificate_required INTEGER DEFAULT 1,
+                certificate_required INTEGER DEFAULT 1 CHECK(certificate_required IN (0, 1)),
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -158,9 +173,9 @@ class Database:
                 id TEXT PRIMARY KEY,
                 user_id TEXT NOT NULL,
                 course_id TEXT NOT NULL,
-                status TEXT DEFAULT 'enrolled',
+                status TEXT DEFAULT 'enrolled' CHECK(status IN ('enrolled', 'in_progress', 'completed', 'dropped')),
                 certificate_url TEXT,
-                certificate_status TEXT DEFAULT 'pending',
+                certificate_status TEXT DEFAULT 'pending' CHECK(certificate_status IN ('pending', 'submitted', 'verified', 'rejected')),
                 enrolled_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 completed_at TEXT,
                 FOREIGN KEY (user_id) REFERENCES users(id),
@@ -168,7 +183,73 @@ class Database:
             )
         """)
         
+        await self._create_indexes()
+        
         await self.db.commit()
+    
+    async def _create_indexes(self):
+        """Create indexes on FK columns and frequently queried columns"""
+        indexes = [
+            # users
+            "CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)",
+            # tasks
+            "CREATE INDEX IF NOT EXISTS idx_tasks_user_id ON tasks(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status)",
+            "CREATE INDEX IF NOT EXISTS idx_tasks_user_status ON tasks(user_id, status)",
+            "CREATE INDEX IF NOT EXISTS idx_tasks_pillar ON tasks(pillar)",
+            "CREATE INDEX IF NOT EXISTS idx_tasks_created_at ON tasks(created_at)",
+            # xp_transactions
+            "CREATE INDEX IF NOT EXISTS idx_xp_tx_user_id ON xp_transactions(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_xp_tx_created_at ON xp_transactions(created_at)",
+            "CREATE INDEX IF NOT EXISTS idx_xp_tx_pillar ON xp_transactions(pillar)",
+            # xp_state
+            "CREATE INDEX IF NOT EXISTS idx_xp_state_user_id ON xp_state(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_xp_state_level ON xp_state(level)",
+            # skins
+            "CREATE INDEX IF NOT EXISTS idx_skins_user_id ON skins(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_skins_equipped ON skins(user_id, equipped)",
+            # evaluations
+            "CREATE INDEX IF NOT EXISTS idx_evaluations_user_id ON evaluations(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_evaluations_task_id ON evaluations(task_id)",
+            "CREATE INDEX IF NOT EXISTS idx_evaluations_status ON evaluations(status)",
+            # courses
+            "CREATE INDEX IF NOT EXISTS idx_courses_pillar ON courses(pillar)",
+            "CREATE INDEX IF NOT EXISTS idx_courses_category ON courses(category)",
+            "CREATE INDEX IF NOT EXISTS idx_courses_difficulty ON courses(difficulty)",
+            # course_enrollments
+            "CREATE INDEX IF NOT EXISTS idx_enroll_user_id ON course_enrollments(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_enroll_course_id ON course_enrollments(course_id)",
+            "CREATE INDEX IF NOT EXISTS idx_enroll_status ON course_enrollments(status)",
+        ]
+        for stmt in indexes:
+            await self.db.execute(stmt)
+    
+    async def _run_migrations(self):
+        """Run pending database migrations"""
+        # Get current migration version
+        cursor = await self.db.execute("SELECT MAX(version) FROM schema_migrations")
+        row = await cursor.fetchone()
+        current_version = row[0] if row and row[0] is not None else 0
+        
+        # Define migrations
+        migrations = [
+            (1, "Initial schema with all tables", None),
+            (2, "Add CHECK constraints to all tables", None),
+            (3, "Add indexes on FK and frequently queried columns", None),
+            (4, "Add CHECK constraint to xp_transactions.pillar", None),
+        ]
+        
+        for version, description, migration_fn in migrations:
+            if version > current_version:
+                print(f"🔄 Running migration {version}: {description}")
+                if migration_fn:
+                    await migration_fn(self.db)
+                await self.db.execute(
+                    "INSERT INTO schema_migrations (version, description) VALUES (?, ?)",
+                    (version, description)
+                )
+                await self.db.commit()
+                print(f"✅ Migration {version} applied")
     
     # ═══════════════════════════════════════════════════════════════════════════
     # USER OPERATIONS
