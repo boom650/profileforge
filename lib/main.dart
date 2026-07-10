@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/ui/screens/chat/chat_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
 import 'ui/screens/home/home_screen.dart';
-import 'providers/app_providers.dart';
+import 'providers/providers.dart';
 import 'db/database.dart';
 
 void main() async {
@@ -51,6 +52,10 @@ class ProfileForgeApp extends ConsumerWidget {
         Locale('ml', 'IN'),
         Locale('pa', 'IN'),
       ],
+      routes: {
+        '/chat': (context) => const ChatScreen(),
+        // Add other named routes here
+      },
       home: ageStatus.when(
         data: (isVerified) => isVerified
             ? const HomeScreen()
