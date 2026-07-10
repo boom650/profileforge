@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../../theme/app_theme.dart';
-import '../../../providers/app_providers.dart';
+import '../../../providers/providers.dart';
 
 final String apiBase = kApiBaseUrl;
 
@@ -341,6 +341,7 @@ class _WeeklyTargetsScreenState extends ConsumerState<WeeklyTargetsScreen> {
               IconButton(
                 icon: const Icon(Icons.refresh_rounded),
                 tooltip: 'Refresh',
+                semanticLabel: 'Refresh targets',
                 onPressed: () {
                   HapticFeedback.lightImpact();
                   _loadTargets();

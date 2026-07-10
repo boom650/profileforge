@@ -21,29 +21,60 @@ class LeaderboardEntry {
   });
 }
 
-/// Pagination controller for infinite scroll / load more.
-class PaginationController {
-  int page = 1;
+/// Pagination controller state.
+class PaginationState {
+  final int page;
   final int pageSize;
-  bool hasMore = true;
-  bool isLoading = false;
+  final bool hasMore;
+  final bool isLoading;
 
-  PaginationController({this.pageSize = 20});
+  const PaginationState({
+    this.page = 1,
+    this.pageSize = 20,
+    this.hasMore = true,
+    this.isLoading = false,
+  });
 
-  void reset() {
-    page = 1;
-    hasMore = true;
-  }
-
-  void loadMore() {
-    if (!hasMore || isLoading) return;
-    page++;
+  PaginationState copyWith({
+    int? page,
+    int? pageSize,
+    bool? hasMore,
+    bool? isLoading,
+  }) {
+    return PaginationState(
+      page: page ?? this.page,
+      pageSize: pageSize ?? this.pageSize,
+      hasMore: hasMore ?? this.hasMore,
+      isLoading: isLoading ?? this.isLoading,
+    );
   }
 }
 
-final leaderboardTabProvider = StateProvider<int>((ref) => 0);
+/// Pagination notifier for infinite scroll / load more.
+class PaginationNotifier extends StateNotifier<PaginationState> {
+  PaginationNotifier() : super(const PaginationState());
 
-final paginationProvider = StateProvider.autoDispose<PaginationController>((ref) {
+  void loadMore() {
+    if (!state.hasMore || state.isLoading) return;
+    state = state.copyWith(page: state.page + 1, isLoading: true);
+  }
+
+  void setLoading(bool loading) {
+    state = state.copyWith(isLoading: loading);
+  }
+
+  void setHasMore(bool hasMore) {
+    state = state.copyWith(hasMore: hasMore);
+  }
+
+  void reset() {
+    state = const PaginationState();
+  }
+}
+
+final paginationProvider = StateNotifierProvider<PaginationNotifier, PaginationState>((ref) {
+  return PaginationNotifier();
+});
   return PaginationController(pageSize: 20);
 });
 
@@ -115,23 +146,24 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final entries = ref.watch(leaderboardProvider);
-    final user = entries.firstWhere((e) => e.isCurrentUser, orElse: () => entries.first);
+    final controller = ref.watch(paginationProvider);
+    final page1 = ref.watch(leaderboardProvider(1));
+    final user = page1.firstWhere((e) => e.isCurrentUser, orElse: () => page1.first);
 
     return Scaffold(
       backgroundColor: dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite,
       body: Column(children: [
         _header(context, dark, user),
         _tabs(context, dark),
-        Expanded(child: entries.isEmpty
-            ? _emptyState(context, dark)
-            : RefreshIndicator(
+        Expanded(
+            child: RefreshIndicator(
                 onRefresh: () async {
+                  controller.reset();
+                  ref.invalidate(leaderboardProvider(1));
                   await Future.delayed(const Duration(milliseconds: 1200));
                 },
                 color: AppTheme.accentPurple,
-                child: _list(context, dark, entries),
-              )),
+                child: _paginatedList(context, dark))),
       ]),
     );
   }
@@ -148,8 +180,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           Row(children: [
             IconButton(
               icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
-              onPressed: () => Navigator.pop(ctx), padding: EdgeInsets.zero,
+              onPressed: () => Navigator.pop(ctx), 
+              padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
+              semanticLabel: 'Go back',
             ),
             const SizedBox(width: 12),
             Text('Leaderboard', style: GoogleFonts.inter(
@@ -215,33 +249,72 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   // ── List ────────────────────────────────────────────────────────────────
 
-  Widget _list(BuildContext ctx, bool dark, List<LeaderboardEntry> entries) {
-    final top3 = entries.take(3).toList();
-    final rest = entries.skip(3).toList();
+  Widget _paginatedList(BuildContext ctx, bool dark) {
+    final controller = ref.watch(paginationProvider);
+    final allEntries = <LeaderboardEntry>[];
 
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-      slivers: [
-        SliverToBoxAdapter(child: _podium(ctx, dark, top3)),
-        SliverToBoxAdapter(child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(height: 1, decoration: BoxDecoration(gradient: LinearGradient(
-            colors: [
-              Colors.transparent,
-              (dark ? AppTheme.surfaceDark : AppTheme.surfaceWhite).withOpacity(0.6),
-              Colors.transparent
-            ]
-          ))),
-        )),
-        SliverToBoxAdapter(child: _columnHeaders(dark ? AppTheme.textMuted : AppTheme.textSecondary)),
-        SliverList(delegate: SliverChildBuilderDelegate(
-          (ctx, i) => _row(ctx, dark, rest[i])
-              .animate().fadeIn(delay: Duration(milliseconds: 60 * (i + 3)), duration: 300.ms)
-              .slideX(begin: 0.05, duration: 300.ms),
-          childCount: rest.length,
-        )),
-        const SliverToBoxAdapter(child: SizedBox(height: 80)),
-      ],
+    for (var i = 1; i <= controller.page; i++) {
+      final pageEntries = ref.watch(leaderboardProvider(i));
+      allEntries.addAll(pageEntries);
+      if (pageEntries.isEmpty) {
+        controller.hasMore = false;
+        break;
+      }
+    }
+
+    if (allEntries.isEmpty) {
+      return _emptyState(ctx, dark);
+    }
+
+    final top3 = allEntries.take(3).toList();
+    final rest = allEntries.skip(3).toList();
+    final textMuted = dark ? const Color(0xFF64748B) : AppTheme.textMuted;
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification info) {
+        if (info.metrics.pixels > info.metrics.maxScrollExtent - 100 &&
+            controller.hasMore &&
+            !controller.isLoading) {
+          controller.isLoading = true;
+          ref.read(paginationProvider.notifier).state = controller..loadMore();
+          Future.delayed(const Duration(milliseconds: 500), () {
+            controller.isLoading = false;
+            ref.read(paginationProvider.notifier).state = controller;
+          });
+        }
+        return false;
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+        slivers: [
+          SliverToBoxAdapter(child: _podium(ctx, dark, top3)),
+          SliverToBoxAdapter(child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(height: 1, decoration: BoxDecoration(gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                (dark ? const Color(0xFF334155) : const Color(0xFFE2D5C8)).withOpacity(0.6),
+                Colors.transparent
+              ]
+            ))),
+          )),
+          SliverToBoxAdapter(child: _columnHeaders(textMuted)),
+          SliverList(delegate: SliverChildBuilderDelegate(
+            (ctx, i) => _row(ctx, dark, rest[i])
+                .animate().fadeIn(delay: Duration(milliseconds: 60 * (i + 3)), duration: 300.ms)
+                .slideX(begin: 0.05, duration: 300.ms),
+            childCount: rest.length,
+          )),
+          if (controller.isLoading)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ),
+          const SliverToBoxAdapter(child: SizedBox(height: 80)),
+        ],
+      ),
     );
   }
 
