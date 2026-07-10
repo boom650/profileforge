@@ -414,6 +414,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       AppTheme.accentOrange, AppTheme.successGreen,
       Color(0xFFDB2777), Color(0xFF0891B2), Color(0xFFDC2626),
     ];
-    return colors[name.hashCode.abs % colors.length];
+    return colors[name.hashCode.abs() % colors.length];
   }
 }
