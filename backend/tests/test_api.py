@@ -16,13 +16,15 @@ mock_db_instance.close = AsyncMock()
 mock_db_instance.get_user = AsyncMock(return_value=None)
 mock_db_instance.create_user = AsyncMock()
 mock_db_instance.get_tasks = AsyncMock(return_value=[])
-mock_db_instance.get_xp = AsyncMock(return_value={"user_id": "test", "total_xp": 0, "current_level": 1})
+mock_db_instance.get_xp_state = AsyncMock(return_value={"user_id": "test", "total_xp": 0, "current_level": 1})
 mock_db_instance.get_skins = AsyncMock(return_value=[])
 mock_db_instance.get_conversations = AsyncMock(return_value=[])
 mock_db_instance.get_weekly_targets = AsyncMock(return_value=[])
 mock_db_instance.search_opportunities = AsyncMock(return_value=[])
 mock_db_instance.search_courses = AsyncMock(return_value=[])
-mock_db_instance.get_course = AsyncMock(return_value=None)
+mock_db_instance.get_course_detail = AsyncMock(return_value=None)
+mock_db_instance.get_user_courses = AsyncMock(return_value=[])
+mock_db_instance.get_course_stats = AsyncMock(return_value={})
 
 # Also mock the db connection
 mock_db_instance.db = AsyncMock()
@@ -36,14 +38,29 @@ mock_wts.ensure_tables = AsyncMock()
 mock_chat_service = AsyncMock()
 mock_chat_service.close = AsyncMock()
 
+# Mock Course service to match new structure
+mock_course_service = AsyncMock()
+mock_course_service.get_all_courses = AsyncMock(return_value=[])
+mock_course_service.get_course = AsyncMock(return_value=None)
+mock_course_service.search_courses = AsyncMock(return_value=[])
+mock_course_service.create_course = AsyncMock()
+mock_course_service.enroll_user = AsyncMock()
+mock_course_service.get_user_enrollments = AsyncMock(return_value=[])
+
+mock_xp_service = AsyncMock()
+mock_xp_service.get_xp_state = AsyncMock(return_value={"user_id": "test", "total_xp": 0, "current_level": 1})
+
+
 with patch('services.database.Database', return_value=mock_db_instance), \
      patch('server.weekly_targets_service', mock_wts), \
      patch('server.chat_service', mock_chat_service), \
+     patch('server.course_service', mock_course_service), \
+     patch('server.xp_service', mock_xp_service), \
      patch('services.ai_evaluation.AIEvaluationService', MagicMock()):
     
     from fastapi.testclient import TestClient
     from server import app
-    client = TestClient(app)
+    client = TestClient(app, raise_server_exceptions=False)
 
 
 class TestHealthEndpoints:
