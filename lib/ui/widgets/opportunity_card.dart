@@ -133,7 +133,9 @@ class OpportunityCardHorizontal extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                    // TODO: Navigate to opportunity details
+                  },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 side: BorderSide(color: tierColor),
@@ -310,7 +312,9 @@ class OpportunityCardVertical extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Navigate to opportunity details
+                  },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     side: BorderSide(color: tierColor),
@@ -325,7 +329,9 @@ class OpportunityCardVertical extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Navigate to opportunity details
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: tierColor,
                     foregroundColor: Colors.white,

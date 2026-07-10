@@ -80,7 +80,9 @@ class Screen5ActivityInventory extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Open guided manual entry modal
+                  },
                   icon: const Icon(Icons.add_rounded, size: 20),
                   label: Text('Manual Entry (Guided)', style: GoogleFonts.inter(fontSize: 14)),
                   style: OutlinedButton.styleFrom(

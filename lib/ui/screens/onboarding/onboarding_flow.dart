@@ -247,6 +247,22 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: Text('Back', style: GoogleFonts.inter(fontSize: 14)),
                     ),
+                  // Skip button — available on all pages except the last
+                  if (_currentPage < _totalPages - 1)
+                    TextButton(
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        _completeOnboarding();
+                      },
+                      child: Text(
+                        'Skip',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

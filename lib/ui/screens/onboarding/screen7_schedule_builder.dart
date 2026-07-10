@@ -64,7 +64,9 @@ class Screen7ScheduleBuilder extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Apply preset schedule
+                  },
                   child: Text('Apply Preset', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                 ),
               ],
