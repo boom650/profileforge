@@ -332,7 +332,7 @@
   },
   "dataStorage": "Data Storage",
   "@dataStorage": {
-    "description": "Data storage setting
+    "description": "Data storage setting"
   },
   "dataViewerComingSoon": "Data viewer coming soon",
   "@dataViewerComingSoon": {
@@ -485,7 +485,7 @@
   },
   "export": "Export",
   "@export": {
-    "description": "Export action
+    "description": "Export action"
   },
   "exportDataPrivacyTerms": "Export data, privacy settings, terms",
   "@exportDataPrivacyTerms": {
@@ -543,11 +543,11 @@
   },
   "forParents": "For Parents",
   "@forParents": {
-    "description": "For parents section
+    "description": "For parents section"
   },
   "freezes": "Freezes",
   "@freezes": {
-    "description": "Streak freezes
+    "description": "Streak freezes"
   },
   "fullName": "Full Name",
   "@fullName": {
@@ -559,94 +559,94 @@
   },
   "gallery": "Gallery",
   "@gallery": {
-    "description": "Gallery section
+    "description": "Gallery section"
   },
   "getRemindedCheckin": "Get reminded to check in every day",
   "@getRemindedCheckin": {
-    "description": "Daily reminder description
+    "description": "Daily reminder description"
   },
   "gettingStarted": "Getting Started",
   "@gettingStarted": {
-    "description": "Getting started section
+    "description": "Getting started section"
   },
   "goBack": "Go back",
   "@goBack": {
-    "description": "Go back action
+    "description": "Go back action"
   },
   "googleDataAnalytics": "Google Data Analytics",
   "@googleDataAnalytics": {
-    "description": "Google Data Analytics course
+    "description": "Google Data Analytics course"
   },
   "googleUxDesign": "Google UX Design Certificate",
   "@googleUxDesign": {
-    "description": "Google UX Design certificate
+    "description": "Google UX Design certificate"
   },
   "gpaUniversity": "GPA: ${university.averageGPA}",
   "@gpaUniversity": {
-    "description": "University GPA
+    "description": "University GPA"
   },
   "grade": "Grade",
   "@grade": {
-    "description": "Grade field
+    "description": "Grade field"
   },
   "habitFormed": "Habit Formed",
   "@habitFormed": {
-    "description": "Habit formed milestone
+    "description": "Habit formed milestone"
   },
   "halfYearHero": "Half Year Hero",
   "@halfYearHero": {
-    "description": "Half year hero milestone
+    "description": "Half year hero milestone"
   },
   "helpAndSupport": "Help & Support",
   "@helpAndSupport": {
-    "description": "Help & support section
+    "description": "Help & support section"
   },
   "helpPeerSucceed": "Help a Peer Succeed",
   "@helpPeerSucceed": {
-    "description": "Help peer action
+    "description": "Help peer action"
   },
   "helpCenterComingSoon": "Help center coming soon",
   "@helpCenterComingSoon": {
-    "description": "Help center placeholder
+    "description": "Help center placeholder"
   },
   "helpUsImprove": "Help us improve ProfileForge",
   "@helpUsImprove": {
-    "description": "Feedback request
+    "description": "Feedback request"
   },
   "homeLocation": "Home Location",
   "@homeLocation": {
-    "description": "Home location field
+    "description": "Home location field"
   },
   "howLongCommute": "How long is your daily commute (one way)?",
   "@howLongCommute": {
-    "description": "Commute time question
+    "description": "Commute time question"
   },
   "howWeHandleData": "How we handle your data",
   "@howWeHandleData": {
-    "description": "Data handling description
+    "description": "Data handling description"
   },
   "hyperLocalOpportunities": "Hyper-Local Opportunities",
   "@hyperLocalOpportunities": {
-    "description": "Hyper-local opportunities
+    "description": "Hyper-local opportunities"
   },
   "ieltsScore": "IELTS Score",
   "@ieltsScore": {
-    "description": "IELTS score field
+    "description": "IELTS score field"
   },
   "inSchoolClubsTeachers": "In-school clubs, teachers, facilities mapped to free periods",
   "@inSchoolClubsTeachers": {
-    "description": "In-school clubs description
+    "description": "In-school clubs description"
   },
   "insights": "Insights",
   "@insights": {
-    "description": "Insights section
+    "description": "Insights section"
   },
   "intendedMajor": "Intended Major",
   "@intendedMajor": {
-    "description": "Intended major field
+    "description": "Intended major field"
   },
   "interests": "Interests",
   "@interests": {
-    "description": "Interests section
+    "description": "Interests section"
   }
 }
