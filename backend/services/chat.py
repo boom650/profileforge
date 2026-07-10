@@ -18,7 +18,7 @@ from models.chat import (
     ChatRequest, ChatResponse, ChatMessage, ConversationHistory
 )
 
-BRIDGE_URL = "http://127.0.0.1:8090"
+BRIDGE_URL = os.getenv("BRIDGE_URL", "http://127.0.0.1:8090")
 
 # In-memory conversation store (lightweight; can be backed by DB later)
 _conversations: Dict[str, ConversationHistory] = {}

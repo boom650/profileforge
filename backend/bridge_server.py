@@ -22,6 +22,12 @@ from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
+# Import config for environment-aware URLs
+try:
+    from config import BRIDGE_URL
+except ImportError:
+    BRIDGE_URL = os.getenv("BRIDGE_URL", "http://127.0.0.1:8090")
+
 BASE_DIR = Path("/data/data/com.termux/files/home/profileforge")
 PENDING_DIR = BASE_DIR / "backend" / "data" / "pending_evaluations"
 RESULTS_DIR = BASE_DIR / "backend" / "data" / "evaluation_results"
@@ -473,8 +479,8 @@ class BridgeHandler(BaseHTTPRequestHandler):
 
 
 def main():
-    server = HTTPServer(("127.0.0.1", 8090), BridgeHandler)
-    print("Hermes Bridge Server running on http://127.0.0.1:8090")
+    server = HTTPServer(("0.0.0.0", int(os.getenv("BRIDGE_PORT", "8090"))), BridgeHandler)
+    print(f"Hermes Bridge Server running on {BRIDGE_URL}")
     print("Endpoints:")
     print("  GET  /health           — health check")
     print("  GET  /pending          — list pending evaluations")

@@ -17,11 +17,12 @@ import sys
 import json
 import time
 import hashlib
+import os
 import httpx
 from pathlib import Path
 from datetime import datetime
 
-BACKEND_URL = "http://localhost:8080"
+BACKEND_URL = os.getenv("API_BASE_URL", "http://localhost:8080")
 UPLOADS_DIR = Path(__file__).parent.parent / "uploads"
 WATCH_FILE = UPLOADS_DIR / ".pending_evaluations.json"
 RESULTS_DIR = UPLOADS_DIR / "results"

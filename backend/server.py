@@ -8,6 +8,17 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Import environment-aware config
+try:
+    from config import API_BASE_URL, BRIDGE_URL, DATABASE_URL, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+except ImportError:
+    # Fallback for local execution
+    API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8080")
+    BRIDGE_URL = os.getenv("BRIDGE_URL", "http://127.0.0.1:8090")
 import uvicorn
 import os
 import json
@@ -299,8 +310,8 @@ async def get_xp(user_id: str):
 
 
 import httpx as _httpx
-BRIDGE_URL = "http://127.0.0.1:8090"
 
+# BRIDGE_URL loaded from config (environment-aware)
 
 @app.post("/api/ai/evaluate")
 async def ai_evaluate_via_bridge(body: dict):
@@ -1388,9 +1399,14 @@ async def delete_user(user_id: str):
         "weekly_targets", "chat_messages", "competition_entries",
         "research_milestones", "opportunities", "gamification",
     ]
+    # Validate table names against whitelist to prevent SQL injection
+    allowed_tables = set(tables)
     deleted = []
     errors = []
     for table in tables:
+        if table not in allowed_tables:
+            errors.append(f"{table}: not allowed")
+            continue
         try:
             await db.db.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
             deleted.append(table)

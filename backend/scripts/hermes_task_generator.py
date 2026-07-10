@@ -4,12 +4,9 @@ Hermes Autonomous Task Generator
 Generates personalized tasks for ProfileForge users
 """
 
-import json
-import httpx
-from datetime import datetime, timedelta
-import random
+import os
 
-BACKEND_URL = "http://localhost:8080"
+BACKEND_URL = os.getenv("API_BASE_URL", "http://localhost:8080")
 
 # Task templates based on pillars
 TASK_TEMPLATES = {

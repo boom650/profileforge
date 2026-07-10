@@ -395,10 +395,11 @@ class Database:
         new_level = (new_total // 100) + 1  # Level up every 100 XP
         
         # Update pillar XP
+        # Validate pillar against whitelist (already done above)
         pillar_column = f"{pillar}_xp"
         new_pillar_xp = current.get(f"{pillar}_xp", 0) + amount
         
-        # Update XP state
+        # Update XP state - pillar_column is validated against whitelist
         await self.db.execute(f"""
             UPDATE xp_state 
             SET total_xp=?, level=?, {pillar_column}=?, updated_at=?
