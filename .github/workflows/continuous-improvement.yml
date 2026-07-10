@@ -125,17 +125,21 @@ jobs:
               # Find highest priority unstarted
               for h in hypotheses:
                   if h["priority"] in ["P0", "P1"]:
-                      print(f"selected_hypothesis={h['id']}" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
-                      print(f"selected_title={h['title']}" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
-                      print(f"selected_category={h['category']}" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+                      output_file = os.environ.get('GITHUB_OUTPUT', '/dev/stdout')
+                      with open(output_file, 'a') as f:
+                          print(f"selected_hypothesis={h['id']}", file=f)
+                          print(f"selected_title={h['title']}", file=f)
+                          print(f"selected_category={h['category']}", file=f)
                       break
           else:
               # Default to first P0 from auto-research
               research_files = [f for f in os.listdir("research") if f.startswith("research_")]
               if research_files:
-                  print("selected_hypothesis=H1" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
-                  print("selected_title=Implement Duolingo-style streak system" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
-                  print("selected_category=gamification" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+                  output_file = os.environ.get('GITHUB_OUTPUT', '/dev/stdout')
+                  with open(output_file, 'a') as f:
+                      print("selected_hypothesis=H1", file=f)
+                      print("selected_title=Implement Duolingo-style streak system", file=f)
+                      print("selected_category=gamification", file=f)
 
       - name: Create implementation branch
         run: |

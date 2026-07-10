@@ -93,6 +93,12 @@ jobs:
           dart run build_runner build --delete-conflicting-outputs
           flutter build web --release --web-renderer canvaskit
 
+      - name: Start web server for accessibility testing
+        run: |
+          cd build/web
+          npx serve -s . -l 8080 &
+          sleep 5
+
       - name: Run axe-core accessibility tests
         run: |
           npm install -g @axe-core/cli

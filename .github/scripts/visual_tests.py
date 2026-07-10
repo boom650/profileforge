@@ -15,7 +15,7 @@ SCENARIOS = [
     # Onboarding Flow (CRITICAL)
     {"name": "onboarding_01_welcome", "path": "/#/onboarding", "wait_for": "text=Welcome", "viewport": {"width": 390, "height": 844}},
     {"name": "onboarding_02_consent", "path": "/#/onboarding/consent", "wait_for": "text=Consent", "viewport": {"width": 390, "height": 844}},
-    {"name": "text=Location", "viewport": {"width": 390, "height": 844}},
+    {"name": "onboarding_03_location", "path": "/#/onboarding/location", "wait_for": "text=Location", "viewport": {"width": 390, "height": 844}},
     {"name": "onboarding_04_academic", "path": "/#/onboarding/academic", "wait_for": "text=Academic", "viewport": {"width": 390, "height": 844}},
     {"name": "onboarding_05_activity", "path": "/#/onboarding/activity", "wait_for": "text=Activity", "viewport": {"width": 390, "height": 844}},
     {"name": "onboarding_06_targets", "path": "/#/onboarding/targets", "wait_for": "text=Target", "viewport": {"width": 390, "height": 844}},
