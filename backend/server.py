@@ -80,9 +80,12 @@ app = FastAPI(
 )
 
 # CORS middleware - allow Flutter app
+# Restrict to app origin in production
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:8080,http://127.0.0.1:8080,capacitor://localhost,http://localhost")
+_origins = [o.strip() for o in ALLOWED_ORIGINS.split(",")]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
