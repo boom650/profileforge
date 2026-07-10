@@ -90,7 +90,14 @@ app = FastAPI(
     description="Backend for ProfileForge - AI CV Builder",
     version="2.0.0",
     lifespan=lifespan,
+    # API Versioning
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
+
+# API Version prefix
+API_PREFIX = "/api/v1"
 
 # CORS middleware - allow Flutter app
 # Restrict to app origin in production
@@ -1164,7 +1171,7 @@ async def get_user_stats(user_id: str):
             "achievements_unlocked": min(completed_targets // 2, 12),
         }
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 
@@ -1203,7 +1210,7 @@ async def log_activity(user_id: str, activity: dict):
         
         return {"status": "logged", "activity_type": activity_type}
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/users/{user_id}/activity")
@@ -1230,7 +1237,7 @@ async def get_activity_history(user_id: str, limit: int = 20):
         
         return {"activities": activities, "count": len(activities)}
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 
@@ -1379,7 +1386,7 @@ async def set_user_goals(user_id: str, goals: dict):
         
         return {"status": "saved", "target_xp": target_xp, "target_missions": target_missions, "target_essays": target_essays}
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/users/{user_id}/goals")
@@ -1405,7 +1412,7 @@ async def get_user_goals(user_id: str):
         # Default goals
         return {"target_xp": 200, "target_missions": 5, "target_essays": 2}
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.delete("/api/users/{user_id}")
