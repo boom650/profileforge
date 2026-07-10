@@ -99,31 +99,31 @@ class _MotivationCard extends StatelessWidget {
         'icon': Icons.favorite_rounded,
         'title': 'Family Pride',
         'subtitle': '"Make them proud" — your North Star',
-        'color': const Color(0xFFEC4899),
+        'color': const AppTheme.categoryPink,
       },
       MotivationDriver.peerComparison: {
         'icon': Icons.people_rounded,
         'title': 'Peer Competition',
         'subtitle': '"Sharma ji\'s kid got into Cornell"',
-        'color': const Color(0xFF8B5CF6),
+        'color': const AppTheme.categoryViolet,
       },
       MotivationDriver.fearOfFailure: {
         'icon': Icons.shield_rounded,
         'title': 'Fear of Failure',
         'subtitle': '"What if I don\'t get anywhere?"',
-        'color': const Color(0xFFEF4444),
+        'color': const AppTheme.categoryRed,
       },
       MotivationDriver.scholarshipNeed: {
         'icon': Icons.attach_money_rounded,
         'title': 'Scholarship Need',
         'subtitle': 'Financial reality — every dollar counts',
-        'color': const Color(0xFF10B981),
+        'color': const AppTheme.categoryEmerald,
       },
       MotivationDriver.genuineCuriosity: {
         'icon': Icons.lightbulb_rounded,
         'title': 'Genuine Curiosity',
         'subtitle': 'Learning for the love of it (highest retention)',
-        'color': const Color(0xFFF59E0B),
+        'color': const AppTheme.accentGold,
       },
       MotivationDriver.statusAbroadDream: {
         'icon': Icons.flight_takeoff_rounded,
@@ -215,13 +215,13 @@ class _StressStyleCard extends StatelessWidget {
         'icon': Icons.flash_on_rounded,
         'title': 'Sprinter',
         'subtitle': 'Burst work. Deadlines fuel you. Rest hard after.',
-        'color': const Color(0xFFF59E0B),
+        'color': const AppTheme.accentGold,
       },
       StressStyle.avoider: {
         'icon': Icons.psychology_rounded,
         'title': 'Avoider',
         'subtitle': 'Need gentle nudges. "Just 2 minutes" works.',
-        'color': const Color(0xFFEC4899),
+        'color': const AppTheme.categoryPink,
       },
     };
 

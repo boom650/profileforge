@@ -36,6 +36,13 @@ class AppTheme {
   static const Color primaryPurple = Color(0xFF7C3AED); // Electric Violet
   static const Color accentOrange = Color(0xFFF97316);
   static const Color accentTeal = Color(0xFF14B8A6);
+  
+  // ── Additional palette colors (onboarding/category) ────────────────────
+  static const Color categoryBlue = Color(0xFF4A90D9);    // Medium Blue
+  static const Color categoryViolet = Color(0xFF8B5CF6);  // Violet
+  static const Color categoryRed = Color(0xFFEF4444);     // Bright Red
+  static const Color categoryEmerald = Color(0xFF10B981); // Emerald
+  static const Color categoryPink = Color(0xFFEC4899);    // Pink
 
   // ── Gradients ───────────────────────────────────────────────────────────
   static const LinearGradient gradientPrimary = LinearGradient(
