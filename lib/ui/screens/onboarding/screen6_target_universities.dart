@@ -494,6 +494,7 @@ class _UniversityResultCard extends StatelessWidget {
                   icon: Icon(Icons.remove_circle_outline, size: 20, color: AppTheme.primaryBlue),
                   onPressed: onRemove,
                   tooltip: 'Remove from list',
+                  semanticLabel: 'Remove ${university.name} from target list',
                 ),
             ],
           ),
