@@ -1,5 +1,5 @@
 # ProfileForge Backend - Pinned Dependencies
-fastapi==1.0.0
+fastapi==0.115.13
 uvicorn==0.34.0
 pydantic==2.10.3
 pydantic[email]
