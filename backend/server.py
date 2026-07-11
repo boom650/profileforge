@@ -28,6 +28,13 @@ from typing import Optional, List
 from pydantic import BaseModel
 import sqlite3
 
+# Import response models
+from models.response import (
+    ErrorResponse, PaginatedResponse, SuccessResponse,
+    LocationResponse, CityResponse, TaskCompleteResponse,
+    TargetStatusResponse, SkinUnlockResponse
+)
+
 # Local imports
 from models.user import User, UserCreate, UserLocation
 from models.task import Task, TaskCreate, TaskStatus
@@ -135,7 +142,7 @@ async def health_check():
 # USER ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post(f"{API_PREFIX}/users", response_model=User)
+@app.post(f"{API_PREFIX}/users", response_model=User, status_code=201)
 async def create_user(user: UserCreate):
     """Create a new user profile"""
     try:
@@ -197,7 +204,7 @@ async def update_city(user_id: str, city: str):
 # TASK ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post(f"{API_PREFIX}/tasks", response_model=Task)
+@app.post(f"{API_PREFIX}/tasks", response_model=Task, status_code=201)
 async def create_task(task: TaskCreate):
     """Create a new task (used by Hermes agent)"""
     return await task_service.create_task(task)
