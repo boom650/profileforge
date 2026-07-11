@@ -45,6 +45,19 @@ from models.response import (
     TargetStatusResponse, SkinUnlockResponse
 )
 
+# Rate limiting
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.util import get_remote_address
+    from slowapi.errors import RateLimitExceeded
+    RATE_LIMIT_AVAILABLE = True
+except ImportError:
+    RATE_LIMIT_AVAILABLE = False
+    Limiter = None
+    _rate_limit_exceeded_handler = None
+    get_remote_address = None
+    RateLimitExceeded = Exception
+
 # Local imports
 from models.user import User, UserCreate, UserLocation
 from models.task import Task, TaskCreate, TaskStatus
@@ -127,6 +140,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limiting
+if RATE_LIMIT_AVAILABLE:
+    limiter = Limiter(key_func=get_remote_address, default_limits=["100/minute"])
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Initialize services
 db = Database()
