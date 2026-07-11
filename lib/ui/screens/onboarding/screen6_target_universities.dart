@@ -292,6 +292,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                     _selectedProgramFilter = selected ? program : '';
                   });
                 },
+                semanticLabel: 'Filter by $program program',
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: context.surfaceElevated,
                 checkmarkColor: Colors.white,

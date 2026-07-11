@@ -28,6 +28,12 @@ dependencies:
   http: ^1.2.2
   url_launcher: ^6.3.1
   
+  # Connectivity
+  connectivity_plus: ^6.0.3
+
+  # Routing
+  go_router: ^14.2.0
+  
   # Location & Maps
   geolocator: ^11.1.0
   latlong2: ^0.9.1

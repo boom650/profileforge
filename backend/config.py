@@ -15,6 +15,12 @@ BRIDGE_URL = os.getenv("BRIDGE_URL", "http://127.0.0.1:8090")
 DATABASE_URL = os.getenv("DATABASE_URL", "profileforge.db")
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY", "a-secure-secret-key-for-dev")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    import warnings
+    warnings.warn("SECRET_KEY is not set! Using a generated key. Set SECRET_KEY in your .env file.", UserWarning, stacklevel=2)
+    import secrets
+    SECRET_KEY = secrets.token_hex(32)
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

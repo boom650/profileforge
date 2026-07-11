@@ -56,6 +56,7 @@ class Database:
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
                 email TEXT UNIQUE,
+                password_hash TEXT,
                 grade INTEGER,
                 board TEXT,
                 stream TEXT,
@@ -309,6 +310,24 @@ class Database:
             created_at=row[11],
             updated_at=row[12]
         )
+    
+    async def get_user_by_email(self, email: str) -> Optional[dict]:
+        """Get user by email for authentication"""
+        cursor = await self.db.execute(
+            "SELECT id, name, email, password_hash FROM users WHERE email = ?", (email,)
+        )
+        row = await cursor.fetchone()
+        if not row:
+            return None
+        return {"id": row[0], "name": row[1], "email": row[2], "password_hash": row[3]}
+    
+    async def store_password_hash(self, user_id: str, password_hash: str):
+        """Store password hash for a user"""
+        await self.db.execute(
+            "UPDATE users SET password_hash = ? WHERE id = ?",
+            (password_hash, user_id)
+        )
+        await self.db.commit()
     
     async def update_user(self, user_id: str, user: User) -> Optional[User]:
         """Update user profile"""

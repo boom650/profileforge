@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
-import '../../../providers/providers.dart';
-import 'weekly_targets_model.dart';
-import 'weekly_targets_provider.dart';
+import '../../../../ui/theme/app_theme.dart';
+import '../../../../providers/providers.dart';
+import '../../domain/model/weekly_targets_model.dart';
+import '../state/weekly_targets_provider.dart';
 import 'widgets/widgets.dart';
 
 // Re-export for backward compatibility
-export 'weekly_targets_model.dart';
-export 'weekly_targets_provider.dart';
+export '../../domain/model/weekly_targets_model.dart';
+export '../state/weekly_targets_provider.dart';
 export 'widgets/widgets.dart';
 
 // ─── Weekly Targets Screen ───────────────────────────────────────────────────

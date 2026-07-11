@@ -1,16 +1,15 @@
-# ProfileForge Backend - Pinned Dependencies (Generated via pip freeze)
-fastapi==0.115.0
-uvicorn==0.30.6
-python-multipart==0.0.9
-aiofiles==23.2.1
+# ProfileForge Backend - Pinned Dependencies
+fastapi==1.0.0
+uvicorn==0.34.0
+pydantic==2.10.3
+pydantic[email]
+python-dotenv==1.1.0
 aiosqlite==0.20.0
 httpx==0.28.1
-pydantic==2.10.1
 pydantic-settings==2.6.1
-python-dotenv==1.0.1
-python-jose==3.4.0
-passlib==1.7.4
-bcrypt==4.3.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==2.1.1
 PyJWT==2.10.1
 email-validator==2.2.0
 orjson==3.10.12
+slowapi==0.1.9

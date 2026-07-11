@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import '../../../config/api_config.dart';
-import 'weekly_targets_model.dart';
+import '../../../../config/api_config.dart';
+import '../../domain/model/weekly_targets_model.dart';
 
 final String apiBase = kApiBaseUrl;
 
@@ -46,8 +46,6 @@ class WeeklyTargetsState {
 }
 
 // ─── Notifier ───────────────────────────────────────────────────────────────
-
-final String apiBase = kApiBaseUrl;
 
 class WeeklyTargetsNotifier extends StateNotifier<WeeklyTargetsState> {
   WeeklyTargetsNotifier() : super(const WeeklyTargetsState()) {

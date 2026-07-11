@@ -39,6 +39,12 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Audit Dart dependencies for vulnerabilities
+        run: |
+          echo "Running dependency audit..."
+          dart pub outdated --mode=null-safety
+          dart pub audit
+
       - name: Analyze (flutter analyze)
         run: flutter analyze --fatal-infos
 
@@ -161,9 +167,13 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
-          pip install -r requirements.txt
-          pip install -r requirements-test.txt
-
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt -r requirements-test.txt
+          pip install pip-audit
+ 
+      - name: Audit Python dependencies for vulnerabilities
+        run: pip-audit -r backend/requirements.txt
+ 
       - name: Run backend tests with coverage
         run: |
           cd backend

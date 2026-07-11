@@ -708,6 +708,7 @@ class _SettingsRow extends StatelessWidget {
         ),
       ),
     );
+    child = MergeSemantics(child: child);
     if (semanticLabel != null) {
       child = Semantics(
         label: semanticLabel,
@@ -717,4 +718,4 @@ class _SettingsRow extends StatelessWidget {
     }
     return child;
   }
-}
+  }

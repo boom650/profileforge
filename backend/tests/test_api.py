@@ -52,10 +52,10 @@ mock_xp_service.get_xp_state = AsyncMock(return_value={"user_id": "test", "total
 
 
 with patch('services.database.Database', return_value=mock_db_instance), \
-     patch('server.weekly_targets_service', mock_wts), \
-     patch('server.chat_service', mock_chat_service), \
-     patch('server.course_service', mock_course_service), \
-     patch('server.xp_service', mock_xp_service), \
+     patch('services.weekly_targets.WeeklyTargetsService', return_value=mock_wts), \
+     patch('services.chat.chat_service', mock_chat_service), \
+     patch('services.courses.CourseService', return_value=mock_course_service), \
+     patch('services.xp.XPService', return_value=mock_xp_service), \
      patch('services.ai_evaluation.AIEvaluationService', MagicMock()):
     
     from fastapi.testclient import TestClient
@@ -162,9 +162,9 @@ class TestModels:
 
     def test_user_model(self):
         from models.user import UserCreate
-        user = UserCreate(email="test@example.com", name="Test", grade=16)
+        user = UserCreate(email="test@example.com", name="Test", password="password123", grade=12, board="CBSE", stream="Science")
         assert user.email == "test@example.com"
-        assert user.grade == 16
+        assert user.grade == 12
 
     def test_evaluation_model(self):
         from models.evaluation import EvaluationRequest
