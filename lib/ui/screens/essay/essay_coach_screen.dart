@@ -392,6 +392,7 @@ class _EssayPromptDetailState extends ConsumerState<EssayPromptDetail> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
           onPressed: () => Navigator.of(context).pop(),
+          semanticLabel: 'Back to essay list',
         ),
         actions: [
           TextButton.icon(

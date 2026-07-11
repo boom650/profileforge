@@ -310,6 +310,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_rounded),
         onPressed: () => Navigator.of(context).pop(),
+        semanticLabel: 'Back to previous screen',
       ),
       title: Row(
         mainAxisSize: MainAxisSize.min,
@@ -360,6 +361,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: const Icon(Icons.delete_outline_rounded, size: 20),
             tooltip: 'Clear chat',
             onPressed: onClear,
+            semanticLabel: 'Clear chat history',
           ),
       ],
     );

@@ -175,6 +175,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         leading: IconButton(
           icon: const Icon(Icons.close_rounded),
           onPressed: () => Navigator.of(context).pop(),
+          semanticLabel: 'Close edit profile',
         ),
       ),
       body: _isLoading

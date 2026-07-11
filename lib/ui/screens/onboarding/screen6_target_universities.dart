@@ -226,6 +226,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                   ? IconButton(
                       icon: Icon(Icons.clear, color: AppTheme.textSecondary),
                       onPressed: () => setState(() => _searchQuery = ''),
+                      semanticLabel: 'Clear search',
                     )
                   : null,
               filled: true,
