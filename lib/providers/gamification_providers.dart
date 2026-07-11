@@ -6,7 +6,7 @@ import '../models/gamification/xp.dart';
 import '../models/gamification/missions.dart';
 import '../models/gamification/admissions_pillar.dart';
 import '../services/gamification/gamification_service.dart';
-import 'service_providers.dart';
+import '../services/service_providers.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // XP STATE
