@@ -168,7 +168,12 @@ class SkinsTab extends ConsumerWidget {
                     },
                   ),
                 ),
-              ],\n            ),\n          );\n        }\n      );\n    }\n\n  IconData _getIconForSkinTier(SkinTier tier) {
+              ],
+            ),
+          );
+        }
+      );
+    }\n  IconData _getIconForSkinTier(SkinTier tier) {
     switch (tier) {
       case SkinTier.explorer:
         return Icons.explore_rounded;

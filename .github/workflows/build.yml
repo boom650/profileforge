@@ -63,12 +63,10 @@ jobs:
     timeout-minutes: 40
     strategy:
       matrix:
-        channel: [stable, beta]
+        channel: [stable]
         include:
           - channel: stable
             flutter-version: '3.44.4'
-          - channel: beta
-            flutter-version: '3.29.0-0.1.pre'
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
