@@ -75,8 +75,6 @@ class PaginationNotifier extends StateNotifier<PaginationState> {
 final paginationProvider = StateNotifierProvider<PaginationNotifier, PaginationState>((ref) {
   return PaginationNotifier();
 });
-  return PaginationController(pageSize: 20);
-});
 
 /// Generates a page of leaderboard entries on demand.
 List<LeaderboardEntry> _generatePage(int tab, int page, int pageSize) {

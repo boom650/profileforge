@@ -510,9 +510,6 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           ),
         ),
       ],
-          ),
-        ),
-      ],
     ).animate().fadeIn(delay: 400.ms, duration: 400.ms);
   }
 }
