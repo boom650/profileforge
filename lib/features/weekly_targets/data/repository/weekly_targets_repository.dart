@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../../../config/api_config.dart';
 import '../../domain/model/weekly_targets_model.dart';
 
-UserID and createTarget params types established by domain model.
+// UserID and createTarget params types established by domain model.
 
 const String apiBase = kApiBaseUrl;
 
