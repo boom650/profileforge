@@ -377,7 +377,6 @@ class ProfileTab extends ConsumerWidget {
       ),
     );
   }
-  }
 
   IconData _getIconForSkinTier(SkinTier tier) {
     switch (tier) {
