@@ -148,7 +148,7 @@
   "@claimXp": {
     "description": "Claim XP button"
   },
-  "claimedXpReward": "Claimed ${mission.xpReward} XP reward! 🎉",
+  "claimedXpReward": "Claimed {mission_xpReward} XP reward! 🎉",
   "@claimedXpReward": {
     "description": "XP claimed message",
     "placeholders": {
@@ -255,7 +255,7 @@
   "@contactUs": {
     "description": "Contact us link"
   },
-  "couldNotOpenWebsite": "Could not open ${university.website}",
+  "couldNotOpenWebsite": "Could not open {university_website}",
   "@couldNotOpenWebsite": {
     "description": "Website open failure",
     "placeholders": {
@@ -456,7 +456,7 @@
       "error": {}
     }
   },
-  "errorResponse": "Error: ${response.body}",
+  "errorResponse": "Error: {response_body}",
   "@errorResponse": {
     "description": "API error response",
     "placeholders": {
@@ -581,7 +581,7 @@
   "@googleUxDesign": {
     "description": "Google UX Design certificate"
   },
-  "gpaUniversity": "GPA: ${university.averageGPA}",
+  "gpaUniversity": "GPA: {university_averageGPA}",
   "@gpaUniversity": {
     "description": "University GPA"
   },
