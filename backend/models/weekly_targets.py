@@ -1,8 +1,6 @@
-"""
-Weekly Targets & Research Paper Milestone Models
-"""
+"""Weekly Targets & Research Paper Milestone Models"""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from enum import Enum
 
@@ -27,35 +25,35 @@ class MilestoneType(str, Enum):
 class ResearchPaperMilestone(BaseModel):
     """A single milestone in the research paper pipeline"""
     id: Optional[str] = None
-    user_id: str
-    paper_title: str
+    user_id: str = Field(..., min_length=1, max_length=100)
+    paper_title: str = Field(..., min_length=1, max_length=200)
     step_name: str  # "topic_selection", "literature_review", "draft_v1", etc.
-    step_order: int
-    description: Optional[str] = None
+    step_order: int = Field(..., ge=0)
+    description: Optional[str] = Field(None, max_length=1000)
     status: MilestoneStatus = MilestoneStatus.NOT_STARTED
     due_date: Optional[str] = None
     completed_at: Optional[str] = None
-    notes: Optional[str] = None
-    xp_reward: int = 10
+    notes: Optional[str] = Field(None, max_length=1000)
+    xp_reward: int = Field(default=10, ge=0, le=10000)
     target_id: Optional[str] = None  # Links to a WeeklyTarget
 
 
 class WeeklyTarget(BaseModel):
     """A weekly target with optional milestones"""
     id: Optional[str] = None
-    user_id: str
-    title: str
-    description: Optional[str] = None
+    user_id: str = Field(..., min_length=1, max_length=100)
+    title: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
     category: Optional[str] = None  # "research", "academics", "extracurricular"
     milestone_type: MilestoneType = MilestoneType.STANDARD
     pillar: Optional[str] = None
-    xp_reward: int = 25
+    xp_reward: int = Field(default=25, ge=0, le=10000)
     status: MilestoneStatus = MilestoneStatus.NOT_STARTED
-    week_number: Optional[int] = None  # ISO week number
+    week_number: Optional[int] = Field(None, ge=1, le=53)  # ISO week number
     year: Optional[int] = None
     due_date: Optional[str] = None
     completed_at: Optional[str] = None
-    progress_pct: int = 0  # 0-100
+    progress_pct: int = Field(default=0, ge=0, le=100)  # 0-100
     milestones: Optional[List[ResearchPaperMilestone]] = None
 
 
@@ -73,13 +71,13 @@ class WeeklyTargetsResponse(BaseModel):
 
 class CreateWeeklyTargetRequest(BaseModel):
     """Request to create a new weekly target"""
-    user_id: str
-    title: str
-    description: Optional[str] = None
+    user_id: str = Field(..., min_length=1, max_length=100)
+    title: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
     category: Optional[str] = None
     milestone_type: MilestoneType = MilestoneType.STANDARD
     pillar: Optional[str] = None
-    xp_reward: int = 25
+    xp_reward: int = Field(default=25, ge=0, le=10000)
     due_date: Optional[str] = None
     # If research paper, auto-generate milestones
     generate_research_milestones: bool = False
@@ -89,4 +87,4 @@ class CreateWeeklyTargetRequest(BaseModel):
 class UpdateMilestoneRequest(BaseModel):
     """Request to update a milestone's status"""
     status: MilestoneStatus
-    notes: Optional[str] = None
+    notes: Optional[str] = Field(None, max_length=1000)

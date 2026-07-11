@@ -16,8 +16,11 @@ from models.xp import XPState, XPTransaction, XPResult
 
 
 class Database:
-    def __init__(self):
-        self.db_path = Path(__file__).parent.parent / "data" / "profileforge.db"
+    def __init__(self, db_path: str = None):
+        if db_path:
+            self.db_path = Path(db_path)
+        else:
+            self.db_path = Path(__file__).parent.parent / "data" / "profileforge.db"
         self.db: Optional[aiosqlite.Connection] = None
     
     async def initialize(self):
@@ -275,7 +278,7 @@ class Database:
         await self.db.commit()
         
         return User(
-            id=user_id,
+            user_id=user_id,
             name=user.name,
             email=user.email,
             grade=user.grade,
@@ -288,7 +291,7 @@ class Database:
     async def get_user(self, user_id: str) -> Optional[User]:
         """Get user by ID"""
         cursor = await self.db.execute(
-            "SELECT * FROM users WHERE id = ?", (user_id,)
+            "SELECT id, name, email, grade, board, stream, created_at FROM users WHERE id = ?", (user_id,)
         )
         row = await cursor.fetchone()
         
@@ -296,19 +299,13 @@ class Database:
             return None
         
         return User(
-            id=row[0],
+            user_id=row[0],
             name=row[1],
             email=row[2],
             grade=row[3],
             board=row[4],
             stream=row[5],
-            city=row[6],
-            state=row[7],
-            country=row[8],
-            latitude=row[9],
-            longitude=row[10],
-            created_at=row[11],
-            updated_at=row[12]
+            created_at=row[6],
         )
     
     async def get_user_by_email(self, email: str) -> Optional[dict]:
@@ -319,7 +316,7 @@ class Database:
         row = await cursor.fetchone()
         if not row:
             return None
-        return {"id": row[0], "name": row[1], "email": row[2], "password_hash": row[3]}
+        return {"user_id": row[0], "name": row[1], "email": row[2], "password_hash": row[3]}
     
     async def store_password_hash(self, user_id: str, password_hash: str):
         """Store password hash for a user"""
@@ -335,11 +332,10 @@ class Database:
         
         await self.db.execute("""
             UPDATE users 
-            SET name=?, email=?, grade=?, board=?, stream=?, 
-                city=?, state=?, country=?, updated_at=?
+            SET name=?, email=?, grade=?, board=?, stream=?, updated_at=?
             WHERE id=?
         """, (user.name, user.email, user.grade, user.board, user.stream,
-              user.city, user.state, user.country, now, user_id))
+              now, user_id))
         
         await self.db.commit()
         return await self.get_user(user_id)

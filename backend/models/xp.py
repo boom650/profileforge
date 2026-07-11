@@ -1,15 +1,13 @@
-"""
-XP / Gamification Models
-"""
+"""XP / Gamification Models"""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
 class XPTransaction(BaseModel):
-    amount: int
-    source: str
-    pillar: str
+    amount: int = Field(..., ge=0, le=100000)
+    source: str = Field(..., min_length=1, max_length=100)
+    pillar: str = Field(..., pattern="^(academic|research|leadership|creativity|community|evidence|consistency)$")
 
 
 class XPResult(BaseModel):

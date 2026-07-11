@@ -1,8 +1,6 @@
-"""
-Course Models
-"""
+"""Course Models"""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from enum import Enum
 
@@ -21,29 +19,29 @@ class CertificateStatus(str, Enum):
 
 class Course(BaseModel):
     id: str
-    title: str
-    description: Optional[str] = None
-    provider: Optional[str] = None
-    url: Optional[str] = None
-    category: Optional[str] = None
-    pillar: Optional[str] = "academics"
-    difficulty: int = 1
-    xp_reward: int = 50
-    estimated_hours: Optional[float] = None
+    title: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=2000)
+    provider: Optional[str] = Field(None, max_length=100)
+    url: Optional[str] = Field(None, pattern=r"^https?://.*")
+    category: Optional[str] = Field(None, max_length=50)
+    pillar: Optional[str] = Field(default="academics", pattern="^(academics|research|leadership|creativity|community|evidence|consistency)$")
+    difficulty: int = Field(default=1, ge=1, le=5)
+    xp_reward: int = Field(default=50, ge=0, le=10000)
+    estimated_hours: Optional[float] = Field(None, ge=0, le=1000)
     certificate_required: bool = True
     created_at: Optional[str] = None
 
 
 class CourseCreate(BaseModel):
-    title: str
-    description: Optional[str] = None
-    provider: Optional[str] = None
-    url: Optional[str] = None
-    category: Optional[str] = None
-    pillar: Optional[str] = "academics"
-    difficulty: int = 1
-    xp_reward: int = 50
-    estimated_hours: Optional[float] = None
+    title: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=2000)
+    provider: Optional[str] = Field(None, max_length=100)
+    url: Optional[str] = Field(None, pattern=r"^https?://.*")
+    category: Optional[str] = Field(None, max_length=50)
+    pillar: Optional[str] = Field(default="academics", pattern="^(academics|research|leadership|creativity|community|evidence|consistency)$")
+    difficulty: int = Field(default=1, ge=1, le=5)
+    xp_reward: int = Field(default=50, ge=0, le=10000)
+    estimated_hours: Optional[float] = Field(None, ge=0, le=1000)
     certificate_required: bool = True
 
 
@@ -59,4 +57,4 @@ class CourseEnrollment(BaseModel):
 
 
 class CertificateSubmit(BaseModel):
-    certificate_url: str
+    certificate_url: str = Field(..., pattern=r"^https?://.*")
