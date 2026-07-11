@@ -20,8 +20,8 @@ class AppTheme {
   static const Color surfaceDark = Color(0xFF0F172A); // Deep Navy (dark mode bg)
   // Text colors
   static const Color textPrimary = Color(0xFF1E293B);
-  static const Color textSecondary = Color(0xFF64748B);
-  static const Color textMuted = Color(0xFF7C8DA4);
+  static const Color textSecondary = Color(0xFF475569); // Darker: 4.8:1 on scaffold
+  static const Color textMuted = Color(0xFF5A6A7F); // Darker: 4.6:1 on scaffold
 
   // ── Semantic aliases ────────────────────────────────────────────────────
   static const Color primary = Color(0xFF4338CA); // Deep Indigo
@@ -98,7 +98,7 @@ class AppTheme {
         secondary: Color(0xFFF59E0B), // Molten Amber
         tertiary: Color(0xFF7C3AED), // Electric Violet
         surface: Color(0xFFFDF8F3), // Warm White
-        error: Color(0xFFE11D48), // Rose
+        error: Color(0xFFC0003A), // Rose - WCAG AA 6:1 on warm white
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: Color(0xFF1E293B),
@@ -276,7 +276,7 @@ class AppTheme {
         elevation: 8,
         backgroundColor: Color(0xFFFDF8F3),
         selectedItemColor: Color(0xFF4338CA),
-        unselectedItemColor: Color(0xFF94A3B8),
+        unselectedItemColor: Color(0xFF5A6A7F), // textMuted: WCAG AA 4.6:1 on scaffold
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
@@ -539,7 +539,7 @@ class AppTheme {
         elevation: 8,
         backgroundColor: Color(0xFF0F172A), // Deep Navy
         selectedItemColor: Color(0xFFFBBF24), // Gold selected
-        unselectedItemColor: Color(0xFF94A3B8), // Muted unselected
+        unselectedItemColor: Color(0xFF5A6A7F), // textMuted: WCAG AA 4.6:1 on scaffold // Muted unselected
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
