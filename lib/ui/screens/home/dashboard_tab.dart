@@ -114,6 +114,7 @@ class DashboardTab extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.notifications_none_rounded),
               tooltip: 'Notifications',
+              semanticLabel: 'Open notifications',
               onPressed: () {
                 HapticFeedback.lightImpact();
                 Navigator.of(context).push(
@@ -124,6 +125,7 @@ class DashboardTab extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.settings_rounded),
               tooltip: 'Settings',
+              semanticLabel: 'Open settings',
               onPressed: () {
                 HapticFeedback.lightImpact();
                 Navigator.of(context).push(

@@ -42,7 +42,7 @@ class WeekSelector extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _ArrowButton(icon: Icons.chevron_left_rounded, onTap: onPrevious),
+          ArrowButton(icon: Icons.chevron_left_rounded, onTap: onPrevious),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -90,7 +90,7 @@ class WeekSelector extends StatelessWidget {
               ],
             ),
           ),
-          _ArrowButton(icon: Icons.chevron_right_rounded, onTap: onNext),
+          ArrowButton(icon: Icons.chevron_right_rounded, onTap: onNext),
         ],
       ),
     ).animate().fadeIn(delay: 100.ms);
