@@ -13,8 +13,9 @@ class TestModelValidation:
 
     def test_xp_negative_amount(self):
         from models.xp import XPTransaction
-        xp = XPTransaction(user_id="123", amount=-50, pillar="academic", source="test")
-        assert xp.amount == -50
+        from pydantic import ValidationError
+        with pytest.raises(ValidationError):
+            XPTransaction(user_id="123", amount=-50, pillar="academic", source="test")
 
     def test_chat_empty_message(self):
         from models.chat import ChatRequest

@@ -271,11 +271,11 @@ class _TimeRow extends StatelessWidget {
     switch (type) {
       case 'sleep': return const Color(0xFF1E3A8A).withValues(alpha: 0.3);
       case 'school': return const Color(0xFF3B82F6).withValues(alpha: 0.3);
-      case 'coaching': return const AppTheme.categoryViolet.withValues(alpha: 0.3);
+      case 'coaching': return AppTheme.categoryViolet.withValues(alpha: 0.3);
       case 'commute': return const Color(0xFF64748B).withValues(alpha: 0.3);
       case 'meal': return const Color(0xFFF59E0B).withValues(alpha: 0.3);
-      case 'study': return const AppTheme.categoryEmerald.withValues(alpha: 0.3);
-      case 'free': return const AppTheme.categoryEmerald.withValues(alpha: 0.15);
+      case 'study': return AppTheme.categoryEmerald.withValues(alpha: 0.3);
+      case 'free': return AppTheme.categoryEmerald.withValues(alpha: 0.15);
       default: return AppTheme.surfaceLight;
     }
   }

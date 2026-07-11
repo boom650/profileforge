@@ -215,13 +215,13 @@ class _StressStyleCard extends StatelessWidget {
         'icon': Icons.flash_on_rounded,
         'title': 'Sprinter',
         'subtitle': 'Burst work. Deadlines fuel you. Rest hard after.',
-        'color': const AppTheme.accentGold,
+        'color': AppTheme.accentGold,
       },
       StressStyle.avoider: {
         'icon': Icons.psychology_rounded,
         'title': 'Avoider',
         'subtitle': 'Need gentle nudges. "Just 2 minutes" works.',
-        'color': const AppTheme.categoryPink,
+        'color': AppTheme.categoryPink,
       },
     };
 

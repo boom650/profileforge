@@ -63,27 +63,27 @@ class Screen9Roadmap extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const AppTheme.categoryBlue.withValues(alpha: 0.15),
+                  AppTheme.categoryBlue.withValues(alpha: 0.15),
                   const Color(0xFF2E6DA4).withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const AppTheme.categoryBlue.withValues(alpha: 0.25)),
+              border: Border.all(color: AppTheme.categoryBlue.withValues(alpha: 0.25)),
             ),
             child: Column(
               children: [
                 Row(
                   children: [
-                    Icon(Icons.emoji_events_rounded, color: const AppTheme.categoryBlue, size: 22),
+                    Icon(Icons.emoji_events_rounded, color: AppTheme.categoryBlue, size: 22),
                     const SizedBox(width: 8),
                     Text(
                       'STARTER SKIN UNLOCKED',
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: const AppTheme.categoryBlue,
+                        color: AppTheme.categoryBlue,
                         letterSpacing: 1,
                       ),
                     ),
@@ -96,11 +96,11 @@ class Screen9Roadmap extends StatelessWidget {
                       width: 64,
                       height: 64,
                       decoration: BoxDecoration(
-                        color: const AppTheme.categoryBlue.withValues(alpha: 0.1),
+                        color: AppTheme.categoryBlue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const AppTheme.categoryBlue.withValues(alpha: 0.25)),
+                        border: Border.all(color: AppTheme.categoryBlue.withValues(alpha: 0.25)),
                       ),
-                      child: Icon(Icons.explore_rounded, color: const AppTheme.categoryBlue, size: 32),
+                      child: Icon(Icons.explore_rounded, color: AppTheme.categoryBlue, size: 32),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -238,21 +238,21 @@ class Screen9Roadmap extends StatelessWidget {
                   label: 'Research',
                   icon: Icons.science_rounded,
                   value: 0.05,
-                  color: const AppTheme.categoryViolet,
+                  color: AppTheme.categoryViolet,
                   isGap: true,
                 ),
                 _RadarBar(
                   label: 'Leadership',
                   icon: Icons.people_rounded,
                   value: 0.40,
-                  color: const AppTheme.categoryRed,
+                  color: AppTheme.categoryRed,
                   isGap: false,
                 ),
                 _RadarBar(
                   label: 'Service',
                   icon: Icons.volunteer_activism_rounded,
                   value: 0.50,
-                  color: const AppTheme.categoryEmerald,
+                  color: AppTheme.categoryEmerald,
                   isGap: false,
                 ),
                 _RadarBar(
@@ -334,7 +334,7 @@ class Screen9Roadmap extends StatelessWidget {
                 icon: Icons.explore_rounded,
                 name: 'Explorer',
                 xp: '500',
-                color: const AppTheme.categoryBlue,
+                color: AppTheme.categoryBlue,
                 isUnlocked: true,
                 delay: 1300,
               ),
@@ -343,7 +343,7 @@ class Screen9Roadmap extends StatelessWidget {
                 icon: Icons.science_rounded,
                 name: 'Scholar',
                 xp: '1000',
-                color: const AppTheme.categoryViolet,
+                color: AppTheme.categoryViolet,
                 isUnlocked: false,
                 delay: 1350,
               ),
@@ -352,7 +352,7 @@ class Screen9Roadmap extends StatelessWidget {
                 icon: Icons.psychology_rounded,
                 name: 'Leader',
                 xp: '2500',
-                color: const AppTheme.categoryRed,
+                color: AppTheme.categoryRed,
                 isUnlocked: false,
                 delay: 1400,
               ),
