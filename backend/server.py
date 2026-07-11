@@ -1161,7 +1161,8 @@ async def get_user_stats(user_id: str):
             targets = await cursor.fetchone()
             total_targets = targets[0] if targets else 0
             completed_targets = targets[1] if targets and targets[1] else 0
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to count weekly targets: {e}")
             total_targets = 0
             completed_targets = 0
 
@@ -1169,14 +1170,16 @@ async def get_user_stats(user_id: str):
         try:
             cursor = await db.db.execute("SELECT COUNT(*) FROM chat_messages WHERE user_id = ?", (user_id,))
             msg_count = (await cursor.fetchone())[0]
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to count chat messages: {e}")
             msg_count = 0
 
         # Count competition entries
         try:
             cursor = await db.db.execute("SELECT COUNT(*) FROM competition_entries WHERE user_id = ?", (user_id,))
             comp_count = (await cursor.fetchone())[0]
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to count competition entries: {e}")
             comp_count = 0
 
         return {
@@ -1217,8 +1220,8 @@ async def log_activity(user_id: str, activity: dict):
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f'Operation failed at line 1223: {e}')
         
         await db.db.execute(
             "INSERT INTO activity_log (user_id, activity_type, description, xp_earned) VALUES (?, ?, ?, ?)",
@@ -1241,7 +1244,7 @@ async def get_activity_history(user_id: str, limit: int = 20):
                 (user_id, limit)
             )
             rows = await cursor.fetchall()
-        except Exception:
+        except Exception as e:
             rows = []
         
         activities = []
@@ -1391,8 +1394,8 @@ async def set_user_goals(user_id: str, goals: dict):
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f'Operation failed at line 1397: {e}')
         
         # Upsert: delete old goals and insert new
         await db.db.execute("DELETE FROM user_goals WHERE user_id = ?", (user_id,))
@@ -1417,7 +1420,7 @@ async def get_user_goals(user_id: str):
                 (user_id,)
             )
             row = await cursor.fetchone()
-        except Exception:
+        except Exception as e:
             row = None
         
         if row:
@@ -1451,7 +1454,7 @@ async def delete_user(user_id: str):
         try:
             await db.db.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
             deleted.append(table)
-        except Exception:
+        except Exception as e:
             errors.append(table)
     try:
         await db.db.execute("DELETE FROM users WHERE id = ?", (user_id,))
