@@ -1,8 +1,51 @@
-// Result/Either pattern for robust error handling in async operations
-import 'package:flutter/foundation.dart';
+/// Result/Either pattern for robust error handling in async operations.
+///
+/// Pure Dart — no flutter or riverpod imports so codegen builders
+/// (drift_dev, freezed, riverpod_generator) can parse it without errors.
+
+/// Successful result
+class Success<T> extends Result<T> {
+  final T value;
+  const Success(this.value);
+
+  @override
+  bool operator ==(Object other) => other is Success<T> && other.value == value;
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() => 'Success($value)';
+}
+
+/// Failed result
+class Failure<T> extends Result<T> {
+  final Object error;
+  final StackTrace? stackTrace;
+  final String? userMessage;
+  final bool isRetryable;
+
+  const Failure(
+    this.error, {
+    this.stackTrace,
+    this.userMessage,
+    this.isRetryable = true,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      other is Failure<T> &&
+      other.error == error &&
+      other.stackTrace == stackTrace;
+
+  @override
+  int get hashCode => Object.hash(error, stackTrace);
+
+  @override
+  String toString() => 'Failure($error)';
+}
 
 /// Represents the result of an operation that can succeed or fail
-@immutable
 abstract class Result<T> {
   const Result();
 
@@ -48,50 +91,6 @@ abstract class Result<T> {
   }
 }
 
-/// Successful result
-@immutable
-class Success<T> extends Result<T> {
-  final T value;
-  const Success(this.value);
-
-  @override
-  bool operator ==(Object other) => other is Success<T> && other.value == value;
-
-  @override
-  int get hashCode => value.hashCode;
-
-  @override
-  String toString() => 'Success($value)';
-}
-
-/// Failed result
-@immutable
-class Failure<T> extends Result<T> {
-  final Object error;
-  final StackTrace? stackTrace;
-  final String? userMessage;
-  final bool isRetryable;
-
-  const Failure(
-    this.error, {
-    this.stackTrace,
-    this.userMessage,
-    this.isRetryable = true,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      other is Failure<T> &&
-      other.error == error &&
-      other.stackTrace == stackTrace;
-
-  @override
-  int get hashCode => Object.hash(error, stackTrace);
-
-  @override
-  String toString() => 'Failure($error)';
-}
-
 /// Extension to easily create Results
 extension ResultExtension<T> on T {
   Result<T> toSuccess() => Success(this);
@@ -105,38 +104,6 @@ extension FutureResultExtension<T> on Future<T> {
     } catch (error, stackTrace) {
       return Failure<T>(error, stackTrace: stackTrace);
     }
-  }
-}
-
-/// AsyncValue wrapper with built-in retry
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-/// Enhanced AsyncValue with retry capability
-class RetryableAsyncValue<T> {
-  final AsyncValue<T> value;
-  final void Function()? onRetry;
-
-  const RetryableAsyncValue(this.value, {this.onRetry});
-
-  bool get isLoading => value.isLoading;
-  bool get hasError => value.hasError;
-  bool get hasValue => value.hasValue;
-  T? get data => value.value;
-  Object? get error => value.error;
-  StackTrace? get stackTrace => value.stackTrace;
-
-  T requireValue => value.requireValue;
-
-  Widget when({
-    required Widget Function(T data) data,
-    required Widget Function() loading,
-    required Widget Function(Object error, StackTrace stackTrace, VoidCallback? retry) error,
-  }) {
-    return value.when(
-      data: data,
-      loading: loading,
-      error: (e, st) => error(e, st, onRetry),
-    );
   }
 }
 
@@ -159,28 +126,5 @@ Future<Result<T>> retryableAsync<T>(
       }
       await Future.delayed(delay * attempts);
     }
-  }
-}
-
-/// Extension for AsyncNotifier to add retry capability
-extension AsyncNotifierRetry<T> on AutoDisposeAsyncNotifier<T> {
-  Future<Result<T>> runWithRetry(
-    Future<T> Function() operation, {
-    int maxRetries = 3,
-    Duration delay = const Duration(seconds: 2),
-    bool Function(Object)? shouldRetry,
-  }) async {
-    state = const AsyncLoading();
-    final result = await retryableAsync(
-      operation,
-      maxRetries: maxRetries,
-      delay: delay,
-      shouldRetry: shouldRetry,
-    );
-    state = result.fold(
-      (value) => AsyncData(value),
-      (failure) => AsyncError(failure.error, failure.stackTrace ?? StackTrace.current),
-    );
-    return result;
   }
 }

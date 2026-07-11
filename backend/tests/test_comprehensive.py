@@ -326,9 +326,12 @@ class TestAPISuccessPaths:
         assert all(t["status"] == "pending" for t in data)
 
     def test_complete_task_success_awards_xp(self, srv):
-        srv["task"].get_task.return_value = {
-            "id": "task123", "user_id": "user123", "title": "Test",
-            "pillar": "academic", "xp_reward": 100}
+        from types import SimpleNamespace
+        task_obj = SimpleNamespace(
+            id="task123", user_id="user123", title="Test",
+            pillar="academic", xp_reward=100
+        )
+        srv["task"].get_task.return_value = task_obj
         srv["task"].update_status.return_value = True
         srv["xp"].award_xp.return_value = {"total_xp": 500, "level_up": True, "new_level": 2}
         r = client.post(f"{API_PREFIX}/tasks/task123/complete")
