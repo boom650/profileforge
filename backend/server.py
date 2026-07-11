@@ -27,6 +27,16 @@ from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
 import sqlite3
+import logging
+import sys
+
+# Configure structured logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger("profileforge")
 
 # Import response models
 from models.response import (
@@ -991,7 +1001,8 @@ async def get_notifications(user_id: str):
         cursor = await db.db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
         user = await cursor.fetchone()
         name = user[1] if user and len(user) > 1 else "Student"
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to fetch user name for notifications: {e}")
         name = "Student"
     
     # Check for pending weekly targets
@@ -1011,8 +1022,8 @@ async def get_notifications(user_id: str):
                 "icon": "🎯",
                 "action": "weekly_targets",
             })
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Failed to fetch pending targets: {e}")
     
     # Streak reminder
     try:
@@ -1031,8 +1042,8 @@ async def get_notifications(user_id: str):
                 "icon": "🔥",
                 "action": "streak",
             })
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Failed to fetch streak data: {e}")
     
     # Competition reminders
     try:
@@ -1048,8 +1059,8 @@ async def get_notifications(user_id: str):
                 "icon": "🏆",
                 "action": "competitions",
             })
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Failed to fetch competition entries: {e}")
     
     # Daily tip notification
     import datetime
