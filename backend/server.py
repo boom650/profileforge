@@ -96,7 +96,7 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
-# API Version prefix
+# API Version prefix - APPLY to all routes
 API_PREFIX = "/api/v1"
 
 # CORS middleware - allow Flutter app
