@@ -128,12 +128,12 @@ class TestAPIConfig:
         assert hasattr(server, 'app')
 
     def test_fastapi_app_has_routes(self):
-        from server import app
+        from server import app, API_PREFIX
         routes = [r.path for r in app.routes if hasattr(r, 'path')]
-        assert '/api/health' in routes
-        assert '/api/users/{user_id}' in routes
-        assert '/api/tasks/{user_id}' in routes
-        assert '/api/xp/{user_id}' in routes
+        assert f'{API_PREFIX}/health' in routes
+        assert f'{API_PREFIX}/users/{{user_id}}' in routes
+        assert f'{API_PREFIX}/tasks/{{user_id}}' in routes
+        assert f'{API_PREFIX}/xp/{{user_id}}' in routes
 
     def test_fastapi_docs_url(self):
         from server import app

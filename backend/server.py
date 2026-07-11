@@ -126,7 +126,7 @@ weekly_targets_service = WeeklyTargetsService(db)
 # HEALTH CHECK
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/health")
+@app.get(f"{API_PREFIX}/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
 
@@ -135,7 +135,7 @@ async def health_check():
 # USER ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/users", response_model=User)
+@app.post(f"{API_PREFIX}/users", response_model=User)
 async def create_user(user: UserCreate):
     """Create a new user profile"""
     try:
@@ -144,7 +144,7 @@ async def create_user(user: UserCreate):
         raise HTTPException(status_code=409, detail="User with this email already exists")
 
 
-@app.get("/api/users/{user_id}", response_model=User)
+@app.get(f"{API_PREFIX}/users/{{user_id}}", response_model=User)
 async def get_user(user_id: str):
     """Get user by ID"""
     user = await db.get_user(user_id)
@@ -153,7 +153,7 @@ async def get_user(user_id: str):
     return user
 
 
-@app.put("/api/users/{user_id}", response_model=User)
+@app.put(f"{API_PREFIX}/users/{{user_id}}", response_model=User)
 async def update_user(user_id: str, user: User):
     """Update user profile"""
     updated = await db.update_user(user_id, user)
@@ -166,7 +166,7 @@ async def update_user(user_id: str, user: User):
 # LOCATION ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/users/{user_id}/location")
+@app.post(f"{API_PREFIX}/users/{{user_id}}/location")
 async def update_location(user_id: str, location: UserLocation):
     """Update user's GPS coordinates"""
     result = await location_service.update_location(user_id, location)
@@ -175,7 +175,7 @@ async def update_location(user_id: str, location: UserLocation):
     return {"status": "success", "location": location}
 
 
-@app.get("/api/users/{user_id}/location")
+@app.get(f"{API_PREFIX}/users/{{user_id}}/location")
 async def get_location(user_id: str):
     """Get user's stored location"""
     location = await location_service.get_location(user_id)
@@ -184,7 +184,7 @@ async def get_location(user_id: str):
     return location
 
 
-@app.post("/api/users/{user_id}/city")
+@app.post(f"{API_PREFIX}/users/{{user_id}}/city")
 async def update_city(user_id: str, city: str):
     """Update user's city (manual entry fallback)"""
     result = await location_service.update_city(user_id, city)
@@ -197,19 +197,19 @@ async def update_city(user_id: str, city: str):
 # TASK ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/tasks", response_model=Task)
+@app.post(f"{API_PREFIX}/tasks", response_model=Task)
 async def create_task(task: TaskCreate):
     """Create a new task (used by Hermes agent)"""
     return await task_service.create_task(task)
 
 
-@app.get("/api/tasks/{user_id}", response_model=List[Task])
+@app.get(f"{API_PREFIX}/tasks/{{user_id}}", response_model=List[Task])
 async def get_user_tasks(user_id: str, status: Optional[str] = None):
     """Get all tasks for a user, optionally filtered by status"""
     return await task_service.get_user_tasks(user_id, status)
 
 
-@app.get("/api/tasks/{user_id}/pending", response_model=List[Task])
+@app.get(f"{API_PREFIX}/tasks/{{user_id}}/pending", response_model=List[Task])
 async def get_pending_tasks(user_id: str):
     """Get pending tasks for a user"""
     return await task_service.get_user_tasks(user_id, "pending")
@@ -218,7 +218,7 @@ async def get_pending_tasks(user_id: str):
 class TaskStatusUpdate(BaseModel):
     status: TaskStatus
 
-@app.put("/api/tasks/{task_id}/status")
+@app.put(f"{API_PREFIX}/tasks/{{task_id}}/status")
 async def update_task_status(task_id: str, body: TaskStatusUpdate):
     """Update task status"""
     result = await task_service.update_status(task_id, body.status)
@@ -227,7 +227,7 @@ async def update_task_status(task_id: str, body: TaskStatusUpdate):
     return {"status": "success"}
 
 
-@app.post("/api/tasks/{task_id}/complete")
+@app.post(f"{API_PREFIX}/tasks/{{task_id}}/complete")
 async def complete_task(task_id: str):
     """Mark task as completed and award XP"""
     task = await task_service.get_task(task_id)
@@ -252,7 +252,7 @@ async def complete_task(task_id: str):
 # DOCUMENT EVALUATION ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/evaluate")
+@app.post(f"{API_PREFIX}/evaluate")
 async def evaluate_document(
     user_id: str,
     task_id: str,
@@ -292,7 +292,7 @@ async def evaluate_document(
     return result
 
 
-@app.post("/api/evaluate/text")
+@app.post(f"{API_PREFIX}/evaluate/text")
 async def evaluate_text(body: dict):
     """Evaluate text content against task criteria."""
     user_id = body.get("user_id", "")
@@ -326,7 +326,7 @@ async def evaluate_text(body: dict):
 # XP / GAMIFICATION ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/xp/{user_id}")
+@app.get(f"{API_PREFIX}/xp/{{user_id}}")
 async def get_xp(user_id: str):
     """Get user's XP state"""
     return await xp_service.get_xp_state(user_id)
@@ -336,7 +336,7 @@ import httpx as _httpx
 
 # BRIDGE_URL loaded from config (environment-aware)
 
-@app.post("/api/ai/evaluate")
+@app.post(f"{API_PREFIX}/ai/evaluate")
 async def ai_evaluate_via_bridge(body: dict):
     """Submit text for AI evaluation via Hermes bridge."""
     async with _httpx.AsyncClient(timeout=5) as client:
@@ -344,7 +344,7 @@ async def ai_evaluate_via_bridge(body: dict):
         return resp.json()
 
 
-@app.get("/api/ai/results/{job_id}")
+@app.get(f"{API_PREFIX}/ai/results/{{job_id}}")
 async def ai_get_result(job_id: str):
     """Get AI evaluation result from bridge."""
     async with _httpx.AsyncClient(timeout=5) as client:
@@ -352,7 +352,7 @@ async def ai_get_result(job_id: str):
         return resp.json()
 
 
-@app.post("/api/ai/tasks/generate")
+@app.post(f"{API_PREFIX}/ai/tasks/generate")
 async def ai_generate_tasks_via_bridge(body: dict):
     """Request AI task generation via Hermes bridge."""
     async with _httpx.AsyncClient(timeout=5) as client:
@@ -360,7 +360,7 @@ async def ai_generate_tasks_via_bridge(body: dict):
         return resp.json()
 
 
-@app.get("/api/ai/task-results/{job_id}")
+@app.get(f"{API_PREFIX}/ai/task-results/{{job_id}}")
 async def ai_get_task_results(job_id: str):
     """Get AI task generation results from bridge."""
     async with _httpx.AsyncClient(timeout=5) as client:
@@ -368,7 +368,7 @@ async def ai_get_task_results(job_id: str):
         return resp.json()
 
 
-@app.post("/api/xp/{user_id}/award")
+@app.post(f"{API_PREFIX}/xp/{{user_id}}/award")
 async def award_xp(user_id: str, transaction: XPTransaction):
     """Award XP to user"""
     result = await xp_service.award_xp(
@@ -380,25 +380,25 @@ async def award_xp(user_id: str, transaction: XPTransaction):
     return result
 
 
-@app.get("/api/xp/{user_id}/history")
+@app.get(f"{API_PREFIX}/xp/{{user_id}}/history")
 async def get_xp_history(user_id: str, limit: int = 50):
     """Get XP transaction history"""
     return await xp_service.get_history(user_id, limit)
 
 
-@app.get("/api/skins/{user_id}")
+@app.get(f"{API_PREFIX}/skins/{{user_id}}")
 async def get_skins(user_id: str):
     """Get user's skin collection"""
     return await xp_service.get_skins(user_id)
 
 
-@app.post("/api/skins/{user_id}/unlock")
+@app.post(f"{API_PREFIX}/skins/{{user_id}}/unlock")
 async def unlock_skin(user_id: str, skin_id: str):
     """Unlock a skin for user"""
     return await xp_service.unlock_skin(user_id, skin_id)
 
 
-@app.post("/api/streak/{user_id}/update")
+@app.post(f"{API_PREFIX}/streak/{{user_id}}/update")
 async def update_streak(user_id: str):
     """Update user's streak (call daily)"""
     return await xp_service.update_streak(user_id)
@@ -408,7 +408,7 @@ async def update_streak(user_id: str):
 # FREE COURSES ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/courses")
+@app.get(f"{API_PREFIX}/courses")
 async def list_courses(
     category: Optional[str] = None,
     pillar: Optional[str] = None,
@@ -418,7 +418,7 @@ async def list_courses(
     return await course_service.get_all_courses(category, pillar, difficulty)
 
 
-@app.get("/api/courses/{course_id}")
+@app.get(f"{API_PREFIX}/courses/{{course_id}}")
 async def get_course(course_id: str):
     """Get course details by ID"""
     course = await course_service.get_course(course_id)
@@ -427,19 +427,19 @@ async def get_course(course_id: str):
     return course
 
 
-@app.get("/api/courses/search/{query}")
+@app.get(f"{API_PREFIX}/courses/search/{{query}}")
 async def search_courses(query: str):
     """Search courses by title, description, or provider"""
     return await course_service.search_courses(query)
 
 
-@app.post("/api/courses/{course_id}")
+@app.post(f"{API_PREFIX}/courses/{{course_id}}")
 async def create_course(course_id: str, course: CourseCreate):
     """Create a new course (admin/hermes endpoint)"""
     return await course_service.create_course(course)
 
 
-@app.post("/api/courses/{user_id}/enroll/{course_id}")
+@app.post(f"{API_PREFIX}/courses/{{user_id}}/enroll/{{course_id}}")
 async def enroll_in_course(user_id: str, course_id: str):
     """Enroll user in a free course"""
     course = await course_service.get_course(course_id)
@@ -450,13 +450,13 @@ async def enroll_in_course(user_id: str, course_id: str):
     return enrollment
 
 
-@app.get("/api/courses/{user_id}/enrolled")
+@app.get(f"{API_PREFIX}/courses/{{user_id}}/enrolled")
 async def get_user_enrollments(user_id: str, status: Optional[str] = None):
     """Get all courses a user is enrolled in"""
     return await course_service.get_user_enrollments(user_id, status)
 
 
-@app.post("/api/courses/{user_id}/submit-certificate/{course_id}")
+@app.post(f"{API_PREFIX}/courses/{{user_id}}/submit-certificate/{{course_id}}")
 async def submit_certificate(user_id: str, course_id: str, body: CertificateSubmit):
     """Submit certificate URL for a completed course"""
     enrollment = await course_service.get_enrollment(user_id, course_id)
@@ -469,7 +469,7 @@ async def submit_certificate(user_id: str, course_id: str, body: CertificateSubm
     return result
 
 
-@app.post("/api/courses/{user_id}/complete/{course_id}")
+@app.post(f"{API_PREFIX}/courses/{{user_id}}/complete/{{course_id}}")
 async def complete_course(user_id: str, course_id: str):
     """Mark course as completed (after certificate approval)"""
     course = await course_service.get_course(course_id)
@@ -496,7 +496,7 @@ async def complete_course(user_id: str, course_id: str):
     }
 
 
-@app.get("/api/courses/{user_id}/stats")
+@app.get(f"{API_PREFIX}/courses/{{user_id}}/stats")
 async def get_course_stats(user_id: str):
     """Get course completion stats for a user"""
     return await course_service.get_user_stats(user_id)
@@ -506,7 +506,7 @@ async def get_course_stats(user_id: str):
 # CHAT ENDPOINTS — Connect to Hermes via bridge
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/chat", response_model=ChatResponse)
+@app.post(f"{API_PREFIX}/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
     Send a message to the Hermes AI coach via the bridge server.
@@ -531,7 +531,7 @@ async def chat(request: ChatRequest):
         )
 
 
-@app.get("/api/chat/{conversation_id}/history")
+@app.get(f"{API_PREFIX}/chat/{{conversation_id}}/history")
 async def get_chat_history(conversation_id: str):
     """Get the full conversation history for a chat session."""
     history = await chat_service.get_conversation_history(conversation_id)
@@ -540,7 +540,7 @@ async def get_chat_history(conversation_id: str):
     return history
 
 
-@app.get("/api/chat/conversations/{user_id}")
+@app.get(f"{API_PREFIX}/chat/conversations/{{user_id}}")
 async def list_user_conversations(user_id: str):
     """List all chat conversations for a user."""
     return await chat_service.list_conversations(user_id)
@@ -550,7 +550,7 @@ async def list_user_conversations(user_id: str):
 # WEEKLY TARGETS & RESEARCH MILESTONES
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/weekly-targets", response_model=WeeklyTarget)
+@app.post(f"{API_PREFIX}/weekly-targets", response_model=WeeklyTarget)
 async def create_weekly_target(request: CreateWeeklyTargetRequest):
     """
     Create a new weekly target.
@@ -564,7 +564,7 @@ async def create_weekly_target(request: CreateWeeklyTargetRequest):
     return await weekly_targets_service.create_target(request)
 
 
-@app.get("/api/weekly-targets/{user_id}")
+@app.get(f"{API_PREFIX}/weekly-targets/{{user_id}}")
 async def get_weekly_targets(
     user_id: str,
     week: Optional[int] = None,
@@ -574,7 +574,7 @@ async def get_weekly_targets(
     return await weekly_targets_service.get_weekly_targets(user_id, week, year)
 
 
-@app.put("/api/weekly-targets/{target_id}/status")
+@app.put(f"{API_PREFIX}/weekly-targets/{{target_id}}/status")
 async def update_target_status(target_id: str, status: MilestoneStatus):
     """Update a weekly target's status (not_started → in_progress → completed)."""
     target = await weekly_targets_service.update_target_status(target_id, status)
@@ -583,7 +583,7 @@ async def update_target_status(target_id: str, status: MilestoneStatus):
     return target
 
 
-@app.delete("/api/weekly-targets/{target_id}")
+@app.delete(f"{API_PREFIX}/weekly-targets/{{target_id}}")
 async def delete_target(target_id: str):
     """Delete a weekly target and its associated milestones."""
     deleted = await weekly_targets_service.delete_target(target_id)
@@ -592,13 +592,13 @@ async def delete_target(target_id: str):
     return {"status": "deleted"}
 
 
-@app.get("/api/research-milestones/{user_id}")
+@app.get(f"{API_PREFIX}/research-milestones/{{user_id}}")
 async def get_research_milestones(user_id: str):
     """Get all research paper milestones for a user."""
     return await weekly_targets_service.get_all_milestones(user_id)
 
 
-@app.put("/api/research-milestones/{milestone_id}")
+@app.put(f"{API_PREFIX}/research-milestones/{{milestone_id}}")
 async def update_milestone(milestone_id: str, req: UpdateMilestoneRequest):
     """
     Update a research milestone's status.
@@ -617,7 +617,7 @@ async def update_milestone(milestone_id: str, req: UpdateMilestoneRequest):
 # HERMES INTEGRATION ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/hermes/tasks/push")
+@app.post(f"{API_PREFIX}/hermes/tasks/push")
 async def hermes_push_tasks(tasks: List[TaskCreate]):
     """
     Endpoint for Hermes agent to push generated tasks.
@@ -631,7 +631,7 @@ async def hermes_push_tasks(tasks: List[TaskCreate]):
     return {"status": "success", "tasks_created": len(created_tasks)}
 
 
-@app.get("/api/hermes/tasks/{user_id}/pending")
+@app.get(f"{API_PREFIX}/hermes/tasks/{{user_id}}/pending")
 async def hermes_get_pending(user_id: str):
     """
     Endpoint for Hermes to check pending tasks.
@@ -640,7 +640,7 @@ async def hermes_get_pending(user_id: str):
     return await task_service.get_user_tasks(user_id, "pending")
 
 
-@app.post("/api/hermes/evaluate")
+@app.post(f"{API_PREFIX}/hermes/evaluate")
 async def hermes_evaluate(request: EvaluationRequest):
     """
     Endpoint for Hermes to evaluate documents.
@@ -653,13 +653,13 @@ async def hermes_evaluate(request: EvaluationRequest):
 # OPPORTUNITY ENDPOINTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/opportunities/search")
+@app.get(f"{API_PREFIX}/opportunities/search")
 async def search_opportunities(city: str):
     """Search opportunities by city"""
     return await location_service.search_by_city(city)
 
 
-@app.get("/api/opportunities/{user_id}")
+@app.get(f"{API_PREFIX}/opportunities/{{user_id}}")
 async def get_opportunities(user_id: str):
     """Get opportunities for user based on location"""
     return await location_service.get_nearby_opportunities(user_id)
@@ -669,13 +669,13 @@ async def get_opportunities(user_id: str):
 # UNIVERSITY MATCHER
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/universities")
+@app.get(f"{API_PREFIX}/universities")
 async def list_universities(country: Optional[str] = None, max_tuition: Optional[int] = None):
     """List all universities, optionally filtered by country or budget"""
     return university_service.search(country=country, max_tuition=max_tuition)
 
 
-@app.get("/api/universities/{uni_id}")
+@app.get(f"{API_PREFIX}/universities/{{uni_id}}")
 async def get_university(uni_id: str):
     """Get details for a specific university"""
     uni = university_service.get_by_id(uni_id)
@@ -684,7 +684,7 @@ async def get_university(uni_id: str):
     return uni
 
 
-@app.post("/api/universities/match")
+@app.post(f"{API_PREFIX}/universities/match")
 async def match_universities(request: UniversityMatchRequest):
     """Find best-fit universities based on student profile"""
     interests = request.interests.split(",") if request.interests else None
@@ -701,7 +701,7 @@ async def match_universities(request: UniversityMatchRequest):
 # NOTIFICATIONS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/notifications/{user_id}/daily")
+@app.get(f"{API_PREFIX}/notifications/{{user_id}}/daily")
 async def get_daily_reminder(user_id: str):
     """Get a context-aware daily reminder for the user"""
     context = {
@@ -713,7 +713,7 @@ async def get_daily_reminder(user_id: str):
     return notification_service.get_daily_reminder(user_id, context)
 
 
-@app.get("/api/notifications/{user_id}/weekly")
+@app.get(f"{API_PREFIX}/notifications/{{user_id}}/weekly")
 async def get_weekly_report(user_id: str):
     """Get weekly summary report"""
     stats = {
@@ -736,14 +736,14 @@ async def get_weekly_report(user_id: str):
     return notification_service.get_weekly_report(user_id, stats)
 
 
-@app.post("/api/notifications/{user_id}/competition-alert")
+@app.post(f"{API_PREFIX}/notifications/{{user_id}}/competition-alert")
 async def get_competition_alert(user_id: str, competition: str = "KVPY",
                                  days_left: int = 14):
     """Get competition registration alert"""
     return notification_service.get_competition_alert(user_id, competition, days_left)
 
 
-@app.get("/api/notifications/{user_id}/streak")
+@app.get(f"{API_PREFIX}/notifications/{{user_id}}/streak")
 async def get_streak_reminder(user_id: str, streak: int = 5):
     """Get streak-based reminder"""
     return notification_service.get_streak_reminder(user_id, streak)
@@ -753,25 +753,25 @@ async def get_streak_reminder(user_id: str, streak: int = 5):
 # SCHOLARSHIPS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/scholarships")
+@app.get(f"{API_PREFIX}/scholarships")
 async def list_scholarships(country: Optional[str] = None):
     """List all scholarships, optionally filtered by country"""
     return scholarship_service.get_all(country=country)
 
 
-@app.get("/api/search-scholarships/{query}")
+@app.get(f"{API_PREFIX}/search-scholarships/{{query}}")
 async def search_scholarships(query: str):
     """Search scholarships by name, country, or description"""
     return scholarship_service.search(query)
 
 
-@app.get("/api/indian-scholarships")
+@app.get(f"{API_PREFIX}/indian-scholarships")
 async def get_indian_scholarships():
     """Get scholarships relevant to Indian students"""
     return scholarship_service.get_for_indian_student()
 
 
-@app.get("/api/scholarships/{scholarship_id}")
+@app.get(f"{API_PREFIX}/scholarships/{{scholarship_id}}")
 async def get_scholarship(scholarship_id: str):
     """Get a specific scholarship"""
     s = scholarship_service.get_by_id(scholarship_id)
@@ -784,19 +784,19 @@ async def get_scholarship(scholarship_id: str):
 # ESSAY PROMPTS
 # ═══════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/essay/prompts")
+@app.get(f"{API_PREFIX}/essay/prompts")
 async def list_essay_prompts(platform: Optional[str] = None):
     """List all essay prompts, optionally filtered by platform"""
     return essay_service.get_all(platform=platform)
 
 
-@app.get("/api/essay-indian-tips/{platform}")
+@app.get(f"{API_PREFIX}/essay-indian-tips/{{platform}}")
 async def get_indian_student_tips(platform: str = "common_app"):
     """Get essay prompts with enhanced tips for Indian students"""
     return essay_service.get_for_indian_student(platform)
 
 
-@app.get("/api/essay/prompts/{prompt_id}")
+@app.get(f"{API_PREFIX}/essay/prompts/{{prompt_id}}")
 async def get_essay_prompt(prompt_id: str):
     """Get a specific essay prompt with tips"""
     prompt = essay_service.get_by_id(prompt_id)
@@ -805,7 +805,7 @@ async def get_essay_prompt(prompt_id: str):
     return prompt
 
 
-@app.post("/api/essay/review")
+@app.post(f"{API_PREFIX}/essay/review")
 async def review_essay(request: dict):
     """Review an essay draft and provide feedback"""
     essay_text = request.get("essay", "")
@@ -906,7 +906,7 @@ async def review_essay(request: dict):
 # PROFILE COMPLETION STRENGTH
 # ══════════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/users/{user_id}/profile-strength")
+@app.get(f"{API_PREFIX}/users/{{user_id}}/profile-strength")
 async def get_profile_strength(user_id: str):
     """Calculate profile completion strength as percentage"""
     cursor = await db.db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
@@ -974,7 +974,7 @@ async def get_profile_strength(user_id: str):
 # NOTIFICATIONS & REMINDERS
 # ══════════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/notifications/{user_id}")
+@app.get(f"{API_PREFIX}/notifications/{{user_id}}")
 async def get_notifications(user_id: str):
     """Get personalized notifications and reminders for a user"""
     notifications = []
@@ -1082,7 +1082,7 @@ async def get_notifications(user_id: str):
     return {"notifications": notifications, "count": len(notifications)}
 
 
-@app.get("/api/daily-tips")
+@app.get(f"{API_PREFIX}/daily-tips")
 async def get_daily_tips():
     """Return daily tips for students"""
     tips = [
@@ -1104,7 +1104,7 @@ async def get_daily_tips():
     return {"tips": rotated[:3]}  # Return 3 tips daily
 
 
-@app.get("/api/achievements")
+@app.get(f"{API_PREFIX}/achievements")
 async def get_achievements():
     """Return all available achievements"""
     achievements = [
@@ -1124,7 +1124,7 @@ async def get_achievements():
     return {"achievements": achievements}
 
 
-@app.get("/api/users/{user_id}/stats")
+@app.get(f"{API_PREFIX}/users/{{user_id}}/stats")
 async def get_user_stats(user_id: str):
     """Get aggregated user statistics"""
     # Get user
@@ -1179,7 +1179,7 @@ async def get_user_stats(user_id: str):
 # ACTIVITY LOG & ANALYTICS
 # ══════════════════════════════════════════════════════════════════════════════
 
-@app.post("/api/users/{user_id}/activity")
+@app.post(f"{API_PREFIX}/users/{{user_id}}/activity")
 async def log_activity(user_id: str, activity: dict):
     """Log a user activity for analytics and streak tracking"""
     try:
@@ -1213,7 +1213,7 @@ async def log_activity(user_id: str, activity: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/api/users/{user_id}/activity")
+@app.get(f"{API_PREFIX}/users/{{user_id}}/activity")
 async def get_activity_history(user_id: str, limit: int = 20):
     """Get recent activity history for a user"""
     try:
@@ -1277,7 +1277,7 @@ async def search_schools(q: str = '', state: str = ''):
     return {'schools': results[:20], 'total': len(results)}
 
 
-@app.get("/api/leaderboard")
+@app.get(f"{API_PREFIX}/leaderboard")
 async def get_leaderboard(period: str = "weekly"):
     """Get leaderboard with mock data for demo + real user stats"""
     # Mock leaderboard data (will be replaced with real data later)
@@ -1307,7 +1307,7 @@ async def get_leaderboard(period: str = "weekly"):
 # MENTOR TIPS & GOAL TRACKING
 # ══════════════════════════════════════════════════════════════════════════════
 
-@app.get("/api/mentor-tips")
+@app.get(f"{API_PREFIX}/mentor-tips")
 async def get_mentor_tips(category: str = "all"):
     """Get curated mentor tips for college admissions"""
     tips = {
@@ -1354,7 +1354,7 @@ async def get_mentor_tips(category: str = "all"):
     return {"tips": [tip]}
 
 
-@app.post("/api/users/{user_id}/goals")
+@app.post(f"{API_PREFIX}/users/{{user_id}}/goals")
 async def set_user_goals(user_id: str, goals: dict):
     """Set weekly goals for a user"""
     try:
@@ -1389,7 +1389,7 @@ async def set_user_goals(user_id: str, goals: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/api/users/{user_id}/goals")
+@app.get(f"{API_PREFIX}/users/{{user_id}}/goals")
 async def get_user_goals(user_id: str):
     """Get user's weekly goals"""
     try:
@@ -1415,7 +1415,7 @@ async def get_user_goals(user_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.delete("/api/users/{user_id}")
+@app.delete(f"{API_PREFIX}/users/{{user_id}}")
 async def delete_user(user_id: str):
     """Delete a user and all associated data"""
     tables = [

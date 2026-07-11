@@ -59,7 +59,7 @@ with patch('services.database.Database', return_value=mock_db_instance), \
      patch('services.ai_evaluation.AIEvaluationService', MagicMock()):
     
     from fastapi.testclient import TestClient
-    from server import app
+    from server import app, API_PREFIX
     client = TestClient(app, raise_server_exceptions=False)
 
 
@@ -67,7 +67,7 @@ class TestHealthEndpoints:
     """Test basic health endpoints"""
 
     def test_health_endpoint(self):
-        response = client.get("/api/health")
+        response = client.get(f"{API_PREFIX}/health")
         assert response.status_code == 200
         assert response.json()["status"] == "healthy"
 
@@ -76,47 +76,47 @@ class TestEndpointExistence:
     """Test that all major endpoints exist and don't return 405 (method not allowed)"""
 
     def test_users_endpoint_exists(self):
-        response = client.get("/api/users/nonexistent")
+        response = client.get(f"{API_PREFIX}/users/nonexistent")
         assert response.status_code != 405, f"Endpoint missing (got 405). Status: {response.status_code}"
 
     def test_create_user_endpoint_exists(self):
-        response = client.post("/api/users", json={})
+        response = client.post(f"{API_PREFIX}/users", json={})
         assert response.status_code != 405
 
     def test_tasks_endpoint_exists(self):
-        response = client.get("/api/tasks/test123")
+        response = client.get(f"{API_PREFIX}/tasks/test123")
         assert response.status_code != 405
 
     def test_tasks_pending_endpoint_exists(self):
-        response = client.get("/api/tasks/test123/pending")
+        response = client.get(f"{API_PREFIX}/tasks/test123/pending")
         assert response.status_code != 405
 
     def test_xp_endpoint_exists(self):
-        response = client.get("/api/xp/test123")
+        response = client.get(f"{API_PREFIX}/xp/test123")
         assert response.status_code != 405
 
     def test_skins_endpoint_exists(self):
-        response = client.get("/api/skins/test123")
+        response = client.get(f"{API_PREFIX}/skins/test123")
         assert response.status_code != 405
 
     def test_chat_endpoint_exists(self):
-        response = client.get("/api/chat/conv1/history")
+        response = client.get(f"{API_PREFIX}/chat/conv1/history")
         assert response.status_code != 405
 
     def test_weekly_targets_endpoint_exists(self):
-        response = client.get("/api/weekly-targets/test123")
+        response = client.get(f"{API_PREFIX}/weekly-targets/test123")
         assert response.status_code != 405
 
     def test_opportunities_endpoint_exists(self):
-        response = client.get("/api/opportunities/search?query=test")
+        response = client.get(f"{API_PREFIX}/opportunities/search?query=test")
         assert response.status_code != 405
 
     def test_courses_endpoint_exists(self):
-        response = client.get("/api/courses/search/test")
+        response = client.get(f"{API_PREFIX}/courses/search/test")
         assert response.status_code != 405
 
     def test_courses_detail_endpoint_exists(self):
-        response = client.get("/api/courses/test123")
+        response = client.get(f"{API_PREFIX}/courses/test123")
         assert response.status_code != 405
 
 
@@ -125,14 +125,14 @@ class TestErrorHandling:
 
     def test_invalid_json(self):
         response = client.post(
-            "/api/users",
+            f"{API_PREFIX}/users",
             content="not json",
             headers={"Content-Type": "application/json"}
         )
         assert response.status_code == 422
 
     def test_method_not_allowed(self):
-        response = client.patch("/api/users/test123")
+        response = client.patch(f"{API_PREFIX}/users/test123")
         assert response.status_code == 405
 
 
