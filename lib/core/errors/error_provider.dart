@@ -1,7 +1,7 @@
 // Global error handling provider
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'core/errors/result.dart';
+import 'result.dart';
 
 /// Provider for capturing and reporting errors globally
 final errorReporterProvider = Provider<ErrorReporter>((ref) {
