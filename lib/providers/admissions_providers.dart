@@ -1,4 +1,5 @@
 /// Admissions probability providers: Monte Carlo engine, factor breakdown, university probabilities.
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/admissions_probability/admissions_engine.dart';
 import 'profile_providers.dart';
