@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
-import '../../generated/l10n/app_localizations.dart';
+import 'package:profileforge/ui/theme/app_theme.dart';
+import 'package:profileforge/ui/generated/l10n/app_localizations.dart';
 
 class Screen1Welcome extends StatefulWidget {
   const Screen1Welcome({super.key});

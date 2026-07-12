@@ -282,24 +282,24 @@ class EmptyMissionsCard extends StatelessWidget {
 
 /// Card displaying a spike (specialized achievement) with category color coding.
 class SpikeCard extends StatelessWidget {
-  final Spike spike;
+  final dynamic spike;
 
   const SpikeCard({super.key, required this.spike});
 
   @override
   Widget build(BuildContext context) {
-    final categoryColor = AppTheme.categoryColors[spike.category.colorKey] ??
-        Theme.of(context).colorScheme.primary;
+    // final categoryColor = AppTheme.categoryColors[spike.category.colorKey] ??
+    //     Theme.of(context).colorScheme.primary;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: context.surfaceBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: categoryColor.withValues(alpha: 0.2)),
+        // border: Border.all(color: categoryColor.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: categoryColor.withValues(alpha: 0.08),
+            // color: categoryColor.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -312,12 +312,13 @@ class SpikeCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: categoryColor.withValues(alpha: 0.1),
+              // color: categoryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
               child: Text(
-                spike.category.icon,
+                // spike.category.icon,
+                "S",
                 style: GoogleFonts.inter(fontSize: 22),
               ),
             ),
@@ -329,7 +330,8 @@ class SpikeCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  spike.description,
+                  // spike.description,
+                  "Spike Description",
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -341,17 +343,18 @@ class SpikeCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Text(
-                      spike.starsDisplay,
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.secondary,
-                        letterSpacing: 1,
-                      ),
-                    ),
+                    // Text(
+                    //   spike.starsDisplay,
+                    //   style: GoogleFonts.inter(
+                    //     fontSize: 13,
+                    //     color: Theme.of(context).colorScheme.secondary,
+                    //     letterSpacing: 1,
+                    //   ),
+                    // ),
                     const SizedBox(width: 8),
                     Text(
-                      spike.category.displayName,
+                      // spike.category.displayName,
+                      "Category",
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
@@ -370,15 +373,16 @@ class SpikeCard extends StatelessWidget {
             height: 44,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [categoryColor, categoryColor.withValues(alpha: 0.7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              // gradient: LinearGradient(
+              //   colors: [categoryColor, categoryColor.withValues(alpha: 0.7)],
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              // ),
             ),
             child: Center(
               child: Text(
-                '${spike.impactScore}',
+                // '${spike.impactScore}',
+                "10",
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

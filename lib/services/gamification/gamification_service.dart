@@ -390,6 +390,116 @@ class GamificationService {
     );
   }
 
+  /// Claim the XP reward for a completed mission.
+  ///
+  /// Finds the mission by [missionId], marks it as claimed, awards its
+  /// [xpReward] as XP, and persists the change.
+  Future<void> claimMissionReward(String missionId) async {
+    final idx = _missions.indexWhere((m) => m.id == missionId);
+    if (idx == -1) return;
+
+    final mission = _missions[idx];
+    if (!mission.isCompleted || mission.isClaimed) return;
+
+    _missions[idx] = mission.copyWith(
+      isClaimed: true,
+      claimedAt: DateTime.now(),
+    );
+
+    _levelBeforeAdd = _xpState.currentLevel;
+    await addXP(
+      amount: mission.xpReward,
+      pillar: mission.pillar,
+      source: 'mission_reward:${mission.type.name}',
+      missionId: missionId,
+    );
+    _saveToPrefs();
+  }
+
+  /// Update progress on a mission, delegating to [_trackMissionProgress].
+  Future<void> updateMissionProgress(String missionId, int increment) async {
+    _trackMissionProgress(missionId, increment);
+    _saveToPrefs();
+  }
+
+  /// Claim the weekly mission set bonus if every mission in the set is complete.
+  ///
+  /// Awards the set's [WeeklyMissionSet.totalXPReward] as XP, marks the bonus
+  /// as claimed, and persists the change.
+  Future<void> claimWeeklyBonus() async {
+    final set = _weeklyMissionSet;
+    if (set == null || set.isBonusClaimed) return;
+    if (!isWeeklySetComplete) return;
+
+    _weeklyMissionSet = set.copyWith(
+      isBonusClaimed: true,
+      bonusClaimedAt: DateTime.now(),
+    );
+
+    _levelBeforeAdd = _xpState.currentLevel;
+    await addXP(
+      amount: set.totalXPReward,
+      pillar: AdmissionsPillar.consistency,
+      source: 'weekly_bonus',
+    );
+    _saveToPrefs();
+  }
+
+  /// Claim the XP reward for a completed mission.
+  ///
+  /// Finds the mission by [missionId], marks it as claimed, awards its
+  /// [xpReward] as XP, and persists the change.
+  Future<void> claimMissionReward(String missionId) async {
+    final idx = _missions.indexWhere((m) => m.id == missionId);
+    if (idx == -1) return;
+
+    final mission = _missions[idx];
+    if (!mission.isCompleted || mission.isClaimed) return;
+
+    _missions[idx] = mission.copyWith(
+      isClaimed: true,
+      claimedAt: DateTime.now(),
+    );
+
+    _levelBeforeAdd = _xpState.currentLevel;
+    await addXP(
+      amount: mission.xpReward,
+      pillar: mission.pillar,
+      source: 'mission_reward:${mission.type.name}',
+      missionId: missionId,
+    );
+    _saveToPrefs();
+  }
+
+  /// Update progress on a mission, delegating to [_trackMissionProgress].
+  Future<void> updateMissionProgress(String missionId, int increment) async {
+    _trackMissionProgress(missionId, increment);
+    _saveToPrefs();
+  }
+
+  /// Claim the weekly mission set bonus if every mission in the set is complete.
+  ///
+  /// Awards the set's [WeeklyMissionSet.totalXPReward] as XP, marks the bonus
+  /// as claimed, and persists the change.
+  Future<void> claimWeeklyBonus() async {
+    final set = _weeklyMissionSet;
+    if (set == null || set.isBonusClaimed) return;
+    if (!isWeeklySetComplete) return;
+
+    _weeklyMissionSet = set.copyWith(
+      isBonusClaimed: true,
+      bonusClaimedAt: DateTime.now(),
+    );
+
+    _levelBeforeAdd = _xpState.currentLevel;
+    await addXP(
+      amount: set.totalXPReward,
+      pillar: AdmissionsPillar.consistency,
+      source: 'weekly_bonus',
+    );
+    _saveToPrefs();
+  }
+
   // ─── Persistence ──────────────────────────────────────────────────────
 
   Future<void> _saveToPrefs() async {

@@ -5,13 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 
-/// Age verification status stored in SharedPreferences.
-enum AgeVerificationStatus {
-  notVerified,
-  under13,       // COPPA blocked
-  minor13to17,   // Limited features
-  adult18plus,   // Full access
-}
+import 'package:profileforge/models/user/user_profile.dart';
 
 /// Provider for age verification state.
 final ageVerificationProvider = FutureProvider<AgeVerificationStatus>((ref) async {

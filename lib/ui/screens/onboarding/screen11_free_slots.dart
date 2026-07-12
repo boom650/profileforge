@@ -33,12 +33,12 @@ class _Screen11FreeSlotsState extends ConsumerState<Screen11FreeSlots> {
     _confirmed = data.freeSlotsConfirmed;
   }
 
-  void _saveToProvider() {
-    ref.read(onboardingDataProvider.notifier).updateFreeSlots(
-      weekdayHours: _weekdayHours,
-      weekendHours: _weekendHours,
-      confirmed: _confirmed,
-    );
+  _formKey = GlobalKey<FormState>();
+  ref.read(onboardingDataProvider.notifier).updateData(
+    ref.read(onboardingDataProvider).copyWith(
+      freeSlotsWeekdayHours: _weekdayHours,
+    ),
+  );
   }
 
   @override

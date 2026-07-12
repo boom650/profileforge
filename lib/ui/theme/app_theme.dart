@@ -353,7 +353,6 @@ class AppTheme {
     );
   }
 
-  // ── Dark theme ──────────────────────────────────────────────────────────
   static ThemeData get darkTheme {
     final base = ThemeData.dark();
     return base.copyWith(
@@ -548,6 +547,28 @@ class AppTheme {
     );
   }
 }
+
+extension ThemeProvider on AppTheme {
+  static ThemeData getTheme(BuildContext context) {
+    final brightness = MediaQuery.of(context).platformBrightness;
+    return brightness == Brightness.dark ? AppTheme.darkTheme : AppTheme.lightTheme;
+  }
+}
+
+extension ThemeContext on BuildContext {
+  ThemeData get theme => Theme.of(this);
+  Color get primary => theme.colorScheme.primary;
+  Color get secondary => theme.colorScheme.secondary;
+  Color get surfaceBg => theme.colorScheme.surface;
+  Color get surfaceElevated => theme.cardColor;
+  Color get textPrimary => theme.textTheme.bodyLarge!.color!;
+  Color get textSecondary => theme.textTheme.bodyMedium!.color!;
+  Color get textMuted => theme.textTheme.bodySmall!.color!;
+  Color get borderColor => theme.dividerColor;
+  bool get isDarkMode => theme.brightness == Brightness.dark;
+}
+
+
 
 class AppColors {
   static const Map<String, Color> tierColors = {

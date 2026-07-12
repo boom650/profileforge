@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,8 +16,6 @@ import '../../widgets/probability_radar.dart';
 import '../../widgets/mission_card.dart';
 import '../../widgets/micro_interactions.dart';
 import '../../widgets/skin_showcase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../config/api_config.dart';
 import '../settings/settings_screen.dart';
 import '../targets/weekly_targets_screen.dart';
 import '../competitions/competition_calendar.dart';
@@ -25,6 +24,8 @@ import '../university/university_browser.dart';
 import '../university/university_matcher.dart';
 import '../essay/essay_coach_screen.dart';
 import 'widgets/shared_widgets.dart';
+import 'package:flutter/services.dart' show HapticFeedback;
+import '../../widgets/skin_showcase.dart' show SkinShowcaseCompact;
 
 /// Dashboard tab - the main home screen content.
 class DashboardTab extends ConsumerWidget {
@@ -112,10 +113,8 @@ class DashboardTab extends ConsumerWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.notifications_none_rounded),
+              icon: Icon(Icons.notifications_none_rounded),
               tooltip: 'Notifications',
-              semanticLabel: 'Open notifications',
-              onPressed: () {
                 HapticFeedback.lightImpact();
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -123,10 +122,8 @@ class DashboardTab extends ConsumerWidget {
               },
             ),
             IconButton(
-              icon: const Icon(Icons.settings_rounded),
+              icon: Icon(Icons.settings_rounded),
               tooltip: 'Settings',
-              semanticLabel: 'Open settings',
-              onPressed: () {
                 HapticFeedback.lightImpact();
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -706,6 +703,34 @@ class LocationPermissionPrompt extends ConsumerStatefulWidget {
   @override
   ConsumerState<LocationPermissionPrompt> createState() =>
       _LocationPermissionPromptState();
+}
+
+class OpportunityCardHorizontal extends StatelessWidget {
+  final String title;
+  final String type;
+  final int tier;
+  final String distance;
+  final double matchScore;
+
+  const OpportunityCardHorizontal({
+    super.key,
+    required this.title,
+    required this.type,
+    required this.tier,
+    required this.distance,
+    required this.matchScore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text('$type - $distance'),
+        trailing: Text('${(matchScore * 100).toInt()}% match'),
+      ),
+    );
+  }
 }
 
 class _LocationPermissionPromptState
