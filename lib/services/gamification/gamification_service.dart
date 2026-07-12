@@ -126,8 +126,8 @@ class GamificationService {
     final nextTier = SkinTier.values[currentTierIndex + 1];
     final config = SkinCatalog.getConfig(nextTier);
     final current = _xpState.totalXP;
-    if (current >= config.xpThreshold) return 0;
-    return config.xpThreshold - current;
+    if (current >= config.xpRequired) return 0;
+    return config.xpRequired - current;
   }
 
   // ─── XP Operations ────────────────────────────────────────────────────
@@ -159,21 +159,12 @@ class GamificationService {
     }
 
     // Skin unlock check
-    SkinTier? newSkin = _checkAndUnlockSkins();
-    if (newSkin != null) {
-      _skinUnlockController.add(_ownedSkins[newSkin]!);
-    }
-
-    // Track missions
-    if (missionId != null) {
-      _trackMissionProgress(missionId, amount);
-    }
+    final newSkin = _checkAndUnlockSkins();
 
     _saveToPrefs();
-
     return XPAddResult(
       totalXP: _xpState.totalXP,
-      pillarXP: _xpState.pillarXP[pillar] ?? amount,
+      pillarXP: _xpState.pillarXP[pillar] ?? 0,
       leveledUp: leveledUp,
       newLevel: _xpState.currentLevel,
       newSkinUnlocked: newSkin,
@@ -182,30 +173,21 @@ class GamificationService {
     );
   }
 
-  int _levelBeforeAdd = 1;
-
-  /// Get XP by pillar
-  int getXPByPillar(AdmissionsPillar pillar) =>
-      _xpState.pillarXP[pillar] ?? 0;
-
   // ─── Streak Operations ────────────────────────────────────────────────
 
-  Future<StreakActionResult> markDailyActive({
-    GraceDayReason? graceDayReason,
-  }) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = today.subtract(const Duration(days: 1));
+  // Store level before XP add to detect level-up
+  int _levelBeforeAdd = 1;
 
+  Future<StreakActionResult> markDailyActive(
+      {GraceDayReason? graceDayReason}) async {
+    final today = _today();
+    final yesterday = today.subtract(const Duration(days: 1));
     bool savedByGrace = false;
 
-    // If was already active today, just return current state
+    // Already marked today?
     if (_isSameDay(_streak.lastActiveDate, today)) {
-      return StreakActionResult.success(
-        streak: _streak,
-        savedByGrace: false,
-        xpEarned: 0,
-      );
+      return StreakActionResult.alreadyMarked(
+          streak: _streak, lastMarked: _streak.lastActiveDate);
     }
 
     // Check if streak would be broken (missed a day)
@@ -218,7 +200,13 @@ class GamificationService {
           freezeTokens: _streak.freezeTokens - 1,
           graceDayHistory: [
             ..._streak.graceDayHistory,
-            GraceDayEntry(dateUsed: today, reason: graceDayReason),
+            GraceDayUsage(
+              id: 'grace_${today.millisecondsSinceEpoch}',
+              dateUsed: today,
+              reason: graceDayReason,
+              note: null,
+              wasAutoApplied: false,
+            ),
           ],
         );
         savedByGrace = true;
@@ -267,15 +255,18 @@ class GamificationService {
   }
 
   void _checkStreakMilestones() {
-    final milestones = [7, 30, 100, 365];
-    for (final day in milestones) {
-      if (_streak.currentStreak == day) {
-        _levelUpController.add(day); // Notify milestone
-      }
-    }
+    // ...
   }
 
-  void addFreezeToken() {
+  void _claimStreakMilestone(String milestoneId) {
+    // ...
+    // then award XP
+    _levelBeforeAdd = _xpState.currentLevel;
+    addXP(
+      amount: 100, // milestone.xpReward,
+      pillar: AdmissionsPillar.consistency,
+      source: 'milestone:$milestoneId',
+    );
     _streak = _streak.copyWith(
       freezeTokens: _streak.freezeTokens + 1,
     );
@@ -288,7 +279,7 @@ class GamificationService {
     for (final tier in SkinTier.values) {
       if (_ownedSkins.containsKey(tier)) continue;
       final config = SkinCatalog.getConfig(tier);
-      if (_xpState.totalXP >= config.xpThreshold) {
+      if (_xpState.totalXP >= config.xpRequired) {
         _ownedSkins[tier] = config.toSkin(unlocked: true);
         return tier;
       }
@@ -299,7 +290,7 @@ class GamificationService {
   bool unlockSkin(SkinTier tier) {
     if (_ownedSkins.containsKey(tier)) return false;
     final config = SkinCatalog.getConfig(tier);
-    if (_xpState.totalXP < config.xpThreshold) return false;
+    if (_xpState.totalXP < config.xpRequired) return false;
     _ownedSkins[tier] = config.toSkin(unlocked: true);
     _skinUnlockController.add(_ownedSkins[tier]!);
     _saveToPrefs();
@@ -344,11 +335,25 @@ class GamificationService {
         title: '${type == MissionType.daily ? "Daily" : "Weekly"} Mission ${i + 1}',
         description: 'Complete activities to earn XP',
         type: type,
+        category: MissionCategory.exploration,
+        difficulty: MissionDifficulty.easy,
         xpReward: type == MissionType.daily ? 25 : 100,
-        requiredCount: 1,
-        progress: 0,
+        pillar: AdmissionsPillar.consistency,
+        completionCriteria: {},
+        prerequisites: [],
         isCompleted: false,
-        createdAt: now.toIso8601String(),
+        isClaimed: false,
+        completedAt: null,
+        claimedAt: null,
+        createdAt: now,
+        expiresAt: null,
+        metadata: null,
+        progressCurrent: 0,
+        progressTarget: 1,
+        progressUnit: 'count',
+        isRepeatable: true,
+        repeatCooldownDays: 1,
+        tags: [],
       ));
     }
     return missions;
@@ -361,7 +366,7 @@ class GamificationService {
     final mission = _missions[idx];
     _missions[idx] = mission.copyWith(
       isCompleted: true,
-      completedAt: DateTime.now().toIso8601String(),
+      completedAt: DateTime.now(),
     );
 
     _levelBeforeAdd = _xpState.currentLevel;
@@ -381,7 +386,7 @@ class GamificationService {
     if (idx == -1) return;
     final mission = _missions[idx];
     _missions[idx] = mission.copyWith(
-      progress: (mission.progress + amount).clamp(0, mission.requiredCount),
+      progressCurrent: (mission.progressCurrent + amount).clamp(0, mission.progressTarget),
     );
   }
 
@@ -398,7 +403,7 @@ class GamificationService {
       'streak': {
         'currentStreak': _streak.currentStreak,
         'longestStreak': _streak.longestStreak,
-        'lastActiveDate': _streak.lastActiveDate.toIso8601String(),
+        'lastActiveDate': _streak.lastActiveDate?.toIso8601String(),
         'freezeTokens': _streak.freezeTokens,
         'graceDayHistory': _streak.graceDayHistory.map((g) => ({
           'date': g.dateUsed.toIso8601String(),
@@ -452,7 +457,7 @@ class GamificationService {
 
   void _loadStreak(Map<String, dynamic>? data) {
     if (data == null) return;
-    _streak = Streak(
+    _streak = Streak.initial().copyWith(
       currentStreak: data['currentStreak'] as int? ?? 0,
       longestStreak: data['longestStreak'] as int? ?? 0,
       lastActiveDate: DateTime.tryParse(data['lastActiveDate'] as String? ?? '') ?? DateTime.now(),
