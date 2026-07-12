@@ -97,17 +97,11 @@ jobs:
       - name: Build App Bundle (AAB)
         run: flutter build appbundle --release
 
-      - name: Upload debug APKs
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-debug-${{ matrix.channel }}
-          path: build/app/outputs/flutter-apk/app-debug.apk
-
       - name: Upload release APKs
         uses: actions/upload-artifact@v4
         with:
           name: apk-release-${{ matrix.channel }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
