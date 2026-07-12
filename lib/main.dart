@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/ui/screens/chat/chat_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'generated/l10n/app_localizations.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
@@ -66,6 +67,7 @@ class ProfileForgeApp extends ConsumerWidget {
           },
           locale: const Locale('en'),
           localizationsDelegates: const [
+            AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

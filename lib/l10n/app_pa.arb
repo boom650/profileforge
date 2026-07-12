@@ -1,5 +1,5 @@
 {
-  "@@locale": "en",
+  "@@locale": "pa",
   "appTitle": "ProfileForge",
   "@appTitle": {
     "description": "The title of the application"
@@ -346,14 +346,7 @@
   "@decisionDay": {
     "description": "Decision day label"
   },
-  "welcomeHeadline": "Your Dream\nUniversity\nAwaits.",
-"@welcomeHeadline": {
-  "description": "Onboarding main headline"
-},
-"valueProposition": "ProfileForge is the AI-powered admissions coach built exclusively for Indian students targeting global universities.",
-"@valueProposition": {
-  "description": "Onboarding subheader"
-},
+  "deepDiveResearch": "Deep dive into research, competitions, or leadership roles",
   "@deepDiveResearch": {
     "description": "Deep dive description"
   },

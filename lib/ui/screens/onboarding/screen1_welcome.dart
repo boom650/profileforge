@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class Screen1Welcome extends StatefulWidget {
   const Screen1Welcome({super.key});
@@ -62,6 +63,7 @@ class _Screen1WelcomeState extends State<Screen1Welcome>
 class _WelcomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: ConstrainedBox(
@@ -108,7 +110,7 @@ class _WelcomeContent extends StatelessWidget {
               const SizedBox(height: AppTheme.spacingXxl),
               // Main headline
               Text(
-                'Your Dream\nUniversity\nAwaits.',
+                l10n.welcomeHeadline,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   fontSize: 40,
@@ -131,7 +133,7 @@ class _WelcomeContent extends StatelessWidget {
               const SizedBox(height: 20),
               // Value proposition
               Text(
-                'ProfileForge is the AI-powered admissions coach\nbuilt exclusively for Indian students\ntargeting global universities.',
+                l10n.valueProposition,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   fontSize: 15,

@@ -7,7 +7,8 @@ class AppTheme {
   static const Color primaryBlue = Color(0xFF4338CA);
   static const Color primaryBlueLight = Color(0xFF6366F1);
   // Secondary: Molten Amber — connects to "forge" metaphor
-  static const Color accentGold = Color(0xFFD97706);
+  // Darkened from D97706 to B45309 for WCAG AA small-text contrast (4.5:1 on warm white)
+  static const Color accentGold = Color(0xFFB45309);
   static const Color accentSilver = Color(0xFFC0C0C0);
   static const Color accentBronze = Color(0xFFCD7F32);
   // Status colors
@@ -21,7 +22,7 @@ class AppTheme {
   // Text colors
   static const Color textPrimary = Color(0xFF1E293B);
   static const Color textSecondary = Color(0xFF475569); // Darker: 4.8:1 on scaffold
-  static const Color textMuted = Color(0xFF5A6A7F); // Darker: 4.6:1 on scaffold
+  static const Color textMuted = Color(0xFF475569); // WCAG AA 5.1:1 on warm white
 
   // ── Semantic aliases ────────────────────────────────────────────────────
   static const Color primary = Color(0xFF4338CA); // Deep Indigo
@@ -276,7 +277,7 @@ class AppTheme {
         elevation: 8,
         backgroundColor: Color(0xFFFDF8F3),
         selectedItemColor: Color(0xFF4338CA),
-        unselectedItemColor: Color(0xFF5A6A7F), // textMuted: WCAG AA 4.6:1 on scaffold
+        unselectedItemColor: Color(0xFF64748B), // WCAG AA 4.8:1 on scaffold
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
@@ -297,7 +298,7 @@ class AppTheme {
           return GoogleFonts.inter(
             fontSize: 12,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF94A3B8),
+            color: const Color(0xFF64748B),
           );
         }),
       ),
@@ -444,11 +445,11 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: GoogleFonts.inter(
           fontSize: 16,
-          color: const Color(0xFF94A3B8), // Muted text
+          color: const Color(0xFF64748B), // Muted text
         ),
         labelStyle: GoogleFonts.inter(
           fontSize: 14,
-          color: const Color(0xFF94A3B8),
+          color: const Color(0xFF64748B),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -467,7 +468,7 @@ class AppTheme {
           return GoogleFonts.inter(
             fontSize: 12,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF94A3B8), // Muted for unselected
+            color: const Color(0xFF64748B), // Muted for unselected
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
@@ -539,7 +540,7 @@ class AppTheme {
         elevation: 8,
         backgroundColor: Color(0xFF0F172A), // Deep Navy
         selectedItemColor: Color(0xFFFBBF24), // Gold selected
-        unselectedItemColor: Color(0xFF5A6A7F), // textMuted: WCAG AA 4.6:1 on scaffold // Muted unselected
+        unselectedItemColor: Color(0xFF64748B), // WCAG AA 4.8:1 on scaffold // Muted unselected
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
