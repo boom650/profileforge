@@ -1,8 +1,7 @@
 # l10n.yaml - Configuration for flutter_gen_l10n
-arb-dir: lib/l10n
+arb-dir: lib/generated/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
-output-class: AppLocalizations
 output-dir: lib/generated/l10n
 synthetic-package: false
 preferred-supported-locales:
