@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'onboarding.dart';
+import 'profile_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('profileBox');
   runApp(const ProviderScope(child: ProfileForgeApp()));
 }
 
@@ -17,7 +23,12 @@ class ProfileForgeApp extends ConsumerWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const OnboardingScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfilePage(),
+      },
     );
   }
 }
@@ -27,31 +38,33 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final xp = ref.watch(xpProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('ProfileForge'),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Chip(label: Text('XP: $xp')),
+          ),
+        ],
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.school, size: 80, color: Colors.deepPurple),
-            SizedBox(height: 16),
-            Text(
-              'ProfileForge',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            const Icon(Icons.school, size: 80, color: Colors.deepPurple),
+            const SizedBox(height: 16),
+            const Text('Welcome to ProfileForge', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            const Text('Build your college admissions profile', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            const SizedBox(height: 32),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.edit),
+              label: const Text('Create Profile'),
+              onPressed: () => Navigator.pushNamed(context, '/profile'),
             ),
-            SizedBox(height: 8),
-            Text(
-              'Gamified College Admissions Profile Builder',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 32),
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Building ProfileForge...'),
           ],
         ),
       ),
