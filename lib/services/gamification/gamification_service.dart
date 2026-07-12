@@ -511,8 +511,10 @@ class GamificationService {
     return DateTime(now.year, now.month, now.day);
   }
 
-  bool _isSameDay(DateTime a, DateTime b) =>
-      a.year == b.year && a.month == b.month && a.day == b.day;
+  bool _isSameDay(DateTime? a, DateTime? b) {
+    if (a == null || b == null) return false;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
 
   static DateTime _startOfWeek(DateTime date) {
     final weekday = date.weekday;
