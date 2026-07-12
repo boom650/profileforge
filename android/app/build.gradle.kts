@@ -1,5 +1,5 @@
 plugins {
-    id("dev.flutter.flutter-gradle-plugin") version "3.44.4"
+    id("dev.flutter.flutter-gradle-plugin")
     id("com.android.application") version "9.0.0"
 }
 
