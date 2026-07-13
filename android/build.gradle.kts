@@ -1,6 +1,6 @@
 plugins {
     id("dev.flutter.flutter-gradle-plugin") version "3.44.4" apply false
-    id("com.android.application") apply false
+    id("com.android.application") version "8.4.0" apply false
 }
 
 buildscript {
