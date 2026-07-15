@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
-import '../weekly_targets_model.dart';
+import '../../../../features/weekly_targets/domain/model/weekly_targets_model.dart';
 
 class WeekSelector extends StatelessWidget {
   final int weekNumber;

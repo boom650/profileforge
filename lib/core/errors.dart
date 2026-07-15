@@ -1,3 +1,3 @@
 // Error handling barrel file
-export 'error_boundary.dart';
-export 'result.dart';
+export 'errors/error_boundary.dart';
+export 'errors/result.dart';

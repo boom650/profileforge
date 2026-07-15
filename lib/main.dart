@@ -20,7 +20,6 @@ void main() async {
   // Zone guard for uncaught async errors
   runZonedGuarded(() async {
     final db = AppDatabase();
-    await db.initialize();
 
     runApp(
       ProviderScope(

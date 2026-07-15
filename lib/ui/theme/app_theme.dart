@@ -555,20 +555,34 @@ extension ThemeProvider on AppTheme {
   }
 }
 
-extension ThemeContext on BuildContext {
+extension ThemeColors on BuildContext {
   ThemeData get theme => Theme.of(this);
-  Color get primary => theme.colorScheme.primary;
-  Color get secondary => theme.colorScheme.secondary;
-  Color get surfaceBg => theme.colorScheme.surface;
-  Color get surfaceElevated => theme.cardColor;
-  Color get textPrimary => theme.textTheme.bodyLarge!.color!;
-  Color get textSecondary => theme.textTheme.bodyMedium!.color!;
-  Color get textMuted => theme.textTheme.bodySmall!.color!;
-  Color get borderColor => theme.dividerColor;
-  bool get isDarkMode => theme.brightness == Brightness.dark;
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  Color get primary => colorScheme.primary;
+  Color get secondary => colorScheme.secondary;
+
+  /// Surface background (warm white in light, dark navy in dark)
+  Color get surfaceBg => colorScheme.surface;
+
+  /// Slightly elevated surface (card backgrounds, containers)
+  Color get surfaceElevated =>
+      isDarkMode ? const Color(0xFF1E293B) : const Color(0xFFFDF8F3);
+
+  /// Primary text color
+  Color get textPrimary => colorScheme.onSurface;
+
+  /// Secondary text color (subtitles, descriptions)
+  Color get textSecondary => colorScheme.onSurface.withValues(alpha: 0.7);
+
+  /// Muted text color (hints, timestamps)
+  Color get textMuted => colorScheme.onSurface.withValues(alpha: 0.5);
+
+  /// Border color for cards and dividers
+  Color get borderColor =>
+      isDarkMode ? const Color(0xFF334155) : const Color(0xFFE2D5C8);
 }
-
-
 
 class AppColors {
   static const Map<String, Color> tierColors = {

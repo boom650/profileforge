@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profileforge/models/gamification/streak.dart';
-import '../helpers.dart';
+import '../../helpers.dart';
 
 void main() {
   group('Streak', () {

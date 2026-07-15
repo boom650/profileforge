@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profileforge/models/gamification/skins.dart';
 import 'package:profileforge/models/gamification/admissions_pillar.dart';
-import '../helpers.dart';
+import '../../helpers.dart';
 
 void main() {
   group('Skin', () {

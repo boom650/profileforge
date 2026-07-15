@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
+import 'package:profileforge/models/age_verification.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
 import 'ui/screens/home/home_screen.dart';
 

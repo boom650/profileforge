@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
-import '../weekly_targets_model.dart';
+import '../../../../features/weekly_targets/domain/model/weekly_targets_model.dart';
 
 class CategoryHeader extends StatelessWidget {
   final String category;

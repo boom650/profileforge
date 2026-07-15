@@ -1,1 +1,1 @@
-export 'package:profileforge/core/errors/errors.dart';
+export 'package:profileforge/core/errors.dart';

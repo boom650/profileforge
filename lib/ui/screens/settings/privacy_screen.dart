@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../onboarding/age_gate.dart';
+import 'package:profileforge/models/age_verification.dart';
 
 /// Provider to check if encryption is enabled.
 final encryptionEnabledProvider = FutureProvider<bool>((ref) async {

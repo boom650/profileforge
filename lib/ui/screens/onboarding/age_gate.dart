@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 
 import 'package:profileforge/models/user/user_profile.dart';
+import 'package:profileforge/models/age_verification.dart';
 
 /// Provider for age verification state.
 final ageVerificationProvider = FutureProvider<AgeVerificationStatus>((ref) async {

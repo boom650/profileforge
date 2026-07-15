@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:profileforge/ui/screens/targets/weekly_targets_model.dart';
+import 'package:profileforge/features/weekly_targets/domain/model/weekly_targets_model.dart';
 
 void main() {
   group('WeeklyTarget', () {

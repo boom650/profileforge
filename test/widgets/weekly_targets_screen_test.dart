@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profileforge/ui/screens/targets/weekly_targets_screen.dart';
-import 'package:profileforge/ui/screens/targets/weekly_targets_model.dart';
+import 'package:profileforge/features/weekly_targets/domain/model/weekly_targets_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {

@@ -39,6 +39,9 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Generate localization
+        run: flutter gen-l10n
+
       - name: Run real judge harness (flutter analyze + flutter test)
         run: |
           bash judge/run_judges.sh
