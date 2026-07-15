@@ -1,5 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/services/ngo_darpan_service.dart';
 
 class OpportunityFeed {
   final List<NGO> ngos;
@@ -41,12 +42,6 @@ class OpportunityFeed {
   }
 }
 
-class NGO {
-  final String name;
-  final String city;
-  const NGO({required this.name, required this.city});
-}
-
 class NearbyPlace {
     final String name;
     const NearbyPlace({required this.name});
@@ -71,7 +66,7 @@ class OpportunityFeedNotifier extends StateNotifier<OpportunityFeed> {
     await Future.delayed(const Duration(seconds: 2));
     state = state.copyWith(
         isLoading: false,
-        ngos: [NGO(name: 'Example NGO in $city', city: city)],
+        ngos: [NGO(id: '', name: 'Example NGO in $city', city: city, state: '', focus: null, description: null, website: null)],
         competitions: [Competition(name: 'Example Competition')],
         openNow: [Competition(name: 'Example Open Now Comp')]
       );
