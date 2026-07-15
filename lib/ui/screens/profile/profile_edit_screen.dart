@@ -488,8 +488,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 icon: const Icon(Icons.close_rounded, size: 18),
                 label: Text('Cancel', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: textSecondary,
-                  side: BorderSide(color: border, width: 1.5),
+                  foregroundColor: context.textSecondary,
+                  side: BorderSide(color: context.borderColor, width: 1.5),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

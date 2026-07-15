@@ -48,9 +48,9 @@ double _relativeLuminance(Color color) {
     c /= 255;
     return (c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4)) as double;
   }
-  final r = f(color.red);
-  final g = f(color.green);
-  final b = f(color.blue);
+  final r = f(color.red.toDouble());
+  final g = f(color.green.toDouble());
+  final b = f(color.blue.toDouble());
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 

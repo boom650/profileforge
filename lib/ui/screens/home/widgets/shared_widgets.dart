@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../models/gamification/skins.dart';
-import '../../../providers/gamification_providers.dart';
+import '../../../../providers/gamification_providers.dart';
 import '../../../widgets/celebration_overlay.dart';
 import '../../../widgets/micro_interactions.dart';
 
@@ -830,6 +830,8 @@ class MissionListTile extends ConsumerWidget {
         return AppTheme.warningAmber;
       case MissionDifficulty.hard:
         return AppTheme.errorRed;
+      case MissionDifficulty.expert:
+        return AppTheme.primaryBlue;
       case MissionDifficulty.legendary:
         return AppTheme.accentPurple;
     }
