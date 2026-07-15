@@ -189,6 +189,12 @@ class OnboardingDataNotifier extends StateNotifier<OnboardingData> {
     );
     _save();
   }
+
+  /// Reset all accumulated onboarding data back to defaults.
+  void reset() {
+    state = const OnboardingData();
+    _save();
+  }
 }
 
 final onboardingDataProvider =

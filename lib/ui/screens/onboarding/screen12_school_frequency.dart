@@ -45,7 +45,7 @@ class _Screen12SchoolFrequencyState
 
   void _saveToProvider() {
     ref.read(onboardingDataProvider.notifier).updateSchoolFrequency(
-      daysPerWeek: _daysPerWeek,
+      schoolDaysPerWeek: _daysPerWeek,
       schoolDays: Set<String>.from(_selectedDays),
       hasSaturdaySchool: _hasSaturdaySchool,
     );

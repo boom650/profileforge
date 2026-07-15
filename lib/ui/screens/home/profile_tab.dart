@@ -9,6 +9,8 @@ import '../../../models/opportunity_feed.dart';
 import '../../../providers/providers.dart';
 import '../settings/settings_screen.dart';
 import '../privacy/privacy_screen.dart';
+import '../statistics/statistics_screen.dart';
+import '../profile/profile_edit_screen.dart';
 import 'widgets/shared_widgets.dart';
 
 /// Profile tab — comprehensive student profile with stats, target universities,

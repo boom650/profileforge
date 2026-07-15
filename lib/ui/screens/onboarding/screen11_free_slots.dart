@@ -35,9 +35,9 @@ class _Screen11FreeSlotsState extends ConsumerState<Screen11FreeSlots> {
 
   void _saveToProvider() {
     ref.read(onboardingDataProvider.notifier).updateFreeSlots(
-      weekdayHours: _weekdayHours,
-      weekendHours: _weekendHours,
-      confirmed: _confirmed,
+      freeSlotsWeekdayHours: _weekdayHours,
+      freeSlotsWeekendHours: _weekendHours,
+      freeSlotsConfirmed: _confirmed,
     );
   }
 

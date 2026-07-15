@@ -76,6 +76,8 @@ final paginationProvider = StateNotifierProvider<PaginationNotifier, PaginationS
   return PaginationNotifier();
 });
 
+final leaderboardTabProvider = StateProvider<int>((ref) => 0);
+
 /// Generates a page of leaderboard entries on demand.
 List<LeaderboardEntry> _generatePage(int tab, int page, int pageSize) {
   const names = [
@@ -111,7 +113,6 @@ List<LeaderboardEntry> _generatePage(int tab, int page, int pageSize) {
 final leaderboardProvider = Provider.family<List<LeaderboardEntry>, int>((ref, page) {
   final tab = ref.watch(leaderboardTabProvider);
   final controller = ref.watch(paginationProvider);
-  controller.pageSize = 20;
   return _generatePage(tab, page, controller.pageSize);
 });
 
@@ -181,7 +182,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
               onPressed: () => Navigator.pop(ctx), 
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              semanticLabel: 'Go back',
+              tooltip: 'Go back',
             ),
             const SizedBox(width: 12),
             Text('Leaderboard', style: GoogleFonts.inter(
@@ -255,7 +256,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       final pageEntries = ref.watch(leaderboardProvider(i));
       allEntries.addAll(pageEntries);
       if (pageEntries.isEmpty) {
-        controller.hasMore = false;
+        ref.read(paginationProvider.notifier).state =
+            controller.copyWith(hasMore: false);
         break;
       }
     }
@@ -273,11 +275,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         if (info.metrics.pixels > info.metrics.maxScrollExtent - 100 &&
             controller.hasMore &&
             !controller.isLoading) {
-          controller.isLoading = true;
-          ref.read(paginationProvider.notifier).state = controller..loadMore();
+          ref.read(paginationProvider.notifier).loadMore();
           Future.delayed(const Duration(milliseconds: 500), () {
-            controller.isLoading = false;
-            ref.read(paginationProvider.notifier).state = controller;
+            ref.read(paginationProvider.notifier).state =
+                controller.copyWith(isLoading: false);
           });
         }
         return false;

@@ -152,7 +152,6 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
               label: Text(tabs[i]),
               selected: isSelected,
               onSelected: (_) => setState(() => _selectedTab = i),
-              semanticLabel: 'Filter by ${tabs[i]}',
               selectedColor: Theme.of(context).colorScheme.primaryContainer,
               labelStyle: GoogleFonts.inter(
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
