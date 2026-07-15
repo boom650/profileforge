@@ -38,7 +38,7 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs || true
 
       - name: Generate localization
-        run: flutter gen-l10n || true
+        run: flutter gen-l10n --arb-dir=lib/l10n --template-arb-file=app_en.arb --output-localization-file=app_localizations.dart --output-dir=lib/generated/l10n --preferred-supported-locales=en,hi,ta,te,bn,mr,gu,kn,ml,pa || true
 
       - name: Full analyze -> log
         run: |
