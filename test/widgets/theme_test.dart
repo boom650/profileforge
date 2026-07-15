@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profileforge/ui/theme/app_theme.dart';
 
@@ -44,7 +46,7 @@ void main() {
 double _relativeLuminance(Color color) {
   double f(double c) {
     c /= 255;
-    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055).pow(2.4);
+    return c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4);
   }
   final r = f(color.red);
   final g = f(color.green);

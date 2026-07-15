@@ -1,7 +1,8 @@
 // Barrel for weekly-targets screen widgets.
-export 'week_selector.dart';
-export 'summary_bar.dart';
-export 'error_state.dart';
-export 'empty_state.dart';
-export 'category_header.dart';
-export 'target_card.dart';
+// The actual widget implementations live under lib/ui/screens/targets/widgets/.
+export '../../../../../ui/screens/targets/widgets/week_selector.dart';
+export '../../../../../ui/screens/targets/widgets/summary_bar.dart';
+export '../../../../../ui/screens/targets/widgets/error_state.dart';
+export '../../../../../ui/screens/targets/widgets/empty_state.dart';
+export '../../../../../ui/screens/targets/widgets/category_header.dart';
+export '../../../../../ui/screens/targets/widgets/target_card.dart';
