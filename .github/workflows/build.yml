@@ -46,7 +46,13 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Generate localization
-        run: flutter gen-l10n --arb-dir=lib/l10n --template-arb-file=app_en.arb --output-localization-file=app_localizations.dart --output-dir=lib/generated/l10n --preferred-supported-locales=en,hi,ta,te,bn,mr,gu,kn,ml,pa
+        run: flutter gen-l10n
+
+      - name: Mirror synthetic l10n package for gradle-invoked flutter (CWD=android/)
+        run: |
+          mkdir -p android/.dart_tool
+          cp -r .dart_tool/flutter_gen android/.dart_tool/flutter_gen 2>/dev/null || true
+          ls -la android/.dart_tool/flutter_gen/app_localizations.dart 2>/dev/null || echo "WARN: flutter_gen not found at repo root after gen-l10n"
 
       - name: Guard entrypoint exists
         run: |
