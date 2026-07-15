@@ -37,6 +37,9 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs || true
 
+      - name: Generate localization
+        run: flutter gen-l10n || true
+
       - name: Full analyze -> log
         run: |
           flutter analyze --no-fatal-infos > analyze_full.txt || true

@@ -1,6 +1,0 @@
-// ignore_for_file: type=lint
-mixin _$SkinCollectionDaoMixin on DatabaseAccessor<AppDatabase> {
-  $StudentProfilesTable get studentProfiles => attachedDatabase.studentProfiles;
-  $SkinsTable get skins => attachedDatabase.skins;
-  $SkinCollectionsTable get skinCollections => attachedDatabase.skinCollections;
-}

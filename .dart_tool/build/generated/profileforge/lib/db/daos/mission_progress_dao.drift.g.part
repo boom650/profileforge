@@ -1,7 +1,0 @@
-// ignore_for_file: type=lint
-mixin _$MissionProgressDaoMixin on DatabaseAccessor<AppDatabase> {
-  $StudentProfilesTable get studentProfiles => attachedDatabase.studentProfiles;
-  $MissionsTable get missions => attachedDatabase.missions;
-  $MissionProgressesTable get missionProgresses =>
-      attachedDatabase.missionProgresses;
-}

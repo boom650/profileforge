@@ -41,3 +41,11 @@ assets/images/
 backend/data/
 _a2.txt
 _e2.txt
+
+# CI/runtime junk (must NOT be committed - poisons package resolution)
+.dart_tool/
+.swarm/
+.hermes/
+.claude-flow/
+build_logs/
+build_logs2/

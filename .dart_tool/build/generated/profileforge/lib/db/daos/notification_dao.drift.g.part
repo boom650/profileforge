@@ -1,5 +1,0 @@
-// ignore_for_file: type=lint
-mixin _$NotificationDaoMixin on DatabaseAccessor<AppDatabase> {
-  $StudentProfilesTable get studentProfiles => attachedDatabase.studentProfiles;
-  $NotificationsTable get notifications => attachedDatabase.notifications;
-}
