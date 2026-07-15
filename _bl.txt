@@ -1,730 +1,825 @@
-Build & Release APK	Set up job	﻿2026-07-15T18:46:07.2462569Z Current runner version: '2.335.1'
-Build & Release APK	Set up job	2026-07-15T18:46:07.2499028Z ##[group]Runner Image Provisioner
-Build & Release APK	Set up job	2026-07-15T18:46:07.2500385Z Hosted Compute Agent
-Build & Release APK	Set up job	2026-07-15T18:46:07.2501318Z Version: 20260707.563
-Build & Release APK	Set up job	2026-07-15T18:46:07.2502337Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
-Build & Release APK	Set up job	2026-07-15T18:46:07.2503442Z Build Date: 2026-07-07T19:33:50Z
-Build & Release APK	Set up job	2026-07-15T18:46:07.2504377Z Worker ID: {da3cc508-b309-4d19-aa22-088bb39c7a97}
-Build & Release APK	Set up job	2026-07-15T18:46:07.2505580Z Azure Region: westus3
-Build & Release APK	Set up job	2026-07-15T18:46:07.2506449Z ##[endgroup]
-Build & Release APK	Set up job	2026-07-15T18:46:07.2508664Z ##[group]Operating System
-Build & Release APK	Set up job	2026-07-15T18:46:07.2509599Z Ubuntu
-Build & Release APK	Set up job	2026-07-15T18:46:07.2510322Z 24.04.4
-Build & Release APK	Set up job	2026-07-15T18:46:07.2511131Z LTS
-Build & Release APK	Set up job	2026-07-15T18:46:07.2511897Z ##[endgroup]
-Build & Release APK	Set up job	2026-07-15T18:46:07.2513138Z ##[group]Runner Image
-Build & Release APK	Set up job	2026-07-15T18:46:07.2514036Z Image: ubuntu-24.04
-Build & Release APK	Set up job	2026-07-15T18:46:07.2514860Z Version: 20260714.240.1
-Build & Release APK	Set up job	2026-07-15T18:46:07.2516446Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260714.240/images/ubuntu/Ubuntu2404-Readme.md
-Build & Release APK	Set up job	2026-07-15T18:46:07.2519168Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260714.240
-Build & Release APK	Set up job	2026-07-15T18:46:07.2520709Z ##[endgroup]
-Build & Release APK	Set up job	2026-07-15T18:46:07.2522345Z ##[group]GITHUB_TOKEN Permissions
-Build & Release APK	Set up job	2026-07-15T18:46:07.2525198Z Contents: write
-Build & Release APK	Set up job	2026-07-15T18:46:07.2526126Z Metadata: read
-Build & Release APK	Set up job	2026-07-15T18:46:07.2526974Z ##[endgroup]
-Build & Release APK	Set up job	2026-07-15T18:46:07.2530600Z Secret source: Actions
-Build & Release APK	Set up job	2026-07-15T18:46:07.2532059Z Prepare workflow directory
-Build & Release APK	Set up job	2026-07-15T18:46:07.3111539Z Prepare all required actions
-Build & Release APK	Set up job	2026-07-15T18:46:07.3169078Z Getting action download info
-Build & Release APK	Set up job	2026-07-15T18:46:07.6410748Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
-Build & Release APK	Set up job	2026-07-15T18:46:07.9827026Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
-Build & Release APK	Set up job	2026-07-15T18:46:08.4803248Z Download action repository 'actions/setup-java@v4' (SHA:c1e323688fd81a25caa38c78aa6df2d33d3e20d9)
-Build & Release APK	Set up job	2026-07-15T18:46:09.4462416Z Download action repository 'softprops/action-gh-release@v1' (SHA:de2c0eb89ae2a093876385947365aca7b0e5f844)
-Build & Release APK	Set up job	2026-07-15T18:46:10.0316044Z Getting action download info
-Build & Release APK	Set up job	2026-07-15T18:46:10.1474877Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
-Build & Release APK	Set up job	2026-07-15T18:46:10.2927478Z Complete job name: Build & Release APK
-Build & Release APK	Run actions/checkout@v4	﻿2026-07-15T18:46:10.3518162Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3525858Z ##[group]Run actions/checkout@v4
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3526307Z with:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3526535Z   repository: boom650/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3529457Z   token: ***
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3529671Z   ssh-strict: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3529889Z   ssh-user: git
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3530116Z   persist-credentials: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3530385Z   clean: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3530608Z   sparse-checkout-cone-mode: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3530875Z   fetch-depth: 1
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3531075Z   fetch-tags: false
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3531281Z   show-progress: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3531491Z   lfs: false
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3531679Z   submodules: false
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3531930Z   set-safe-directory: true
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3532361Z env:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3532571Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3532803Z   JAVA_VERSION: 17
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.3533008Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4840777Z Syncing repository: boom650/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4843171Z ##[group]Getting Git version info
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4843907Z Working directory is '/home/runner/work/profileforge/profileforge'
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4844937Z [command]/usr/bin/git version
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4845971Z git version 2.54.0
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4864705Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4894683Z Temporarily overriding HOME='/home/runner/work/_temp/08a76307-9556-4fbc-8cbc-c79f396d65fd' before making global git config changes
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4896419Z Adding repository directory to the temporary git global config as a safe directory
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4897683Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4924937Z Deleting the contents of '/home/runner/work/profileforge/profileforge'
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4926456Z ##[group]Initializing the repository
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.4927620Z [command]/usr/bin/git init /home/runner/work/profileforge/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5147288Z hint: Using 'master' as the name for the initial branch. This default branch name
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5149964Z hint: will change to "main" in Git 3.0. To configure the initial branch name
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5151115Z hint: to use in all of your new repositories, which will suppress this warning,
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5152396Z hint: call:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5152898Z hint:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5153914Z hint: 	git config --global init.defaultBranch <name>
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5154675Z hint:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5155708Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5156801Z hint: 'development'. The just-created branch can be renamed via this command:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5158694Z hint:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5159618Z hint: 	git branch -m <name>
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5160298Z hint:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5161291Z hint: Disable this message with "git config set advice.defaultBranchName false"
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5162756Z Initialized empty Git repository in /home/runner/work/profileforge/profileforge/.git/
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5165965Z [command]/usr/bin/git remote add origin https://github.com/boom650/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5168724Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5170237Z ##[group]Disabling automatic garbage collection
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5171171Z [command]/usr/bin/git config --local gc.auto 0
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5198522Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5199673Z ##[group]Setting up auth
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5225983Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5302396Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5786803Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.5790706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6043605Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6075978Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6258565Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6288524Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6289850Z ##[group]Fetching the repository
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:10.6298557Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b396b011877eba71deea49e68964fdf42c76742f:refs/remotes/origin/main
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6574893Z From https://github.com/boom650/profileforge
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6577792Z  * [new ref]         b396b011877eba71deea49e68964fdf42c76742f -> origin/main
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6606413Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6607216Z ##[group]Determining the checkout info
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6609309Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6617071Z [command]/usr/bin/git sparse-checkout disable
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6666410Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6690875Z ##[group]Checking out the ref
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.6691865Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.7112486Z Switched to a new branch 'main'
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.7119316Z branch 'main' set up to track 'origin/main'.
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.7121408Z ##[endgroup]
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.7173525Z [command]/usr/bin/git log -1 --format=%H
-Build & Release APK	Run actions/checkout@v4	2026-07-15T18:46:11.7196828Z b396b011877eba71deea49e68964fdf42c76742f
-Build & Release APK	Setup Flutter	﻿2026-07-15T18:46:11.7515401Z ##[group]Run subosito/flutter-action@v2
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7515744Z with:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7515949Z   flutter-version: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7516177Z   channel: stable
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7516374Z   cache: true
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7516579Z   architecture: X64
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7516792Z   pub-cache-path: default
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7517017Z   dry-run: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7517286Z   git-source: https://github.com/flutter/flutter.git
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7517579Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7517770Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7517995Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7518539Z ##[endgroup]
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7632247Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7632757Z ^[[36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7685831Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7686266Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7686469Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7686704Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7686992Z ##[endgroup]
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7830035Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7830444Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh -p \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7830735Z ^[[36;1m  -n '3.27.4' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7830952Z ^[[36;1m  -f '' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7831151Z ^[[36;1m  -a 'X64' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7831354Z ^[[36;1m  -k '' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7831553Z ^[[36;1m  -c '' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7831749Z ^[[36;1m  -l '' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7831956Z ^[[36;1m  -d 'default' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7832272Z ^[[36;1m  -g 'https://github.com/flutter/flutter.git' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7832587Z ^[[36;1m  stable^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7865364Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7865727Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7865931Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7866158Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:11.7866364Z ##[endgroup]
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0011273Z ##[group]Run actions/cache@v5
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0011651Z with:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0012079Z   path: /opt/hostedtoolcache/flutter/stable-3.27.4-x64
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0012640Z   key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0013164Z   enableCrossOsArchive: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0013497Z   fail-on-cache-miss: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0014322Z   lookup-only: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0014720Z   save-always: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0015019Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0015269Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0015632Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.0015902Z ##[endgroup]
-Build & Release APK	Setup Flutter	2026-07-15T18:46:12.4253178Z Cache hit for: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
-Build & Release APK	Setup Flutter	2026-07-15T18:46:13.6621876Z Received 0 of 906983551 (0.0%), 0.0 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:14.6649282Z Received 125829120 of 906983551 (13.9%), 59.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:15.6639982Z Received 142606336 of 906983551 (15.7%), 45.3 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:16.6669726Z Received 264241152 of 906983551 (29.1%), 62.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:17.6658501Z Received 373293056 of 906983551 (41.2%), 71.1 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:18.6655171Z Received 398458880 of 906983551 (43.9%), 63.3 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:19.6709696Z Received 486539264 of 906983551 (53.6%), 66.2 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:20.6808489Z Received 603979776 of 906983551 (66.6%), 71.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:21.6729074Z Received 717225984 of 906983551 (79.1%), 75.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:22.6742158Z Received 830472192 of 906983551 (91.6%), 79.1 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:23.4929664Z Received 906983551 of 906983551 (100.0%), 79.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:23.4939278Z Cache Size: ~865 MB (906983551 B)
-Build & Release APK	Setup Flutter	2026-07-15T18:46:23.5019768Z [command]/usr/bin/tar -xf /home/runner/work/_temp/00aa90c7-f05c-4253-9086-46bfa87666d4/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
-Build & Release APK	Setup Flutter	2026-07-15T18:46:30.9432247Z Cache restored successfully
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.5357721Z Cache restored from key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6886069Z ##[group]Run actions/cache@v5
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6886324Z with:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6886524Z   path: /home/runner/.pub-cache
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6887229Z   key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6887950Z   enableCrossOsArchive: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6888797Z   fail-on-cache-miss: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6889039Z   lookup-only: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6889269Z   save-always: false
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6889491Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6889679Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6889901Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:32.6890098Z ##[endgroup]
-Build & Release APK	Setup Flutter	2026-07-15T18:46:33.0643361Z Cache hit for: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
-Build & Release APK	Setup Flutter	2026-07-15T18:46:34.3149881Z Received 0 of 98414678 (0.0%), 0.0 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:35.3162592Z Received 94220374 of 98414678 (95.7%), 44.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:36.1648836Z Received 98414678 of 98414678 (100.0%), 32.9 MBs/sec
-Build & Release APK	Setup Flutter	2026-07-15T18:46:36.1651711Z Cache Size: ~94 MB (98414678 B)
-Build & Release APK	Setup Flutter	2026-07-15T18:46:36.1839704Z [command]/usr/bin/tar -xf /home/runner/work/_temp/67532aae-99d6-4b90-bea7-4576938c8856/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9349101Z Cache restored successfully
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9475648Z Cache restored from key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9561603Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9561979Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9562268Z ^[[36;1m  -n '3.27.4' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9562509Z ^[[36;1m  -a 'x64' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9562820Z ^[[36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.27.4-x64' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9563195Z ^[[36;1m  -d '/home/runner/.pub-cache' \^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9563464Z ^[[36;1m  stable^[[0m
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9595901Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9596247Z env:
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9596443Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9596669Z   JAVA_VERSION: 17
-Build & Release APK	Setup Flutter	2026-07-15T18:46:37.9596874Z ##[endgroup]
-Build & Release APK	Setup Java	﻿2026-07-15T18:46:38.1436053Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1437276Z ##[group]Run actions/setup-java@v4
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1437544Z with:
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1437742Z   distribution: temurin
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1437969Z   java-version: 17
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1438363Z   cache: gradle
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1438569Z   java-package: jdk
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1438780Z   check-latest: false
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1438995Z   server-id: github
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1439221Z   server-username: GITHUB_ACTOR
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1439475Z   server-password: GITHUB_TOKEN
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1439723Z   overwrite-settings: true
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1439960Z   job-status: success
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1442587Z   token: ***
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1442781Z env:
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1443031Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1443263Z   JAVA_VERSION: 17
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1443578Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1444084Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Setup Java	2026-07-15T18:46:38.1444350Z ##[endgroup]
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3029989Z ##[group]Installed distributions
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3231609Z Resolved Java 17.0.19+10 from tool-cache
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3232364Z Setting Java 17.0.19+10 as the default
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3242308Z (node:2295) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3243653Z (Use `node --trace-deprecation ...` to show where the warning was created)
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3246030Z Creating toolchains.xml for JDK version 17 from temurin
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3317335Z Writing to /home/runner/.m2/toolchains.xml
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3338561Z 
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3368722Z Java configuration:
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3372754Z   Distribution: temurin
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3373388Z   Version: 17.0.19+10
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3374282Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3374947Z 
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3375796Z ##[endgroup]
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3401307Z Creating settings.xml with server-id: github
-Build & Release APK	Setup Java	2026-07-15T18:46:38.3402675Z Writing to /home/runner/.m2/settings.xml
-Build & Release APK	Setup Java	2026-07-15T18:46:38.7814579Z gradle cache is not found
-Build & Release APK	Get dependencies	﻿2026-07-15T18:46:38.7853031Z ##[group]Run flutter pub get
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7853510Z ^[[36;1mflutter pub get^[[0m
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7905426Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7905710Z env:
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7905922Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7906158Z   JAVA_VERSION: 17
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7906477Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7906856Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7907229Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7907703Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Get dependencies	2026-07-15T18:46:38.7908312Z ##[endgroup]
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0922311Z 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0923538Z   ╔════════════════════════════════════════════════════════════════════════════╗
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0925034Z   ║                 Welcome to Flutter! - https://flutter.dev                  ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0925987Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0927464Z   ║ The Flutter tool uses Google Analytics to anonymously report feature usage ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0929317Z   ║ statistics and basic crash reports. This data is used to help improve      ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0930473Z   ║ Flutter tools over time.                                                   ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0931742Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0933524Z   ║ Flutter tool analytics are not sent on the very first run. To disable      ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0934846Z   ║ reporting, type 'flutter config --no-analytics'. To display the current    ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0936371Z   ║ setting, type 'flutter config'. If you opt out of analytics, an opt-out    ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0937520Z   ║ event will be sent, and then no further information will be sent by the    ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0939153Z   ║ Flutter tool.                                                              ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0940143Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0941494Z   ║ By downloading the Flutter SDK, you agree to the Google Terms of Service.  ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0943376Z   ║ The Google Privacy Policy describes how data is handled in this service.   ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0944812Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0945903Z   ║ Moreover, Flutter includes the Dart SDK, which may send usage metrics and  ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0947386Z   ║ crash reports to Google.                                                   ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0948496Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0950217Z   ║ Read about data we send with crash reports:                                ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0951375Z   ║ https://flutter.dev/to/crash-reporting                                     ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0952698Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0953764Z   ║ See Google's privacy policy:                                               ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0955159Z   ║ https://policies.google.com/privacy                                        ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0956165Z   ║                                                                            ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0957390Z   ║ To disable animations in this tool, use                                    ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0958624Z   ║ 'flutter config --no-cli-animations'.                                      ║
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0960117Z   ╚════════════════════════════════════════════════════════════════════════════╝
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.0960741Z 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4377054Z "bn": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4377572Z "gu": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4378232Z "hi": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4378662Z "kn": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4379373Z "ml": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4379817Z "mr": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4380263Z "pa": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4380709Z "ta": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4381142Z "te": 2 untranslated message(s).
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4381727Z To see a detailed report, use the untranslated-messages-file 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4382348Z option in the l10n.yaml file:
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4382860Z untranslated-messages-file: desiredFileName.txt
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4383394Z <other option>: <other selection> 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4383645Z 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4383656Z 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4383939Z This will generate a JSON format file containing all messages that 
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.4384512Z need to be translated.
-Build & Release APK	Get dependencies	2026-07-15T18:46:39.6353266Z Resolving dependencies...
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.2526451Z Downloading packages...
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3584890Z   _fe_analyzer_shared 67.0.0 (105.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3602152Z   analyzer 6.4.1 (14.1.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3602747Z   analyzer_plugin 0.11.3 (0.14.14 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3603323Z < async 2.11.0 (was 2.13.1) (2.13.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3612154Z < boolean_selector 2.1.1 (was 2.1.2) (2.1.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3618820Z   build 2.4.1 (4.0.8 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3619409Z   build_config 1.1.2 (1.3.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3619967Z < build_daemon 4.0.4 (was 4.1.1) (4.1.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3620553Z   build_resolvers 2.4.2 (3.0.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3621081Z   build_runner 2.4.13 (2.15.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3621673Z   build_runner_core 7.3.2 (9.3.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3622253Z < characters 1.3.0 (was 1.4.1) (1.4.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3622883Z < checked_yaml 2.0.3 (was 2.0.4) (2.0.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3623459Z   cli_util 0.4.2 (0.5.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3623979Z < clock 1.1.1 (was 1.1.2) (1.1.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3624551Z < code_builder 4.10.1 (was 4.11.1) (4.11.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3625175Z < collection 1.19.0 (was 1.19.1) (1.19.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3625765Z + connectivity_plus 6.1.5 (7.3.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3626303Z + connectivity_plus_platform_interface 2.1.0
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3626922Z < cupertino_icons 1.0.8 (was 1.0.9) (1.0.9 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3627518Z   custom_lint_core 0.6.3 (0.8.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3628014Z   dart_style 2.3.6 (3.1.12 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3628661Z < dbus 0.7.12 (was 0.7.14) (0.7.14 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3629177Z   drift 2.21.0 (2.34.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3629701Z   drift_dev 2.21.2 (2.34.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3630622Z   equatable 2.0.8 (2.1.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3631170Z < fake_async 1.3.1 (was 1.3.3) (1.3.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3631751Z < ffi 2.1.3 (was 2.2.0) (2.2.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3632401Z   fl_chart 0.68.0 (1.2.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3632982Z   flutter_lints 4.0.0 (6.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3633670Z   flutter_local_notifications 17.2.4 (22.0.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3634333Z   flutter_local_notifications_linux 4.0.1 (8.0.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3635127Z   flutter_local_notifications_platform_interface 7.2.0 (12.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3635927Z + flutter_localizations 0.0.0 from sdk flutter
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3636522Z   flutter_map 7.0.2 (8.3.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3637212Z < flutter_plugin_android_lifecycle 2.0.29 (was 2.0.35) (2.0.35 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3637972Z   flutter_riverpod 2.6.1 (3.3.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3638737Z   flutter_secure_storage 9.2.4 (10.3.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3639407Z   flutter_secure_storage_linux 1.2.3 (3.0.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3640135Z   flutter_secure_storage_macos 3.1.3 (4.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3640943Z   flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3641761Z   flutter_secure_storage_web 1.2.1 (2.1.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3642762Z   flutter_secure_storage_windows 3.1.2 (4.2.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3643435Z   freezed 2.5.2 (3.2.5 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3644020Z   freezed_annotation 2.4.4 (3.1.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3658391Z   geolocator 11.1.0 (14.0.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3659446Z   geolocator_android 4.6.2 (5.0.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3660126Z   geolocator_web 3.0.0 (4.1.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3660685Z + go_router 14.8.1 (17.3.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3661232Z < google_fonts 6.3.0 (was 6.3.3) (8.2.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3661889Z < google_maps_flutter 2.12.3 (was 2.17.1) (2.17.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3662703Z < google_maps_flutter_android 2.18.1 (was 2.19.12) (2.19.12 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3663586Z < google_maps_flutter_ios 2.15.5 (was 2.18.4) (2.18.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3664462Z < google_maps_flutter_platform_interface 2.13.0 (was 2.15.0) (2.16.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3665351Z < google_maps_flutter_web 0.5.12+2 (was 0.6.2+3) (0.6.2+3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3666016Z   intl 0.19.0 (0.20.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3666503Z   js 0.6.7 (0.7.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3667047Z   json_annotation 4.9.0 (4.12.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3667738Z   json_serializable 6.8.0 (6.14.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3668454Z   latlong2 0.9.1 (0.10.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3669051Z < leak_tracker 10.0.7 (was 11.0.2) (11.0.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3669775Z < leak_tracker_flutter_testing 3.0.8 (was 3.0.10) (3.0.10 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3670615Z < leak_tracker_testing 3.0.1 (was 3.0.2) (3.0.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3688581Z   lints 4.0.0 (6.1.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3702420Z < lottie 3.3.1 (was 3.3.3) (3.5.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3708710Z < matcher 0.12.16+1 (was 0.12.19) (0.12.20 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3709571Z < material_color_utilities 0.11.1 (was 0.13.0) (0.13.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3710389Z < meta 1.15.0 (was 1.18.0) (1.19.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3711075Z   mgrs_dart 2.0.0 (3.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3711635Z + mocktail 1.0.5
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3712052Z + nm 0.5.0
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3712540Z   package_config 2.2.0 (3.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3713157Z < path 1.9.0 (was 1.9.1) (1.9.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3713804Z < path_provider 2.1.5 (was 2.1.6) (2.1.6 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3714574Z < path_provider_android 2.2.17 (was 2.3.1) (2.3.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3715337Z < path_provider_foundation 2.4.1 (was 2.6.0) (2.6.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3716005Z < path_provider_linux 2.2.1 (was 2.2.2) (2.2.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3716802Z < path_provider_platform_interface 2.1.2 (was 2.1.3) (2.1.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3717888Z < petitparser 6.0.2 (was 7.0.2) (7.0.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3718893Z   pointycastle 3.9.1 (4.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3719472Z   proj4dart 2.1.0 (3.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3719991Z   riverpod 2.6.1 (3.3.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3720486Z   riverpod_analyzer_utils 0.5.1 (0.5.10 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3721050Z   riverpod_annotation 2.6.1 (4.0.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3721583Z   riverpod_generator 2.4.0 (4.0.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3722139Z   sanitize_html 2.1.0 (2.2.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3722740Z < shared_preferences 2.5.3 (was 2.5.5) (2.5.5 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3723492Z < shared_preferences_android 2.4.11 (was 2.4.26) (2.4.27 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3724320Z < shared_preferences_foundation 2.5.4 (was 2.5.6) (2.5.6 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3725210Z < shared_preferences_platform_interface 2.4.1 (was 2.4.2) (2.4.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3725920Z   shelf_web_socket 2.0.1 (3.0.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3726452Z   source_gen 1.5.0 (4.2.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3727009Z   source_helper 1.3.5 (1.3.12 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3727565Z < source_span 1.10.0 (was 1.10.2) (1.10.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3728645Z < sqflite 2.4.1 (was 2.4.2+1) (2.4.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3729286Z < sqflite_android 2.4.0 (was 2.4.2+3) (2.4.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3729949Z < sqflite_common 2.5.4+6 (was 2.5.8) (2.5.11 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3730654Z < sqflite_darwin 2.4.1+1 (was 2.4.2) (2.4.3+1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3731363Z   sqflite_platform_interface 2.4.0 (2.4.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3731983Z   sqlite3 2.9.4 (3.4.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3732586Z   sqlite3_flutter_libs 0.5.42 (0.6.0+eol available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3733239Z   sqlparser 0.39.2 (0.45.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3733852Z < stack_trace 1.12.0 (was 1.12.1) (1.12.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3734525Z < stream_channel 2.1.2 (was 2.1.4) (2.1.4 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3735217Z < string_scanner 1.3.0 (was 1.4.1) (1.4.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3735908Z < synchronized 3.3.0+3 (was 3.4.0+1) (3.4.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3736582Z < term_glyph 1.2.1 (was 1.2.2) (1.2.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3737266Z < test_api 0.7.3 (was 0.7.11) (0.7.13 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3737874Z   timezone 0.9.4 (0.11.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3738621Z   unicode 0.3.1 (1.1.9 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3740186Z + url_launcher 6.3.2
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3748956Z + url_launcher_android 6.3.17 (6.3.32 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3749728Z + url_launcher_ios 6.3.3 (6.4.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3750355Z + url_launcher_linux 3.2.1 (3.2.2 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3750938Z + url_launcher_macos 3.2.2 (3.2.5 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3751543Z + url_launcher_platform_interface 2.3.2
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3752161Z + url_launcher_web 2.4.1 (2.4.3 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3752738Z + url_launcher_windows 3.1.4 (3.1.5 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3753315Z   uuid 4.5.3 (4.6.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3753859Z < vector_math 2.1.4 (was 2.2.0) (2.4.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3754507Z < vm_service 14.3.0 (was 15.2.0) (15.2.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3755110Z < win32 5.10.1 (was 5.15.0) (6.3.0 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3755676Z < xml 6.5.0 (was 6.6.1) (7.0.1 available)
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3756267Z These packages are no longer being depended on:
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3756861Z - code_assets 1.2.1
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3757361Z - hooks 2.0.2
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3757787Z - jni 1.0.0
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3758338Z - jni_flutter 1.0.1
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3758767Z - objective_c 9.4.1
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3759257Z - record_use 0.6.0
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3759723Z - workmanager 0.5.2
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3760221Z Changed 73 dependencies!
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3760907Z 117 packages have newer versions incompatible with dependency constraints.
-Build & Release APK	Get dependencies	2026-07-15T18:46:41.3761662Z Try `flutter pub outdated` for more information.
-Build & Release APK	Generate code	﻿2026-07-15T18:46:41.8586378Z ##[group]Run dart run build_runner build --delete-conflicting-outputs
-Build & Release APK	Generate code	2026-07-15T18:46:41.8587306Z ^[[36;1mdart run build_runner build --delete-conflicting-outputs^[[0m
-Build & Release APK	Generate code	2026-07-15T18:46:41.8625732Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Generate code	2026-07-15T18:46:41.8626012Z env:
-Build & Release APK	Generate code	2026-07-15T18:46:41.8626229Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Generate code	2026-07-15T18:46:41.8626468Z   JAVA_VERSION: 17
-Build & Release APK	Generate code	2026-07-15T18:46:41.8626783Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Generate code	2026-07-15T18:46:41.8627175Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Generate code	2026-07-15T18:46:41.8627542Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Generate code	2026-07-15T18:46:41.8628189Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Generate code	2026-07-15T18:46:41.8628616Z ##[endgroup]
-Build & Release APK	Generate code	2026-07-15T18:46:46.8310834Z [INFO] Generating build script...
-Build & Release APK	Generate code	2026-07-15T18:46:47.2159523Z [INFO] Generating build script completed, took 394ms
-Build & Release APK	Generate code	2026-07-15T18:46:47.2160962Z 
-Build & Release APK	Generate code	2026-07-15T18:46:47.2560340Z [INFO] Precompiling build script......
-Build & Release APK	Generate code	2026-07-15T18:46:52.6509173Z [INFO] Precompiling build script... completed, took 5.4s
-Build & Release APK	Generate code	2026-07-15T18:46:52.6518494Z 
-Build & Release APK	Generate code	2026-07-15T18:46:53.3325461Z [INFO] Initializing inputs
-Build & Release APK	Generate code	2026-07-15T18:46:53.9768263Z [INFO] Building new asset graph...
-Build & Release APK	Generate code	2026-07-15T18:46:55.8357328Z [INFO] Building new asset graph completed, took 1.9s
-Build & Release APK	Generate code	2026-07-15T18:46:55.8359597Z 
-Build & Release APK	Generate code	2026-07-15T18:46:55.8359975Z [INFO] Checking for unexpected pre-existing outputs....
-Build & Release APK	Generate code	2026-07-15T18:46:55.8366169Z [INFO] Deleting 39 declared outputs which already existed on disk.
-Build & Release APK	Generate code	2026-07-15T18:46:55.8393400Z [INFO] Checking for unexpected pre-existing outputs. completed, took 3ms
-Build & Release APK	Generate code	2026-07-15T18:46:55.8394096Z 
-Build & Release APK	Generate code	2026-07-15T18:46:55.8468820Z [INFO] Running build...
-Build & Release APK	Generate code	2026-07-15T18:46:55.8890198Z [INFO] Generating SDK summary...
-Build & Release APK	Generate code	2026-07-15T18:46:58.2664182Z [INFO] 2.4s elapsed, 0/16 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:46:58.9824510Z [WARNING] riverpod_generator on test/services/spike_framework_test.dart:
-Build & Release APK	Generate code	2026-07-15T18:46:58.9829992Z Your current `analyzer` version may not fully support your current SDK version.
-Build & Release APK	Generate code	2026-07-15T18:46:58.9841927Z 
-Build & Release APK	Generate code	2026-07-15T18:46:58.9842453Z Analyzer language version: 3.4.0
-Build & Release APK	Generate code	2026-07-15T18:46:58.9858728Z SDK language version: 3.6.0
-Build & Release APK	Generate code	2026-07-15T18:46:58.9859367Z 
-Build & Release APK	Generate code	2026-07-15T18:46:58.9859686Z Please update to the latest `analyzer` version (14.1.0) by running
-Build & Release APK	Generate code	2026-07-15T18:46:58.9860206Z `flutter packages upgrade`.
-Build & Release APK	Generate code	2026-07-15T18:46:58.9860435Z 
-Build & Release APK	Generate code	2026-07-15T18:46:58.9860772Z If you are not getting the latest version by running the above command, you
-Build & Release APK	Generate code	2026-07-15T18:46:58.9861522Z can try adding a constraint like the following to your pubspec to start
-Build & Release APK	Generate code	2026-07-15T18:46:58.9862174Z diagnosing why you can't get the latest version:
-Build & Release APK	Generate code	2026-07-15T18:46:58.9862542Z 
-Build & Release APK	Generate code	2026-07-15T18:46:58.9862678Z dev_dependencies:
-Build & Release APK	Generate code	2026-07-15T18:46:58.9863005Z   analyzer: ^14.1.0
-Build & Release APK	Generate code	2026-07-15T18:46:58.9863208Z 
-Build & Release APK	Generate code	2026-07-15T18:47:00.5711593Z [INFO] 4.7s elapsed, 0/16 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:01.6164387Z [INFO] 5.8s elapsed, 0/16 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:01.6847122Z [INFO] Generating SDK summary completed, took 5.8s
-Build & Release APK	Generate code	2026-07-15T18:47:01.6857929Z 
-Build & Release APK	Generate code	2026-07-15T18:47:02.7464157Z [INFO] 6.9s elapsed, 64/95 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:03.7873261Z [INFO] 7.9s elapsed, 78/106 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:04.8467795Z [INFO] 9.0s elapsed, 115/146 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:05.8600748Z [INFO] 10.0s elapsed, 126/154 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:06.9734972Z [INFO] 11.1s elapsed, 142/161 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:10.4319613Z [INFO] 14.6s elapsed, 143/161 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:17.1158669Z [INFO] 21.3s elapsed, 236/244 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:18.1341753Z [INFO] 22.3s elapsed, 242/245 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:26.9286773Z [INFO] 31.1s elapsed, 303/319 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:27.9469297Z [INFO] 32.1s elapsed, 350/365 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:28.9472861Z [INFO] 33.1s elapsed, 445/468 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:29.9905083Z [INFO] 34.1s elapsed, 475/491 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:31.9601966Z [INFO] 36.1s elapsed, 475/491 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:33.0834991Z [INFO] 37.2s elapsed, 533/549 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:34.0892395Z [INFO] 38.2s elapsed, 550/567 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:36.1181226Z [INFO] 40.3s elapsed, 569/587 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:37.1527322Z [INFO] 41.3s elapsed, 636/653 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:39.1419714Z [INFO] 43.3s elapsed, 691/692 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:40.1591855Z [INFO] 44.3s elapsed, 991/1007 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:41.2647632Z [INFO] 45.4s elapsed, 991/1007 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:42.3587340Z [INFO] 46.5s elapsed, 991/1007 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:43.3650115Z [INFO] 47.5s elapsed, 993/1009 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:44.4615427Z [INFO] 48.6s elapsed, 993/1009 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:45.5483997Z [INFO] 49.7s elapsed, 993/1009 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:46.6583420Z [INFO] 50.8s elapsed, 995/1011 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:47.7656171Z [INFO] 51.9s elapsed, 995/1011 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:48.8648734Z [INFO] 53.0s elapsed, 997/1012 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:49.9504042Z [INFO] 54.1s elapsed, 998/1014 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:51.0502967Z [INFO] 55.2s elapsed, 998/1014 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:52.0666772Z [INFO] 56.2s elapsed, 1001/1017 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:53.0751190Z [INFO] 57.2s elapsed, 1002/1018 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:54.1601522Z [INFO] 58.3s elapsed, 1002/1018 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:55.1614683Z [INFO] 59.3s elapsed, 1004/1020 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:56.2684410Z [INFO] 1m 0s elapsed, 1008/1024 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:57.3662460Z [INFO] 1m 1s elapsed, 1011/1027 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:58.4460883Z [INFO] 1m 2s elapsed, 1016/1032 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:47:59.4749076Z [INFO] 1m 3s elapsed, 1020/1036 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:00.5566256Z [INFO] 1m 4s elapsed, 1020/1036 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:01.6614583Z [INFO] 1m 5s elapsed, 1029/1045 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:02.7579051Z [INFO] 1m 6s elapsed, 1036/1052 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:03.8654898Z [INFO] 1m 8s elapsed, 1058/1074 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:04.9473956Z [INFO] 1m 9s elapsed, 1075/1091 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:05.9552449Z [INFO] 1m 10s elapsed, 1095/1097 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:06.9623571Z [INFO] 1m 11s elapsed, 1095/1097 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:07.9769210Z [INFO] 1m 12s elapsed, 1095/1097 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:09.1030443Z [INFO] 1m 13s elapsed, 1095/1097 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:10.1570184Z [INFO] 1m 14s elapsed, 1096/1097 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:11.2054552Z [INFO] 1m 15s elapsed, 1316/1316 actions completed.
-Build & Release APK	Generate code	2026-07-15T18:48:12.0597674Z [INFO] Running build completed, took 1m 16s
-Build & Release APK	Generate code	2026-07-15T18:48:12.0599905Z 
-Build & Release APK	Generate code	2026-07-15T18:48:12.0622308Z [INFO] Caching finalized dependency graph...
-Build & Release APK	Generate code	2026-07-15T18:48:12.4452658Z [INFO] Caching finalized dependency graph completed, took 386ms
-Build & Release APK	Generate code	2026-07-15T18:48:12.4453572Z 
-Build & Release APK	Generate code	2026-07-15T18:48:12.4487593Z [INFO] Succeeded after 1m 16s with 395 outputs (1657 actions)
-Build & Release APK	Generate code	2026-07-15T18:48:12.4488447Z 
-Build & Release APK	Generate localization	﻿2026-07-15T18:48:12.6543141Z ##[group]Run flutter gen-l10n
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6543648Z ^[[36;1mflutter gen-l10n^[[0m
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6584103Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6584531Z env:
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6584845Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6608541Z   JAVA_VERSION: 17
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6609073Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6609649Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6610145Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6610632Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Generate localization	2026-07-15T18:48:12.6611002Z ##[endgroup]
-Build & Release APK	Generate localization	2026-07-15T18:48:12.8614519Z Because l10n.yaml exists, the options defined there will be used instead.
-Build & Release APK	Generate localization	2026-07-15T18:48:12.8619794Z To use the command line arguments, delete the l10n.yaml file in the Flutter project.
-Build & Release APK	Generate localization	2026-07-15T18:48:12.8636408Z 
-Build & Release APK	Generate localization	2026-07-15T18:48:12.8636554Z 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0914343Z "bn": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0915313Z "gu": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0915959Z "hi": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0916583Z "kn": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0917134Z "ml": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0917673Z "mr": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0918460Z "pa": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0921867Z "ta": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0922862Z "te": 2 untranslated message(s).
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0923559Z To see a detailed report, use the untranslated-messages-file 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0924316Z option in the l10n.yaml file:
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0924878Z untranslated-messages-file: desiredFileName.txt
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0925574Z <other option>: <other selection> 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0926015Z 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0926135Z 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0926586Z This will generate a JSON format file containing all messages that 
-Build & Release APK	Generate localization	2026-07-15T18:48:13.0927375Z need to be translated.
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	﻿2026-07-15T18:48:13.1083700Z ##[group]Run rm -rf android/.dart_tool
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1084245Z ^[[36;1mrm -rf android/.dart_tool^[[0m
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1084711Z ^[[36;1mln -sfn ../.dart_tool android/.dart_tool^[[0m
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1085220Z ^[[36;1mls -la android/.dart_tool^[[0m
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1132966Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1133247Z env:
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1133454Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1133702Z   JAVA_VERSION: 17
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1134020Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1134399Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1134773Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1135266Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1135641Z ##[endgroup]
-Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:48:13.1237013Z lrwxrwxrwx 1 runner runner 13 Jul 15 18:48 android/.dart_tool -> ../.dart_tool
-Build & Release APK	Guard entrypoint exists	﻿2026-07-15T18:48:13.1271269Z ##[group]Run test -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1272384Z ^[[36;1mtest -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)^[[0m
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1322011Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1322430Z env:
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1322760Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1323136Z   JAVA_VERSION: 17
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1323654Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1324276Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1324903Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1325773Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Guard entrypoint exists	2026-07-15T18:48:13.1326456Z ##[endgroup]
-Build & Release APK	Build APK (release)	﻿2026-07-15T18:48:13.1419397Z ##[group]Run pwd
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1419810Z ^[[36;1mpwd^[[0m
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1420156Z ^[[36;1mls -la lib/main.dart^[[0m
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1420604Z ^[[36;1mflutter build apk --release^[[0m
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1460988Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1461268Z env:
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1461475Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1461742Z   JAVA_VERSION: 17
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1462064Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1462440Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1462816Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1463299Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1463677Z ##[endgroup]
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1529091Z /home/runner/work/profileforge/profileforge
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.1532137Z -rw-r--r-- 1 runner runner 4138 Jul 15 18:46 lib/main.dart
-Build & Release APK	Build APK (release)	2026-07-15T18:48:13.9768611Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9808949Z Running Gradle task 'assembleRelease'...                        
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9838930Z "bn": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9839697Z "gu": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9858863Z "hi": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9878642Z "kn": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9898874Z "ml": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9899807Z "mr": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9918681Z "pa": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9955905Z "ta": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9978889Z "te": 2 untranslated message(s).
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9998782Z To see a detailed report, use the untranslated-messages-file 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:32.9999612Z option in the l10n.yaml file:
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0015926Z untranslated-messages-file: desiredFileName.txt
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0035328Z <other option>: <other selection> 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0056350Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0078358Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0079028Z This will generate a JSON format file containing all messages that 
-Build & Release APK	Build APK (release)	2026-07-15T18:50:33.0098858Z need to be translated.
-Build & Release APK	Build APK (release)	2026-07-15T18:50:58.5549598Z Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 21032 bytes (98.7% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5579059Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5619238Z FAILURE: Build failed with an exception.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5619972Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5638815Z * What went wrong:
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5655177Z Execution failed for task ':app:processReleaseResources'.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5679181Z > A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5680169Z    > Android resource linking failed
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5685240Z      ERROR: /home/runner/work/profileforge/profileforge/android/app/src/main/AndroidManifest.xml:23:9-43:20: AAPT: error: attribute android:windowSoftInputType not found.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5686638Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5686852Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5687121Z * Try:
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5687670Z > Run with --stacktrace option to get the stack trace.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5688622Z > Run with --info or --debug option to get more log output.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5689345Z > Run with --scan to get full insights.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5689994Z > Get more help at https://help.gradle.org.
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5690475Z 
-Build & Release APK	Build APK (release)	2026-07-15T18:51:55.5690765Z BUILD FAILED in 3m 40s
-Build & Release APK	Build APK (release)	2026-07-15T18:51:56.1263663Z Running Gradle task 'assembleRelease'...                          222.1s
-Build & Release APK	Build APK (release)	2026-07-15T18:51:56.1319786Z Gradle task assembleRelease failed with exit code 1
-Build & Release APK	Build APK (release)	2026-07-15T18:51:56.1399236Z ##[error]Process completed with exit code 1.
-Build & Release APK	Run real judge harness (scoring, non-gating)	﻿2026-07-15T18:51:56.1477041Z ##[group]Run bash judge/run_judges.sh
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1477591Z ^[[36;1mbash judge/run_judges.sh^[[0m
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1580971Z shell: /usr/bin/bash -e {0}
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1581465Z env:
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1581824Z   FLUTTER_VERSION: 3.27.4
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1582248Z   JAVA_VERSION: 17
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1582852Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1583583Z   PUB_CACHE: /home/runner/.pub-cache
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1584288Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1585239Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1585981Z ##[endgroup]
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:51:56.1738738Z == Running flutter analyze (ground truth) ==
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:52:25.5048785Z analyze: errors=0 warnings=86 info=868
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:52:25.5086698Z === TOP ERROR CATEGORIES ===
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:52:25.5093672Z == Running flutter test (ground truth) ==
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:10.5277317Z tests: pass_markers=0 fail_markers=0
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5386221Z == Judge results written to judge/results.json ==
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5392056Z {
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5392587Z   "status": "ok",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5394528Z   "ground_truth": {
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5395164Z     "analyze_errors": 0,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5395798Z     "analyze_warnings": 86,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5396346Z     "semantics_widgets": 1,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5396869Z     "hardcoded_strings": 752,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5397941Z     "arb_files": 10,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5398549Z     "test_files": 16,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5399012Z     "missing_imports": 0,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5399415Z     "hardcoded_http": 2,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5399814Z     "raw_error_leaks": 1,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5400211Z     "const_usage": 4656,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5400621Z     "stateful_widgets": 32,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5401034Z     "dispose_methods": 21,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5401431Z     "todo_markers": 8,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5401707Z     "doc_comments": 944
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5401934Z   },
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5402131Z   "scores": {
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5402329Z     "accessibility": 22,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5402584Z     "testing_ci": 75,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5402807Z     "security": 57,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5403012Z     "architecture": 100,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5403241Z     "performance": 91,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5403451Z     "ui_ux": 90,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5403650Z     "product_fit": 52,
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5403864Z     "documentation": 100
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5404082Z   },
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5404260Z   "evidence": {
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5404654Z     "accessibility": "semantics_widgets=1 (need >0), hardcoded_strings=752 (penalty), arb_files=10",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5405137Z     "testing_ci": "analyze_errors=0, test_files=16",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5405515Z     "security": "hardcoded_http(non-localhost)=2, raw_error_leaks=1",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5405908Z     "architecture": "missing_imports=0, analyze_errors=0",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5406269Z     "performance": "const_usage=4656, dispose_ratio=21/32",
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5406620Z     "product_fit": "todo_markers=8, test_files=16"
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5406897Z   }
-Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T18:53:13.5407073Z }
-Build & Release APK	Post Setup Java	﻿2026-07-15T18:53:13.5503386Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-Build & Release APK	Post Setup Java	2026-07-15T18:53:13.5504578Z Post job cleanup.
-Build & Release APK	Post Setup Java	2026-07-15T18:53:13.6850397Z (node:3594) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-Build & Release APK	Post Setup Java	2026-07-15T18:53:13.6852033Z (Use `node --trace-deprecation ...` to show where the warning was created)
-Build & Release APK	Post Setup Flutter	﻿2026-07-15T18:53:13.7246891Z Post job cleanup.
-Build & Release APK	Post Run actions/checkout@v4	﻿2026-07-15T18:53:13.7385076Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.7386966Z Post job cleanup.
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8335555Z [command]/usr/bin/git version
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8410562Z git version 2.54.0
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8493692Z Temporarily overriding HOME='/home/runner/work/_temp/0df0d30a-1b4e-407a-9561-151eb5571bdc' before making global git config changes
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8495196Z Adding repository directory to the temporary git global config as a safe directory
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8496444Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8561570Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.8623184Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.9231977Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.9297260Z http.https://github.com/.extraheader
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.9321427Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:13.9422963Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:14.0048937Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-Build & Release APK	Post Run actions/checkout@v4	2026-07-15T18:53:14.0123347Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-Build & Release APK	Complete job	﻿2026-07-15T18:53:14.0720581Z Cleaning up orphan processes
-Build & Release APK	Complete job	2026-07-15T18:53:14.0946469Z Terminate orphan process: pid (2644) (java)
-Build & Release APK	Complete job	2026-07-15T18:53:14.0981919Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & Release APK	Set up job	﻿2026-07-15T18:54:43.9751075Z Current runner version: '2.335.1'
+Build & Release APK	Set up job	2026-07-15T18:54:43.9785485Z ##[group]Runner Image Provisioner
+Build & Release APK	Set up job	2026-07-15T18:54:43.9786969Z Hosted Compute Agent
+Build & Release APK	Set up job	2026-07-15T18:54:43.9787944Z Version: 20260624.560
+Build & Release APK	Set up job	2026-07-15T18:54:43.9789094Z Commit: 925d229a51159bc391ae97e54a2dd1fe20af789d
+Build & Release APK	Set up job	2026-07-15T18:54:43.9790301Z Build Date: 2026-06-24T18:26:47Z
+Build & Release APK	Set up job	2026-07-15T18:54:43.9791445Z Worker ID: {b0326fef-1904-46d7-8683-bce5c2724d4f}
+Build & Release APK	Set up job	2026-07-15T18:54:43.9793210Z Azure Region: eastus
+Build & Release APK	Set up job	2026-07-15T18:54:43.9794158Z ##[endgroup]
+Build & Release APK	Set up job	2026-07-15T18:54:43.9796869Z ##[group]Operating System
+Build & Release APK	Set up job	2026-07-15T18:54:43.9797919Z Ubuntu
+Build & Release APK	Set up job	2026-07-15T18:54:43.9798792Z 24.04.4
+Build & Release APK	Set up job	2026-07-15T18:54:43.9799748Z LTS
+Build & Release APK	Set up job	2026-07-15T18:54:43.9800548Z ##[endgroup]
+Build & Release APK	Set up job	2026-07-15T18:54:43.9801414Z ##[group]Runner Image
+Build & Release APK	Set up job	2026-07-15T18:54:43.9802520Z Image: ubuntu-24.04
+Build & Release APK	Set up job	2026-07-15T18:54:43.9803442Z Version: 20260705.232.1
+Build & Release APK	Set up job	2026-07-15T18:54:43.9805525Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260705.232/images/ubuntu/Ubuntu2404-Readme.md
+Build & Release APK	Set up job	2026-07-15T18:54:43.9808505Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260705.232
+Build & Release APK	Set up job	2026-07-15T18:54:43.9810164Z ##[endgroup]
+Build & Release APK	Set up job	2026-07-15T18:54:43.9811880Z ##[group]GITHUB_TOKEN Permissions
+Build & Release APK	Set up job	2026-07-15T18:54:43.9815010Z Contents: write
+Build & Release APK	Set up job	2026-07-15T18:54:43.9816028Z Metadata: read
+Build & Release APK	Set up job	2026-07-15T18:54:43.9817058Z ##[endgroup]
+Build & Release APK	Set up job	2026-07-15T18:54:43.9819958Z Secret source: Actions
+Build & Release APK	Set up job	2026-07-15T18:54:43.9821100Z Prepare workflow directory
+Build & Release APK	Set up job	2026-07-15T18:54:44.0494872Z Prepare all required actions
+Build & Release APK	Set up job	2026-07-15T18:54:44.0563649Z Getting action download info
+Build & Release APK	Set up job	2026-07-15T18:54:44.3257466Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Build & Release APK	Set up job	2026-07-15T18:54:44.9514795Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+Build & Release APK	Set up job	2026-07-15T18:54:45.0903023Z Download action repository 'actions/setup-java@v4' (SHA:c1e323688fd81a25caa38c78aa6df2d33d3e20d9)
+Build & Release APK	Set up job	2026-07-15T18:54:45.4607526Z Download action repository 'softprops/action-gh-release@v1' (SHA:de2c0eb89ae2a093876385947365aca7b0e5f844)
+Build & Release APK	Set up job	2026-07-15T18:54:45.6780685Z Getting action download info
+Build & Release APK	Set up job	2026-07-15T18:54:45.7525068Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+Build & Release APK	Set up job	2026-07-15T18:54:45.9653632Z Complete job name: Build & Release APK
+Build & Release APK	Run actions/checkout@v4	﻿2026-07-15T18:54:46.0599001Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0610949Z ##[group]Run actions/checkout@v4
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0612334Z with:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0613245Z   repository: boom650/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0622746Z   token: ***
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0623668Z   ssh-strict: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0624759Z   ssh-user: git
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0625775Z   persist-credentials: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0626821Z   clean: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0688957Z   sparse-checkout-cone-mode: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0690905Z   fetch-depth: 1
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0692295Z   fetch-tags: false
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0693410Z   show-progress: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0694587Z   lfs: false
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0695414Z   submodules: false
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0696317Z   set-safe-directory: true
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0697973Z env:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0698757Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0699637Z   JAVA_VERSION: 17
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.0700436Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.1869705Z Syncing repository: boom650/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.1874999Z ##[group]Getting Git version info
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.1877356Z Working directory is '/home/runner/work/profileforge/profileforge'
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.1880706Z [command]/usr/bin/git version
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2025693Z git version 2.54.0
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2071579Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2087751Z Temporarily overriding HOME='/home/runner/work/_temp/dfc3bce7-1ff8-42fb-9d4c-04ce82f09730' before making global git config changes
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2113465Z Adding repository directory to the temporary git global config as a safe directory
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2118169Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2202910Z Deleting the contents of '/home/runner/work/profileforge/profileforge'
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2207814Z ##[group]Initializing the repository
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2210475Z [command]/usr/bin/git init /home/runner/work/profileforge/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2339951Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2343604Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2347531Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2350660Z hint: call:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2352402Z hint:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2354972Z hint: 	git config --global init.defaultBranch <name>
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2358236Z hint:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2360544Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2365052Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2367815Z hint:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2369345Z hint: 	git branch -m <name>
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2371092Z hint:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2373327Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2377660Z Initialized empty Git repository in /home/runner/work/profileforge/profileforge/.git/
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2384882Z [command]/usr/bin/git remote add origin https://github.com/boom650/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2477672Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2480283Z ##[group]Disabling automatic garbage collection
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2482653Z [command]/usr/bin/git config --local gc.auto 0
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2562140Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2576717Z ##[group]Setting up auth
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2587116Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.2619623Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3108710Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3180306Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3459482Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3493895Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3742270Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3835398Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3855337Z ##[group]Fetching the repository
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.3867471Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0ec1cd924d9f4d4422836ad35fd5b10dfd719e3d:refs/remotes/origin/main
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8738269Z From https://github.com/boom650/profileforge
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8739939Z  * [new ref]         0ec1cd924d9f4d4422836ad35fd5b10dfd719e3d -> origin/main
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8789696Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8790827Z ##[group]Determining the checkout info
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8792489Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8800501Z [command]/usr/bin/git sparse-checkout disable
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8855958Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8891735Z ##[group]Checking out the ref
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.8896988Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.9596959Z Switched to a new branch 'main'
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.9598207Z branch 'main' set up to track 'origin/main'.
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.9601663Z ##[endgroup]
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.9602774Z [command]/usr/bin/git log -1 --format=%H
+Build & Release APK	Run actions/checkout@v4	2026-07-15T18:54:46.9620196Z 0ec1cd924d9f4d4422836ad35fd5b10dfd719e3d
+Build & Release APK	Setup Flutter	﻿2026-07-15T18:54:47.0028005Z ##[group]Run subosito/flutter-action@v2
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0028640Z with:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0029061Z   flutter-version: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0029550Z   channel: stable
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0030001Z   cache: true
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0030427Z   architecture: X64
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0030903Z   pub-cache-path: default
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0031404Z   dry-run: false
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0031959Z   git-source: https://github.com/flutter/flutter.git
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0032603Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0033017Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0033500Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0033944Z ##[endgroup]
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0210775Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0211569Z ^[[36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0458327Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0459061Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0459504Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0460011Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0460525Z ##[endgroup]
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0684862Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0685618Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh -p \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0686188Z ^[[36;1m  -n '3.27.4' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0686659Z ^[[36;1m  -f '' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0687084Z ^[[36;1m  -a 'X64' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0687345Z ^[[36;1m  -k '' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0687592Z ^[[36;1m  -c '' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0687833Z ^[[36;1m  -l '' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0688297Z ^[[36;1m  -d 'default' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0688892Z ^[[36;1m  -g 'https://github.com/flutter/flutter.git' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0689455Z ^[[36;1m  stable^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0722829Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0723243Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0723605Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0723881Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.0724121Z ##[endgroup]
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2635368Z ##[group]Run actions/cache@v5
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2635755Z with:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2636053Z   path: /opt/hostedtoolcache/flutter/stable-3.27.4-x64
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2636574Z   key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2637053Z   enableCrossOsArchive: false
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2637351Z   fail-on-cache-miss: false
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2637632Z   lookup-only: false
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2637894Z   save-always: false
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2638136Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2638364Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2638626Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.2638861Z ##[endgroup]
+Build & Release APK	Setup Flutter	2026-07-15T18:54:47.5115412Z Cache hit for: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Build & Release APK	Setup Flutter	2026-07-15T18:54:48.6265743Z Received 159383552 of 906983551 (17.6%), 149.3 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:54:49.6261014Z Received 402653184 of 906983551 (44.4%), 190.2 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:54:50.6328508Z Received 658505728 of 906983551 (72.6%), 207.5 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:54:51.6349687Z Received 847249408 of 906983551 (93.4%), 200.6 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:54:51.8745555Z Received 906983551 of 906983551 (100.0%), 202.7 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:54:51.8760769Z Cache Size: ~865 MB (906983551 B)
+Build & Release APK	Setup Flutter	2026-07-15T18:54:51.8859448Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c65ccb2d-386b-4656-af49-94845868f05e/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.0723705Z Cache restored successfully
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.1262872Z Cache restored from key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3380273Z ##[group]Run actions/cache@v5
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3380730Z with:
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3381079Z   path: /home/runner/.pub-cache
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3382345Z   key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3383724Z   enableCrossOsArchive: false
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3384207Z   fail-on-cache-miss: false
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3385824Z   lookup-only: false
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3386063Z   save-always: false
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3386270Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3386455Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3386688Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.3386889Z ##[endgroup]
+Build & Release APK	Setup Flutter	2026-07-15T18:55:00.6684842Z Cache hit for: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Build & Release APK	Setup Flutter	2026-07-15T18:55:01.2404966Z Received 98414678 of 98414678 (100.0%), 184.4 MBs/sec
+Build & Release APK	Setup Flutter	2026-07-15T18:55:01.2406007Z Cache Size: ~94 MB (98414678 B)
+Build & Release APK	Setup Flutter	2026-07-15T18:55:01.2480073Z [command]/usr/bin/tar -xf /home/runner/work/_temp/92a3c938-2496-413e-a236-bc7c9180f4f4/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6043788Z Cache restored successfully
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6165679Z Cache restored from key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6325407Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6325788Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6326103Z ^[[36;1m  -n '3.27.4' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6326388Z ^[[36;1m  -a 'x64' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6326709Z ^[[36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.27.4-x64' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6327091Z ^[[36;1m  -d '/home/runner/.pub-cache' \^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6327376Z ^[[36;1m  stable^[[0m
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6358909Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6359292Z env:
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6359488Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6359718Z   JAVA_VERSION: 17
+Build & Release APK	Setup Flutter	2026-07-15T18:55:04.6359931Z ##[endgroup]
+Build & Release APK	Setup Java	﻿2026-07-15T18:55:04.8001685Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8003006Z ##[group]Run actions/setup-java@v4
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8003279Z with:
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8003477Z   distribution: temurin
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8003704Z   java-version: 17
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8003918Z   cache: gradle
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8004118Z   java-package: jdk
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8004676Z   check-latest: false
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8004910Z   server-id: github
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8005134Z   server-username: GITHUB_ACTOR
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8005390Z   server-password: GITHUB_TOKEN
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8005662Z   overwrite-settings: true
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8005905Z   job-status: success
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8008602Z   token: ***
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8008804Z env:
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8009036Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8009272Z   JAVA_VERSION: 17
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8009591Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8009978Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Setup Java	2026-07-15T18:55:04.8010244Z ##[endgroup]
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9658906Z ##[group]Installed distributions
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9724040Z Resolved Java 17.0.19+10 from tool-cache
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9725018Z Setting Java 17.0.19+10 as the default
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9736357Z (node:2294) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9737780Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9741000Z Creating toolchains.xml for JDK version 17 from temurin
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9822142Z Writing to /home/runner/.m2/toolchains.xml
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9823017Z 
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9823468Z Java configuration:
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9824174Z   Distribution: temurin
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9825088Z   Version: 17.0.19+10
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9825894Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9826663Z 
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9827389Z ##[endgroup]
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9845723Z Creating settings.xml with server-id: github
+Build & Release APK	Setup Java	2026-07-15T18:55:04.9875781Z Writing to /home/runner/.m2/settings.xml
+Build & Release APK	Setup Java	2026-07-15T18:55:05.2395315Z gradle cache is not found
+Build & Release APK	Get dependencies	﻿2026-07-15T18:55:05.2545442Z ##[group]Run flutter pub get
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2545999Z ^[[36;1mflutter pub get^[[0m
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2580526Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2580795Z env:
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2581000Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2581242Z   JAVA_VERSION: 17
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2581565Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2581978Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2582368Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2582864Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.2583269Z ##[endgroup]
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5382309Z 
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5396181Z   ╔════════════════════════════════════════════════════════════════════════════╗
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5397478Z   ║                 Welcome to Flutter! - https://flutter.dev                  ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5398713Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5399867Z   ║ The Flutter tool uses Google Analytics to anonymously report feature usage ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5401246Z   ║ statistics and basic crash reports. This data is used to help improve      ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5402506Z   ║ Flutter tools over time.                                                   ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5403686Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5405188Z   ║ Flutter tool analytics are not sent on the very first run. To disable      ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5406594Z   ║ reporting, type 'flutter config --no-analytics'. To display the current    ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5407931Z   ║ setting, type 'flutter config'. If you opt out of analytics, an opt-out    ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5409288Z   ║ event will be sent, and then no further information will be sent by the    ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5410555Z   ║ Flutter tool.                                                              ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5411638Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5412823Z   ║ By downloading the Flutter SDK, you agree to the Google Terms of Service.  ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5414224Z   ║ The Google Privacy Policy describes how data is handled in this service.   ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5415801Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5417012Z   ║ Moreover, Flutter includes the Dart SDK, which may send usage metrics and  ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5418321Z   ║ crash reports to Google.                                                   ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5419478Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5420645Z   ║ Read about data we send with crash reports:                                ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5422009Z   ║ https://flutter.dev/to/crash-reporting                                     ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5423214Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5424672Z   ║ See Google's privacy policy:                                               ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5426076Z   ║ https://policies.google.com/privacy                                        ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5427271Z   ║                                                                            ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5428787Z   ║ To disable animations in this tool, use                                    ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5430132Z   ║ 'flutter config --no-cli-animations'.                                      ║
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5431457Z   ╚════════════════════════════════════════════════════════════════════════════╝
+Build & Release APK	Get dependencies	2026-07-15T18:55:05.5432206Z 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0716469Z "bn": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0717162Z "gu": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0729132Z "hi": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0733131Z "kn": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0738603Z "ml": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0744917Z "mr": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0764490Z "pa": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0764861Z "ta": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0765143Z "te": 2 untranslated message(s).
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0765480Z To see a detailed report, use the untranslated-messages-file 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0765877Z option in the l10n.yaml file:
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0766177Z untranslated-messages-file: desiredFileName.txt
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0766497Z <other option>: <other selection> 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0766677Z 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0766684Z 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0766862Z This will generate a JSON format file containing all messages that 
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.0767224Z need to be translated.
+Build & Release APK	Get dependencies	2026-07-15T18:55:06.2915404Z Resolving dependencies...
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.1925041Z Downloading packages...
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3184885Z   _fe_analyzer_shared 67.0.0 (105.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3186132Z   analyzer 6.4.1 (14.1.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3186953Z   analyzer_plugin 0.11.3 (0.14.14 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3187812Z < async 2.11.0 (was 2.13.1) (2.13.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3188633Z < boolean_selector 2.1.1 (was 2.1.2) (2.1.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3189351Z   build 2.4.1 (4.0.8 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3189962Z   build_config 1.1.2 (1.3.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3190678Z < build_daemon 4.0.4 (was 4.1.1) (4.1.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3191442Z   build_resolvers 2.4.2 (3.0.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3192149Z   build_runner 2.4.13 (2.15.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3192937Z   build_runner_core 7.3.2 (9.3.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3193680Z < characters 1.3.0 (was 1.4.1) (1.4.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3194710Z < checked_yaml 2.0.3 (was 2.0.4) (2.0.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3195432Z   cli_util 0.4.2 (0.5.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3196133Z < clock 1.1.1 (was 1.1.2) (1.1.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3196914Z < code_builder 4.10.1 (was 4.11.1) (4.11.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3197732Z < collection 1.19.0 (was 1.19.1) (1.19.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3198508Z + connectivity_plus 6.1.5 (7.3.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3199219Z + connectivity_plus_platform_interface 2.1.0
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3200650Z < cupertino_icons 1.0.8 (was 1.0.9) (1.0.9 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3201490Z   custom_lint_core 0.6.3 (0.8.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3201973Z   dart_style 2.3.6 (3.1.12 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3202433Z < dbus 0.7.12 (was 0.7.14) (0.7.14 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3202907Z   drift 2.21.0 (2.34.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3203325Z   drift_dev 2.21.2 (2.34.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3203757Z   equatable 2.0.8 (2.1.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3204214Z < fake_async 1.3.1 (was 1.3.3) (1.3.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3204954Z < ffi 2.1.3 (was 2.2.0) (2.2.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3205262Z   fl_chart 0.68.0 (1.2.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3205535Z   flutter_lints 4.0.0 (6.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3205866Z   flutter_local_notifications 17.2.4 (22.0.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3206238Z   flutter_local_notifications_linux 4.0.1 (8.0.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3206681Z   flutter_local_notifications_platform_interface 7.2.0 (12.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3207083Z + flutter_localizations 0.0.0 from sdk flutter
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3207646Z   flutter_map 7.0.2 (8.3.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3208017Z < flutter_plugin_android_lifecycle 2.0.29 (was 2.0.35) (2.0.35 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3208408Z   flutter_riverpod 2.6.1 (3.3.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3208715Z   flutter_secure_storage 9.2.4 (10.3.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3209045Z   flutter_secure_storage_linux 1.2.3 (3.0.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3209379Z   flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3209765Z   flutter_secure_storage_platform_interface 1.1.2 (2.0.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3210151Z   flutter_secure_storage_web 1.2.1 (2.1.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3210651Z   flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3210959Z   freezed 2.5.2 (3.2.5 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3211230Z   freezed_annotation 2.4.4 (3.1.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3211519Z   geolocator 11.1.0 (14.0.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3211804Z   geolocator_android 4.6.2 (5.0.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3212092Z   geolocator_web 3.0.0 (4.1.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3212358Z + go_router 14.8.1 (17.3.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3212636Z < google_fonts 6.3.0 (was 6.3.3) (8.2.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3213021Z < google_maps_flutter 2.12.3 (was 2.17.1) (2.17.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3213419Z < google_maps_flutter_android 2.18.1 (was 2.19.12) (2.19.12 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3213830Z < google_maps_flutter_ios 2.15.5 (was 2.18.4) (2.18.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3222740Z < google_maps_flutter_platform_interface 2.13.0 (was 2.15.0) (2.16.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3226393Z < google_maps_flutter_web 0.5.12+2 (was 0.6.2+3) (0.6.2+3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3227073Z   intl 0.19.0 (0.20.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3227537Z   js 0.6.7 (0.7.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3227997Z   json_annotation 4.9.0 (4.12.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3228525Z   json_serializable 6.8.0 (6.14.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3229032Z   latlong2 0.9.1 (0.10.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3229520Z < leak_tracker 10.0.7 (was 11.0.2) (11.0.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3230174Z < leak_tracker_flutter_testing 3.0.8 (was 3.0.10) (3.0.10 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3230856Z < leak_tracker_testing 3.0.1 (was 3.0.2) (3.0.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3231391Z   lints 4.0.0 (6.1.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3231906Z < lottie 3.3.1 (was 3.3.3) (3.5.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3232486Z < matcher 0.12.16+1 (was 0.12.19) (0.12.20 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3233111Z < material_color_utilities 0.11.1 (was 0.13.0) (0.13.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3233728Z < meta 1.15.0 (was 1.18.0) (1.19.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3234562Z   mgrs_dart 2.0.0 (3.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3235058Z + mocktail 1.0.5
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3235678Z + nm 0.5.0
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3236043Z   package_config 2.2.0 (3.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3236546Z < path 1.9.0 (was 1.9.1) (1.9.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3237106Z < path_provider 2.1.5 (was 2.1.6) (2.1.6 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3237754Z < path_provider_android 2.2.17 (was 2.3.1) (2.3.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3238463Z < path_provider_foundation 2.4.1 (was 2.6.0) (2.6.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3239164Z < path_provider_linux 2.2.1 (was 2.2.2) (2.2.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3239875Z < path_provider_platform_interface 2.1.2 (was 2.1.3) (2.1.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3240545Z < petitparser 6.0.2 (was 7.0.2) (7.0.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3241088Z   pointycastle 3.9.1 (4.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3241572Z   proj4dart 2.1.0 (3.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3242039Z   riverpod 2.6.1 (3.3.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3242576Z   riverpod_analyzer_utils 0.5.1 (0.5.10 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3243159Z   riverpod_annotation 2.6.1 (4.0.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3243696Z   riverpod_generator 2.4.0 (4.0.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3244946Z   sanitize_html 2.1.0 (2.2.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3245852Z < shared_preferences 2.5.3 (was 2.5.5) (2.5.5 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3246580Z < shared_preferences_android 2.4.11 (was 2.4.26) (2.4.27 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3247355Z < shared_preferences_foundation 2.5.4 (was 2.5.6) (2.5.6 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3248187Z < shared_preferences_platform_interface 2.4.1 (was 2.4.2) (2.4.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3248886Z   shelf_web_socket 2.0.1 (3.0.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3249376Z   source_gen 1.5.0 (4.2.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3250179Z   source_helper 1.3.5 (1.3.12 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3250877Z < source_span 1.10.0 (was 1.10.2) (1.10.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3267058Z < sqflite 2.4.1 (was 2.4.2+1) (2.4.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3267695Z < sqflite_android 2.4.0 (was 2.4.2+3) (2.4.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3268268Z < sqflite_common 2.5.4+6 (was 2.5.8) (2.5.11 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3268734Z < sqflite_darwin 2.4.1+1 (was 2.4.2) (2.4.3+1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3269181Z   sqflite_platform_interface 2.4.0 (2.4.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3269635Z   sqlite3 2.9.4 (3.4.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3270092Z   sqlite3_flutter_libs 0.5.42 (0.6.0+eol available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3270528Z   sqlparser 0.39.2 (0.45.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3270938Z < stack_trace 1.12.0 (was 1.12.1) (1.12.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3271371Z < stream_channel 2.1.2 (was 2.1.4) (2.1.4 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3271869Z < string_scanner 1.3.0 (was 1.4.1) (1.4.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3272286Z < synchronized 3.3.0+3 (was 3.4.0+1) (3.4.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3272779Z < term_glyph 1.2.1 (was 1.2.2) (1.2.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3273183Z < test_api 0.7.3 (was 0.7.11) (0.7.13 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3273548Z   timezone 0.9.4 (0.11.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3274028Z   unicode 0.3.1 (1.1.9 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3295093Z + url_launcher 6.3.2
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3295587Z + url_launcher_android 6.3.17 (6.3.32 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3296156Z + url_launcher_ios 6.3.3 (6.4.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3296684Z + url_launcher_linux 3.2.1 (3.2.2 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3297225Z + url_launcher_macos 3.2.2 (3.2.5 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3297746Z + url_launcher_platform_interface 2.3.2
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3298249Z + url_launcher_web 2.4.1 (2.4.3 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3298788Z + url_launcher_windows 3.1.4 (3.1.5 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3299295Z   uuid 4.5.3 (4.6.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3299764Z < vector_math 2.1.4 (was 2.2.0) (2.4.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3300338Z < vm_service 14.3.0 (was 15.2.0) (15.2.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3300882Z < win32 5.10.1 (was 5.15.0) (6.3.0 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3301389Z < xml 6.5.0 (was 6.6.1) (7.0.1 available)
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3301929Z These packages are no longer being depended on:
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3302443Z - code_assets 1.2.1
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3302811Z - hooks 2.0.2
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3303142Z - jni 1.0.0
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3303487Z - jni_flutter 1.0.1
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3303854Z - objective_c 9.4.1
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3304214Z - record_use 0.6.0
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3305334Z - workmanager 0.5.2
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3305742Z Changed 73 dependencies!
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3306383Z 117 packages have newer versions incompatible with dependency constraints.
+Build & Release APK	Get dependencies	2026-07-15T18:55:09.3307141Z Try `flutter pub outdated` for more information.
+Build & Release APK	Generate code	﻿2026-07-15T18:55:09.9350972Z ##[group]Run dart run build_runner build --delete-conflicting-outputs
+Build & Release APK	Generate code	2026-07-15T18:55:09.9351558Z ^[[36;1mdart run build_runner build --delete-conflicting-outputs^[[0m
+Build & Release APK	Generate code	2026-07-15T18:55:09.9384792Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Generate code	2026-07-15T18:55:09.9385068Z env:
+Build & Release APK	Generate code	2026-07-15T18:55:09.9385266Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Generate code	2026-07-15T18:55:09.9385498Z   JAVA_VERSION: 17
+Build & Release APK	Generate code	2026-07-15T18:55:09.9385827Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Generate code	2026-07-15T18:55:09.9386226Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Generate code	2026-07-15T18:55:09.9386605Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Generate code	2026-07-15T18:55:09.9387302Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Generate code	2026-07-15T18:55:09.9387696Z ##[endgroup]
+Build & Release APK	Generate code	2026-07-15T18:55:15.3711531Z [INFO] Generating build script...
+Build & Release APK	Generate code	2026-07-15T18:55:15.8308516Z [INFO] Generating build script completed, took 471ms
+Build & Release APK	Generate code	2026-07-15T18:55:15.8309222Z 
+Build & Release APK	Generate code	2026-07-15T18:55:15.8760541Z [INFO] Precompiling build script......
+Build & Release APK	Generate code	2026-07-15T18:55:22.0020189Z [INFO] Precompiling build script... completed, took 6.1s
+Build & Release APK	Generate code	2026-07-15T18:55:22.0021112Z 
+Build & Release APK	Generate code	2026-07-15T18:55:22.8196676Z [INFO] Initializing inputs
+Build & Release APK	Generate code	2026-07-15T18:55:23.5039231Z [INFO] Building new asset graph...
+Build & Release APK	Generate code	2026-07-15T18:55:25.4603116Z [INFO] Building new asset graph completed, took 2.0s
+Build & Release APK	Generate code	2026-07-15T18:55:25.4603942Z 
+Build & Release APK	Generate code	2026-07-15T18:55:25.4605011Z [INFO] Checking for unexpected pre-existing outputs....
+Build & Release APK	Generate code	2026-07-15T18:55:25.4613578Z [INFO] Deleting 39 declared outputs which already existed on disk.
+Build & Release APK	Generate code	2026-07-15T18:55:25.4647931Z [INFO] Checking for unexpected pre-existing outputs. completed, took 4ms
+Build & Release APK	Generate code	2026-07-15T18:55:25.4648769Z 
+Build & Release APK	Generate code	2026-07-15T18:55:25.4733356Z [INFO] Running build...
+Build & Release APK	Generate code	2026-07-15T18:55:25.5206074Z [INFO] Generating SDK summary...
+Build & Release APK	Generate code	2026-07-15T18:55:28.0497865Z [INFO] 2.6s elapsed, 0/16 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:30.5369216Z [INFO] 5.1s elapsed, 0/16 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:30.9888532Z [WARNING] riverpod_generator on test/providers/profile_providers_test.dart:
+Build & Release APK	Generate code	2026-07-15T18:55:30.9905212Z Your current `analyzer` version may not fully support your current SDK version.
+Build & Release APK	Generate code	2026-07-15T18:55:30.9924626Z 
+Build & Release APK	Generate code	2026-07-15T18:55:30.9924979Z Analyzer language version: 3.4.0
+Build & Release APK	Generate code	2026-07-15T18:55:30.9925521Z SDK language version: 3.6.0
+Build & Release APK	Generate code	2026-07-15T18:55:30.9925885Z 
+Build & Release APK	Generate code	2026-07-15T18:55:30.9926274Z Please update to the latest `analyzer` version (14.1.0) by running
+Build & Release APK	Generate code	2026-07-15T18:55:30.9926936Z `flutter packages upgrade`.
+Build & Release APK	Generate code	2026-07-15T18:55:30.9927274Z 
+Build & Release APK	Generate code	2026-07-15T18:55:30.9927690Z If you are not getting the latest version by running the above command, you
+Build & Release APK	Generate code	2026-07-15T18:55:30.9928621Z can try adding a constraint like the following to your pubspec to start
+Build & Release APK	Generate code	2026-07-15T18:55:30.9929376Z diagnosing why you can't get the latest version:
+Build & Release APK	Generate code	2026-07-15T18:55:30.9929828Z 
+Build & Release APK	Generate code	2026-07-15T18:55:30.9930056Z dev_dependencies:
+Build & Release APK	Generate code	2026-07-15T18:55:30.9930486Z   analyzer: ^14.1.0
+Build & Release APK	Generate code	2026-07-15T18:55:30.9930791Z 
+Build & Release APK	Generate code	2026-07-15T18:55:31.7142175Z [INFO] Generating SDK summary completed, took 6.2s
+Build & Release APK	Generate code	2026-07-15T18:55:31.7143905Z 
+Build & Release APK	Generate code	2026-07-15T18:55:32.7735626Z [INFO] 7.3s elapsed, 69/103 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:33.7794613Z [INFO] 8.3s elapsed, 93/116 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:38.2100783Z [INFO] 12.7s elapsed, 99/117 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:39.3116954Z [INFO] 13.8s elapsed, 120/140 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:40.3772265Z [INFO] 14.9s elapsed, 184/195 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:47.4908561Z [INFO] 22.0s elapsed, 235/244 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:48.6014092Z [INFO] 23.1s elapsed, 242/245 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:55.7840760Z [INFO] 30.3s elapsed, 319/334 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:57.3102818Z [INFO] 31.8s elapsed, 325/339 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:58.4036150Z [INFO] 32.9s elapsed, 333/344 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:55:59.4416301Z [INFO] 34.0s elapsed, 362/365 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:00.4911527Z [INFO] 35.0s elapsed, 461/481 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:01.5034080Z [INFO] 36.0s elapsed, 475/491 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:03.2865440Z [INFO] 37.8s elapsed, 475/491 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:04.3732042Z [INFO] 38.9s elapsed, 538/555 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:05.4674752Z [INFO] 40.0s elapsed, 552/572 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:06.4906921Z [INFO] 41.0s elapsed, 569/586 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:07.5245247Z [INFO] 42.1s elapsed, 596/613 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:09.3762138Z [INFO] 43.9s elapsed, 637/654 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:10.4698263Z [INFO] 45.0s elapsed, 652/668 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:11.5197825Z [INFO] 46.0s elapsed, 927/943 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:12.5738217Z [INFO] 47.1s elapsed, 936/952 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:13.5795805Z [INFO] 48.1s elapsed, 938/954 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:14.5911609Z [INFO] 49.1s elapsed, 938/954 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:15.6195497Z [INFO] 50.1s elapsed, 939/955 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:16.6756026Z [INFO] 51.2s elapsed, 939/955 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:17.6931827Z [INFO] 52.2s elapsed, 940/956 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:18.7732251Z [INFO] 53.3s elapsed, 941/957 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:19.7817286Z [INFO] 54.3s elapsed, 942/958 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:20.7847056Z [INFO] 55.3s elapsed, 942/958 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:21.7935435Z [INFO] 56.3s elapsed, 943/959 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:22.8863606Z [INFO] 57.4s elapsed, 944/960 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:23.9719297Z [INFO] 58.5s elapsed, 945/961 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:24.9901736Z [INFO] 59.5s elapsed, 946/962 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:26.0868101Z [INFO] 1m 0s elapsed, 948/964 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:27.1906683Z [INFO] 1m 1s elapsed, 951/967 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:28.2285387Z [INFO] 1m 2s elapsed, 951/967 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:29.2848618Z [INFO] 1m 3s elapsed, 953/969 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:30.3751727Z [INFO] 1m 4s elapsed, 956/972 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:31.3871571Z [INFO] 1m 5s elapsed, 959/975 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:32.4775447Z [INFO] 1m 7s elapsed, 961/977 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:33.4901930Z [INFO] 1m 8s elapsed, 964/980 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:34.5792833Z [INFO] 1m 9s elapsed, 968/984 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:35.5898976Z [INFO] 1m 10s elapsed, 973/989 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:36.5975591Z [INFO] 1m 11s elapsed, 973/989 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:37.6839335Z [INFO] 1m 12s elapsed, 978/994 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:38.7748982Z [INFO] 1m 13s elapsed, 992/1008 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:39.7825357Z [INFO] 1m 14s elapsed, 1006/1022 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:40.8843779Z [INFO] 1m 15s elapsed, 1026/1042 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:41.9964168Z [INFO] 1m 16s elapsed, 1040/1056 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:43.0935690Z [INFO] 1m 17s elapsed, 1058/1074 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:44.1892753Z [INFO] 1m 18s elapsed, 1076/1088 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:45.2722477Z [INFO] 1m 19s elapsed, 1096/1097 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:46.8220979Z [INFO] 1m 21s elapsed, 1286/1300 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:47.8799385Z [INFO] 1m 22s elapsed, 1461/1474 actions completed.
+Build & Release APK	Generate code	2026-07-15T18:56:48.0748790Z [INFO] Running build completed, took 1m 22s
+Build & Release APK	Generate code	2026-07-15T18:56:48.0774779Z 
+Build & Release APK	Generate code	2026-07-15T18:56:48.0775427Z [INFO] Caching finalized dependency graph...
+Build & Release APK	Generate code	2026-07-15T18:56:48.5399087Z [INFO] Caching finalized dependency graph completed, took 464ms
+Build & Release APK	Generate code	2026-07-15T18:56:48.5404716Z 
+Build & Release APK	Generate code	2026-07-15T18:56:48.5469228Z [INFO] Succeeded after 1m 23s with 395 outputs (1657 actions)
+Build & Release APK	Generate code	2026-07-15T18:56:48.5472045Z 
+Build & Release APK	Generate localization	﻿2026-07-15T18:56:48.8342503Z ##[group]Run flutter gen-l10n
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8342834Z ^[[36;1mflutter gen-l10n^[[0m
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8375868Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8376128Z env:
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8376327Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8376558Z   JAVA_VERSION: 17
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8376874Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8377266Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8377652Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8378166Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Generate localization	2026-07-15T18:56:48.8378549Z ##[endgroup]
+Build & Release APK	Generate localization	2026-07-15T18:56:49.0790191Z Because l10n.yaml exists, the options defined there will be used instead.
+Build & Release APK	Generate localization	2026-07-15T18:56:49.0791622Z To use the command line arguments, delete the l10n.yaml file in the Flutter project.
+Build & Release APK	Generate localization	2026-07-15T18:56:49.0793004Z 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.0793259Z 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3309798Z "bn": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3315151Z "gu": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3315928Z "hi": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3316849Z "kn": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3317595Z "ml": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3318329Z "mr": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3319068Z "pa": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3319794Z "ta": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3320491Z "te": 2 untranslated message(s).
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3321335Z To see a detailed report, use the untranslated-messages-file 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3322147Z option in the l10n.yaml file:
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3322918Z untranslated-messages-file: desiredFileName.txt
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3323761Z <other option>: <other selection> 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3324614Z 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3324830Z 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3325410Z This will generate a JSON format file containing all messages that 
+Build & Release APK	Generate localization	2026-07-15T18:56:49.3326360Z need to be translated.
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	﻿2026-07-15T18:56:49.3519756Z ##[group]Run rm -rf android/.dart_tool
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3520354Z ^[[36;1mrm -rf android/.dart_tool^[[0m
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3520921Z ^[[36;1mln -sfn ../.dart_tool android/.dart_tool^[[0m
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3521368Z ^[[36;1mls -la android/.dart_tool^[[0m
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3554598Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3555046Z env:
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3555394Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3555824Z   JAVA_VERSION: 17
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3556384Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3557058Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3557478Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3557992Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3558377Z ##[endgroup]
+Build & Release APK	Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)	2026-07-15T18:56:49.3664631Z lrwxrwxrwx 1 runner runner 13 Jul 15 18:56 android/.dart_tool -> ../.dart_tool
+Build & Release APK	Guard entrypoint exists	﻿2026-07-15T18:56:49.3701861Z ##[group]Run test -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3703049Z ^[[36;1mtest -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)^[[0m
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3746794Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3747234Z env:
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3747588Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3748008Z   JAVA_VERSION: 17
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3748568Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3749268Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3749948Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3750857Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Guard entrypoint exists	2026-07-15T18:56:49.3751578Z ##[endgroup]
+Build & Release APK	Build APK (release)	﻿2026-07-15T18:56:49.3861966Z ##[group]Run pwd
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3862386Z ^[[36;1mpwd^[[0m
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3862798Z ^[[36;1mls -la lib/main.dart^[[0m
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3863284Z ^[[36;1mflutter build apk --release^[[0m
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3906252Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3906700Z env:
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3907043Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3907451Z   JAVA_VERSION: 17
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3908014Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3908708Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3909376Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3910279Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3910976Z ##[endgroup]
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.3995331Z /home/runner/work/profileforge/profileforge
+Build & Release APK	Build APK (release)	2026-07-15T18:56:49.4008710Z -rw-r--r-- 1 runner runner 4138 Jul 15 18:54 lib/main.dart
+Build & Release APK	Build APK (release)	2026-07-15T18:56:50.3904968Z 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6372461Z Running Gradle task 'assembleRelease'...                        
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6385191Z "bn": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6405020Z "gu": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6432845Z "hi": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6465019Z "kn": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6483311Z "ml": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6495553Z "mr": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6522153Z "pa": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6522689Z "ta": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6523168Z "te": 2 untranslated message(s).
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6523772Z To see a detailed report, use the untranslated-messages-file 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6524805Z option in the l10n.yaml file:
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6525336Z untranslated-messages-file: desiredFileName.txt
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6525916Z <other option>: <other selection> 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6526243Z 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6526255Z 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6526577Z This will generate a JSON format file containing all messages that 
+Build & Release APK	Build APK (release)	2026-07-15T18:59:09.6527269Z need to be translated.
+Build & Release APK	Build APK (release)	2026-07-15T18:59:37.8031055Z Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 21032 bytes (98.7% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3076208Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:5: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3124833Z import io.flutter.Log;
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3125285Z                  ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3152766Z   symbol:   class Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3165817Z   location: package io.flutter
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3195765Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:7: error: package io.flutter.embedding.engine does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3205137Z import io.flutter.embedding.engine.FlutterEngine;
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3215275Z                                   ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3230175Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:17: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3233174Z   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3254884Z                                            ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3274859Z   symbol:   class FlutterEngine
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.3275435Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4053606Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:19: error: package dev.fluttercommunity.plus.connectivity does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4115356Z       flutterEngine.getPlugins().add(new dev.fluttercommunity.plus.connectivity.ConnectivityPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4189441Z                                                                                ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4215853Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:21: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4243581Z       Log.e(TAG, "Error registering plugin connectivity_plus, dev.fluttercommunity.plus.connectivity.ConnectivityPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4250561Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4276192Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4294856Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4315865Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:24: error: package com.dexterous.flutterlocalnotifications does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4325768Z       flutterEngine.getPlugins().add(new com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4339222Z                                                                                 ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4356001Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:26: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4388565Z       Log.e(TAG, "Error registering plugin flutter_local_notifications, com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4434763Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4444771Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4458210Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4475894Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:29: error: package io.flutter.plugins.flutter_plugin_android_lifecycle does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4502736Z       flutterEngine.getPlugins().add(new io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4510898Z                                                                                           ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4518299Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:31: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4526651Z       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4528172Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4528739Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4529429Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4531167Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:34: error: package com.it_nomads.fluttersecurestorage does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4533359Z       flutterEngine.getPlugins().add(new com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4534852Z                                                                            ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4536657Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:36: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4538788Z       Log.e(TAG, "Error registering plugin flutter_secure_storage, com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4540129Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4540699Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4541374Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4543048Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:39: error: package com.baseflow.geolocator does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4545406Z       flutterEngine.getPlugins().add(new com.baseflow.geolocator.GeolocatorPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4546480Z                                                                 ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4547942Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:41: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4550174Z       Log.e(TAG, "Error registering plugin geolocator_android, com.baseflow.geolocator.GeolocatorPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4551320Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4551854Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4552558Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4554502Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:44: error: package io.flutter.plugins.googlemaps does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4591625Z       flutterEngine.getPlugins().add(new io.flutter.plugins.googlemaps.GoogleMapsPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4610022Z                                                                       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4611508Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:46: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4613553Z       Log.e(TAG, "Error registering plugin google_maps_flutter_android, io.flutter.plugins.googlemaps.GoogleMapsPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4617172Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4617723Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4618388Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4620053Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:49: error: package io.flutter.plugins.pathprovider does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4622064Z       flutterEngine.getPlugins().add(new io.flutter.plugins.pathprovider.PathProviderPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4623152Z                                                                         ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4624846Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:51: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4627105Z       Log.e(TAG, "Error registering plugin path_provider_android, io.flutter.plugins.pathprovider.PathProviderPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4628263Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4628765Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4629399Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4631166Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:54: error: package io.flutter.plugins.sharedpreferences does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4633293Z       flutterEngine.getPlugins().add(new io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4634860Z                                                                              ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4661264Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:56: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4695043Z       Log.e(TAG, "Error registering plugin shared_preferences_android, io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4704821Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4722520Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4723265Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4725211Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:59: error: package com.tekartik.sqflite does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4727067Z       flutterEngine.getPlugins().add(new com.tekartik.sqflite.SqflitePlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4728031Z                                                              ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4729440Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:61: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4731189Z       Log.e(TAG, "Error registering plugin sqflite_android, com.tekartik.sqflite.SqflitePlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4732176Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4732659Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4733271Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4735218Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:64: error: package eu.simonbinder.sqlite3_flutter_libs does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4739639Z       flutterEngine.getPlugins().add(new eu.simonbinder.sqlite3_flutter_libs.Sqlite3FlutterLibsPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4743717Z                                                                             ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4749614Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:66: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4751696Z       Log.e(TAG, "Error registering plugin sqlite3_flutter_libs, eu.simonbinder.sqlite3_flutter_libs.Sqlite3FlutterLibsPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4752927Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4753425Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4754037Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4755954Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:69: error: package io.flutter.plugins.urllauncher does not exist
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4758192Z       flutterEngine.getPlugins().add(new io.flutter.plugins.urllauncher.UrlLauncherPlugin());
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4759252Z                                                                        ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4760698Z /home/runner/work/profileforge/profileforge/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java:71: error: cannot find symbol
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4762534Z       Log.e(TAG, "Error registering plugin url_launcher_android, io.flutter.plugins.urllauncher.UrlLauncherPlugin", e);
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4763654Z       ^
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4764162Z   symbol:   variable Log
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4765067Z   location: class GeneratedPluginRegistrant
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.4765779Z 25 errors
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5016880Z 
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5025483Z FAILURE: Build failed with an exception.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5054707Z 
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5071706Z * What went wrong:
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5110783Z Execution failed for task ':app:compileReleaseJavaWithJavac'.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5125299Z > Compilation failed; see the compiler error output for details.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5154630Z 
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5168454Z * Try:
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5186337Z > Run with --info option to get more log output.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5224827Z > Run with --scan to get full insights.
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5244621Z 
+Build & Release APK	Build APK (release)	2026-07-15T19:00:52.5244829Z BUILD FAILED in 4m
+Build & Release APK	Build APK (release)	2026-07-15T19:00:53.0090326Z Running Gradle task 'assembleRelease'...                          242.6s
+Build & Release APK	Build APK (release)	2026-07-15T19:00:53.0135641Z Gradle task assembleRelease failed with exit code 1
+Build & Release APK	Build APK (release)	2026-07-15T19:00:53.0227162Z ##[error]Process completed with exit code 1.
+Build & Release APK	Run real judge harness (scoring, non-gating)	﻿2026-07-15T19:00:53.0307018Z ##[group]Run bash judge/run_judges.sh
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0307376Z ^[[36;1mbash judge/run_judges.sh^[[0m
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0398409Z shell: /usr/bin/bash -e {0}
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0398673Z env:
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0398867Z   FLUTTER_VERSION: 3.27.4
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0399101Z   JAVA_VERSION: 17
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0399420Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0399833Z   PUB_CACHE: /home/runner/.pub-cache
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0400214Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0400705Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0401093Z ##[endgroup]
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:00:53.0511119Z == Running flutter analyze (ground truth) ==
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:01:22.1255863Z analyze: errors=0 warnings=86 info=868
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:01:22.1325419Z === TOP ERROR CATEGORIES ===
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:01:22.1342269Z == Running flutter test (ground truth) ==
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:05.2855577Z tests: pass_markers=0 fail_markers=0
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4403971Z == Judge results written to judge/results.json ==
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4413087Z {
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4413644Z   "status": "ok",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4415107Z   "ground_truth": {
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4415742Z     "analyze_errors": 0,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4416292Z     "analyze_warnings": 86,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4416913Z     "semantics_widgets": 1,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4420525Z     "hardcoded_strings": 752,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4421000Z     "arb_files": 10,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4421349Z     "test_files": 16,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4421729Z     "missing_imports": 0,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4422145Z     "hardcoded_http": 2,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4422553Z     "raw_error_leaks": 1,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4422890Z     "const_usage": 4656,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4423235Z     "stateful_widgets": 32,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4423628Z     "dispose_methods": 21,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4423991Z     "todo_markers": 8,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4424665Z     "doc_comments": 944
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4425011Z   },
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4425295Z   "scores": {
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4425604Z     "accessibility": 22,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4425938Z     "testing_ci": 75,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4426298Z     "security": 57,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4426660Z     "architecture": 100,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4427033Z     "performance": 91,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4427643Z     "ui_ux": 90,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4427979Z     "product_fit": 52,
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4428340Z     "documentation": 100
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4428697Z   },
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4428990Z   "evidence": {
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4429665Z     "accessibility": "semantics_widgets=1 (need >0), hardcoded_strings=752 (penalty), arb_files=10",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4430231Z     "testing_ci": "analyze_errors=0, test_files=16",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4430644Z     "security": "hardcoded_http(non-localhost)=2, raw_error_leaks=1",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4431066Z     "architecture": "missing_imports=0, analyze_errors=0",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4431436Z     "performance": "const_usage=4656, dispose_ratio=21/32",
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4431799Z     "product_fit": "todo_markers=8, test_files=16"
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4432082Z   }
+Build & Release APK	Run real judge harness (scoring, non-gating)	2026-07-15T19:02:18.4432254Z }
+Build & Release APK	Post Setup Java	﻿2026-07-15T19:02:18.4534013Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & Release APK	Post Setup Java	2026-07-15T19:02:18.4535506Z Post job cleanup.
+Build & Release APK	Post Setup Java	2026-07-15T19:02:18.7944828Z (node:3752) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build & Release APK	Post Setup Java	2026-07-15T19:02:18.7946096Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build & Release APK	Post Setup Flutter	﻿2026-07-15T19:02:18.8438116Z Post job cleanup.
+Build & Release APK	Post Run actions/checkout@v4	﻿2026-07-15T19:02:18.8589054Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:18.8591234Z Post job cleanup.
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:18.9812878Z [command]/usr/bin/git version
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:18.9921107Z git version 2.54.0
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0036243Z Temporarily overriding HOME='/home/runner/work/_temp/8307dc1b-d721-46ee-a264-255ea714f6b7' before making global git config changes
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0045400Z Adding repository directory to the temporary git global config as a safe directory
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0065256Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0116848Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0235705Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0647411Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0674924Z http.https://github.com/.extraheader
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0705358Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.0746120Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.1289031Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build & Release APK	Post Run actions/checkout@v4	2026-07-15T19:02:19.1409253Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build & Release APK	Complete job	﻿2026-07-15T19:02:19.1873722Z Cleaning up orphan processes
+Build & Release APK	Complete job	2026-07-15T19:02:19.2344026Z Terminate orphan process: pid (2696) (java)
+Build & Release APK	Complete job	2026-07-15T19:02:19.2370895Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

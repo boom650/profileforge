@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application") version "8.4.0"
+    id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -11,6 +12,10 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -38,10 +43,10 @@ android {
             isShrinkResources = false
         }
     }
+}
 
-    flutter {
-        source = "../.."
-    }
+flutter {
+    source = "../.."
 }
 
 dependencies {
