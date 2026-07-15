@@ -157,7 +157,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         Expanded(
             child: RefreshIndicator(
                 onRefresh: () async {
-                  controller.reset();
+                  ref.read(paginationProvider.notifier).reset();
                   ref.invalidate(leaderboardProvider(1));
                   await Future.delayed(const Duration(milliseconds: 1200));
                 },

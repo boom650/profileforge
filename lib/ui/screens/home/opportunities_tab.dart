@@ -62,7 +62,6 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
             tooltip: 'Discover opportunities near me',
             onPressed: () =>
                 ref.read(opportunityFeedProvider.notifier).discover(),
-            tooltip: 'Use my location',
           ),
         ],
       ),

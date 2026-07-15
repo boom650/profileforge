@@ -361,7 +361,6 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: const Icon(Icons.delete_outline_rounded, size: 20),
             tooltip: 'Clear chat',
             onPressed: onClear,
-            tooltip: 'Clear chat history',
           ),
       ],
     );

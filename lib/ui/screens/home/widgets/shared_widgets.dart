@@ -648,10 +648,10 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        await ref.read(updateMissionProgressProvider(
+                        await ref.read(updateMissionProgressProvider)(
                           mission.id,
                           mission.progressTarget - mission.progressCurrent,
-                        ))();
+                        );
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -665,8 +665,8 @@ class MissionListTile extends ConsumerWidget {
                             ),
                           );
                           CelebrationHelper.show(
-                          context,
-                          CelebrationType.missionComplete,
+                            context,
+                            type: CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {
@@ -699,10 +699,10 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        await ref.read(updateMissionProgressProvider(
+                        await ref.read(updateMissionProgressProvider)(
                           mission.id,
                           mission.progressTarget - mission.progressCurrent,
-                        ))();
+                        );
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -716,8 +716,8 @@ class MissionListTile extends ConsumerWidget {
                             ),
                           );
                           CelebrationHelper.show(
-                          context,
-                          CelebrationType.missionComplete,
+                            context,
+                            type: CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {
