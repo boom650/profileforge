@@ -7,7 +7,7 @@ import 'package:profileforge/ui/theme/app_theme.dart';
 void main() {
   group('AppTheme', () {
     testWidgets('primary color is defined', (WidgetTester tester) async {
-      expect(AppTheme.primaryColor, isA<Color>());
+      expect(AppTheme.primaryBlue, isA<Color>());
     });
 
     testWidgets('AppTheme has spacing constants', (WidgetTester tester) async {
@@ -21,22 +21,22 @@ void main() {
 
     testWidgets('textMuted meets WCAG AA contrast on scaffold', (WidgetTester tester) async {
       // AA requires 4.5:1 for normal text
-      final contrast = _contrastRatio(AppTheme.textMuted, AppTheme.scaffoldBackground);
+      final contrast = _contrastRatio(AppTheme.textMuted, AppTheme.surfaceWhite);
       expect(contrast, greaterThanOrEqualTo(4.5));
     });
 
     testWidgets('accentGold meets WCAG AA contrast on scaffold', (WidgetTester tester) async {
-      final contrast = _contrastRatio(AppTheme.accentGold, AppTheme.scaffoldBackground);
+      final contrast = _contrastRatio(AppTheme.accentGold, AppTheme.surfaceWhite);
       expect(contrast, greaterThanOrEqualTo(3.0)); // Large text threshold
     });
 
     testWidgets('errorRed meets WCAG AA contrast on scaffold', (WidgetTester tester) async {
-      final contrast = _contrastRatio(AppTheme.errorRed, AppTheme.scaffoldBackground);
+      final contrast = _contrastRatio(AppTheme.errorRed, AppTheme.surfaceWhite);
       expect(contrast, greaterThanOrEqualTo(4.5));
     });
 
     testWidgets('successGreen meets WCAG AA contrast on scaffold', (WidgetTester tester) async {
-      final contrast = _contrastRatio(AppTheme.successGreen, AppTheme.scaffoldBackground);
+      final contrast = _contrastRatio(AppTheme.successGreen, AppTheme.surfaceWhite);
       expect(contrast, greaterThanOrEqualTo(4.5));
     });
   });
@@ -46,7 +46,7 @@ void main() {
 double _relativeLuminance(Color color) {
   double f(double c) {
     c /= 255;
-    return c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4);
+    return (c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4)) as double;
   }
   final r = f(color.red);
   final g = f(color.green);

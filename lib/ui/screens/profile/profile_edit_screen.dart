@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../config/api_config.dart';
-import '../../theme/app_theme.dart';
+import 'package:profileforge/ui/theme/app_theme.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
   const ProfileEditScreen({super.key});
