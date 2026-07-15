@@ -1,0 +1,304 @@
+Full flutter analyze (log)	Set up job	﻿2026-07-15T16:56:12.3901390Z Current runner version: '2.335.1'
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.3979927Z ##[group]Runner Image Provisioner
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.3981309Z Hosted Compute Agent
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.3982326Z Version: 20260707.563
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4003906Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4005356Z Build Date: 2026-07-07T19:33:50Z
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4006933Z Worker ID: {d45de04b-1df8-4c45-9b96-7c42924be596}
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4008249Z Azure Region: eastus
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4009202Z ##[endgroup]
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4011645Z ##[group]Operating System
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4012680Z Ubuntu
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4013948Z 24.04.4
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4014828Z LTS
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4015676Z ##[endgroup]
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4016751Z ##[group]Runner Image
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4017830Z Image: ubuntu-24.04
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4019484Z Version: 20260714.240.1
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4021630Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260714.240/images/ubuntu/Ubuntu2404-Readme.md
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4045311Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260714.240
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4047156Z ##[endgroup]
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4049376Z ##[group]GITHUB_TOKEN Permissions
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4052377Z Contents: read
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4053910Z Metadata: read
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4054958Z Packages: read
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4055913Z ##[endgroup]
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4058946Z Secret source: Actions
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4060454Z Prepare workflow directory
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4830442Z Prepare all required actions
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.4887534Z Getting action download info
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.7878478Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:12.9066823Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:13.0064709Z Download action repository 'actions/setup-java@v4' (SHA:c1e323688fd81a25caa38c78aa6df2d33d3e20d9)
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:13.3992797Z Getting action download info
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:13.4984205Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+Full flutter analyze (log)	Set up job	2026-07-15T16:56:14.4115619Z Complete job name: Full flutter analyze (log)
+Full flutter analyze (log)	Run actions/checkout@v4	﻿2026-07-15T16:56:14.4889354Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4897148Z ##[group]Run actions/checkout@v4
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4897775Z with:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4898139Z   repository: boom650/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4900800Z   token: ***
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4901143Z   ssh-strict: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4901483Z   ssh-user: git
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4901828Z   persist-credentials: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4902201Z   clean: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4902548Z   sparse-checkout-cone-mode: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4902959Z   fetch-depth: 1
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4903685Z   fetch-tags: false
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4904180Z   show-progress: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4904524Z   lfs: false
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4904841Z   submodules: false
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4905220Z   set-safe-directory: true
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4905898Z env:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4906234Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4906599Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.4906921Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.6119155Z Syncing repository: boom650/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.6124924Z ##[group]Getting Git version info
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.6126421Z Working directory is '/home/runner/work/profileforge/profileforge'
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:14.6130659Z [command]/usr/bin/git version
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0047033Z git version 2.54.0
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0083063Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0100303Z Temporarily overriding HOME='/home/runner/work/_temp/55608c3d-eebf-45bc-8a66-2e78ad31c394' before making global git config changes
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0111756Z Adding repository directory to the temporary git global config as a safe directory
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0113679Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0181085Z Deleting the contents of '/home/runner/work/profileforge/profileforge'
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0186633Z ##[group]Initializing the repository
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0187364Z [command]/usr/bin/git init /home/runner/work/profileforge/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0574525Z hint: Using 'master' as the name for the initial branch. This default branch name
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0575773Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0576854Z hint: to use in all of your new repositories, which will suppress this warning,
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0577610Z hint: call:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0577948Z hint:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0578438Z hint: 	git config --global init.defaultBranch <name>
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0579010Z hint:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0579578Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0580563Z hint: 'development'. The just-created branch can be renamed via this command:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0581274Z hint:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0581690Z hint: 	git branch -m <name>
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0582140Z hint:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0582800Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0591413Z Initialized empty Git repository in /home/runner/work/profileforge/profileforge/.git/
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0596071Z [command]/usr/bin/git remote add origin https://github.com/boom650/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0647373Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0648470Z ##[group]Disabling automatic garbage collection
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0651650Z [command]/usr/bin/git config --local gc.auto 0
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0690331Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0691579Z ##[group]Setting up auth
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0699228Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.0742106Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1121839Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1161300Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1407826Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1448685Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1782490Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1786062Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1787175Z ##[group]Fetching the repository
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.1788982Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a0d727e8b67b80fe6d62467caf7f16ffef961950:refs/remotes/origin/main
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5856738Z From https://github.com/boom650/profileforge
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5874400Z  * [new ref]         a0d727e8b67b80fe6d62467caf7f16ffef961950 -> origin/main
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5934701Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5944455Z ##[group]Determining the checkout info
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5954200Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.5964227Z [command]/usr/bin/git sparse-checkout disable
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6034220Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6100019Z ##[group]Checking out the ref
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6105219Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6935657Z Switched to a new branch 'main'
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6938208Z branch 'main' set up to track 'origin/main'.
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.6976319Z ##[endgroup]
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.7083847Z [command]/usr/bin/git log -1 --format=%H
+Full flutter analyze (log)	Run actions/checkout@v4	2026-07-15T16:56:15.7113971Z a0d727e8b67b80fe6d62467caf7f16ffef961950
+Full flutter analyze (log)	Setup Flutter	﻿2026-07-15T16:56:15.7464723Z ##[group]Run subosito/flutter-action@v2
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7465071Z with:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7465271Z   flutter-version: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7465491Z   channel: stable
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7465683Z   cache: true
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7465875Z   architecture: X64
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7466094Z   pub-cache-path: default
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7466324Z   dry-run: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7466592Z   git-source: https://github.com/flutter/flutter.git
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7466896Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7467078Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7467296Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7467496Z ##[endgroup]
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7572150Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7572604Z ^[[36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7651805Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7652181Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7652378Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7652607Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7652852Z ##[endgroup]
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7810273Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7810657Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh -p \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7810955Z ^[[36;1m  -n '3.27.4' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7811180Z ^[[36;1m  -f '' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7811384Z ^[[36;1m  -a 'X64' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7811590Z ^[[36;1m  -k '' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7811779Z ^[[36;1m  -c '' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7811970Z ^[[36;1m  -l '' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7812168Z ^[[36;1m  -d 'default' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7812499Z ^[[36;1m  -g 'https://github.com/flutter/flutter.git' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7812822Z ^[[36;1m  stable^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7864099Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7864460Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7864650Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7864872Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.7865066Z ##[endgroup]
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9705034Z ##[group]Run actions/cache@v5
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9705377Z with:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9705639Z   path: /opt/hostedtoolcache/flutter/stable-3.27.4-x64
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9706116Z   key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9706557Z   enableCrossOsArchive: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9706824Z   fail-on-cache-miss: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9707077Z   lookup-only: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9707291Z   save-always: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9707487Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9707675Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9707898Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:15.9708095Z ##[endgroup]
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:16.1954235Z Cache hit for: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:17.2994419Z Received 176160768 of 906983551 (19.4%), 168.0 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:18.2985215Z Received 385875968 of 906983551 (42.5%), 183.9 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:19.2970936Z Received 562036736 of 906983551 (62.0%), 178.7 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:20.3285933Z Received 721420288 of 906983551 (79.5%), 171.9 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:21.2434382Z Received 906983551 of 906983551 (100.0%), 175.0 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:21.2493996Z Cache Size: ~865 MB (906983551 B)
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:21.2595032Z [command]/usr/bin/tar -xf /home/runner/work/_temp/fed9f0e8-4441-4279-8cad-d09ede1b91bf/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.2383557Z Cache restored successfully
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.2914062Z Cache restored from key: flutter-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4838840Z ##[group]Run actions/cache@v5
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4839135Z with:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4839525Z   path: /home/runner/.pub-cache
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4840277Z   key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4841049Z   enableCrossOsArchive: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4841309Z   fail-on-cache-miss: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4841852Z   lookup-only: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4842068Z   save-always: false
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4842273Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4842471Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4842709Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.4842911Z ##[endgroup]
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:29.7244827Z Cache hit for: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:30.2889635Z Received 98414678 of 98414678 (100.0%), 191.2 MBs/sec
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:30.2892466Z Cache Size: ~94 MB (98414678 B)
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:30.2925909Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2a76dea1-524b-4b9f-b9fc-aef764221a3c/cache.tzst -P -C /home/runner/work/profileforge/profileforge --use-compress-program unzstd
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.0912616Z Cache restored successfully
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1072681Z Cache restored from key: flutter-pub-linux-stable-3.27.4-x64-d8a9f9a52e5af486f80d932e838ee93861ffd863-c38d018a24dc069da2cade286b6fa9720a8a51523fc1fce8cf1dc4e79f2a641b
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1215259Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1215639Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1215960Z ^[[36;1m  -n '3.27.4' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1216245Z ^[[36;1m  -a 'x64' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1216575Z ^[[36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.27.4-x64' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1216961Z ^[[36;1m  -d '/home/runner/.pub-cache' \^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1217247Z ^[[36;1m  stable^[[0m
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1274287Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1274670Z env:
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1274876Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1275129Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Flutter	2026-07-15T16:56:33.1275349Z ##[endgroup]
+Full flutter analyze (log)	Setup Java	﻿2026-07-15T16:56:33.3149595Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3151020Z ##[group]Run actions/setup-java@v4
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3151298Z with:
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3151499Z   distribution: temurin
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3151737Z   java-version: 17
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3151958Z   cache: gradle
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3152169Z   java-package: jdk
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3152389Z   check-latest: false
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3152616Z   server-id: github
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3152839Z   server-username: GITHUB_ACTOR
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3153104Z   server-password: GITHUB_TOKEN
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3153731Z   overwrite-settings: true
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3154016Z   job-status: success
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3156420Z   token: ***
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3156628Z env:
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3156856Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3157098Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3157421Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3157834Z   PUB_CACHE: /home/runner/.pub-cache
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.3158108Z ##[endgroup]
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5075154Z ##[group]Installed distributions
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5201704Z Resolved Java 17.0.19+10 from tool-cache
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5217340Z Setting Java 17.0.19+10 as the default
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5234318Z (node:2317) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5254048Z Creating toolchains.xml for JDK version 17 from temurin
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5256255Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5352903Z Writing to /home/runner/.m2/toolchains.xml
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5384432Z 
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5406438Z Java configuration:
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5407416Z   Distribution: temurin
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5433452Z   Version: 17.0.19+10
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5444285Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5463619Z 
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5471827Z ##[endgroup]
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5498750Z Creating settings.xml with server-id: github
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.5510452Z Writing to /home/runner/.m2/settings.xml
+Full flutter analyze (log)	Setup Java	2026-07-15T16:56:33.8203853Z gradle cache is not found
+Full flutter analyze (log)	Get dependencies	﻿2026-07-15T16:56:33.8295074Z ##[group]Run flutter pub get
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8295414Z ^[[36;1mflutter pub get^[[0m
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8354124Z shell: /usr/bin/bash -e {0}
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8354403Z env:
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8354611Z   FLUTTER_VERSION: 3.27.4
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8354853Z   JAVA_VERSION: 17
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8355185Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.27.4-x64/flutter
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8355588Z   PUB_CACHE: /home/runner/.pub-cache
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8355995Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8356516Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.8356917Z ##[endgroup]
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9620115Z 
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9634141Z   ╔════════════════════════════════════════════════════════════════════════════╗
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9635473Z   ║                 Welcome to Flutter! - https://flutter.dev                  ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9636579Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9637960Z   ║ The Flutter tool uses Google Analytics to anonymously report feature usage ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9639424Z   ║ statistics and basic crash reports. This data is used to help improve      ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9640776Z   ║ Flutter tools over time.                                                   ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9641974Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9643635Z   ║ Flutter tool analytics are not sent on the very first run. To disable      ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9645018Z   ║ reporting, type 'flutter config --no-analytics'. To display the current    ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9646245Z   ║ setting, type 'flutter config'. If you opt out of analytics, an opt-out    ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9647566Z   ║ event will be sent, and then no further information will be sent by the    ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9648886Z   ║ Flutter tool.                                                              ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9650083Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9651294Z   ║ By downloading the Flutter SDK, you agree to the Google Terms of Service.  ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9652714Z   ║ The Google Privacy Policy describes how data is handled in this service.   ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9654267Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9655539Z   ║ Moreover, Flutter includes the Dart SDK, which may send usage metrics and  ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9656875Z   ║ crash reports to Google.                                                   ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9658048Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9659266Z   ║ Read about data we send with crash reports:                                ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9660681Z   ║ https://flutter.dev/to/crash-reporting                                     ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9661945Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9663163Z   ║ See Google's privacy policy:                                               ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9664780Z   ║ https://policies.google.com/privacy                                        ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9665993Z   ║                                                                            ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9667607Z   ║ To disable animations in this tool, use                                    ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9668980Z   ║ 'flutter config --no-cli-animations'.                                      ║
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9670359Z   ╚════════════════════════════════════════════════════════════════════════════╝
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:33.9671106Z 
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:34.1298340Z Generating synthetic localizations package failed with 1 error:
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:34.1299124Z 
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:34.1300053Z Error: Attempted to generate localizations code without having the flutter: generate flag turned on.
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:34.1302272Z Check pubspec.yaml and ensure that flutter: generate: true has been added and rebuild the project. Otherwise, the localizations source code will not be importable.
+Full flutter analyze (log)	Get dependencies	2026-07-15T16:56:34.1369873Z ##[error]Process completed with exit code 1.
+Full flutter analyze (log)	Post Setup Java	﻿2026-07-15T16:56:34.1486280Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Full flutter analyze (log)	Post Setup Java	2026-07-15T16:56:34.1487650Z Post job cleanup.
+Full flutter analyze (log)	Post Setup Java	2026-07-15T16:56:34.3073001Z (node:2354) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Full flutter analyze (log)	Post Setup Java	2026-07-15T16:56:34.3100728Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Full flutter analyze (log)	Post Setup Flutter	﻿2026-07-15T16:56:34.3874573Z Post job cleanup.
+Full flutter analyze (log)	Post Run actions/checkout@v4	﻿2026-07-15T16:56:34.4081569Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.4085081Z Post job cleanup.
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.5736124Z [command]/usr/bin/git version
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.5857369Z git version 2.54.0
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.5974827Z Temporarily overriding HOME='/home/runner/work/_temp/22499ff3-27f6-4533-98d5-a81a9beed2c9' before making global git config changes
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.5994255Z Adding repository directory to the temporary git global config as a safe directory
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.5995879Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/profileforge/profileforge
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6054042Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6083544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6429604Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6459446Z http.https://github.com/.extraheader
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6494676Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6571319Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6878921Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Full flutter analyze (log)	Post Run actions/checkout@v4	2026-07-15T16:56:34.6910788Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Full flutter analyze (log)	Complete job	﻿2026-07-15T16:56:34.7477480Z Cleaning up orphan processes
+Full flutter analyze (log)	Complete job	2026-07-15T16:56:34.7841331Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
