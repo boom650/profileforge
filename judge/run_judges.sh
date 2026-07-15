@@ -41,6 +41,11 @@ WARN_COUNT=$(grep -cE "warning •" judge/out/analyze.txt || true)
 INFO_COUNT=$(grep -cE "info •" judge/out/analyze.txt || true)
 echo "analyze: errors=$ERR_COUNT warnings=$WARN_COUNT info=$INFO_COUNT"
 
+# Extract top error categories for the improvement loop to target.
+grep -oE "error • .*" judge/out/analyze.txt | sed -E 's/error • //' | cut -d: -f1 | sort | uniq -c | sort -rn > judge/out/error_categories.txt || true
+echo "=== TOP ERROR CATEGORIES ==="
+head -20 judge/out/error_categories.txt
+
 echo "== Running flutter test (ground truth) =="
 flutter test --coverage > judge/out/test.txt 2>&1 || true
 PASS=$(grep -cE "✓" judge/out/test.txt || true)
