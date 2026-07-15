@@ -1,0 +1,52 @@
+name: Diagnose Analyze
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.27.4'
+  JAVA_VERSION: '17'
+
+jobs:
+  analyze:
+    name: Full flutter analyze (artifact)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs || true
+
+      - name: Full analyze (machine-readable)
+        run: |
+          flutter analyze --no-fatal-infos --machine > analyze_machine.json || true
+          flutter analyze --no-fatal-infos > analyze_text.txt || true
+          echo "Total machine errors:"; grep -c '"severity":"ERROR"' analyze_machine.json || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: analyze-full
+          path: |
+            analyze_machine.json
+            analyze_text.txt
+          retention-days: 7
