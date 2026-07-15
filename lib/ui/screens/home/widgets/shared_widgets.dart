@@ -664,9 +664,9 @@ class MissionListTile extends ConsumerWidget {
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                           );
-                          CelebrationOverlay.show(
-                            context,
-                            CelebrationType.missionComplete,
+                          CelebrationHelper.show(
+                          context,
+                          CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {
@@ -715,9 +715,9 @@ class MissionListTile extends ConsumerWidget {
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                           );
-                          CelebrationOverlay.show(
-                            context,
-                            CelebrationType.missionComplete,
+                          CelebrationHelper.show(
+                          context,
+                          CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {

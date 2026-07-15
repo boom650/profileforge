@@ -273,7 +273,7 @@ class _UniversityMatcherScreenState
               onPressed: _resetForm,
               icon: const Icon(Icons.refresh_rounded),
               tooltip: 'Reset',
-              semanticLabel: 'Reset the form',
+              tooltip: 'Reset the form',
             ),
         ],
       ),

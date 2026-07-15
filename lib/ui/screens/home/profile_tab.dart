@@ -119,7 +119,7 @@ class ProfileTab extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.analytics_rounded),
             tooltip: 'Statistics',
-            semanticLabel: 'Open statistics',
+            tooltip: 'Open statistics',
             onPressed: () {
               HapticFeedback.lightImpact();
               Navigator.of(context).push(
@@ -129,7 +129,7 @@ class ProfileTab extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.edit_rounded),
-            semanticLabel: 'Edit profile',
+            tooltip: 'Edit profile',
             onPressed: () {
               HapticFeedback.lightImpact();
               Navigator.of(context).push(

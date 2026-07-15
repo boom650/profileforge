@@ -47,7 +47,10 @@ jobs:
           test -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)
 
       - name: Build APK (release)
-        run: flutter build apk --release --split-per-abi
+        run: |
+          pwd
+          ls -la lib/main.dart
+          flutter build apk --release --split-per-abi --target=lib/main.dart
 
       - name: Build App Bundle (AAB)
         run: flutter build appbundle --release

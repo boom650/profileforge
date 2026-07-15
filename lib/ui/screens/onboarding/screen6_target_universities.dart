@@ -226,7 +226,7 @@ class _Screen6TargetUniversitiesState extends State<Screen6TargetUniversities> {
                   ? IconButton(
                       icon: Icon(Icons.clear, color: AppTheme.textSecondary),
                       onPressed: () => setState(() => _searchQuery = ''),
-                      semanticLabel: 'Clear search',
+                      tooltip: 'Clear search',
                     )
                   : null,
               filled: true,
@@ -495,7 +495,7 @@ class _UniversityResultCard extends StatelessWidget {
                   icon: Icon(Icons.remove_circle_outline, size: 20, color: AppTheme.primaryBlue),
                   onPressed: onRemove,
                   tooltip: 'Remove from list',
-                  semanticLabel: 'Remove ${university.name} from target list',
+                  tooltip: 'Remove ${university.name} from target list',
                 ),
             ],
           ),

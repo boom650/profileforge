@@ -68,7 +68,7 @@ class _WeeklyTargetsScreenState extends ConsumerState<WeeklyTargetsScreen> {
               IconButton(
                 icon: const Icon(Icons.refresh_rounded),
                 tooltip: 'Refresh',
-                semanticLabel: 'Refresh targets',
+                tooltip: 'Refresh targets',
                 onPressed: () {
                   HapticFeedback.lightImpact();
                   _loadTargets();

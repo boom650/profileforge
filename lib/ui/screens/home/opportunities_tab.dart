@@ -59,7 +59,7 @@ class _OpportunitiesTabState extends ConsumerState<OpportunitiesTab> {
             ),
           IconButton(
             icon: const Icon(Icons.my_location_rounded),
-            semanticLabel: 'Discover opportunities near me',
+            tooltip: 'Discover opportunities near me',
             onPressed: () =>
                 ref.read(opportunityFeedProvider.notifier).discover(),
             tooltip: 'Use my location',
