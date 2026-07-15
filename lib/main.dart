@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/ui/screens/chat/chat_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
 import 'package:profileforge/models/age_verification.dart';

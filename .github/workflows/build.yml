@@ -54,26 +54,6 @@ jobs:
           ln -sfn ../.dart_tool android/.dart_tool
           ls -la android/.dart_tool
 
-      - name: Capture generated l10n (diagnostic, any location)
-        if: always()
-        run: |
-          echo "=== search for generated app_localizations.dart ==="
-          find . -name "app_localizations.dart" -not -path "*/.pub-cache/*" 2>/dev/null
-          mkdir -p capture
-          cp .dart_tool/flutter_gen/app_localizations.dart capture/from_synthetic.dart 2>/dev/null || true
-          cp lib/generated/l10n/app_localizations.dart capture/from_outputdir.dart 2>/dev/null || true
-          ls -la capture/ 2>/dev/null
-          echo "=== repo_root .dart_tool/flutter_gen exists? ==="
-          ls -la .dart_tool/flutter_gen/ 2>/dev/null || echo "NO synthetic at repo root"
-
-      - name: Upload captured l10n
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: l10n-generated
-          path: capture/
-          if-no-files-found: warn
-
       - name: Guard entrypoint exists
         run: |
           test -f lib/main.dart || (echo "ERROR: lib/main.dart missing before build" && exit 1)
