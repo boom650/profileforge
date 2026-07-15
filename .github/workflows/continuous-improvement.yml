@@ -2,21 +2,29 @@ name: Continuous Improvement Pipeline
 
 "on":
   schedule:
-    - cron: '0 14 * * 1'  # Every Monday 2 PM (after research at 9 AM)
+    - cron: workflow_dispatch:
+# disabled push trigger
+# on: '0 14 * * 1'  # Every Monday 2 PM (after research at 9 AM)
   workflow_dispatch:
     inputs:
       force_run:
-        description: 'Force run even if no changes'
+        description: workflow_dispatch:
+# disabled push trigger
+# on: 'Force run even if no changes'
         required: false
         default: false
 
 jobs:
   check_triggers:
     name: Check for Triggers
-    runs-on: ubuntu-latest
+    runs-on: workflow_dispatch:
+# disabled push trigger
+# on: ubuntu-latest
     outputs:
       should_run: ${{ steps.check.outputs.should_run }}
-      reason: ${{ steps.check.outputs.reason }}
+      reason: workflow_dispatch:
+# disabled push trigger
+# on: ${{ steps.check.outputs.reason }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,7 +100,9 @@ jobs:
     name: Run Full Improvement Cycle
     needs: check_triggers
     if: needs.check_triggers.outputs.should_run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: workflow_dispatch:
+# disabled push trigger
+# on: ubuntu-latest
     timeout-minutes: 180
     
     steps:
@@ -209,7 +219,9 @@ jobs:
 
   monthly_quality_audit:
     name: Monthly Quality Audit
-    runs-on: ubuntu-latest
+    runs-on: workflow_dispatch:
+# disabled push trigger
+# on: ubuntu-latest
     if: github.event.schedule == '0 0 1 * *' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
@@ -255,10 +267,18 @@ jobs:
           
           # 5. User experience metrics
           print("\n5. UX METRICS")
-          print("   - Onboarding completion: >85%")
-          print("   - D1 retention: >55%")
-          print("   - D7 retention: >35%")
-          print("   - D30 retention: >18%")
+          print("   - Onboarding completion: workflow_dispatch:
+# disabled push trigger
+# on: >85%")
+          print("   - D1 retention: workflow_dispatch:
+# disabled push trigger
+# on: >55%")
+          print("   - D7 retention: workflow_dispatch:
+# disabled push trigger
+# on: >35%")
+          print("   - D30 retention: workflow_dispatch:
+# disabled push trigger
+# on: >18%")
           print("   - Crash-free sessions: >99.5%")
           
           # 6. Feature completeness
