@@ -107,7 +107,7 @@ ANIM=$(grep -rEl "flutter_animate|AnimationController" lib --include=*.dart 2>/d
 UIUX=$((60))
 [ "$THEME" -gt 0 ] && UIUX=$((UIUX+15))
 [ "$ANIM" -gt 0 ] && UIUX=$((UIUX+10))
-[ "$SEMANT" -gt 0 ] && UIUX=$((UIUX+5))
+[ "$SEMAN" -gt 0 ] && UIUX=$((UIUX+5))
 [ "$UIUX" -gt 100 ] && UIUX=100
 
 # PRODUCT FIT: presence of core feature screens (essay coach, matcher) and absence of TODO/UnimplementedError.
