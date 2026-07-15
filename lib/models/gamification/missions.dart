@@ -71,6 +71,7 @@ enum MissionDifficulty {
   medium,    // 100-250 XP
   hard,      // 250-500 XP
   expert,    // 500+ XP
+  legendary, // 1000+ XP
 }
 
 extension MissionDifficultyExtension on MissionDifficulty {

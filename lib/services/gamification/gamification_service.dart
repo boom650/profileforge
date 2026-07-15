@@ -145,7 +145,7 @@ class GamificationService {
       pillarXP: Map<AdmissionsPillar, int>.from(_xpState.pillarXP)
         ..update(pillar, (v) => v + amount, ifAbsent: () => amount),
       totalXP: _xpState.totalXP + amount,
-      currentLevel: XPUtils.levelForXp(_xpState.totalXP + amount),
+      currentLevel: XPUtils.levelFromXP(_xpState.totalXP + amount),
     );
 
     // Track daily/weekly activity
@@ -187,7 +187,7 @@ class GamificationService {
     // Already marked today?
     if (_isSameDay(_streak.lastActiveDate, today)) {
       return StreakActionResult.alreadyMarked(
-          streak: _streak);
+          streak: _streak, message: 'Already marked active today');
     }
 
     // Check if streak would be broken (missed a day)
@@ -248,8 +248,14 @@ class GamificationService {
     _saveToPrefs();
 
     return StreakActionResult.success(
-      savedByGrace: savedByGrace,
+      newStreak: _streak,
+      newMilestones: const [],
       xpEarned: earnedXP,
+      freezeTokensEarned: 0,
+      graceDaysEarned: 0,
+      message: savedByGrace
+          ? 'Streak maintained using a grace day'
+          : 'Daily streak extended',
     );
   }
 
@@ -322,6 +328,63 @@ class GamificationService {
     _missions.removeWhere((m) => m.type == MissionType.weekly);
     final newWeekly = _generateMissionsForType(MissionType.weekly, count: 5);
     _missions.addAll(newWeekly);
+    _saveToPrefs();
+  }
+
+  /// Update progress on a mission by [increment]. When progress reaches the
+  /// target the mission is marked completed and its XP is awarded.
+  Future<void> updateMissionProgress(String missionId, int increment) async {
+    final idx = _missions.indexWhere((m) => m.id == missionId);
+    if (idx == -1) return;
+    final mission = _missions[idx];
+    final newProgress = mission.progressCurrent + increment;
+    final completed = newProgress >= mission.progressTarget;
+    _missions[idx] = mission.copyWith(
+      progressCurrent: newProgress,
+      isCompleted: completed,
+    );
+    if (completed) {
+      await addXP(
+        amount: mission.xpReward,
+        pillar: mission.pillar,
+        source: 'mission_${mission.id}',
+      );
+    }
+    _saveToPrefs();
+  }
+
+  /// Claim the XP reward for a completed mission (idempotent).
+  Future<void> claimMissionReward(String missionId) async {
+    final mission = _missions.firstWhere(
+      (m) => m.id == missionId,
+      orElse: () => _missions.first,
+    );
+    if (mission.isCompleted) {
+      await addXP(
+        amount: mission.xpReward,
+        pillar: mission.pillar,
+        source: 'claim_${mission.id}',
+      );
+    }
+    _saveToPrefs();
+  }
+
+  /// Claim the weekly mission-set bonus when all weekly missions are done.
+  Future<void> claimWeeklyBonus() async {
+    final allDone = weeklyMissions.every((m) => m.isCompleted);
+    if (allDone) {
+      await addXP(
+        amount: 250,
+        pillar: AdmissionsPillar.consistency,
+        source: 'weekly_bonus',
+      );
+    }
+    _saveToPrefs();
+  }
+
+  /// Grant a freeze (grace-day) token.
+  void addFreezeToken() {
+    _streak = _streak.copyWith(freezeTokens: _streak.freezeTokens + 1);
     _saveToPrefs();
   }
 

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profileforge/services/gamification/gamification_service.dart';
 import 'package:profileforge/models/gamification/admissions_pillar.dart';
+import 'package:profileforge/models/gamification/missions.dart';
+import 'package:profileforge/models/gamification/streak.dart';
 import 'package:profileforge/models/gamification/skins.dart';
 import '../helpers.dart';
 

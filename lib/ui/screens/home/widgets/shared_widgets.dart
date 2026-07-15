@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../models/gamification/skins.dart';
+import '../../../providers/gamification_providers.dart';
 import '../../../widgets/celebration_overlay.dart';
 import '../../../widgets/micro_interactions.dart';
 
@@ -647,36 +648,25 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        final result =
-                            await ref.read(completeMissionProvider(mission.id))();
+                        await ref.read(updateMissionProgressProvider(
+                          mission.id,
+                          mission.progressTarget - mission.progressCurrent,
+                        ))();
                         if (context.mounted) {
-                          result.when(
-                            success: (_, __, ___, ____, _____) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('Mission completed! 🎉 +XP'),
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                ),
-                              );
-                              ref.read(celebrationOverlayProvider.notifier).show(
-                                    CelebrationType.missionComplete,
-                                  );
-                            },
-                            failure: (_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('Failed to complete mission'),
-                                  backgroundColor: Colors.orange,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  const Text('Mission completed! 🎉 +XP'),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          );
+                          CelebrationOverlay.show(
+                            context,
+                            CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {
@@ -709,36 +699,25 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        final result =
-                            await ref.read(completeMissionProvider(mission.id))();
+                        await ref.read(updateMissionProgressProvider(
+                          mission.id,
+                          mission.progressTarget - mission.progressCurrent,
+                        ))();
                         if (context.mounted) {
-                          result.when(
-                            success: (_, __, ___, ____, _____) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('Mission completed! 🎉 +XP'),
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                ),
-                              );
-                              ref.read(celebrationOverlayProvider.notifier).show(
-                                    CelebrationType.missionComplete,
-                                  );
-                            },
-                            failure: (_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('Failed to complete mission'),
-                                  backgroundColor: Colors.orange,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  const Text('Mission completed! 🎉 +XP'),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          );
+                          CelebrationOverlay.show(
+                            context,
+                            CelebrationType.missionComplete,
                           );
                         }
                       } catch (e) {
@@ -771,32 +750,16 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        final result =
-                            await ref.read(claimMissionProvider(mission.id))();
+                        await ref.read(claimMissionRewardProvider(mission.id))();
                         if (context.mounted) {
-                          result.when(
-                            success: (_, __, ___, ____, _____) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('XP claimed! 💫'),
-                                  backgroundColor: AppTheme.successGreen,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                ),
-                              );
-                            },
-                            failure: (_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      const Text('Failed to claim XP'),
-                                  backgroundColor: Colors.orange,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('XP claimed! 💫'),
+                              backgroundColor: AppTheme.successGreen,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
                           );
                         }
                       } catch (e) {
