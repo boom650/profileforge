@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../../../theme/app_theme.dart';
 import '../../../models/gamification/missions.dart';
 import '../../../models/gamification/skins.dart';
-import '../../widgets/celebration_overlay.dart';
-import '../../widgets/micro_interactions.dart';
+import '../../../widgets/celebration_overlay.dart';
+import '../../../widgets/micro_interactions.dart';
 
 /// A compact stat card for the dashboard row.
 class DashboardStatCard extends StatelessWidget {

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/screens/onboarding/age_gate.dart';
+import 'package:profileforge/models/age_verification.dart';
 import 'ui/screens/onboarding/onboarding_flow.dart';
 import 'ui/screens/home/home_screen.dart';
 import 'providers/providers.dart';
@@ -42,7 +43,7 @@ class ProfileForgeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ageStatus = ref.watch(ageVerificationProvider);
-    final theme = AppTheme.getTheme(context);
+    final theme = ThemeProvider.getTheme(context);
 
     // Wrap the entire app with connectivity monitoring and ErrorBoundary
     return ErrorBoundary(
@@ -89,9 +90,9 @@ class ProfileForgeApp extends ConsumerWidget {
             // Add other named routes here
           },
           home: ageStatus.when(
-            data: (isVerified) => isVerified
-                ? const HomeScreen()
-                : const OnboardingFlow(),
+            data: (status) => status == AgeVerificationStatus.notVerified
+                ? const OnboardingFlow()
+                : const HomeScreen(),
             loading: () => const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
