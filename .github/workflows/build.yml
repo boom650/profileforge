@@ -5,6 +5,12 @@ on:
     branches: ["main", "master"]
   workflow_dispatch:
 
+# Serialize: never run two APK builds concurrently (shared runner workspace
+# clobbering is a suspected cause of the intermittent lib/main.dart vanish).
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   FLUTTER_VERSION: '3.27.4'
   JAVA_VERSION: '17'
@@ -50,7 +56,7 @@ jobs:
         run: |
           pwd
           ls -la lib/main.dart
-          flutter build apk --release --split-per-abi --target=lib/main.dart
+          flutter build apk --release
 
       - name: Build App Bundle (AAB)
         run: flutter build appbundle --release
@@ -62,15 +68,13 @@ jobs:
           body: |
             **Auto-generated release**
 
-            APK files (arm64-v8a, armeabi-v7a, x86_64)
+            APK (universal)
             AAB (Android App Bundle)
 
             Build triggered by: ${{ github.actor }}
             Commit: ${{ github.sha }}
           files: |
-            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            build/app/outputs/flutter-apk/app-x86_64-release.apk
+            build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
           generate_release_notes: false
           prerelease: true
@@ -80,5 +84,3 @@ jobs:
         if: always()
         run: |
           bash judge/run_judges.sh
-          echo "=== JUDGE RESULTS ==="
-          cat judge/results.json

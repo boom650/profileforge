@@ -119,7 +119,6 @@ class ProfileTab extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.analytics_rounded),
             tooltip: 'Statistics',
-            tooltip: 'Open statistics',
             onPressed: () {
               HapticFeedback.lightImpact();
               Navigator.of(context).push(

@@ -750,7 +750,7 @@ class MissionListTile extends ConsumerWidget {
                     onPressed: () async {
                       HapticFeedback.heavyImpact();
                       try {
-                        await ref.read(claimMissionRewardProvider(mission.id))();
+                        await ref.read(claimMissionRewardProvider)(mission.id);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
