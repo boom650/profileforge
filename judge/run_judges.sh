@@ -10,6 +10,11 @@
 # Output: judge/results.json  (objective, evidence-backed scores per rubric)
 set -uo pipefail
 
+# Guard: any unset var defaults to 0/empty rather than aborting the harness.
+# We WANT the harness to emit results.json even when ground-truth counts are empty.
+export SEMAN="" HARDCODED_STR="" ARB="" ERR_COUNT="" WARN_COUNT="" INFO_COUNT="" PASS="" FAIL=""
+export TCOUNT="" MISSING="" HTTP="" RAWERR="" CONST="" STATEFUL="" DISPOSE="" TODO="" DOCC=""
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
@@ -50,7 +55,7 @@ HARDCODED_STR=$(grep -rEn "'([A-Z][a-zA-Z ]{3,})'" lib/ui --include=*.dart 2>/de
 ARB=$(ls lib/l10n/*.arb 2>/dev/null | wc -l | tr -d ' ')
 # Start at 40 (fails per report: no semantics, hardcoded strings), reward real improvements.
 ACC=$((40))
-if [ "$SEMANT" -gt 0 ]; then ACC=$((ACC + SEMANT*2)); fi
+if [ "$SEMAN" -gt 0 ]; then ACC=$((ACC + SEMAN*2)); fi
 if [ "$ARB" -ge 10 ]; then ACC=$((ACC + 10)); fi
 # penalize hardcoded strings (capped)
 PEN=$((HARDCODED_STR>30?30:HARDCODED_STR))
