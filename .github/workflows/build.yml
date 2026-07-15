@@ -48,11 +48,11 @@ jobs:
       - name: Generate localization
         run: flutter gen-l10n
 
-      - name: Mirror synthetic l10n package for gradle-invoked flutter (CWD=android/)
+      - name: Symlink android/.dart_tool -> ../.dart_tool (gradle-invoked flutter resolves CWD-relative)
         run: |
-          mkdir -p android/.dart_tool
-          cp -r .dart_tool/flutter_gen android/.dart_tool/flutter_gen 2>/dev/null || true
-          ls -la android/.dart_tool/flutter_gen/app_localizations.dart 2>/dev/null || echo "WARN: flutter_gen not found at repo root after gen-l10n"
+          rm -rf android/.dart_tool
+          ln -sfn ../.dart_tool android/.dart_tool
+          ls -la android/.dart_tool
 
       - name: Guard entrypoint exists
         run: |
