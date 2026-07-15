@@ -1,8 +1,10 @@
-name: Build Release APK
+name: Build Release APK (manual only)
 
+# DISABLED from push. build.yml is the single push-triggered build.
+# This workflow is kept for manual re-runs only to avoid duplicate CI runs.
 on:
   workflow_dispatch:
-    inputs:
+
 env:
   FLUTTER_VERSION: '3.24.5'
   JAVA_VERSION: '17'

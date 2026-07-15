@@ -2,7 +2,7 @@ name: Build ProfileForge APK
 
 on:
   push:
-    branches: ["master", "main"]
+    branches: ["main", "master"]
   workflow_dispatch:
 
 env:
@@ -39,6 +39,12 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Run real judge harness (flutter analyze + flutter test)
+        run: |
+          bash judge/run_judges.sh
+          echo "=== JUDGE RESULTS ==="
+          cat judge/results.json
+
       - name: Build APK (release)
         run: flutter build apk --release --split-per-abi
 
@@ -51,10 +57,10 @@ jobs:
           name: "ProfileForge APK – ${{ github.ref_name }}"
           body: |
             **Auto-generated release**
-            
+
             📱 APK files (arm64-v8a, armeabi-v7a, x86_64)
             📦 AAB (Android App Bundle)
-            
+
             Build triggered by: ${{ github.actor }}
             Commit: ${{ github.sha }}
           files: |
