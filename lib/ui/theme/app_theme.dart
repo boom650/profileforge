@@ -625,29 +625,3 @@ extension ColorExtension on Color {
   Color withAlpha(int alpha) => withValues(alpha: alpha / 255);
 }
 
-/// Extension on BuildContext to provide theme-aware color accessors.
-/// Use these instead of hardcoded AppTheme constants to support dark mode.
-extension ThemeColors on BuildContext {
-  ColorScheme get colorScheme => Theme.of(this).colorScheme;
-  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
-
-  /// Surface background (warm white in light, dark navy in dark)
-  Color get surfaceBg => colorScheme.surface;
-
-  /// Slightly elevated surface (card backgrounds, containers)
-  Color get surfaceElevated =>
-      isDarkMode ? const Color(0xFF1E293B) : const Color(0xFFFDF8F3);
-
-  /// Primary text color
-  Color get textPrimary => colorScheme.onSurface;
-
-  /// Secondary text color (subtitles, descriptions)
-  Color get textSecondary => colorScheme.onSurface.withValues(alpha: 0.7);
-
-  /// Muted text color (hints, timestamps)
-  Color get textMuted => colorScheme.onSurface.withValues(alpha: 0.5);
-
-  /// Border color for cards and dividers
-  Color get borderColor =>
-      isDarkMode ? const Color(0xFF334155) : const Color(0xFFE2D5C8);
-}
