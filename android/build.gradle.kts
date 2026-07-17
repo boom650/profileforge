@@ -2,6 +2,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("file://${System.getenv("FLUTTER_ROOT")}/bin/cache/artifacts/engine/android")
+        }
     }
 }
 

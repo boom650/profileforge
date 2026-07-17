@@ -47,6 +47,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Precache Flutter artifacts
+        run: flutter precache --android
+
       - name: Analyze
         run: flutter analyze
 
