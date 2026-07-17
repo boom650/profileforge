@@ -32,13 +32,13 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics --no-cli-animations
+
       - name: Regenerate Android project (canonical Flutter 3.27.4)
         run: |
           rm -rf android
           flutter create --platforms android .
-          # Restore app namespace + package to match existing Java/Kotlin sources
-          sed -i 's/namespace = "com.example.profileforge"/namespace = "com.profileforge.profileforge"/' android/app/build.gradle.kts
-          sed -i 's/applicationId = "com.example.profileforge"/applicationId = "com.profileforge.profileforge"/' android/app/build.gradle.kts
 
       - name: Get dependencies
         run: flutter pub get
