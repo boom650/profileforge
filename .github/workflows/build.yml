@@ -31,7 +31,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
-          cache: gradle
 
       - name: Regenerate Android project (canonical Flutter 3.27.4)
         run: |
