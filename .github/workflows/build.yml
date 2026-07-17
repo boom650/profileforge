@@ -33,6 +33,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           cache: gradle
 
+      - name: Ensure local.properties has flutter.sdk
+        run: |
+          cd android
+          if [ ! -f local.properties ]; then
+            echo "flutter.sdk=$FLUTTER_ROOT" > local.properties
+            echo "sdk.dir=$ANDROID_HOME" >> local.properties
+          else
+            grep -q "flutter.sdk" local.properties || echo "flutter.sdk=$FLUTTER_ROOT" >> local.properties
+          fi
+          cat local.properties
+
       - name: Get dependencies
         run: flutter pub get
 
