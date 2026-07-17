@@ -33,22 +33,16 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           cache: gradle
 
-      - name: Ensure local.properties has flutter.sdk
+      - name: Regenerate Android project (canonical Flutter 3.27.4)
         run: |
-          cd android
-          if [ ! -f local.properties ]; then
-            echo "flutter.sdk=$FLUTTER_ROOT" > local.properties
-            echo "sdk.dir=$ANDROID_HOME" >> local.properties
-          else
-            grep -q "flutter.sdk" local.properties || echo "flutter.sdk=$FLUTTER_ROOT" >> local.properties
-          fi
-          cat local.properties
+          rm -rf android
+          flutter create --platforms android .
+          # Restore app namespace + package to match existing Java/Kotlin sources
+          sed -i 's/namespace = "com.example.profileforge"/namespace = "com.profileforge.profileforge"/' android/app/build.gradle.kts
+          sed -i 's/applicationId = "com.example.profileforge"/applicationId = "com.profileforge.profileforge"/' android/app/build.gradle.kts
 
       - name: Get dependencies
         run: flutter pub get
-
-      - name: Precache Flutter artifacts
-        run: flutter precache --android
 
       - name: Analyze
         run: flutter analyze
