@@ -5,16 +5,24 @@ on:
     branches: ["master", "main"]
   workflow_dispatch:
 
+env:
+  FLUTTER_VERSION: '3.27.4'
+  JAVA_VERSION: '17'
+
 jobs:
-  build:
+  build-and-release:
+    name: Build & Release APK
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.4'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
 
@@ -22,26 +30,39 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Run analysis
+      - name: Analyze
         run: flutter analyze
 
-      - name: Regenerate Android platform
-        run: |
-          rm -rf android/
-          flutter create --project-name profileforge --platforms android .
-          flutter pub get
+      - name: Build APK (release)
+        run: flutter build apk --release --split-per-abi
 
-      - name: Build APK
-        run: flutter build apk --debug
+      - name: Build App Bundle (AAB)
+        run: flutter build appbundle --release
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: success()
         with:
-          name: profileforge-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
-          if-no-files-found: error
+          name: "ProfileForge APK – ${{ github.ref_name }}"
+          body: |
+            **Auto-generated release**
+
+            📱 APK files (arm64-v8a, armeabi-v7a, x86_64)
+            📦 AAB (Android App Bundle)
+
+            Build triggered by: ${{ github.actor }}
+            Commit: ${{ github.sha }}
+          files: |
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+          generate_release_notes: false
+          prerelease: true
+          make_latest: true
