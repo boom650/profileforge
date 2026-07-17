@@ -56,6 +56,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: success()
         with:
+          tag_name: "v${{ github.run_number }}-${{ github.sha }}"
           name: "ProfileForge APK – ${{ github.ref_name }}"
           body: |
             **Auto-generated release**
@@ -70,6 +71,6 @@ jobs:
             build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
             build/app/outputs/flutter-apk/app-x86_64-release.apk
             build/app/outputs/bundle/release/app-release.aab
+          fail_on_unmatched_files: false
           generate_release_notes: false
           prerelease: true
-          make_latest: true
