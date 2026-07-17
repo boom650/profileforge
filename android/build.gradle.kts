@@ -1,9 +1,3 @@
-plugins {
-    id("dev.flutter.flutter-gradle-plugin") version "3.27.4" apply false
-    id("com.android.application") version "8.4.0" apply false
-    id("org.jetbrains.kotlin.android") version "2.0.20" apply false
-}
-
 allprojects {
     repositories {
         google()
@@ -11,10 +5,7 @@ allprojects {
     }
 }
 
-val newBuildDir: Directory =
-    rootProject.layout.buildDirectory
-        .dir("../../build")
-        .get()
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {

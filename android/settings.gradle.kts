@@ -16,5 +16,11 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("dev.flutter.flutter-gradle-plugin") version "3.27.4" apply false
+    id("com.android.application") version "8.4.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.20" apply false
+}
+
 rootProject.name = "profileforge"
 include(":app")
