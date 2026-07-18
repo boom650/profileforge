@@ -24,7 +24,7 @@ class ProfilePage extends ConsumerWidget {
             onPressed: () async {
               final path = exportAsync.value;
               if (path == null) return;
-              await SharePlus.instance.share(ShareParams(files: [XFile(path)]));
+              await Share.shareXFiles([XFile(path)], text: 'My ProfileForge profile');
             },
           ),
         ],
