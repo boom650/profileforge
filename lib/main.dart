@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'onboarding.dart';
 import 'profile_page.dart';
+import 'profile_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final xp = ref.watch(xpProvider);
+    final xp = ref.watch(profileProvider).xp;
     return Scaffold(
       appBar: AppBar(
         title: const Text('ProfileForge'),
