@@ -1,5 +1,5 @@
 name: profileforge
-description: "ProfileForge - Gamified College Admissions Profile Builder"
+description: "ProfileForge - Autonomous AI-powered CV-building & hyper-scheduling platform"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,21 +10,48 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  # State
   flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  # Immutable models
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  # Local DB (spec: Drift 2.18+)
+  drift: ^2.20.0
+  drift_flutter: ^0.1.0
+  sqlite3_flutter_libs: ^0.5.20
+  # Persistence of non-DB prefs (flags)
   shared_preferences: ^2.3.2
+  # Secure storage
+  flutter_secure_storage: ^9.2.2
+  # Animations
+  flutter_animate: ^4.5.0
+  # Routing
+  go_router: ^14.2.7
+  # Connectivity
+  connectivity_plus: ^6.0.3
+  # Background
+  workmanager: ^0.5.2
+  # i18n
   intl: ^0.19.0
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  path_provider: ^2.1.4
-  equatable: ^2.0.5
-  uuid: ^4.5.1
+  # PDF (offline export)
   pdf: ^3.11.1
   share_plus: ^7.2.2
+  # Utils
+  uuid: ^4.5.1
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  drift_dev: ^2.20.0
+  riverpod_generator: ^2.4.0
+  custom_lint: ^0.6.4
+  riverpod_lint: ^2.4.0
 
 flutter:
   uses-material-design: true

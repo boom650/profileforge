@@ -13,3 +13,17 @@ mcp_config.json
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# Generated code (produced by CI build_runner)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Judge harness output (build artifact)
+judge_report.json
+
+# Duplicate / inspection copies (not app source)
+profileforge_inspect/
+
+# Local env
+.env
