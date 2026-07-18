@@ -44,8 +44,6 @@ class SkinUnlocks extends Table {
   TextColumn get profileId => text()();
   TextColumn get skinId => text()();
   DateTimeColumn get unlockedAt => dateTime().withDefault(currentDateAndTime)();
-  @override
-  Set<Column<Object>> get primaryKey => {profileId, skinId};
 }
 
 /// Generated daily/weekly/monthly/special/seasonal missions.
@@ -73,8 +71,6 @@ class LeagueMemberships extends Table {
   IntColumn get weeklyXp => integer().withDefault(const Constant(0))();
   BoolColumn get shielded => boolean().withDefault(const Constant(false))();
   DateTimeColumn get seasonStart => dateTime().withDefault(currentDateAndTime)();
-  @override
-  Set<Column<Object>> get primaryKey => {id};
 }
 
 /// Accountability buddies (H4).
@@ -85,8 +81,6 @@ class Buddies extends Table {
   TextColumn get buddyProfileId => text()();
   BoolColumn get sharedStreakGoal => boolean().withDefault(const Constant(false))();
   TextColumn get note => text().withDefault(const Constant(''))();
-  @override
-  Set<Column<Object>> get primaryKey => {id};
 }
 
 /// Teams (H5).
@@ -107,8 +101,6 @@ class TeamMembers extends Table {
   TextColumn get teamId => text()();
   TextColumn get profileId => text()();
   TextColumn get role => text().withDefault(const Constant('member'))();
-  @override
-  Set<Column<Object>> get primaryKey => {id};
 }
 
 /// Team challenge progress (H5).
