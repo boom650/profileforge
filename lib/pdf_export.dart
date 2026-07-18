@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'profile_model.dart';
 
@@ -20,7 +19,7 @@ final pdfExportProvider = FutureProvider.family<String, Profile>((ref, profile) 
           pw.SizedBox(height: 8),
           pw.Text('XP: ${profile.xp}'),
           pw.SizedBox(height: 16),
-          pw.Text('Achievements', style: const pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Text('Achievements', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
           pw.SizedBox(height: 6),
           ...profile.achievements.map((a) => pw.Bullet(text: a)),
           if (profile.achievements.isEmpty) pw.Text('No achievements yet.'),

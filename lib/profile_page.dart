@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:share_plus/share_plus.dart';
 import 'profile_model.dart';
 import 'pdf_export.dart';
@@ -21,7 +22,8 @@ class ProfilePage extends ConsumerWidget {
             icon: const Icon(Icons.picture_as_pdf),
             tooltip: 'Export PDF',
             onPressed: () async {
-              final path = await exportAsync.future;
+              final path = exportAsync.value;
+              if (path == null) return;
               await SharePlus.instance.share(ShareParams(files: [XFile(path)]));
             },
           ),
@@ -80,7 +82,7 @@ class ProfilePage extends ConsumerWidget {
             exportAsync.when(
               data: (_) => const Text('PDF ready — tap the PDF icon to export & share.',
                   style: TextStyle(color: Colors.green)),
-              loading: const LinearProgressIndicator(),
+              loading: () => const LinearProgressIndicator(),
               error: (e, _) => Text('PDF error: $e', style: const TextStyle(color: Colors.red)),
             ),
           ],
