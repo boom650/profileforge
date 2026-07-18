@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
+import 'package:profileforge/core/celebration/celebrate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/features/buddy/application/buddy_providers.dart';
 
 class BuddiesScreen extends ConsumerWidget {
@@ -9,49 +14,157 @@ class BuddiesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final buddies = ref.watch(buddiesProvider(profileId));
     final nudge = ref.watch(buddyMotivationProvider(profileId));
 
     return Scaffold(
       appBar: AppBar(title: const Text('Buddies')),
-      body: Column(
+      bottomNavigationBar: appBottomNav(context, '/buddies'),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
-          if (nudge.value != null)
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Chip(
-                avatar: const Icon(Icons.notifications_active),
-                label: Text(nudge.value!),
-              ).animate().shake(),
+          GradientBanner(
+            from: Palette.pink,
+            to: Palette.orange,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('🤝 Accountability partners',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900)),
+                const SizedBox(height: 6),
+                Text(
+                    'Add friends, check in, and keep each other on track for the admission grind.',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.92), fontSize: 13)),
+              ],
             ),
-          Expanded(
-            child: buddies.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('Error: $e')),
-              data: (list) => ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, i) {
-                  final b = list[i];
-                  return Semantics(
-                    label: 'Buddy ${b.buddyProfileId}',
-                    child: ListTile(
-                      leading: const CircleAvatar(child: Icon(Icons.person)),
-                      title: Text(b.buddyProfileId),
-                      subtitle: Text('Goal: ${b.sharedStreakGoal}-day shared streak'),
-                      trailing: FilledButton(
-                        onPressed: () => ref.read(checkInProvider((
-                          from: profileId,
-                          to: b.buddyProfileId,
-                          xp: 10,
-                          note: 'Keep going!',
-                        ))),
-                        child: const Text('Check in'),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: (i * 40).ms);
-                },
+          ),
+          const SizedBox(height: 14),
+          if (nudge.valueOrNull != null)
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Palette.orange.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(14),
               ),
-            ),
+              child: Row(
+                children: [
+                  const Text('🔥', style: TextStyle(fontSize: 22)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                      child: Text(nudge.valueOrNull!,
+                          style: const TextStyle(fontWeight: FontWeight.w700))),
+                ],
+              ),
+            ).animate().shake(),
+          const SizedBox(height: 16),
+          SectionTitle('Your buddies',
+              action: IconButton(
+                icon: const Icon(Icons.person_add),
+                onPressed: () => _addBuddy(context, ref),
+              )),
+          ...buddies.when(
+            data: (rows) => rows.isEmpty
+                ? [const Text('No buddies yet. Tap + to add one.')]
+                : rows.map((b) {
+                    final initial = (b.buddyId.isNotEmpty
+                            ? b.buddyId[0]
+                            : '?')
+                        .toUpperCase();
+                    final color = Palette
+                        .green; // deterministic color by hash would be nicer
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(color: theme.dividerColor, width: 1),
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: color,
+                            child: Text(initial,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900)),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(b.buddyId,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w800)),
+                                Text('Tap to check in with them',
+                                    style: TextStyle(
+                                        color: theme.hintColor, fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.send, color: Palette.green),
+                            onPressed: () {
+                              SoundService.instance.tap();
+                              ref.read(checkInProvider((
+                                from: profileId,
+                                to: b.buddyId,
+                                xp: 5,
+                                note: 'Checking in — let’s both finish today’s mission!',
+                              )));
+                              celebrate(context, message: 'Checked in 🤝');
+                            },
+                          ),
+                        ],
+                      ),
+                    ).animate().fadeIn().slideX(begin: 0.04);
+                  }).toList(),
+            loading: () => const [CircularProgressIndicator()],
+            error: (e, _) => [Text('Error: $e')],
+          ),
+          const SizedBox(height: 16),
+          PoppyButton(
+            label: 'Find a team instead',
+            color: Palette.blue,
+            onTap: () => context.push('/teams'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _addBuddy(BuildContext context, WidgetRef ref) {
+    final ctrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Add a buddy'),
+        content: TextField(
+          controller: ctrl,
+          decoration: const InputDecoration(
+            hintText: 'Their profile id or @handle',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () {
+              final id = ctrl.text.trim();
+              if (id.isEmpty) return;
+              ref.read(addBuddyProvider((me: profileId, buddyId: id)));
+              SoundService.instance.success();
+              Navigator.pop(context);
+            },
+            child: const Text('Add'),
           ),
         ],
       ),

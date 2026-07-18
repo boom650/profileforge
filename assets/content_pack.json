@@ -1,0 +1,396 @@
+{
+  "university_guides": {
+    "MIT": {
+      "overview": "MIT looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Stanford": {
+      "overview": "Stanford looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Oxford": {
+      "overview": "Oxford looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Cambridge": {
+      "overview": "Cambridge looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Harvard": {
+      "overview": "Harvard looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Yale": {
+      "overview": "Yale looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Princeton": {
+      "overview": "Princeton looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "NUS": {
+      "overview": "NUS looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "ETH Z\u00fcrich": {
+      "overview": "ETH Z\u00fcrich looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Imperial College": {
+      "overview": "Imperial College looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Caltech": {
+      "overview": "Caltech looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Berkeley": {
+      "overview": "Berkeley looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Toronto": {
+      "overview": "Toronto looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "Tsinghua": {
+      "overview": "Tsinghua looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    },
+    "NTU": {
+      "overview": "NTU looks for sustained excellence, intellectual curiosity, and impact beyond the classroom.",
+      "what_matters": [
+        "Rigorous coursework and top grades in your strongest subjects.",
+        "Depth in 1-2 areas (research, Olympiads, projects) over breadth.",
+        "A compelling, specific 'why this university' essay.",
+        "Letters that speak to character, not just achievement."
+      ],
+      "suggested_timeline": {
+        "Grade 10": "Build strong fundamentals; explore clubs.",
+        "Grade 11": "Deepen one passion; enter competitions.",
+        "Grade 12": "Apply early; polish essays with feedback."
+      }
+    }
+  },
+  "subject_study_plans": {
+    "Math": {
+      "key_topics": [
+        "Math core concept 1",
+        "Math core concept 2",
+        "Math core concept 3",
+        "Math core concept 4",
+        "Math core concept 5",
+        "Math core concept 6",
+        "Math core concept 7",
+        "Math core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Physics": {
+      "key_topics": [
+        "Physics core concept 1",
+        "Physics core concept 2",
+        "Physics core concept 3",
+        "Physics core concept 4",
+        "Physics core concept 5",
+        "Physics core concept 6",
+        "Physics core concept 7",
+        "Physics core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Chemistry": {
+      "key_topics": [
+        "Chemistry core concept 1",
+        "Chemistry core concept 2",
+        "Chemistry core concept 3",
+        "Chemistry core concept 4",
+        "Chemistry core concept 5",
+        "Chemistry core concept 6",
+        "Chemistry core concept 7",
+        "Chemistry core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Biology": {
+      "key_topics": [
+        "Biology core concept 1",
+        "Biology core concept 2",
+        "Biology core concept 3",
+        "Biology core concept 4",
+        "Biology core concept 5",
+        "Biology core concept 6",
+        "Biology core concept 7",
+        "Biology core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Computer Science": {
+      "key_topics": [
+        "Computer Science core concept 1",
+        "Computer Science core concept 2",
+        "Computer Science core concept 3",
+        "Computer Science core concept 4",
+        "Computer Science core concept 5",
+        "Computer Science core concept 6",
+        "Computer Science core concept 7",
+        "Computer Science core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Economics": {
+      "key_topics": [
+        "Economics core concept 1",
+        "Economics core concept 2",
+        "Economics core concept 3",
+        "Economics core concept 4",
+        "Economics core concept 5",
+        "Economics core concept 6",
+        "Economics core concept 7",
+        "Economics core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "History": {
+      "key_topics": [
+        "History core concept 1",
+        "History core concept 2",
+        "History core concept 3",
+        "History core concept 4",
+        "History core concept 5",
+        "History core concept 6",
+        "History core concept 7",
+        "History core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "English": {
+      "key_topics": [
+        "English core concept 1",
+        "English core concept 2",
+        "English core concept 3",
+        "English core concept 4",
+        "English core concept 5",
+        "English core concept 6",
+        "English core concept 7",
+        "English core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Geography": {
+      "key_topics": [
+        "Geography core concept 1",
+        "Geography core concept 2",
+        "Geography core concept 3",
+        "Geography core concept 4",
+        "Geography core concept 5",
+        "Geography core concept 6",
+        "Geography core concept 7",
+        "Geography core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    },
+    "Engineering": {
+      "key_topics": [
+        "Engineering core concept 1",
+        "Engineering core concept 2",
+        "Engineering core concept 3",
+        "Engineering core concept 4",
+        "Engineering core concept 5",
+        "Engineering core concept 6",
+        "Engineering core concept 7",
+        "Engineering core concept 8"
+      ],
+      "practice_plan": "Week 1-2 fundamentals, Week 3-4 past papers, Week 5 mock exam.",
+      "resources": [
+        "Textbook chapters 1-6",
+        "Past paper set A-C",
+        "One explainer video per topic"
+      ]
+    }
+  }
+}

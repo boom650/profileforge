@@ -1,8 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/missions/data/mission_repository.dart';
 import 'package:profileforge/features/missions/domain/mission_models.dart';
+import 'package:profileforge/features/missions/domain/mission_generator.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
   return MissionRepository(ref.watch(appDatabaseProvider));
@@ -10,27 +13,73 @@ final missionRepositoryProvider = Provider<MissionRepository>((ref) {
 
 final todaysMissionsProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
-  final rows = await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
-  return rows.where((r) => r.cadence == MissionCadence.daily.name).toList();
+  final rows =
+      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
+  return rows
+      .where((r) => r.cadence == MissionCadence.daily.name)
+      .toList();
 });
 
 final weeklyMissionsProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
-  final rows = await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
-  return rows.where((r) => r.cadence == MissionCadence.weekly.name).toList();
+  final rows =
+      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
+  return rows
+      .where((r) => r.cadence == MissionCadence.weekly.name)
+      .toList();
 });
 
-final completeMissionProvider =
-    Provider.family<void, ({String profileId, String missionId})>((ref, args) {
-  ref.watch(missionRepositoryProvider).complete(args.missionId);
+final missionHistoryProvider =
+    FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
+  return ref.watch(missionRepositoryProvider).history(profileId);
+});
+
+/// Complete a mission: marks done, awards XP (×skin multiplier) + gems.
+final completeMissionProvider = Provider.family<
+    Future<void>,
+    ({String profileId, String missionId, int xp, String pillar})>((ref, args) async {
+  await ref.watch(missionRepositoryProvider).complete(args.missionId);
+  // Award XP via the XP ledger (handles skin multiplier through provided xp).
+  await ref.watch(xpRepositoryProvider).award(
+        profileId: args.profileId,
+        amount: args.xp,
+        source: 'mission:${args.missionId}',
+      );
+  // Award gems (1 gem per 5 XP, min 2).
+  final gems = (args.xp / 5).ceil().clamp(2, 50);
+  ref.read(addGemsProvider((profileId: args.profileId, amount: gems)));
   ref.invalidate(todaysMissionsProvider(args.profileId));
+  ref.invalidate(totalXpProvider(args.profileId));
+  ref.invalidate(gemsProvider(args.profileId));
 });
 
-/// Recomputes + persists the daily mission set via MissionEngine.
-final generateMissionsProvider =
-    Provider.family<void, String>((ref, profileId) {
-  final engine = MissionEngine();
-  final generated = engine.generateDaily(profileId);
-  ref.watch(missionRepositoryProvider).upsertGenerated(generated);
+/// Regenerates today's missions, *personalized* from the onboarding profile.
+final generateMissionsProvider = Provider.family<void, String>((ref, profileId) {
+  final onboarding =
+      ref.read(onboardingProvider(profileId)).valueOrNull;
+  final gen = MissionGenerator();
+  final generated = onboarding == null
+      ? const MissionEngine().generateDaily(profileId)
+      : gen
+          .generateDaily(onboarding, profileId)
+          .map((m) => Mission(
+                id: m.id,
+                profileId: profileId,
+                title: m.title,
+                cadence: MissionCadence.daily,
+                pillar: _pillar(m.pillar),
+                xpReward: m.xp,
+                dueAt: DateTime.now().add(const Duration(days: 1)),
+                completed: false,
+              ))
+          .toList();
+  ref.read(missionRepositoryProvider).upsertGenerated(generated);
   ref.invalidate(todaysMissionsProvider(profileId));
 });
+
+MissionPillar _pillar(String s) {
+  for (final p in MissionPillar.values) {
+    if (p.name.toLowerCase() == s.toLowerCase()) return p;
+  }
+  return MissionPillar.academics;
+}

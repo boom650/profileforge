@@ -163,3 +163,22 @@ class SyncOutbox extends Table {
   IntColumn get attempts => integer().withDefault(const Constant(0))();
   DateTimeColumn get queuedAt => dateTime().withDefault(currentDateAndTime)();
 }
+
+/// Soft currency (gems) earned from activity; spent in the shop.
+@DataClassName('WalletRow')
+class Wallets extends Table {
+  TextColumn get profileId => text()();
+  IntColumn get gems => integer().withDefault(const Constant(0))();
+  @override
+  Set<Column<Object>> get primaryKey => {profileId};
+}
+
+/// Daily-login reward tracking (7-day streak wheel).
+@DataClassName('DailyRewardRow')
+class DailyRewards extends Table {
+  TextColumn get profileId => text()();
+  IntColumn get day => integer().withDefault(const Constant(0))();
+  DateTimeColumn get lastClaimed => dateTime().nullable()();
+  @override
+  Set<Column<Object>> get primaryKey => {profileId};
+}

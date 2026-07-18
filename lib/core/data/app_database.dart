@@ -22,20 +22,22 @@ part 'app_database.g.dart';
   Onboarding,
   SyncOutbox,
   SkinStates,
+  Wallets,
+  DailyRewards,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? driftDatabase(name: 'profileforge'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // Future migrations go here with `m.addColumn` etc.
-          // Safe, incremental, never destructive.
+          // Non-destructive: only create tables that don't yet exist.
+          await m.createOnlyForMissingTables();
         },
       );
 }

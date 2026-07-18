@@ -1,130 +1,170 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
+import 'package:profileforge/core/celebration/celebrate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/features/skins/application/skin_providers.dart';
 import 'package:profileforge/features/skins/domain/skin_definitions.dart';
+import 'package:profileforge/features/wallet/application/wallet_providers.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
-/// Skin picker screen. Shows the nine pillar skins, locked/unlocked state,
-/// rarity, and an equip action with a subtle unlock animation.
 class SkinsScreen extends ConsumerWidget {
   const SkinsScreen({super.key, required this.profileId});
   final String profileId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final unlocked = ref.watch(unlockedSkinsProvider(profileId));
-    final equipped = ref.watch(equippedSkinProvider(profileId));
+    final theme = Theme.of(context);
+    final totalXp = ref.watch(totalXpProvider(profileId)).valueOrNull ?? 0;
+    final unlocked = ref.watch(unlockedSkinsProvider(profileId)).valueOrNull ?? [];
+    final equipped = ref.watch(equippedSkinProvider(profileId)).valueOrNull;
+    final gems = ref.watch(gemsProvider(profileId)).valueOrNull ?? 0;
+    final unlockedIds = unlocked.map((s) => s.id).toSet();
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Skins')),
-      body: unlocked.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
-        data: (unlockedSkins) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.8,
-            ),
-            itemCount: kSkins.length,
-            itemBuilder: (context, i) {
-              final skin = kSkins[i];
-              final isUnlocked = unlockedSkins.any((s) => s.id == skin.id);
-              final isEquipped = equipped.when(
-                data: (e) => e.id == skin.id,
-                loading: () => false,
-                error: (_, __) => false,
-              );
-              return _SkinTile(
-                skin: skin,
-                unlocked: isUnlocked,
-                equipped: isEquipped,
-                profileId: profileId,
-              ).animate().fadeIn(delay: (i * 40).ms).scale();
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _SkinTile extends ConsumerWidget {
-  const _SkinTile({
-    required this.skin,
-    required this.unlocked,
-    required this.equipped,
-    required this.profileId,
-  });
-
-  final Skin skin;
-  final bool unlocked;
-  final bool equipped;
-  final String profileId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Color(skin.seedColor);
-    return InkWell(
-      onTap: unlocked
-          ? () => ref.read(equipSkinProvider(
-              (profileId: profileId, skinId: skin.id)))
-          : null,
-      borderRadius: BorderRadius.circular(16),
-      child: Semantics(
-        label: '${skin.name}, ${skin.rarity.name} skin, '
-            '${unlocked ? 'unlocked' : 'locked'}'
-            '${equipped ? ', equipped' : ''}',
-        button: true,
-        enabled: unlocked,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: [color, Color(skin.accentColor)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            border: equipped
-                ? Border.all(color: Colors.white, width: 3)
-                : null,
-          ),
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      unlocked ? Icons.checkroom : Icons.lock,
-                      size: 28,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      skin.name,
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              if (!unlocked)
-                Positioned(
-                  bottom: 6,
-                  left: 0,
-                  right: 0,
-                  child: Text(
-                    '${skin.xpThreshold} XP',
-                    style: const TextStyle(color: Colors.white70, fontSize: 10),
-                    textAlign: TextAlign.center,
+      appBar: AppBar(title: const Text('Skins & Shop')),
+      bottomNavigationBar: appBottomNav(context, '/skins'),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          GradientBanner(
+            from: Palette.green,
+            to: Palette.yellow,
+            child: Row(
+              children: [
+                const Text('💎', style: TextStyle(fontSize: 30)),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Your collection',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900)),
+                      Text('$gems gems • ${unlocked.length}/${kSkins.length} unlocked',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13)),
+                    ],
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 16),
+          SectionTitle('Skins'),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 0.78,
+            children: kSkins.map((skin) {
+              final isUnlocked = unlockedIds.contains(skin.id);
+              final isEquipped = equipped?.id == skin.id;
+              final cost = kSkinGemCost[skin.id] ?? 0;
+              final canAfford = gems >= cost;
+              return Container(
+                decoration: BoxDecoration(
+                  color: theme.cardColor,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: isEquipped ? Palette.green : rarityColor(skin.rarity.name),
+                    width: isEquipped ? 3 : 1.5,
+                  ),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    // Preview orb.
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(colors: [
+                          Color(skin.seedColor),
+                          Color(skin.accentColor),
+                        ]),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(skin.name,
+                        style: const TextStyle(fontWeight: FontWeight.w900)),
+                    RarityBadge(skin.rarity.name),
+                    const SizedBox(height: 4),
+                    Text('×${skin.xpMultiplier} XP',
+                        style: TextStyle(
+                            color: rarityColor(skin.rarity.name),
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12)),
+                    const Spacer(),
+                    if (isEquipped)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Palette.green,
+                          borderRadius: BorderRadius.circular(10)),
+                        child: const Text('Equipped',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12)),
+                      )
+                    else if (isUnlocked)
+                      OutlinedButton(
+                        onPressed: () {
+                          ref.read(equipSkinProvider((
+                            profileId: profileId,
+                            skinId: skin.id,
+                          )));
+                          SoundService.instance.tap();
+                        },
+                        child: const Text('Equip'),
+                      )
+                    else if (cost == 0)
+                      OutlinedButton(
+                        onPressed: () {
+                          ref.read(purchaseSkinProvider((
+                            profileId: profileId,
+                            skinId: skin.id,
+                          )));
+                          SoundService.instance.unlock();
+                          celebrate(context, message: 'Unlocked!');
+                        },
+                        child: const Text('Claim'),
+                      )
+                    else
+                      FilledButton.icon(
+                        onPressed: canAfford
+                            ? () {
+                                final ok = ref.read(purchaseSkinProvider((
+                                  profileId: profileId,
+                                  skinId: skin.id,
+                                )));
+                                if (ok) {
+                                  SoundService.instance.unlock();
+                                  celebrate(context, message: 'Bought! 💎');
+                                }
+                              }
+                            : null,
+                        icon: const Icon(Icons.diamond, size: 14),
+                        label: Text('$cost'),
+                      ),
+                  ],
+                ),
+              ).animate().fadeIn().scale(begin: const Offset(0.9, 0.9));
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          Text('Earn gems from missions & daily rewards. Skins boost XP and show off your pillars.',
+              style: theme.textTheme.bodySmall),
+        ],
       ),
     );
   }

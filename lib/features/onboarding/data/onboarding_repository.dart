@@ -16,7 +16,7 @@ _OnboardJson _runEncode(OnboardingProfile p) => _OnboardJson(
       jsonEncode(p.targetUniversities),
       jsonEncode(p.subjects),
       jsonEncode(p.grades),
-      jsonEncode(p.clubs),
+      jsonEncode(p.activities),
       jsonEncode(p.careerInterests),
     );
 
@@ -31,12 +31,12 @@ class OnboardingRepository {
       targetUniversities: Value(j.universities),
       subjects: Value(j.subjects),
       grades: Value(j.grades),
-      clubs: Value(j.clubs),
+      clubs: Value(j.activities), // activities stored in `clubs` column
       budget: Value(p.budget),
       travelRadiusKm: Value(p.travelRadiusKm),
       availabilityHoursPerWeek: Value(p.availabilityHoursPerWeek),
       careerInterests: Value(j.careers),
-      location: Value(p.location),
+      location: Value(p.competitionsPersistJson), // competitions stored in `location`
     ));
   }
 

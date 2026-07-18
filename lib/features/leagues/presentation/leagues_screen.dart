@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
+import 'package:profileforge/core/celebration/celebrate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 
@@ -10,97 +15,163 @@ class LeaguesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final me = ref.watch(myLeagueProvider(profileId));
     final standings = ref.watch(leagueStandingsProvider(profileId));
-    final tier = me.whenData((m) => m == null ? LeagueTier.bronze : _tierOf(m.tier)).value ?? LeagueTier.bronze;
-    final weeklyXp = me.whenData((m) => m?.weeklyXp ?? 0).value ?? 0;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Leagues')),
-      body: Padding(
+      bottomNavigationBar: appBottomNav(context, '/leagues'),
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Semantics(
-              label: 'Current league: ${tier.label}, $weeklyXp XP this week',
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
+        children: [
+          // Tier ladder.
+          SectionTitle('Climb the ladder'),
+          SizedBox(
+            height: 64,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: LeagueTier.values.length,
+              separatorBuilder: (_, __) =>
+                  const Icon(Icons.chevron_right, color: Colors.grey),
+              itemBuilder: (_, i) {
+                final t = LeagueTier.values[i];
+                final isMe = me.valueOrNull?.tier == t.name;
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: isMe ? t.color : t.color.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: t.color),
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(tier.label,
-                          style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 8),
-                      LinearProgressIndicator(
-                        value: (tier.promotionThreshold == 999999)
-                            ? 1.0
-                            : (weeklyXp / tier.promotionThreshold)
-                                .clamp(0.0, 1.0),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(tier.promoteTo == null
-                          ? 'Top tier — defend your rank!'
-                          : 'Next tier at ${tier.promotionThreshold} weekly XP'),
-                      if (me.whenData((m) => m?.shielded ?? false).value == true)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Text('🛡 Shield active — protected from demotion'),
-                        ),
+                      Text(t.emoji, style: const TextStyle(fontSize: 22)),
+                      Text(t.label,
+                          style: TextStyle(
+                              color: isMe ? Colors.white : t.color,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12)),
                     ],
                   ),
-                ),
-              ).animate().fadeIn().slideY(begin: 0.1),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: standings.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('Error: $e')),
-                data: (rows) => ListView.separated(
-                  itemCount: rows.length,
-                  separatorBuilder: (_, __) => const Divider(),
-                  itemBuilder: (context, i) {
-                    final r = rows[i];
-                    final isMe = r.profileId == profileId;
-                    return Semantics(
-                      label: 'Rank ${i + 1}, ${r.weeklyXp} XP${isMe ? ", you" : ""}',
-                      child: ListTile(
-                        leading: CircleAvatar(child: Text('${i + 1}')),
-                        title: Text(isMe ? 'You' : r.profileId),
-                        trailing: Text('${r.weeklyXp} XP'),
-                        tileColor: isMe ? Theme.of(context).colorScheme.primaryContainer : null,
-                      ),
-                    ).animate().fadeIn(delay: (i * 30).ms);
-                  },
-                ),
-              ),
-            ),
-            FilledButton.icon(
-              onPressed: () async {
-                final res = await ref.read(seasonResetProvider(profileId));
-                if (res != null && context.mounted) {
-                  final msg = res.promoted
-                      ? 'Promoted to ${res.tier.promoteTo?.label}!'
-                      : res.demoted
-                          ? 'Demoted to ${res.tier.demoteTo?.label}.'
-                          : res.shielded
-                              ? 'Shield absorbed a demotion!'
-                              : 'Held rank in ${res.tier.label}.';
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(msg)));
-                }
+                );
               },
-              icon: const Icon(Icons.refresh),
-              label: const Text('Resolve week'),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 18),
+          GradientBanner(
+            from: Palette.purple,
+            to: Palette.red,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('🏆 This week\'s standings',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900)),
+                const SizedBox(height: 6),
+                Text(
+                    'Top 10% get promoted, bottom 10% drop a tier. Shields save you from demotion.',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.9), fontSize: 13)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          ...standings.when(
+            data: (rows) {
+              final sorted = [...rows]
+                ..sort((a, b) => b.weeklyXp.compareTo(a.weeklyXp));
+              return sorted.asMap().entries.map((e) {
+                final i = e.key;
+                final m = e.value;
+                final isMe = m.profileId == profileId;
+                final medal = i == 0
+                    ? '🥇'
+                    : i == 1
+                        ? '🥈'
+                        : i == 2
+                            ? '🥉'
+                            : '${i + 1}.';
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isMe
+                        ? Palette.green.withOpacity(0.18)
+                        : theme.cardColor,
+                    borderRadius: BorderRadius.circular(14),
+                    border: isMe
+                        ? BorderSide(color: Palette.green, width: 2)
+                        : BorderSide.none,
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 30,
+                          child: Text(medal,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w900, fontSize: 16))),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          isMe ? 'You' : m.profileId,
+                          style: TextStyle(
+                              fontWeight: isMe
+                                  ? FontWeight.w900
+                                  : FontWeight.w600),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Palette.yellow,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text('${m.weeklyXp} XP',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12)),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(delay: (i * 30).ms);
+              }).toList();
+            },
+            loading: () => const [CircularProgressIndicator()],
+            error: (e, _) => [Text('Error: $e')],
+          ),
+          const SizedBox(height: 16),
+          PoppyButton(
+            label: 'Resolve week & claim result',
+            color: Palette.purple,
+            onTap: () async {
+              final res =
+                  await ref.read(seasonResetProvider(profileId).future);
+              SoundService.instance.levelUp();
+              if (res != null) {
+                final msg = res.promoted
+                    ? 'Promoted! ⬆️'
+                    : res.demoted
+                        ? 'Demoted ⬇️'
+                        : res.shielded
+                            ? 'Saved by shield 🛡️'
+                            : 'Stayed put';
+                celebrate(context, message: msg);
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: () => context.push('/buddies'),
+            child: const Text('Invite buddies to join your league →'),
+          ),
+        ],
       ),
     );
   }
 }
-
-LeagueTier _tierOf(String s) =>
-    LeagueTier.values.firstWhere((t) => t.name == s, orElse: () => LeagueTier.bronze);

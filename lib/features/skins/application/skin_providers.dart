@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/skins/data/skin_repository.dart';
 import 'package:profileforge/features/skins/domain/skin_definitions.dart';
+import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 final skinRepositoryProvider = Provider<SkinRepository>((ref) {
@@ -34,4 +35,22 @@ final equipSkinProvider =
     Provider.family<void, ({String profileId, String skinId})>((ref, args) {
   ref.watch(skinRepositoryProvider).equip(args.profileId, args.skinId);
   ref.invalidate(equippedSkinProvider(args.profileId));
+});
+
+/// Buy a skin with gems (unlocks it regardless of XP). Returns true if bought.
+final purchaseSkinProvider =
+    Provider.family<bool, ({String profileId, String skinId})>((ref, args) {
+  final cost = kSkinGemCost[args.skinId] ?? 0;
+  if (cost <= 0) {
+    ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
+    ref.invalidate(unlockedSkinsProvider(args.profileId));
+    return true;
+  }
+  final ok =
+      ref.read(spendGemsProvider((profileId: args.profileId, cost: cost)));
+  if (ok) {
+    ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
+    ref.invalidate(unlockedSkinsProvider(args.profileId));
+  }
+  return ok;
 });

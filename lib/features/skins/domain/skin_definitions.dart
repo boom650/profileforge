@@ -172,9 +172,23 @@ const List<Skin> kSkins = [
 /// Resolve a skin by id (falls back to the first/common skin).
 Skin skinById(String id) => kSkins.firstWhere((s) => s.id == id, orElse: () => kSkins.first);
 
-/// Synergy bonus: if equipped skin's synergyPillar matches the activity pillar,
+/// Syncergy bonus: if equipped skin's synergyPillar matches the activity pillar,
 /// return the bonus multiplier; otherwise 1.0.
 double synergyBonus(Skin equipped, SkinPillar activityPillar) {
   if (equipped.synergyPillar == activityPillar) return 1.1;
   return 1.0;
 }
+
+/// Gem cost to buy a skin from the shop (when it isn't yet XP-unlocked).
+/// Common skins are free; rarer ones cost more.
+const Map<String, int> kSkinGemCost = {
+  'scholar': 0,
+  'captain': 120,
+  'citizen': 90,
+  'athlete': 80,
+  'investigator': 200,
+  'maker': 220,
+  'guardian': 160,
+  'paragon': 400,
+  'diplomat': 800,
+};

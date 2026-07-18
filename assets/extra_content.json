@@ -1,0 +1,78 @@
+{
+  "essay_templates": {
+    "personal_growth": "Prompt: Describe a challenge you overcame.\nHook: a single vivid scene.\nBody: what you did, what you learned, how it changed you.\nClose: tie it to your future goals.",
+    "why_university": "Prompt: Why this university?\nOpen: a specific moment that drew you here.\nBody: 2-3 concrete programs/people/labs that fit your plan.\nClose: how you'll contribute back."
+  },
+  "interview_questions": [
+    "Tell me about yourself.",
+    "Why this program?",
+    "Describe a time you failed and what you learned.",
+    "What's a book that changed how you think?",
+    "Where do you see yourself in 5 years?",
+    "What would you do if admitted and a better offer appeared?"
+  ],
+  "scholarships": [
+    {
+      "name": "Fulbright",
+      "region": "Global",
+      "note": "For graduate study; competitive, leadership focus."
+    },
+    {
+      "name": "Chevening",
+      "region": "UK",
+      "note": "UK gov; future leaders."
+    },
+    {
+      "name": "Rhodes",
+      "region": "Oxford",
+      "note": "Academic + character; very selective."
+    },
+    {
+      "name": "DAAD",
+      "region": "Germany",
+      "note": "Research/study in Germany."
+    },
+    {
+      "name": "Commonwealth",
+      "region": "UK/Commonwealth",
+      "note": "Need-based + merit."
+    },
+    {
+      "name": "Erasmus+",
+      "region": "EU",
+      "note": "Mobility grants within Europe."
+    }
+  ],
+  "olympiads": [
+    {
+      "name": "IMO",
+      "subject": "Math",
+      "region": "Global"
+    },
+    {
+      "name": "IPhO",
+      "subject": "Physics",
+      "region": "Global"
+    },
+    {
+      "name": "ICO",
+      "subject": "Chemistry",
+      "region": "Global"
+    },
+    {
+      "name": "IBO",
+      "subject": "Biology",
+      "region": "Global"
+    },
+    {
+      "name": "IOI",
+      "subject": "Informatics",
+      "region": "Global"
+    },
+    {
+      "name": "ISEF",
+      "subject": "Science Fair",
+      "region": "Global"
+    }
+  ]
+}

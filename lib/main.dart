@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/data/app_database_provider.dart';
-import 'package:profileforge/core/localization/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:profileforge/core/navigation/app_router.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
-void main() {
+/// ProfileForge — gamified admission-journey companion.
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting();
   runApp(const ProviderScope(child: ProfileForgeApp()));
 }
 
@@ -14,21 +17,20 @@ class ProfileForgeApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(appDatabaseProvider); // open DB early
-    final router = ref.watch(routerProvider);
+    final mode = ref.watch(themeModeProvider);
     return MaterialApp.router(
       title: 'ProfileForge',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-      ),
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        ...GlobalMaterialLocalizations.delegates,
-      ],
-      supportedLocales: const [Locale('en'), Locale('zh')],
-      routerConfig: router,
       debugShowCheckedModeBanner: false,
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
+      themeMode: toFlutterThemeMode(mode),
+      routerConfig: ref.watch(routerProvider),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en')],
     );
   }
 }
