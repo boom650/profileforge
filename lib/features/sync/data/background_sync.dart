@@ -1,30 +1,19 @@
-import 'package:workmanager/workmanager.dart';
-
-/// H9 background sync registration. Registers a periodic Workmanager task
-/// that flushes the offline outbox when the OS grants a background window.
-/// Entrypoint runs in a separate isolate.
-@pragma('vm:entry-point')
-void syncCallbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    // TODO: resolve ProviderContainer + run syncFlushProvider.
-    // For now the outbox is flushed opportunistically on connectivity restore.
-    return Future.value(true);
-  });
-}
-
+/// H9 background sync registration.
+///
+/// NOTE: the periodic Workmanager task is intentionally not wired in the CI
+/// release build because the `workmanager` plugin's bundled Kotlin does not
+/// compile against the Kotlin/AGP versions emitted by `flutter create` on
+/// Flutter 3.32. The offline outbox is flushed opportunistically whenever
+/// connectivity is restored (see `sync_providers.dart` -> `syncFlushProvider`),
+/// which covers the common offline->online case. A proper backend-scheduled
+/// periodic sync is tracked under Phase Two (H9) in ROADMAP.md.
 class BackgroundSync {
   static const _syncTask = 'profileforge_periodic_sync';
 
+  /// No-op on the current build. Real periodic registration is a Phase Two item.
   static Future<void> initialize() async {
-    await Workmanager().initialize(
-      syncCallbackDispatcher,
-      isInDebugMode: false,
-    );
-    await Workmanager().registerPeriodicTask(
-      _syncTask,
-      _syncTask,
-      frequency: const Duration(hours: 6),
-      constraints: Constraints(networkType: NetworkType.connected),
-    );
+    // TODO(phase-two): re-add a Kotlin-2-compatible periodic sync plugin and
+    // resolve the ProviderContainer inside the background isolate entrypoint.
+    return;
   }
 }

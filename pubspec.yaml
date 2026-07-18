@@ -32,8 +32,8 @@ dependencies:
   go_router: ^14.2.7
   # Connectivity
   connectivity_plus: ^6.0.3
-  # Background
-  workmanager: ^0.5.2
+  # Background (H9 periodic sync intentionally not wired in CI build — see background_sync.dart)
+  # workmanager: ^0.5.2  # Kotlin incompatible with Flutter 3.32 template; outbox flushes on connectivity restore
   # i18n
   intl: ^0.20.2
   # HTTP client (H9 backend)
