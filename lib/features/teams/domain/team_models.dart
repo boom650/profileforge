@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team_models.freezed.dart';
 
-enum TeamPrivacy { `public`, `private` }
+enum TeamPrivacy { public, private }
 
 @freezed
 class Team with _$Team {
