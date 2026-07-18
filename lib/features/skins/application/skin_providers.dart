@@ -47,7 +47,7 @@ final purchaseSkinProvider =
     return true;
   }
   final ok = await ref
-      .watch(spendGemsProvider((profileId: args.profileId, cost: cost)))
+      .read(spendGemsProvider((profileId: args.profileId, cost: cost)))
       .future;
   if (ok) {
     ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
