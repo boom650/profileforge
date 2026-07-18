@@ -23,11 +23,15 @@ class SoundService {
     if (_muted) return;
     try {
       await _player.stop();
-      await _player.play(AssetSource('audio/$name.wav'),
-          mode: PlayerMode.lowLatency);
+      await _player.play(
+        AssetSource('audio/$name.wav'),
+        mode: PlayerMode.lowLatency,
+      );
     } catch (_) {
       // Missing asset — silently ignore.
     }
+  }
+
   void dispose() => _player.dispose();
 
   // Named effects (fire-and-forget; intentionally not awaited by callers).
