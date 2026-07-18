@@ -20,6 +20,8 @@ dependencies:
   drift: ^2.20.0
   drift_flutter: ^0.1.0
   sqlite3_flutter_libs: ^0.5.20
+  flutter_localizations:
+    sdk: flutter
   # Persistence of non-DB prefs (flags)
   shared_preferences: ^2.3.2
   # Secure storage

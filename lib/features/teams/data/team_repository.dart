@@ -25,7 +25,7 @@ class TeamRepository {
     ));
   }
 
-  Future<List<TeamMember>> members(String teamId) async {
+  Future<List<TeamMemberRow>> members(String teamId) async {
     return (_db.select(_db.teamMembers)
           ..where((t) => t.teamId.equals(teamId)))
         .get();
@@ -42,7 +42,7 @@ class TeamRepository {
     }
   }
 
-  Future<List<TeamChallenge>> challenges(String teamId) async {
+  Future<List<TeamChallengeRow>> challenges(String teamId) async {
     return (_db.select(_db.teamChallenges)
           ..where((t) => t.teamId.equals(teamId)))
         .get();

@@ -1,14 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/teams/data/team_repository.dart';
+import 'package:profileforge/features/teams/domain/team_models.dart';
 
 final teamRepositoryProvider = Provider<TeamRepository>((ref) {
   return TeamRepository(ref.watch(appDatabaseProvider));
 });
 
 final myTeamsProvider =
-    FutureProvider.family<List<TeamMember>, String>((ref, profileId) async {
-  return (_db(ref).select(_db(ref).teams)).get() as Future<List<TeamMember>>;
+    FutureProvider.family<List<TeamRow>, String>((ref, profileId) async {
+  final db = ref.watch(appDatabaseProvider);
+  return (db.select(db.teams)
+        ..where((t) => t.ownerProfileId.equals(profileId)))
+      .get();
+});
+
+final teamMembersProvider =
+    FutureProvider.family<List<TeamMemberRow>, String>((ref, teamId) async {
+  return ref.watch(teamRepositoryProvider).members(teamId);
 });
 
 final teamLeaderboardProvider =
@@ -27,5 +37,3 @@ final joinTeamProvider =
     Provider.family<void, ({String teamId, String profileId})>((ref, args) {
   ref.watch(teamRepositoryProvider).joinTeam(args.teamId, args.profileId);
 });
-
-AppDatabase _db(WidgetRef ref) => ref.watch(appDatabaseProvider);

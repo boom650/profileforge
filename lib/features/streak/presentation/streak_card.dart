@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 
@@ -72,7 +73,7 @@ class _StreakCardBody extends ConsumerWidget {
                     final event = await ref
                         .read(streakProvider(profileId).notifier)
                         .recordToday();
-                    final day = event.maybeWhen(
+                    final day = event?.maybeWhen(
                       milestone: (d) => d,
                       orElse: () => null,
                     );

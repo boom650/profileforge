@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:profileforge/core/data/tables.dart';
+import 'package:profileforge/features/skins/data/skin_table.dart';
 
 part 'app_database.g.dart';
 
@@ -20,6 +21,7 @@ part 'app_database.g.dart';
   TeamChallenges,
   Onboarding,
   SyncOutbox,
+  SkinStates,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])

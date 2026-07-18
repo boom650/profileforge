@@ -16,7 +16,7 @@ class BuddyRepository {
     }
   }
 
-  Future<List<Buddy>> listBuddies(String profileId) async {
+  Future<List<BuddyRow>> listBuddies(String profileId) async {
     try {
       return (_db.select(_db.buddies)
             ..where((t) => t.profileId.equals(profileId)))
@@ -39,7 +39,7 @@ class BuddyRepository {
     }
   }
 
-  Future<List<BuddyCheckIn>> recentCheckIns(String profileId) async {
+  Future<List<BuddyCheckInRow>> recentCheckIns(String profileId) async {
     try {
       final rows = await (_db.select(_db.buddyCheckIns)
             ..where((t) => t.toProfileId.equals(profileId))

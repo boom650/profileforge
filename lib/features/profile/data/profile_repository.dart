@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/features/profile/domain/profile.dart';
@@ -15,7 +16,7 @@ class ProfileRepository {
       id: row.id,
       name: row.name,
       goal: row.goal,
-      achievements: row.achievements,
+      achievements: (jsonDecode(row.achievements) as List).cast<String>(),
     );
   }
 
@@ -25,7 +26,7 @@ class ProfileRepository {
             id: Value(p.id),
             name: Value(p.name),
             goal: Value(p.goal),
-            achievements: Value(p.achievements),
+            achievements: Value(jsonEncode(p.achievements)),
           ),
         );
   }

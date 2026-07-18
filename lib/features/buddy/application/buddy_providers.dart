@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/buddy/data/buddy_repository.dart';
 
@@ -7,7 +8,7 @@ final buddyRepositoryProvider = Provider<BuddyRepository>((ref) {
 });
 
 final buddiesProvider =
-    FutureProvider.family<List<Buddy>, String>((ref, profileId) async {
+    FutureProvider.family<List<BuddyRow>, String>((ref, profileId) async {
   return ref.watch(buddyRepositoryProvider).listBuddies(profileId);
 });
 

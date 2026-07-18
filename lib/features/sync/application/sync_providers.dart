@@ -11,7 +11,7 @@ final syncRepositoryProvider = Provider<SyncRepository>((ref) {
 final syncEngineProvider = Provider<SyncEngine>((ref) => SyncEngine());
 
 final connectivityProvider = StreamProvider<ConnectivityResult>((ref) {
-  return Connectivity().onStatusChange;
+  return Connectivity().onConnectivityChanged;
 });
 
 /// Flushes the outbox when online. In production this POSTs to the REST

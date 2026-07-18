@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
 
 class SyncRepository {
