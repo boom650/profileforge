@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/buddy/data/buddy_repository.dart';
+import 'package:profileforge/features/buddy/domain/buddy_models.dart';
 
 final buddyRepositoryProvider = Provider<BuddyRepository>((ref) {
   return BuddyRepository(ref.watch(appDatabaseProvider));

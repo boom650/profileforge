@@ -10,7 +10,7 @@ final syncRepositoryProvider = Provider<SyncRepository>((ref) {
 
 final syncEngineProvider = Provider<SyncEngine>((ref) => SyncEngine());
 
-final connectivityProvider = StreamProvider<ConnectivityResult>((ref) {
+final connectivityProvider = StreamProvider<List<ConnectivityResult>>((ref) {
   return Connectivity().onConnectivityChanged;
 });
 

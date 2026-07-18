@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/features/calendar/domain/calendar_engine.dart';
 import 'package:profileforge/features/calendar/data/calendar_repository.dart';
 
 final calendarRepositoryProvider = Provider<CalendarRepository>((ref) => const CalendarRepository());

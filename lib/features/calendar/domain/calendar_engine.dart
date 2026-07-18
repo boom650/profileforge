@@ -102,7 +102,7 @@ class TaskAllocator {
     required this.fixed,
     required this.tasks,
     required this.energy,
-    this.priority = const PriorityEngine(),
+    this.priority = PriorityEngine(),
     BacklogQueue? backlog,
   }) : backlog = backlog ?? BacklogQueue();
 
