@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:profileforge/features/skins/data/skin_table.dart'
-    show SkinStates;
 
 /// Profile table — the student's admission identity.
 /// Data class named ProfileRow to avoid clashing with the freezed domain Profile.
@@ -34,7 +32,7 @@ class Streaks extends Table {
   IntColumn get graceDaysUsed => integer().withDefault(const Constant(0))();
   IntColumn get freezeTokens => integer().withDefault(const Constant(3))();
   IntColumn get weekendAmulets => integer().withDefault(const Constant(2))();
-  IntColumn get recovered => integer().withDefault(const Constant(0))();
+  BoolColumn get recovered => boolean().withDefault(const Constant(false))();
   @override
   Set<Column<Object>> get primaryKey => {profileId};
 }
@@ -142,10 +140,13 @@ class Onboarding extends Table {
   TextColumn get profileId => text()();
   TextColumn get targetUniversities => text().withDefault(const Constant('[]'))();
   TextColumn get subjects => text().withDefault(const Constant('[]'))();
-  TextColumn get goals => text().withDefault(const Constant('[]'))();
-  TextColumn get budget => text().withDefault(const Constant(''))();
-  IntColumn get radiusKm => integer().withDefault(const Constant(0))();
-  BoolColumn get completed => boolean().withDefault(const Constant(false))();
+  TextColumn get grades => text().withDefault(const Constant('{}'))();
+  TextColumn get clubs => text().withDefault(const Constant('[]'))();
+  IntColumn get budget => integer().withDefault(const Constant(0))();
+  IntColumn get travelRadiusKm => integer().withDefault(const Constant(0))();
+  IntColumn get availabilityHoursPerWeek => integer().withDefault(const Constant(0))();
+  TextColumn get careerInterests => text().withDefault(const Constant('[]'))();
+  TextColumn get location => text().withDefault(const Constant(''))();
   @override
   Set<Column<Object>> get primaryKey => {profileId};
 }

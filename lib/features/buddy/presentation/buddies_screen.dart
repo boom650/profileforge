@@ -33,15 +33,15 @@ class BuddiesScreen extends ConsumerWidget {
                 itemBuilder: (context, i) {
                   final b = list[i];
                   return Semantics(
-                    label: 'Buddy ${b.buddyId}',
+                    label: 'Buddy ${b.buddyProfileId}',
                     child: ListTile(
                       leading: const CircleAvatar(child: Icon(Icons.person)),
-                      title: Text(b.buddyId),
+                      title: Text(b.buddyProfileId),
                       subtitle: Text('Goal: ${b.sharedStreakGoal}-day shared streak'),
                       trailing: FilledButton(
                         onPressed: () => ref.read(checkInProvider((
                           from: profileId,
-                          to: b.buddyId,
+                          to: b.buddyProfileId,
                           xp: 10,
                           note: 'Keep going!',
                         ))),

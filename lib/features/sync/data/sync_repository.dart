@@ -8,7 +8,7 @@ class SyncRepository {
   Future<int> enqueue(String entity, String op, String payload) async {
     return _db.into(_db.syncOutbox).insert(SyncOutboxCompanion(
       entity: Value(entity),
-      op: Value(op),
+      kind: Value(op),
       payload: Value(payload),
     ));
   }
@@ -16,7 +16,7 @@ class SyncRepository {
   Future<List<SyncOutboxRow>> pending() async {
     return (_db.select(_db.syncOutbox)
           ..where((t) => t.done.equals(false))
-          ..orderBy([(t) => Ordering.desc(t.queuedAt)]))
+          ..orderBy([(t) => t.queuedAt.desc()]))
         .get();
   }
 

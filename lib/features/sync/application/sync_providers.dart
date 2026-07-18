@@ -20,7 +20,7 @@ final syncFlushProvider = FutureProvider<void>((ref) async {
   final repo = ref.watch(syncRepositoryProvider);
   final engine = ref.watch(syncEngineProvider);
   final online = await Connectivity().checkConnectivity();
-  if (online == ConnectivityResult.none) return;
+  if (online.contains(ConnectivityResult.none)) return;
   final pending = await repo.pending();
   for (final op in pending) {
     // TODO: send op.payload to backend via REST/WebSocket.

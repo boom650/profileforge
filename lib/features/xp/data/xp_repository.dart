@@ -33,7 +33,7 @@ class XpRepository {
   Future<List<XpEventRow>> history(String profileId) async {
     return (_db.select(_db.xpEvents)
           ..where((t) => t.profileId.equals(profileId))
-          ..orderBy([(t) => Ordering.desc(t.at)]))
+          ..orderBy([(t) => t.at.desc()]))
         .get();
   }
 }

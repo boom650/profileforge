@@ -9,7 +9,7 @@ class BuddyRepository {
     try {
       await _db.into(_db.buddies).insertOnConflictUpdate(BuddiesCompanion(
         profileId: Value(myProfileId),
-        buddyId: Value(buddyId),
+        buddyProfileId: Value(buddyId),
       ));
     } catch (e) {
       rethrow;
@@ -43,7 +43,7 @@ class BuddyRepository {
     try {
       final rows = await (_db.select(_db.buddyCheckIns)
             ..where((t) => t.toProfileId.equals(profileId))
-            ..orderBy([(t) => Ordering.desc(t.at)]))
+            ..orderBy([(t) => t.id.desc()])
           .get();
       return rows;
     } catch (e) {

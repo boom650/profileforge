@@ -52,8 +52,8 @@ class EnergyCurve {
 
 /// Scores + ranks tasks. Critical/high-pillar tasks float to the top.
 class PriorityEngine {
+  const PriorityEngine();
   /// Weighted priority: base priority + pillar-weight boost + deadline pressure.
-  double score(Task t, {int? daysUntilDue}) {
     var s = t.priority * 10.0;
     const pillarWeight = {
       'Academics': 3.0,

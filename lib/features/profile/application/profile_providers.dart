@@ -22,7 +22,8 @@ class ProfileNotifier extends FamilyAsyncNotifier<Profile, String> {
   FutureOr<Profile> build(String id) async {
     _id = id;
     _repo = ref.watch(profileRepositoryProvider);
-    return _repo.get(id) ?? Profile(id: id);
+    final existing = await _repo.get(id);
+    return existing ?? Profile(id: id);
   }
 
   Future<void> setName(String v) => _update((p) => p.copyWith(name: v));
