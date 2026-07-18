@@ -11,7 +11,8 @@ class CalendarRepository {
     required List<Task> tasks,
     required EnergyCurve energy,
   }) =>
-      TaskAllocator(fixed: fixed, tasks: tasks, energy: energy).allocate();
+      TaskAllocator(fixed: fixed, tasks: tasks, energy: energy, priority: PriorityEngine())
+          .allocate();
 
   /// Detect unexpected free time between [from] and [to].
   List<CalendarSlot> detectUnexpectedFree(
@@ -19,6 +20,6 @@ class CalendarRepository {
     DateTime from,
     DateTime to,
   ) =>
-      TaskAllocator(fixed: fixed, tasks: const [], energy: EnergyCurve())
+      TaskAllocator(fixed: fixed, tasks: const [], energy: EnergyCurve(), priority: PriorityEngine())
           .detectUnexpectedFree(from, to);
 }

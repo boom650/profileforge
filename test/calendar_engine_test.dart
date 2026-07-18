@@ -20,6 +20,7 @@ void main() {
         fixed: fixed,
         tasks: tasks,
         energy: EnergyCurve(),
+        priority: PriorityEngine(),
       );
       final plan = alloc.allocate();
       expect(plan.length, 2);
@@ -34,14 +35,14 @@ void main() {
 
     test('oversized tasks fall into backlog', () {
       final big = Task(id: 'big', title: 'Big', priority: 5, estMinutes: 99999);
-      final alloc = TaskAllocator(fixed: fixed, tasks: [big], energy: EnergyCurve());
+      final alloc = TaskAllocator(fixed: fixed, tasks: [big], energy: EnergyCurve(), priority: PriorityEngine());
       final plan = alloc.allocate();
       expect(plan.containsKey(big), isFalse);
       expect(alloc.backlog.length, 1);
     });
 
     test('detectUnexpectedFree returns slot when no fixed overlap', () {
-      final alloc = TaskAllocator(fixed: fixed, tasks: const [], energy: EnergyCurve());
+      final alloc = TaskAllocator(fixed: fixed, tasks: const [], energy: EnergyCurve(), priority: PriorityEngine());
       final gap = alloc.detectUnexpectedFree(
         DateTime(2026, 1, 5, 14), // Mon 14:00 free
         DateTime(2026, 1, 5, 15),
@@ -51,7 +52,7 @@ void main() {
 
     test('reschedule frees capacity and re-allocates backlog', () {
       final big = Task(id: 'big', title: 'Big', priority: 4, estMinutes: 99999);
-      final alloc = TaskAllocator(fixed: fixed, tasks: [big], energy: EnergyCurve());
+      final alloc = TaskAllocator(fixed: fixed, tasks: [big], energy: EnergyCurve(), priority: PriorityEngine());
       alloc.allocate();
       final current = alloc.allocate();
       // reschedule removes 'big' and re-allocates remaining (none) — no throw
