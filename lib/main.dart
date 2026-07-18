@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
+import 'package:profileforge/core/localization/app_localizations.dart';
+import 'package:profileforge/core/navigation/app_router.dart';
+import 'package:profileforge/core/session/session_provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: ProfileForgeApp()));
 }
 
@@ -13,17 +15,21 @@ class ProfileForgeApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Eagerly open the database so the first screen has data ready.
-    final _ = ref.watch(appDatabaseProvider);
+    ref.watch(appDatabaseProvider); // open DB early
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'ProfileForge',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
       ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
+      supportedLocales: const [Locale('en'), Locale('zh')],
       routerConfig: router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -16,6 +16,10 @@ part 'app_database.g.dart';
   Buddies,
   Teams,
   TeamMembers,
+  BuddyCheckIns,
+  TeamChallenges,
+  Onboarding,
+  SyncOutbox,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])

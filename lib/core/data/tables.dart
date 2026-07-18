@@ -101,3 +101,43 @@ class TeamMembers extends Table {
   @override
   Set<Column> get primaryKey => {teamId, profileId};
 }
+
+/// Buddy check-ins (H4) — XP/log book shared between accountability partners.
+class BuddyCheckIns extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get fromProfileId => text()();
+  TextColumn get toProfileId => text()();
+  IntColumn get xp => integer().withDefault(const Constant(0))();
+  TextColumn get note => text().withDefault(const Constant(''))();
+  DateTimeColumn get at => dateTime().withDefault(currentDateAndTime)();
+}
+
+/// Team challenges (H5) — shared goals with XP targets and deadlines.
+class TeamChallenges extends Table {
+  TextColumn get id => text()();
+  TextColumn get teamId => text()();
+  TextColumn get title => text()();
+  IntColumn get goalXp => integer().withDefault(const Constant(0))();
+  IntColumn get currentXp => integer().withDefault(const Constant(0))();
+  DateTimeColumn get endsAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Onboarding capture (H7) — the student's admission context.
+class Onboarding extends Table {
+  TextColumn get profileId => text()();
+  TextColumn get targetUniversities => text().withDefault(const Constant('[]'))();
+  TextColumn get subjects => text().withDefault(const Constant('[]'))();
+  TextColumn get grades => text().withDefault(const Constant('{}'))();
+  TextColumn get clubs => text().withDefault(const Constant('[]'))();
+  IntColumn get budget => integer().withDefault(const Constant(0))();
+  IntColumn get travelRadiusKm => integer().withDefault(const Constant(0))();
+  IntColumn get availabilityHoursPerWeek => integer().withDefault(const Constant(5))();
+  TextColumn get careerInterests => text().withDefault(const Constant('[]'))();
+  TextColumn get location => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column> get primaryKey => {profileId};
+}

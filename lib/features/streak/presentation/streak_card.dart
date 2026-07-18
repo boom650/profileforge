@@ -5,10 +5,10 @@ import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 
 /// Animated streak card with humane-recovery indicators.
-/// Accessible: Semantic labels on every interactive element.
+/// Accessible: Semantic labels + tooltips on every interactive element.
 class StreakCard extends ConsumerWidget {
-  final String profileId;
   const StreakCard({super.key, required this.profileId});
+  final String profileId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,55 +25,62 @@ class StreakCard extends ConsumerWidget {
 }
 
 class _StreakCardBody extends ConsumerWidget {
+  const _StreakCardBody({required this.state, required this.profileId});
   final StreakState state;
   final String profileId;
-  const _StreakCardBody({required this.state, required this.profileId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    return Semantics(
-      label: 'Current streak ${state.current} days, longest ${state.longest}',
-      child: Card(
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.local_fire_department, color: Colors.orange, size: 32)
-                      .animate(onPlay: (c) => c.repeat())
-                      .shake(duration: 1200.ms),
-                  const SizedBox(width: 8),
-                  Text('${state.current}',
-                      style: theme.textTheme.headlineMedium
-                          ?.copyWith(fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 6),
-                  const Text('day streak',
-                      style: TextStyle(color: Colors.grey)),
-                  const Spacer(),
-                  _RecoveryChips(state: state),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text('Longest: ${state.longest}',
-                  style: theme.textTheme.bodySmall),
-              const SizedBox(height: 12),
-              FilledButton.icon(
-                icon: const Icon(Icons.check_circle),
-                label: const Text('Mark today done'),
-                onPressed: () async {
-                  final event = await ref
-                      .read(streakProvider(profileId).notifier)
-                      .recordToday();
-                  if (event is _Milestone && context.mounted) {
-                    _celebrate(context, (event as _Milestone).day);
-                  }
-                },
-              ),
-            ],
+    return MergeSemantics(
+      child: Semantics(
+        label: 'Current streak ${state.current} days, longest ${state.longest}',
+        child: Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Tooltip(
+                      message: 'Your streak is burning bright',
+                      child: const Icon(Icons.local_fire_department,
+                              color: Colors.orange, size: 32)
+                          .animate(onPlay: (c) => c.repeat())
+                          .shake(duration: 1200.ms),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(state.current.toString(),
+                        semanticsLabel: '${state.current} days',
+                        style: theme.textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 6),
+                    const Text('day streak', style: TextStyle(color: Colors.grey)),
+                    const Spacer(),
+                    _RecoveryChips(state: state),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text('Longest: ${state.longest}', style: theme.textTheme.bodySmall),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  icon: const Icon(Icons.check_circle),
+                  label: const Text('Mark today done'),
+                  onPressed: () async {
+                    final event = await ref
+                        .read(streakProvider(profileId).notifier)
+                        .recordToday();
+                    final day = event.maybeWhen(
+                      milestone: (d) => d,
+                      orElse: () => null,
+                    );
+                    if (day != null && context.mounted) _celebrate(context, day);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -81,6 +88,7 @@ class _StreakCardBody extends ConsumerWidget {
   }
 
   void _celebrate(BuildContext context, int day) {
+    HapticFeedback.mediumImpact();
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -107,26 +115,32 @@ class _StreakCardBody extends ConsumerWidget {
 }
 
 class _RecoveryChips extends StatelessWidget {
-  final StreakState state;
   const _RecoveryChips({required this.state});
+  final StreakState state;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 6,
       children: [
-        _chip(Icons.ac_unit, '${state.freezeTokens}', 'Freeze tokens'),
-        _chip(Icons.auto_awesome, '${state.weekendAmulets}', 'Weekend amulets'),
-        _chip(Icons.forum, '${state.graceDaysUsed}', 'Grace used'),
+        _chip(Icons.ac_unit, '${state.freezeTokens}', 'Freeze tokens',
+            'Skip a day without breaking your streak'),
+        _chip(Icons.auto_awesome, '${state.weekendAmulets}', 'Weekend amulets',
+            'Protect weekend streaks'),
+        _chip(Icons.forum, '${state.graceDaysUsed}', 'Grace days used',
+            'Late-day grace already used'),
       ],
     );
   }
 
-  Widget _chip(IconData icon, String n, String label) => Semantics(
-        label: '$label: $n',
-        child: Chip(
-          avatar: Icon(icon, size: 16),
-          label: Text(n, style: const TextStyle(fontSize: 12)),
+  Widget _chip(IconData icon, String n, String label, String tooltip) => Tooltip(
+        message: tooltip,
+        child: Semantics(
+          label: '$label: $n',
+          child: Chip(
+            avatar: Icon(icon, size: 16),
+            label: Text(n, style: const TextStyle(fontSize: 12)),
+          ),
         ),
       );
 }
