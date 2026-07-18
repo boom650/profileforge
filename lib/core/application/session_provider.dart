@@ -1,5 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/core/data/app_database_provider.dart';
 
 /// Active user session. Offline-first: a single local profile is the default.
 /// Multi-profile + auth arrive with H9 (backend). For now the device profile id

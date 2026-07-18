@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/streak/data/streak_repository.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 
@@ -30,20 +31,20 @@ class StreakNotifier extends FamilyAsyncNotifier<StreakState, String> {
   Future<StreakEvent?> recordToday() async {
     final now = DateTime.now();
     final s = state.valueOrNull ?? const StreakState();
-    final (next, event) = _engine.recordActivity(s, now);
-    await _repo.save(_profileId, next);
-    state = AsyncData(next);
-    return event;
+    final result = _engine.recordActivity(s, now);
+    await _repo.save(_profileId, result.state);
+    state = AsyncData(result.state);
+    return result.event;
   }
 
   /// Resolve a missed day humanely (called on app resume).
   Future<StreakEvent?> resolveMissed() async {
     final now = DateTime.now();
     final s = state.valueOrNull ?? const StreakState();
-    final (next, event) = _engine.resolveMissedDay(s, now);
-    await _repo.save(_profileId, next);
-    state = AsyncData(next);
-    return event;
+    final result = _engine.resolveMissedDay(s, now);
+    await _repo.save(_profileId, result.state);
+    state = AsyncData(result.state);
+    return result.event;
   }
 
   /// Spend a freeze token to protect the streak.

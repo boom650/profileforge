@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/profile/data/profile_repository.dart';
 import 'package:profileforge/features/profile/domain/profile.dart';
 
@@ -30,7 +31,8 @@ class ProfileNotifier extends FamilyAsyncNotifier<Profile, String> {
       _update((p) => p.addAchievement(a));
 
   Future<void> _update(Profile Function(Profile) fn) async {
-    final next = fn(state.valueOrNull ?? Profile(id: _id));
+    final current = state.valueOrNull;
+    final next = fn(current ?? Profile(id: _id));
     await _repo.save(next);
     state = AsyncData(next);
   }

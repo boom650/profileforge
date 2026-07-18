@@ -42,13 +42,11 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 16),
             StreakCard(profileId: profileId),
             const SizedBox(height: 16),
-            Consumer(builder: (c, w, _) {
-              return FilledButton.icon(
-                icon: const Icon(Icons.edit),
-                label: const Text('Edit Profile'),
-                onPressed: () => c.push('/profile'),
-              );
-            }),
+            FilledButton.icon(
+              icon: const Icon(Icons.edit),
+              label: const Text('Edit Profile'),
+              onPressed: () => context.push('/profile'),
+            ),
           ],
         ),
       ),

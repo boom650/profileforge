@@ -11,6 +11,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider(profileId));
+    final notifier = ref.watch(profileProvider(profileId).notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Builder'),
@@ -23,7 +24,6 @@ class ProfilePage extends ConsumerWidget {
               if (p == null) return;
               final path = await exportProfilePdf(p);
               if (context.mounted) {
-                // share handled by caller; show path
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('PDF ready: $path')),
                 );
@@ -41,13 +41,13 @@ class ProfilePage extends ConsumerWidget {
             TextField(
               decoration: const InputDecoration(labelText: 'Name'),
               controller: TextEditingController(text: p.name),
-              onChanged: ref.read(profileProvider(profileId).notifier).setName,
+              onChanged: notifier.setName,
             ),
             const SizedBox(height: 12),
             TextField(
               decoration: const InputDecoration(labelText: 'Admissions Goal'),
               controller: TextEditingController(text: p.goal),
-              onChanged: ref.read(profileProvider(profileId).notifier).setGoal,
+              onChanged: notifier.setGoal,
             ),
             const SizedBox(height: 20),
             const Text('Achievements',
@@ -78,7 +78,7 @@ class ProfilePage extends ConsumerWidget {
                   ),
                 );
                 if (v != null && v.trim().isNotEmpty) {
-                  ref.read(profileProvider(profileId).notifier).addAchievement(v.trim());
+                  notifier.addAchievement(v.trim());
                 }
               },
             ),

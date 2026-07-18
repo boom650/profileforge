@@ -45,7 +45,7 @@ class _StreakCardBody extends ConsumerWidget {
                 children: [
                   const Icon(Icons.local_fire_department, color: Colors.orange, size: 32)
                       .animate(onPlay: (c) => c.repeat())
-                      .shake(duration: 1200.ms, y: 2),
+                      .shake(duration: 1200.ms),
                   const SizedBox(width: 8),
                   Text('${state.current}',
                       style: theme.textTheme.headlineMedium

@@ -4,7 +4,7 @@ import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/features/profile/presentation/badges_page.dart';
 import 'package:profileforge/features/profile/presentation/profile_page.dart';
 import 'package:profileforge/features/streak/presentation/streak_card.dart';
-import 'home_page.dart';
+import 'package:profileforge/features/home/home_page.dart';
 
 /// Central router. Offline-first; all routes resolve to local features.
 final routerProvider = Provider<GoRouter>((ref) {

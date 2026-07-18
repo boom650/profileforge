@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 
 /// Profile table — the student's admission identity.
+/// Data class named ProfileRow to avoid clashing with the domain Profile model.
+@DataClassName('ProfileRow')
 class Profiles extends Table {
   TextColumn get id => text()();
   TextColumn get name => text().withDefault(const Constant(''))();
