@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/features/home/home_page.dart';
 import 'package:profileforge/features/onboarding/presentation/onboarding_screen.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final profileId = ref.watch(activeProfileIdProvider);
   return GoRouter(

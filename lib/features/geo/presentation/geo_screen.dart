@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/geo/application/geo_providers.dart';
-import 'package:profileforge/features/geo/domain/geo_engine.dart';
 
 class GeoScreen extends ConsumerWidget {
   const GeoScreen({super.key, required this.lat, required this.lng, this.radiusKm = 25});

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/streak/data/streak_repository.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
