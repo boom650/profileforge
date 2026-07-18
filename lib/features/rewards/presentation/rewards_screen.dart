@@ -103,7 +103,8 @@ class RewardsScreen extends ConsumerWidget {
               label: 'Claim Day $day reward',
               color: Palette.orange,
               onTap: () async {
-                final g = await ref.read(claimDailyRewardProvider(profileId));
+                final g = await ref
+                    .read(claimDailyRewardProvider(profileId).future);
                 SoundService.instance.coin();
                 celebrate(context, message: '+$g 💎');
               },
