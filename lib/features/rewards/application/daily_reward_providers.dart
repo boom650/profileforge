@@ -15,10 +15,10 @@ final dailyRewardProvider =
   return ref.watch(dailyRewardRepositoryProvider).status(profileId);
 });
 
-/// Claim today's reward (awards gems via the wallet).
+/// Claim today's reward (awards gems via the wallet). Awaitable.
 final claimDailyRewardProvider =
-    Provider.family<int, String>((ref, profileId) {
-  final gems = ref.watch(dailyRewardRepositoryProvider).claim(profileId);
+    FutureProvider.family<int, String>((ref, profileId) async {
+  final gems = await ref.watch(dailyRewardRepositoryProvider).claim(profileId);
   ref.invalidate(dailyRewardProvider(profileId));
   ref.invalidate(gemsProvider(profileId));
   return gems;

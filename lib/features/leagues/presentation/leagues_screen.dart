@@ -40,17 +40,17 @@ class LeaguesScreen extends ConsumerWidget {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
-                    color: isMe ? t.color : t.color.withOpacity(0.15),
+                    color: isMe ? t.tierColor : t.tierColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: t.color),
+                    border: Border.all(color: t.tierColor),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(t.emoji, style: const TextStyle(fontSize: 22)),
-                      Text(t.label,
+                      Text(t.tierEmoji, style: const TextStyle(fontSize: 22)),
+                      Text(t.tierLabel,
                           style: TextStyle(
-                              color: isMe ? Colors.white : t.color,
+                              color: isMe ? Colors.white : t.tierColor,
                               fontWeight: FontWeight.w900,
                               fontSize: 12)),
                     ],
@@ -104,8 +104,8 @@ class LeaguesScreen extends ConsumerWidget {
                         : theme.cardColor,
                     borderRadius: BorderRadius.circular(14),
                     border: isMe
-                        ? BorderSide(color: Palette.green, width: 2)
-                        : BorderSide.none,
+                        ? Border.all(color: Palette.green, width: 2)
+                        : null,
                   ),
                   child: Row(
                     children: [
@@ -151,7 +151,7 @@ class LeaguesScreen extends ConsumerWidget {
             color: Palette.purple,
             onTap: () async {
               final res =
-                  await ref.read(seasonResetProvider(profileId).future);
+                  await ref.read(seasonResetProvider(profileId));
               SoundService.instance.levelUp();
               if (res != null) {
                 final msg = res.promoted

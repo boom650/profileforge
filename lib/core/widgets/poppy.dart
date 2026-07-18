@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// Reusable "poppy" UI atoms used across every screen.

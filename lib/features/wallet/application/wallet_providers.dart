@@ -19,10 +19,10 @@ final addGemsProvider =
   ref.invalidate(gemsProvider(args.profileId));
 });
 
-/// Attempt to spend gems; returns success.
+/// Attempt to spend gems; returns success (awaitable).
 final spendGemsProvider =
-    Provider.family<bool, ({String profileId, int cost})>((ref, args) {
-  final ok = ref.watch(walletRepositoryProvider).spend(args.profileId, args.cost);
+    FutureProvider.family<bool, ({String profileId, int cost})>((ref, args) async {
+  final ok = await ref.watch(walletRepositoryProvider).spend(args.profileId, args.cost);
   ref.invalidate(gemsProvider(args.profileId));
   return ok;
 });

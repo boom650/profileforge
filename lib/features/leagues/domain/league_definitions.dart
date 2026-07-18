@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'league_definitions.freezed.dart';
@@ -7,6 +8,22 @@ enum LeagueTier { bronze, silver, gold, platinum, diamond, obsidian }
 
 extension LeagueTierX on LeagueTier {
   String get label => name[0].toUpperCase() + name.substring(1);
+  Color get tierColor => switch (this) {
+        LeagueTier.bronze => const Color(0xFFCD7F32),
+        LeagueTier.silver => const Color(0xFF9AA0A6),
+        LeagueTier.gold => const Color(0xFFFFC800),
+        LeagueTier.platinum => const Color(0xFF1CB0F6),
+        LeagueTier.diamond => const Color(0xFF58CC02),
+        LeagueTier.obsidian => const Color(0xFF37474F),
+      };
+  String get tierEmoji => switch (this) {
+        LeagueTier.bronze => '🥉',
+        LeagueTier.silver => '🥈',
+        LeagueTier.gold => '🥇',
+        LeagueTier.platinum => '💎',
+        LeagueTier.diamond => '💠',
+        LeagueTier.obsidian => '🖤',
+      };
   int get promotionThreshold => switch (this) {
         LeagueTier.bronze => 300,
         LeagueTier.silver => 700,

@@ -43,6 +43,10 @@ class OnboardingProfile with _$OnboardingProfile {
 
   const OnboardingProfile._();
 
+  /// JSON used to persist [competitions] into the `location` DB column.
+  String get competitionsPersistJson => jsonEncode(
+      competitions.map((a) => {'name': a.name, 'result': a.result, 'year': a.year}).toList());
+
   bool get isComplete =>
       targetUniversities.isNotEmpty &&
       subjects.isNotEmpty &&
@@ -102,9 +106,9 @@ class OnboardingProfile with _$OnboardingProfile {
     try {
       comps = (jsonDecode(location) as List)
           .map((e) => Achievement(
-                name: (e['n'] ?? '').toString(),
-                result: (e['r'] ?? '').toString(),
-                year: (e['y'] ?? '').toString(),
+                name: (e['name'] ?? e['n'] ?? '').toString(),
+                result: (e['result'] ?? e['r'] ?? '').toString(),
+                year: (e['year'] ?? e['y'] ?? '').toString(),
               ))
           .toList();
     } catch (_) {

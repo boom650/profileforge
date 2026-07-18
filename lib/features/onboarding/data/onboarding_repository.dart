@@ -31,7 +31,7 @@ class OnboardingRepository {
       targetUniversities: Value(j.universities),
       subjects: Value(j.subjects),
       grades: Value(j.grades),
-      clubs: Value(j.activities), // activities stored in `clubs` column
+      clubs: Value(j.clubs), // activities stored in `clubs` column
       budget: Value(p.budget),
       travelRadiusKm: Value(p.travelRadiusKm),
       availabilityHoursPerWeek: Value(p.availabilityHoursPerWeek),

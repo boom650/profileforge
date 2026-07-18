@@ -49,11 +49,11 @@ class SkinUnlocks extends Table {
 /// Generated daily/weekly/monthly/special/seasonal missions.
 @DataClassName('MissionRow')
 class Missions extends Table {
-  TextColumn get id => text()();
-  TextColumn get profileId => text()();
-  TextColumn get title => text()();
-  TextColumn get pillar => text()();
-  TextColumn get cadence => text()();
+  TextColumn get id => text().withDefault(const Constant(''))();
+  TextColumn get profileId => text().withDefault(const Constant(''))();
+  TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get pillar => text().withDefault(const Constant(''))();
+  TextColumn get cadence => text().withDefault(const Constant('daily'))();
   DateTimeColumn get due => dateTime().nullable()();
   BoolColumn get done => boolean().withDefault(const Constant(false))();
   IntColumn get xpReward => integer().withDefault(const Constant(10))();

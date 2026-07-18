@@ -36,8 +36,11 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // Non-destructive: only create tables that don't yet exist.
-          await m.createOnlyForMissingTables();
+          // Non-destructive: only create tables added after v1.
+          if (from < 2) {
+            await m.createTable(wallets);
+            await m.createTable(dailyRewards);
+          }
         },
       );
 }

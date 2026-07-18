@@ -71,12 +71,11 @@ class BuddiesScreen extends ConsumerWidget {
             data: (rows) => rows.isEmpty
                 ? [const Text('No buddies yet. Tap + to add one.')]
                 : rows.map((b) {
-                    final initial = (b.buddyId.isNotEmpty
-                            ? b.buddyId[0]
-                            : '?')
+                    final initial = (b.buddyProfileId.isNotEmpty
+                          ? b.buddyProfileId[0]
+                          : '?')
                         .toUpperCase();
-                    final color = Palette
-                        .green; // deterministic color by hash would be nicer
+                    final color = Palette.green;
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
@@ -115,7 +114,7 @@ class BuddiesScreen extends ConsumerWidget {
                               SoundService.instance.tap();
                               ref.read(checkInProvider((
                                 from: profileId,
-                                to: b.buddyId,
+                                to: b.buddyProfileId,
                                 xp: 5,
                                 note: 'Checking in — let’s both finish today’s mission!',
                               )));

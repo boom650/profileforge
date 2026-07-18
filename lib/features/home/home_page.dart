@@ -235,19 +235,19 @@ class HomePage extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: tier.color.withOpacity(0.12),
+                  color: tier.tierColor.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: tier.color),
+                  border: Border.all(color: tier.tierColor),
                 ),
                 child: Row(
                   children: [
-                    Text(tier.emoji, style: const TextStyle(fontSize: 30)),
+                    Text(tier.tierEmoji, style: const TextStyle(fontSize: 30)),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(tier.label,
+                          Text(tier.tierLabel,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w900, fontSize: 16)),
                           Text(

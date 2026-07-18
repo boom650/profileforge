@@ -240,7 +240,7 @@ ThemeData darkTheme() => ThemeData(
 enum AppThemeMode { system, light, dark }
 
 final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, AppThemeMode>(
-  ThemeModeNotifier.new,
+  (ref) => ThemeModeNotifier(),
 );
 
 class ThemeModeNotifier extends StateNotifier<AppThemeMode> {
