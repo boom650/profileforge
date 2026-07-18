@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/features/buddies/presentation/buddies_screen.dart';
+import 'package:profileforge/features/buddy/presentation/buddies_screen.dart';
 import 'package:profileforge/features/geo/presentation/geo_screen.dart';
 import 'package:profileforge/features/leagues/presentation/leagues_screen.dart';
 import 'package:profileforge/features/missions/presentation/missions_screen.dart';

@@ -141,3 +141,17 @@ class Onboarding extends Table {
   @override
   Set<Column> get primaryKey => {profileId};
 }
+
+/// Offline-first sync outbox (H9). Queued mutations flushed by Workmanager
+/// when connectivity returns. `kind` = insert/update/delete; `payload` is the
+/// JSON body; `attempts` backs retry/backoff.
+class SyncOutbox extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get profileId => text()();
+  TextColumn get entity => text()(); // profile, streak, mission, ...
+  TextColumn get kind => text()(); // insert | update | delete
+  TextColumn get payload => text()(); // JSON
+  DateTimeColumn get queuedAt => dateTime().withDefault(currentDateAndTime)();
+  IntColumn get attempts => integer().withDefault(const Constant(0))();
+  BoolColumn get done => boolean().withDefault(const Constant(false))();
+}

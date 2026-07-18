@@ -7,8 +7,8 @@ final calendarRepositoryProvider = Provider<CalendarRepository>((ref) => const C
 final weeklyPlanProvider = Provider<Map<Task, CalendarSlot>>((ref) {
   final repo = ref.watch(calendarRepositoryProvider);
   // In production these come from the device calendar + mission backlog.
-  const fixed = <CalendarSlot>[];
-  const tasks = <Task>[
+  final fixed = <CalendarSlot>[];
+  final tasks = <Task>[
     Task(id: 'essay', title: 'University essay draft', priority: 5, estMinutes: 60),
     Task(id: 'paper', title: 'Read research paper', priority: 3, estMinutes: 60),
   ];

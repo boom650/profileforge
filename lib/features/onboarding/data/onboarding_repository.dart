@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:isolate';
+import 'package:flutter/foundation.dart';
 import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
