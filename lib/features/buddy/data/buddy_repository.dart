@@ -43,7 +43,7 @@ class BuddyRepository {
     try {
       final rows = await (_db.select(_db.buddyCheckIns)
             ..where((t) => t.toProfileId.equals(profileId))
-            ..orderBy([(t) => Ordering.desc(t.id)])
+            ..orderBy([(t) => Ordering.desc(t.id)]))
           .get();
       return rows;
     } catch (e) {
