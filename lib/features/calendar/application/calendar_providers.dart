@@ -13,5 +13,5 @@ final weeklyPlanProvider = Provider<Map<Task, CalendarSlot>>((ref) {
     Task(id: 'essay', title: 'University essay draft', priority: 5, estMinutes: 60),
     Task(id: 'paper', title: 'Read research paper', priority: 3, estMinutes: 60),
   ];
-  return repo.allocate(fixed: fixed, tasks: tasks, energy: EnergyCurve());
+  return repo.allocate(fixed: fixed, tasks: tasks, energy: EnergyCurve(), priority: PriorityEngine());
 });

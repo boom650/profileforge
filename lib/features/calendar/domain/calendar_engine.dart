@@ -103,7 +103,7 @@ class TaskAllocator {
     required this.fixed,
     required this.tasks,
     required this.energy,
-    this.priority = PriorityEngine(),
+    required this.priority,
     BacklogQueue? backlog,
   }) : backlog = backlog ?? BacklogQueue();
 

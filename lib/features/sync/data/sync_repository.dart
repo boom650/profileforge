@@ -16,7 +16,7 @@ class SyncRepository {
   Future<List<SyncOutboxRow>> pending() async {
     return (_db.select(_db.syncOutbox)
           ..where((t) => t.done.equals(false))
-          ..orderBy([(t) => t.queuedAt.desc()]))
+          ..orderBy([(t) => OrderingTerm.desc(t.queuedAt)]))
         .get();
   }
 

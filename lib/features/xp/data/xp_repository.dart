@@ -9,7 +9,7 @@ class XpRepository {
   Future<int> totalXp(String profileId) async {
     final row = await (_db.select(_db.xpEvents)
           ..where((t) => t.profileId.equals(profileId))
-          ..orderBy([(t) => Ordering.desc(t.id)])
+          ..orderBy([(t) => OrderingTerm.desc(t.at)])
           ..limit(1))
         .getSingleOrNull();
     return row?.balanceAfter ?? 0;
