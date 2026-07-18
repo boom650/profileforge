@@ -42,6 +42,7 @@ jobs:
         run: |
           rm -rf android
           flutter create --platforms android .
+          rm -f test/widget_test.dart
 
       - name: Get dependencies
         run: flutter pub get
