@@ -7,7 +7,8 @@ part 'league_definitions.freezed.dart';
 enum LeagueTier { bronze, silver, gold, platinum, diamond, obsidian }
 
 extension LeagueTierX on LeagueTier {
-  String get label => name[0].toUpperCase() + name.substring(1);
+  String get tierLabel => name[0].toUpperCase() + name.substring(1);
+  String get label => tierLabel;
   Color get tierColor => switch (this) {
         LeagueTier.bronze => const Color(0xFFCD7F32),
         LeagueTier.silver => const Color(0xFF9AA0A6),

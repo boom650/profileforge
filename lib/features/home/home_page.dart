@@ -10,6 +10,7 @@ import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';

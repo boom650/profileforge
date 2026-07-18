@@ -102,8 +102,8 @@ class RewardsScreen extends ConsumerWidget {
             PoppyButton(
               label: 'Claim Day $day reward',
               color: Palette.orange,
-              onTap: () {
-                final g = ref.read(claimDailyRewardProvider(profileId));
+              onTap: () async {
+                final g = await ref.read(claimDailyRewardProvider(profileId));
                 SoundService.instance.coin();
                 celebrate(context, message: '+$g 💎');
               },

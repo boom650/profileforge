@@ -39,15 +39,15 @@ final equipSkinProvider =
 
 /// Buy a skin with gems (unlocks it regardless of XP). Returns true if bought.
 final purchaseSkinProvider =
-    Provider.family<bool, ({String profileId, String skinId})>((ref, args) {
+    FutureProvider.family<bool, ({String profileId, String skinId})>((ref, args) async {
   final cost = kSkinGemCost[args.skinId] ?? 0;
   if (cost <= 0) {
     ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
     ref.invalidate(unlockedSkinsProvider(args.profileId));
     return true;
   }
-  final ok =
-      ref.read(spendGemsProvider((profileId: args.profileId, cost: cost)));
+  final ok = await ref
+      .read(spendGemsProvider((profileId: args.profileId, cost: cost)));
   if (ok) {
     ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
     ref.invalidate(unlockedSkinsProvider(args.profileId));

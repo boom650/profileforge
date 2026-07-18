@@ -99,7 +99,7 @@ class BuddiesScreen extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(b.buddyId,
+                                Text(b.buddyProfileId,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w800)),
                                 Text('Tap to check in with them',

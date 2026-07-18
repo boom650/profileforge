@@ -129,8 +129,8 @@ class SkinsScreen extends ConsumerWidget {
                       )
                     else if (cost == 0)
                       OutlinedButton(
-                        onPressed: () {
-                          ref.read(purchaseSkinProvider((
+                        onPressed: () async {
+                          await ref.read(purchaseSkinProvider((
                             profileId: profileId,
                             skinId: skin.id,
                           )));
@@ -142,8 +142,8 @@ class SkinsScreen extends ConsumerWidget {
                     else
                       FilledButton.icon(
                         onPressed: canAfford
-                            ? () {
-                                final ok = ref.read(purchaseSkinProvider((
+                            ? () async {
+                                final ok = await ref.read(purchaseSkinProvider((
                                   profileId: profileId,
                                   skinId: skin.id,
                                 )));

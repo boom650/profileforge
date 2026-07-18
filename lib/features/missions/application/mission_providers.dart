@@ -60,7 +60,7 @@ final generateMissionsProvider = Provider.family<void, String>((ref, profileId) 
       ref.read(onboardingProvider(profileId)).valueOrNull;
   final gen = MissionGenerator();
   final generated = onboarding == null
-      ? const MissionEngine().generateDaily(profileId)
+      ? MissionEngine().generateDaily(profileId)
       : gen
           .generateDaily(onboarding, profileId)
           .map((m) => Mission(
