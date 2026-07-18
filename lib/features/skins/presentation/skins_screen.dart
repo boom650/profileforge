@@ -143,11 +143,12 @@ class SkinsScreen extends ConsumerWidget {
                       FilledButton.icon(
                         onPressed: canAfford
                             ? () async {
-                                final ok = await ref
-                                    .read(purchaseSkinProvider((
-                                  profileId: profileId,
-                                  skinId: skin.id,
-                                )).future);
+                                final ok = await ref.read(
+                                  purchaseSkinProvider((
+                                    profileId: profileId,
+                                    skinId: skin.id,
+                                  )).future,
+                                );
                                 if (ok) {
                                   SoundService.instance.unlock();
                                   celebrate(context, message: 'Bought! 💎');
