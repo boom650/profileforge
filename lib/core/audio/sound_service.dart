@@ -1,5 +1,4 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart';
 
 /// Lightweight sound-effects service. Plays short bundled WAVs.
 /// All calls are no-ops if the asset is missing (so the app never

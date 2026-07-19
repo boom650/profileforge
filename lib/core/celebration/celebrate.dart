@@ -16,7 +16,6 @@ void celebrate(
   Color color = const Color(0xFF58CC02),
 }) {
   final overlay = Overlay.of(context);
-  if (overlay == null) return;
   late final OverlayEntry entry;
   entry = OverlayEntry(
     builder: (_) => _CelebrateLayer(
@@ -192,7 +191,6 @@ class _ConfettiPainter extends CustomPainter {
 /// Floating "+N XP" pill that rises and fades.
 void showXpPopup(BuildContext context, int xp, {int gems = 0}) {
   final overlay = Overlay.of(context);
-  if (overlay == null) return;
   late final OverlayEntry entry;
   entry = OverlayEntry(
     builder: (_) => _XpPopup(
