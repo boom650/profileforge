@@ -42,16 +42,23 @@ jobs:
           flutter create --platforms android .
           rm -f test/widget_test.dart
 
-      - name: Inject runtime permissions (INTERNET for connectivity/dio)
+      - name: Inject runtime permissions (INTERNET)
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
           grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\\n</manifest>#' "$MAN"
+            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
 
-      - name: Enable core library desugaring (flutter_local_notifications)
+      - name: Enable core library desugaring
         run: |
-          sed -i 's/compileOptions {/compileOptions {\\n        isCoreLibraryDesugaringEnabled = true/' android/app/build.gradle.kts
-          sed -i 's/flutter {/dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\\n}\\n\\nflutter {/' android/app/build.gradle.kts
+          python3 << 'PYEOF'
+          import sys
+          p = 'android/app/build.gradle.kts'
+          c = open(p).read()
+          c = c.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
+          c = c.replace('flutter {', 'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\n}\n\nflutter {')
+          open(p, 'w').write(c)
+          print('desugaring enabled')
+          PYEOF
 
       - name: Pub get
         run: flutter pub get
@@ -108,16 +115,23 @@ jobs:
           flutter create --platforms android .
           rm -f test/widget_test.dart
 
-      - name: Inject runtime permissions (INTERNET for connectivity/dio)
+      - name: Inject runtime permissions (INTERNET)
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
           grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\\n</manifest>#' "$MAN"
+            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
 
-      - name: Enable core library desugaring (flutter_local_notifications)
+      - name: Enable core library desugaring
         run: |
-          sed -i 's/compileOptions {/compileOptions {\\n        isCoreLibraryDesugaringEnabled = true/' android/app/build.gradle.kts
-          sed -i 's/flutter {/dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\\n}\\n\\nflutter {/' android/app/build.gradle.kts
+          python3 << 'PYEOF'
+          import sys
+          p = 'android/app/build.gradle.kts'
+          c = open(p).read()
+          c = c.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
+          c = c.replace('flutter {', 'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\n}\n\nflutter {')
+          open(p, 'w').write(c)
+          print('desugaring enabled')
+          PYEOF
 
       - name: Pub get
         run: flutter pub get
