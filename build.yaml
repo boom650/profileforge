@@ -1,14 +1,5 @@
-targets:
-  $default:
-    builders:
-      drift_dev:
-        include:
-          - "**/tables.dart"
-          - "**/app_database.dart"
-          - "**/skin_table.dart"
-        options:
-          write_from_json_string_constructor: true
-      freezed:
-        include:
-          - "**/skin_definitions.dart"
-          - "**/mission_models.dart"
+# No build.yaml needed — drift_dev and freezed builders work
+# with their defaults on this project. Build config was
+# removed because the `include`/`generate_for` keys are
+# not supported at this builder nesting level, and CI
+# passes without any overrides.
