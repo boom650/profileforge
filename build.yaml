@@ -2,13 +2,13 @@ targets:
   $default:
     builders:
       drift_dev:
+        include:
+          - "**/tables.dart"
+          - "**/app_database.dart"
+          - "**/skin_table.dart"
         options:
-          include:
-            - "**/tables.dart"
-            - "**/app_database.dart"
-            - "**/skin_table.dart"
+          write_from_json_string_constructor: true
       freezed:
-        options:
-          include:
-            - "**/skin_definitions.dart"
-            - "**/mission_models.dart"
+        include:
+          - "**/skin_definitions.dart"
+          - "**/mission_models.dart"
