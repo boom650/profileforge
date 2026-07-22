@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:drift/drift.dart';
 import 'package:profileforge/features/xp/data/xp_repository.dart';
 import 'package:profileforge/core/data/app_database.dart';
 
@@ -7,7 +8,6 @@ import 'package:profileforge/core/data/app_database.dart';
 void main() {
   group('XpRepository setup', () {
     test('XpEventRow has expected fields', () {
-      // Validate the model structure at compile time via type inference
       final row = XpEventRow(
         id: 1,
         profileId: 'test-profile',
