@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
 
 /// 7-day login-reward wheel state.

@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
-import 'package:profileforge/features/missions/domain/mission_models.dart';
 
 class DailyQuestRepository {
   final AppDatabase _db;
