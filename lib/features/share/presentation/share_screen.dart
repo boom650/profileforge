@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
@@ -72,16 +73,16 @@ class ShareProgressScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  // Use share_plus to share text
                   final text = '🌟 My ProfileForge Progress:\n'
                       '⭐ XP: ${totalXpAsync.valueOrNull ?? 0}\n'
                       '🔥 Streak: ${streakAsync.valueOrNull?.current ?? 0} days\n'
                       '🏆 Badges: ${achCountAsync.valueOrNull ?? 0}\n'
                       '⏱️ Focus: ${focusMinAsync.valueOrNull ?? 0} min\n'
                       'Download ProfileForge and build YOUR future!';
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('📋 Copied! Paste to share.\n\n$text'),
-                    duration: const Duration(seconds: 5),
+                  Clipboard.setData(ClipboardData(text: text));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('📋 Progress copied to clipboard!'),
+                    duration: Duration(seconds: 2),
                   ));
                 },
                 icon: const Icon(Icons.copy_rounded),

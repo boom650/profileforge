@@ -8,6 +8,7 @@ final xpRepositoryProvider = Provider<XpRepository>((ref) {
 
 /// Running total XP for a profile (single source of truth via XpEvents ledger).
 final totalXpProvider = FutureProvider.family<int, String>((ref, profileId) async {
+  ref.keepAlive();
   return ref.watch(xpRepositoryProvider).totalXp(profileId);
 });
 

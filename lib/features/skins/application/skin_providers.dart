@@ -11,6 +11,7 @@ final skinRepositoryProvider = Provider<SkinRepository>((ref) {
 
 /// Computes the set of unlocked skin ids for a profile based on total XP.
 final unlockedSkinsProvider = FutureProvider.family<List<Skin>, String>((ref, profileId) async {
+  ref.keepAlive();
   final repo = ref.watch(skinRepositoryProvider);
   final totalXp = await ref.watch(totalXpProvider(profileId).future);
   final unlocked = <Skin>[];

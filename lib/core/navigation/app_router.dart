@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/application/session_provider.dart';
@@ -20,31 +21,52 @@ import 'package:profileforge/features/challenges/presentation/challenges_screen.
 import 'package:profileforge/features/summary/presentation/weekly_summary_screen.dart';
 import 'package:profileforge/features/share/presentation/share_screen.dart';
 
+/// A slide-from-right page transition for GoRouter routes.
+Page<Object> _slidePage(Widget child) {
+  return CustomTransitionPage<Object>(
+    child: child,
+    transitionsBuilder: (c, a, s, ch) => SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0.3, 0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(parent: a, curve: Curves.easeOutCubic)),
+      child: ch,
+    ),
+  );
+}
+
+/// Shorthand: create a GoRoute with a slide transition.
+GoRoute _route(String path, Widget Function(BuildContext, GoRouterState) builder) {
+  return GoRoute(
+    path: path,
+    pageBuilder: (c, s) => _slidePage(builder(c, s)),
+  );
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final profileId = ref.watch(activeProfileIdProvider);
   final pid = profileId.value ?? 'local-profile';
   return GoRouter(
     initialLocation: '/home',
     routes: [
-      GoRoute(path: '/home', builder: (c, s) => HomePage(profileId: pid)),
-      GoRoute(path: '/missions', builder: (c, s) => MissionsScreen(profileId: pid)),
-      GoRoute(path: '/leagues', builder: (c, s) => LeaguesScreen(profileId: pid)),
-      GoRoute(path: '/buddies', builder: (c, s) => BuddiesScreen(profileId: pid)),
-      GoRoute(path: '/skins', builder: (c, s) => SkinsScreen(profileId: pid)),
-      GoRoute(path: '/teams', builder: (c, s) => TeamsScreen(profileId: pid)),
-      GoRoute(path: '/discover', builder: (c, s) => DiscoverScreen(profileId: pid)),
-      GoRoute(path: '/rewards', builder: (c, s) => RewardsScreen(profileId: pid)),
-      GoRoute(path: '/profile', builder: (c, s) => ProfileScreen(profileId: pid)),
-      GoRoute(path: '/onboarding', builder: (c, s) => OnboardingScreen(profileId: pid)),
-      // New feature routes
-      GoRoute(path: '/timer', builder: (c, s) => TimerScreen(profileId: pid)),
-      GoRoute(path: '/analytics', builder: (c, s) => AnalyticsScreen(profileId: pid)),
-      GoRoute(path: '/achievements', builder: (c, s) => AchievementsScreen(profileId: pid)),
-      GoRoute(path: '/quests', builder: (c, s) => QuestsScreen(profileId: pid)),
-      GoRoute(path: '/goal', builder: (c, s) => GoalScreen(profileId: pid)),
-      GoRoute(path: '/challenges', builder: (c, s) => ChallengesScreen(profileId: pid)),
-      GoRoute(path: '/summary', builder: (c, s) => WeeklySummaryScreen(profileId: pid)),
-      GoRoute(path: '/share', builder: (c, s) => ShareProgressScreen(profileId: pid)),
+      _route('/home', (c, s) => HomePage(profileId: pid)),
+      _route('/missions', (c, s) => MissionsScreen(profileId: pid)),
+      _route('/leagues', (c, s) => LeaguesScreen(profileId: pid)),
+      _route('/buddies', (c, s) => BuddiesScreen(profileId: pid)),
+      _route('/skins', (c, s) => SkinsScreen(profileId: pid)),
+      _route('/teams', (c, s) => TeamsScreen(profileId: pid)),
+      _route('/discover', (c, s) => DiscoverScreen(profileId: pid)),
+      _route('/rewards', (c, s) => RewardsScreen(profileId: pid)),
+      _route('/profile', (c, s) => ProfileScreen(profileId: pid)),
+      _route('/onboarding', (c, s) => OnboardingScreen(profileId: pid)),
+      _route('/timer', (c, s) => TimerScreen(profileId: pid)),
+      _route('/analytics', (c, s) => AnalyticsScreen(profileId: pid)),
+      _route('/achievements', (c, s) => AchievementsScreen(profileId: pid)),
+      _route('/quests', (c, s) => QuestsScreen(profileId: pid)),
+      _route('/goal', (c, s) => GoalScreen(profileId: pid)),
+      _route('/challenges', (c, s) => ChallengesScreen(profileId: pid)),
+      _route('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
+      _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
     ],
   );
 });
