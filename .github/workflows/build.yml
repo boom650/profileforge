@@ -46,7 +46,12 @@ jobs:
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
           grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
+            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\\n</manifest>#' "$MAN"
+
+      - name: Enable core library desugaring (flutter_local_notifications)
+        run: |
+          sed -i 's/compileOptions {/compileOptions {\\n        isCoreLibraryDesugaringEnabled = true/' android/app/build.gradle.kts
+          sed -i 's/flutter {/dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\\n}\\n\\nflutter {/' android/app/build.gradle.kts
 
       - name: Pub get
         run: flutter pub get
@@ -107,7 +112,12 @@ jobs:
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
           grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
+            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\\n</manifest>#' "$MAN"
+
+      - name: Enable core library desugaring (flutter_local_notifications)
+        run: |
+          sed -i 's/compileOptions {/compileOptions {\\n        isCoreLibraryDesugaringEnabled = true/' android/app/build.gradle.kts
+          sed -i 's/flutter {/dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\\n}\\n\\nflutter {/' android/app/build.gradle.kts
 
       - name: Pub get
         run: flutter pub get
