@@ -4,22 +4,22 @@ import 'package:profileforge/features/timer/domain/timer_engine.dart';
 
 void main() {
   group('TimerEngine state machine', () {
-    test('initial state: not running, not paused, seconds = duration', () {
+    test('initial state: not running, not paused, seconds = 0 (not started)', () {
       final engine = TimerEngine(durationMinutes: 25);
       expect(engine.isRunning, false);
       expect(engine.isPaused, false);
-      expect(engine.secondsRemaining, 0); // hasn't started yet
-      expect(engine.elapsedSeconds, -25 * 60); // 0 - 1500
+      expect(engine.secondsRemaining, 0); // hasn't been started
       expect(engine.earnedXp, 0); // no sessionStart
       engine.dispose();
     });
 
-    test('start() sets running, resets seconds to duration', () {
+    test('start() sets running, sets seconds to duration*60', () {
       final engine = TimerEngine(durationMinutes: 10);
       engine.start();
       expect(engine.isRunning, true);
       expect(engine.isPaused, false);
       expect(engine.secondsRemaining, 10 * 60);
+      expect(engine.elapsedSeconds, 0);
       expect(engine.sessionStart, isNotNull);
       engine.dispose();
     });
@@ -42,7 +42,6 @@ void main() {
       expect(engine.isPaused, true);
       expect(engine.isRunning, true);
       await Future.delayed(const Duration(seconds: 2));
-      // After pause, secondsRemaining should not decrease
       expect(engine.secondsRemaining, beforePause);
       engine.dispose();
     });
@@ -90,13 +89,11 @@ void main() {
     });
 
     test('onComplete fires when timer reaches 0', () async {
-      // Use a 1-second timer so it completes quickly
       final engine = TimerEngine(durationMinutes: 0);
-      // durationMinutes=0 → 0 seconds → should complete immediately on start
       var completed = false;
       engine.onComplete = () { completed = true; };
       engine.start();
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(seconds: 2)); // wait for periodic timer
       expect(completed, true);
       expect(engine.isRunning, false);
       expect(engine.secondsRemaining, 0);
@@ -110,7 +107,6 @@ void main() {
       engine.start();
       await Future.delayed(const Duration(seconds: 3));
       expect(ticks.length, greaterThanOrEqualTo(2));
-      // Ticks should be decreasing
       expect(ticks.first, greaterThan(ticks.last));
       engine.dispose();
     });
@@ -141,12 +137,12 @@ void main() {
   });
 
   group('TimerEdge cases', () {
-    test('zero-duration timer completes instantly', () async {
+    test('zero-duration timer completes after first tick', () async {
       final engine = TimerEngine(durationMinutes: 0);
       var completed = false;
       engine.onComplete = () { completed = true; };
       engine.start();
-      await Future.delayed(const Duration(milliseconds: 200));
+      await Future.delayed(const Duration(seconds: 2));
       expect(completed, true);
       engine.dispose();
     });
@@ -154,7 +150,7 @@ void main() {
     test('dispose cancels timer without error', () {
       final engine = TimerEngine(durationMinutes: 25);
       engine.start();
-      engine.dispose(); // should not throw
+      engine.dispose();
     });
   });
 }
