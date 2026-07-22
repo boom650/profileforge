@@ -1,7 +1,10 @@
 import 'package:drift/drift.dart';
 
+// ============================================================
+// EXISTING TABLES (preserved as-is)
+// ============================================================
+
 /// Profile table — the student's admission identity.
-/// Data class named ProfileRow to avoid clashing with the freezed domain Profile.
 @DataClassName('ProfileRow')
 class Profiles extends Table {
   TextColumn get id => text()();
@@ -173,4 +176,82 @@ class DailyRewards extends Table {
   DateTimeColumn get lastClaimed => dateTime().nullable()();
   @override
   Set<Column<Object>> get primaryKey => {profileId};
+}
+
+// ============================================================
+// NEW TABLES
+// ============================================================
+
+/// Study timer (Pomodoro) focus sessions log.
+@DataClassName('FocusSessionRow')
+class FocusSessions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get profileId => text()();
+  IntColumn get durationMinutes => integer()();
+  IntColumn get xpEarned => integer().withDefault(const Constant(0))();
+  TextColumn get tag => text().withDefault(const Constant(''))();
+  BoolColumn get completed => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get startedAt => dateTime()();
+}
+
+/// Achievement / badge definitions.
+@DataClassName('AchievementDefRow')
+class AchievementDefinitions extends Table {
+  TextColumn get id => text()();
+  TextColumn get name => text()();
+  TextColumn get description => text()();
+  TextColumn get icon => text().withDefault(const Constant('🏆'))();
+  TextColumn get criteriaType => text()(); // 'streak', 'xp_total', 'missions_total', 'focus_total', 'quests_total', 'daily_login', 'skins_unlocked', 'challenges_won'
+  IntColumn get criteriaValue => integer()(); // threshold
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Unlocked achievements per profile.
+@DataClassName('AchievementUnlockRow')
+class AchievementUnlocks extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get profileId => text()();
+  TextColumn get achievementId => text()();
+  DateTimeColumn get unlockedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+/// Daily quests — 3 quick high-XP challenges per day.
+@DataClassName('DailyQuestRow')
+class DailyQuests extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId => text()();
+  TextColumn get title => text()();
+  TextColumn get description => text().withDefault(const Constant(''))();
+  IntColumn get xpReward => integer().withDefault(const Constant(25))();
+  BoolColumn get done => boolean().withDefault(const Constant(false))();
+  TextColumn get date => text()(); // 'YYYY-MM-DD'
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// User goals (primary & secondary).
+@DataClassName('UserGoalRow')
+class UserGoals extends Table {
+  TextColumn get profileId => text()();
+  TextColumn get primaryGoal => text().withDefault(const Constant('general'))(); // 'exam_prep', 'competition', 'general', 'skill_building', 'college_apps'
+  TextColumn get secondaryGoals => text().withDefault(const Constant('[]'))();
+  @override
+  Set<Column<Object>> get primaryKey => {profileId};
+}
+
+/// Friend challenges / duels.
+@DataClassName('FriendChallengeRow')
+class FriendChallenges extends Table {
+  TextColumn get id => text()();
+  TextColumn get profileId => text()(); // creator
+  TextColumn get opponentId => text()(); // other profile (or 'ghost' for AI opponent)
+  IntColumn get wagerXp => integer().withDefault(const Constant(50))();
+  TextColumn get status => text().withDefault(const Constant('pending'))(); // 'pending', 'active', 'completed', 'expired'
+  IntColumn get challengerScore => integer().withDefault(const Constant(0))();
+  IntColumn get opponentScore => integer().withDefault(const Constant(0))();
+  DateTimeColumn get expiresAt => dateTime()();
+  TextColumn get winnerId => text().withDefault(const Constant(''))();
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }

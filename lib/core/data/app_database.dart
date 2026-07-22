@@ -24,22 +24,35 @@ part 'app_database.g.dart';
   SkinStates,
   Wallets,
   DailyRewards,
+  FocusSessions,
+  AchievementDefinitions,
+  AchievementUnlocks,
+  DailyQuests,
+  UserGoals,
+  FriendChallenges,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? driftDatabase(name: 'profileforge'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // Non-destructive: only create tables added after v1.
           if (from < 2) {
             await m.createTable(wallets);
             await m.createTable(dailyRewards);
+          }
+          if (from < 3) {
+            await m.createTable(focusSessions);
+            await m.createTable(achievementDefinitions);
+            await m.createTable(achievementUnlocks);
+            await m.createTable(dailyQuests);
+            await m.createTable(userGoals);
+            await m.createTable(friendChallenges);
           }
         },
       );

@@ -146,10 +146,11 @@ class HomePage extends ConsumerWidget {
             // Daily reward CTA.
             if (rewardAsync.valueOrNull?.canClaim ?? false)
               GestureDetector(
-                onTap: () {
-                  final g = ref.read(claimDailyRewardProvider(profileId));
+                onTap: () async {
+                  final g = await ref.read(claimDailyRewardProvider(profileId).future);
                   SoundService.instance.coin();
                   celebrate(context, message: '+$g 💎');
+                  ref.invalidate(dailyRewardProvider(profileId));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -269,6 +270,24 @@ class HomePage extends ConsumerWidget {
             }),
             const SizedBox(height: 24),
 
+            // Quick actions grid — new features
+            SectionTitle('Quick Actions'),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8, runSpacing: 8,
+              children: [
+                _QuickAction(icon: '⏱️', label: 'Focus Timer', route: '/timer', color: Colors.blue),
+                _QuickAction(icon: '📊', label: 'Analytics', route: '/analytics', color: Colors.purple),
+                _QuickAction(icon: '🏆', label: 'Achievements', route: '/achievements', color: Colors.amber),
+                _QuickAction(icon: '🗺️', label: 'Quests', route: '/quests', color: Colors.green),
+                _QuickAction(icon: '🎯', label: 'Goal', route: '/goal', color: Colors.teal),
+                _QuickAction(icon: '⚔️', label: 'Challenges', route: '/challenges', color: Colors.orange),
+                _QuickAction(icon: '📅', label: 'Summary', route: '/summary', color: Colors.indigo),
+                _QuickAction(icon: '📤', label: 'Share', route: '/share', color: Colors.pink),
+              ],
+            ),
+            const SizedBox(height: 24),
+
             PoppyButton(
               label: 'Generate / refresh my plan',
               onTap: () {
@@ -284,6 +303,39 @@ class HomePage extends ConsumerWidget {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Quick action button for the home page feature grid.
+class _QuickAction extends StatelessWidget {
+  final String icon;
+  final String label;
+  final String route;
+  final Color color;
+  const _QuickAction({required this.icon, required this.label, required this.route, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: 90, height: 90,
+      child: Material(
+        color: color.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => context.push(route),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 28)),
+              const SizedBox(height: 4),
+              Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface)),
+            ],
+          ),
         ),
       ),
     );

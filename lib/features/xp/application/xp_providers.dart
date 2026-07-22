@@ -10,3 +10,25 @@ final xpRepositoryProvider = Provider<XpRepository>((ref) {
 final totalXpProvider = FutureProvider.family<int, String>((ref, profileId) async {
   return ref.watch(xpRepositoryProvider).totalXp(profileId);
 });
+
+/// Weekly XP earned.
+final weeklyXpProvider = FutureProvider.family<int, String>((ref, profileId) async {
+  final weekAgo = DateTime.now().subtract(const Duration(days: 7));
+  return ref.watch(xpRepositoryProvider).xpSince(profileId, weekAgo);
+});
+
+/// Add XP to a profile and invalidate caches.
+final addXpProvider = NotifierProvider<AddXpNotifier, void>(AddXpNotifier.new);
+
+class AddXpNotifier extends Notifier<void> {
+  @override
+  void build() {}
+
+  Future<void> execute(String profileId, int amount, String source) async {
+    final repo = ref.read(xpRepositoryProvider);
+    await repo.add(profileId, amount, source);
+    // Invalidate dependent providers
+    ref.invalidate(totalXpProvider(profileId));
+    ref.invalidate(weeklyXpProvider(profileId));
+  }
+}

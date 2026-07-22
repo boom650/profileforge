@@ -41,10 +41,10 @@ final completeMissionProvider = Provider.family<
     ({String profileId, String missionId, int xp, String pillar})>((ref, args) async {
   await ref.watch(missionRepositoryProvider).complete(args.missionId);
   // Award XP via the XP ledger (handles skin multiplier through provided xp).
-  await ref.watch(xpRepositoryProvider).award(
-        profileId: args.profileId,
-        amount: args.xp,
-        source: 'mission:${args.missionId}',
+  await ref.watch(xpRepositoryProvider).add(
+        args.profileId,
+        args.xp,
+        'mission:${args.missionId}',
       );
   // Award gems (1 gem per 5 XP, min 2).
   final gems = (args.xp / 5).ceil().clamp(2, 50);

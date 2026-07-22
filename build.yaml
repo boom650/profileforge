@@ -1,0 +1,14 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          include:
+            - "**/tables.dart"
+            - "**/app_database.dart"
+            - "**/skin_table.dart"
+      freezed:
+        options:
+          include:
+            - "**/skin_definitions.dart"
+            - "**/mission_models.dart"

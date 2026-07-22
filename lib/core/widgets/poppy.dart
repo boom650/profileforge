@@ -5,26 +5,67 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// Reusable "poppy" UI atoms used across every screen.
 
 class PoppyButton extends StatelessWidget {
-  const PoppyButton(
-      {super.key, required this.label, required this.onTap, this.color});
+  const PoppyButton({
+    super.key,
+    required this.label,
+    this.onTap,
+    this.onPressed,
+    this.color,
+    this.icon,
+    this.compact = false,
+  });
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
   final Color? color;
+  final IconData? icon;
+  final bool compact;
+
+  VoidCallback? get _onAction => onPressed ?? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    if (compact) {
+      return FilledButton.icon(
+        onPressed: _onAction,
+        icon: icon != null ? Icon(icon, size: 16) : const SizedBox.shrink(),
+        label: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+        style: FilledButton.styleFrom(
+          backgroundColor: color ?? Palette.green,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      );
+    }
+    if (icon != null) {
+      return SizedBox(
+        width: double.infinity,
+        child: FilledButton.icon(
+          onPressed: _onAction,
+          icon: Icon(icon!, size: 18),
+          label: Text(label),
+          style: FilledButton.styleFrom(
+            backgroundColor: color ?? Palette.green,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       width: double.infinity,
       child: FilledButton(
-        onPressed: onTap,
+        onPressed: _onAction,
         style: FilledButton.styleFrom(
           backgroundColor: color ?? Palette.green,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          textStyle: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
         ),
         child: Text(label),
       ),
