@@ -6,12 +6,14 @@ import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/game/level.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/galaxy_chart.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
@@ -223,6 +225,16 @@ class HomePage extends ConsumerWidget {
                 }).toList() ??
                 [const Text('Generate your plan to see missions →')],
 
+            const SizedBox(height: 18),
+
+            // Galaxy progress chart.
+            const SectionTitle('Your galaxy'),
+            const SizedBox(height: 8),
+            const GalaxyChart(),
+            const SizedBox(height: 18),
+
+            // Ambient sound panel.
+            const AmbientAudioPanel(),
             const SizedBox(height: 18),
 
             // League mini card.

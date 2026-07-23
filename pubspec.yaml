@@ -68,6 +68,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/ambient/
+    - assets/images/buddy/
+    - assets/images/skins/
+    - assets/images/stories/
+    - assets/audio/ambient/lofi_10.mb.mp3
+    - assets/audio/ambient/rain_10.mb.mp3
+    - assets/audio/ambient/library_10.mb.mp3
+    - assets/audio/ambient/coffee_10.mb.mp3
+    - assets/audio/ambient/lofi_10.mb.mp3
     - assets/
     - assets/audio/
     - assets/images/

@@ -9,7 +9,9 @@ import 'package:profileforge/features/achievements/application/achievement_provi
 import 'package:profileforge/core/audio/sound_provider.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
-import 'package:profileforge/features/timer/domain/timer_engine.dart';
+import 'package:profileforge/features/buddy/presentation/body_double_widget.dart';
+import 'package:profileforge/features/habits/application/timer_debt_listener.dart';
+
 
 class TimerScreen extends ConsumerStatefulWidget {
   final String profileId;
@@ -70,7 +72,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
 
   @override
   Widget build(BuildContext context) {
-    final timerState = ref.watch(timerStateProvider);
+    // Activate debt listener – ensures early‑stop debts are recorded.
+    ref.watch(timerDebtListener);
+
     final theme = Theme.of(context);
     final notifier = ref.read(timerStateProvider.notifier);
 
@@ -99,6 +103,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                   }).toList(),
                 ),
                 const SizedBox(height: 30),
+
+                // Body Double widget
+                const BodyDoubleWidget(),
+                const SizedBox(height: 20),
 
                 // Circular timer display
                 AnimatedBuilder(

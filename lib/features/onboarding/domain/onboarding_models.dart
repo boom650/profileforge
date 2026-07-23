@@ -129,3 +129,72 @@ class OnboardingProfile with _$OnboardingProfile {
     );
   }
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Schedule profile — extended onboarding data (v4), stored in the same
+// Onboarding table via separate columns.  Not freezed to avoid generated-code
+// conflicts; a simple immutable data class.
+// ────────────────────────────────────────────────────────────────────────────
+
+class ScheduleProfile {
+  final List<int> schoolDays;   // 1=Mon..7=Sun
+  final int schoolStartHour;
+  final int schoolStartMinute;
+  final int schoolEndHour;
+  final int schoolEndMinute;
+  final String energyPeak;      // "morning", "afternoon", "night"
+  final String sleepStart;      // "22:00"
+  final String sleepEnd;        // "07:00"
+  final String timelineGoal;    // "6months", "1year", "2years", "custom"
+  final int screenTimeHours;
+  final String studyEnvironment; // "library", "home", "cafe", "school", "mixed"
+  final String socialMediaUsage; // "light", "moderate", "heavy"
+
+  const ScheduleProfile({
+    this.schoolDays = const [1, 2, 3, 4, 5],
+    this.schoolStartHour = 8,
+    this.schoolStartMinute = 0,
+    this.schoolEndHour = 15,
+    this.schoolEndMinute = 0,
+    this.energyPeak = 'morning',
+    this.sleepStart = '22:00',
+    this.sleepEnd = '07:00',
+    this.timelineGoal = '1year',
+    this.screenTimeHours = 3,
+    this.studyEnvironment = 'mixed',
+    this.socialMediaUsage = 'moderate',
+  });
+
+  ScheduleProfile copyWith({
+    List<int>? schoolDays,
+    int? schoolStartHour,
+    int? schoolStartMinute,
+    int? schoolEndHour,
+    int? schoolEndMinute,
+    String? energyPeak,
+    String? sleepStart,
+    String? sleepEnd,
+    String? timelineGoal,
+    int? screenTimeHours,
+    String? studyEnvironment,
+    String? socialMediaUsage,
+  }) {
+    return ScheduleProfile(
+      schoolDays: schoolDays ?? this.schoolDays,
+      schoolStartHour: schoolStartHour ?? this.schoolStartHour,
+      schoolStartMinute: schoolStartMinute ?? this.schoolStartMinute,
+      schoolEndHour: schoolEndHour ?? this.schoolEndHour,
+      schoolEndMinute: schoolEndMinute ?? this.schoolEndMinute,
+      energyPeak: energyPeak ?? this.energyPeak,
+      sleepStart: sleepStart ?? this.sleepStart,
+      sleepEnd: sleepEnd ?? this.sleepEnd,
+      timelineGoal: timelineGoal ?? this.timelineGoal,
+      screenTimeHours: screenTimeHours ?? this.screenTimeHours,
+      studyEnvironment: studyEnvironment ?? this.studyEnvironment,
+      socialMediaUsage: socialMediaUsage ?? this.socialMediaUsage,
+    );
+  }
+
+  /// JSON columns stored in the Onboarding table.
+  String get schoolDaysJson => jsonEncode(schoolDays);
+}

@@ -129,7 +129,7 @@ class BuddyCheckIns extends Table {
   DateTimeColumn get at => dateTime().withDefault(currentDateAndTime)();
 }
 
-/// Onboarding snapshot (H7).
+/// Onboarding snapshot (H7) — extended with schedule, energy, and timeline data.
 @DataClassName('OnboardingRow')
 class Onboarding extends Table {
   TextColumn get profileId => text()();
@@ -142,6 +142,33 @@ class Onboarding extends Table {
   IntColumn get availabilityHoursPerWeek => integer().withDefault(const Constant(0))();
   TextColumn get careerInterests => text().withDefault(const Constant('[]'))();
   TextColumn get location => text().withDefault(const Constant(''))();
+
+  // ── Schedule & timetable (v4) ──
+  /// JSON array of weekday codes: [1,2,3,4,5] (1=Mon..7=Sun).
+  TextColumn get schoolDays => text().withDefault(const Constant('[1,2,3,4,5]'))();
+  IntColumn get schoolStartHour => integer().withDefault(const Constant(8))();
+  IntColumn get schoolStartMinute => integer().withDefault(const Constant(0))();
+  IntColumn get schoolEndHour => integer().withDefault(const Constant(15))();
+  IntColumn get schoolEndMinute => integer().withDefault(const Constant(0))();
+
+  // ── Energy & sleep ──
+  /// "morning", "afternoon", or "night".
+  TextColumn get energyPeak => text().withDefault(const Constant('morning'))();
+  /// "22:00"
+  TextColumn get sleepStart => text().withDefault(const Constant('22:00'))();
+  /// "07:00"
+  TextColumn get sleepEnd => text().withDefault(const Constant('07:00'))();
+
+  // ── Goals & environment ──
+  /// "6months", "1year", "2years", "custom".
+  TextColumn get timelineGoal => text().withDefault(const Constant('1year'))();
+  /// Daily screen time (hours).
+  IntColumn get screenTimeHours => integer().withDefault(const Constant(3))();
+  /// "library", "home", "cafe", "school", "mixed".
+  TextColumn get studyEnvironment => text().withDefault(const Constant('mixed'))();
+  /// "light", "moderate", "heavy".
+  TextColumn get socialMediaUsage => text().withDefault(const Constant('moderate'))();
+
   @override
   Set<Column<Object>> get primaryKey => {profileId};
 }
@@ -181,6 +208,17 @@ class DailyRewards extends Table {
 // ============================================================
 // NEW TABLES
 // ============================================================
+
+/// XP Debt incurred by broken streaks or missed missions.
+@DataClassName('XpDebtRow')
+class XpDebt extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get profileId => text()();
+  IntColumn get amount => integer()();
+  TextColumn get reason => text()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  BoolColumn get isPaid => boolean().withDefault(const Constant(false))();
+}
 
 /// Study timer (Pomodoro) focus sessions log.
 @DataClassName('FocusSessionRow')

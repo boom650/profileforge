@@ -1,52 +1,164 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-/// Local notification scheduling service.
-/// Uses flutter_local_notifications for on-device reminders (no API key needed).
+/// ────────────────────────────────────────────────────────────────────────────
+/// ProfileForge notification service.
+/// Uses `flutter_local_notifications` for on-device reminders (no API key).
+/// Now fully wired: initialises channel on startup, schedules persistent
+/// streak / quest reminders, and fires local notifications even when the app
+/// is in the background.
+/// ────────────────────────────────────────────────────────────────────────────
+
 class NotificationService {
-  // In a real app, this would use flutter_local_notifications plugin.
-  // For now we provide the interface — the plugin initialization requires
-  // Android manifest changes that CI doesn't set up yet.
-  // This service tracks notifications in SharedPreferences
-  // until the full plugin is wired.
-
+  final FlutterLocalNotificationsPlugin _plugin;
   bool _initialized = false;
-  bool _enabled = true;
 
-  bool get enabled => _enabled;
+  static const String _channelId = 'profileforge_reminders';
+  static const String _channelName = 'ProfileForge Reminders';
+  static const String _channelDesc = 'Streak alerts, quest reminders & daily nudges';
 
+  NotificationService(this._plugin);
+
+  /// Must be called once on app startup.
   Future<void> initialize() async {
+    if (_initialized) return;
+
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosSettings = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
+
+    await _plugin.initialize(
+      const InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
+        macOS: null,
+      ),
+    );
+
+    // Create channel
+    await _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _channelId,
+        _channelName,
+        description: _channelDesc,
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+      ),
+    );
+
     _initialized = true;
   }
 
-  Future<void> setEnabled(bool v) async {
-    _enabled = v;
+  bool get isInitialized => _initialized;
+
+  /// Show an immediate notification.
+  Future<void> show({
+    required int id,
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
+    if (!_initialized) await initialize();
+    await _plugin.show(
+      id,
+      title,
+      body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          _channelName,
+          channelDescription: _channelDesc,
+          importance: Importance.high,
+          priority: Priority.high,
+          playSound: true,
+          icon: '@mipmap/ic_launcher',
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+      payload: payload,
+    );
   }
 
-  /// Schedule a daily reminder at a specific hour.
-  Future<void> scheduleDailyReminder(int hour, int minute, String title, String body) async {
-    if (!_initialized || !_enabled) return;
-    // Placeholder: in production, use flutter_local_notifications
-    // AndroidManifest.xml changes + NotificationChannel creation required.
-  }
-
-  /// Cancel all scheduled notifications.
-  Future<void> cancelAll() async {
-    // Placeholder
+  /// Schedule a daily repeating reminder.
+  Future<void> scheduleDaily({
+    required int id,
+    required int hour,
+    required int minute,
+    required String title,
+    required String body,
+  }) async {
+    if (!_initialized) await initialize();
+    await _plugin.periodicallyShow(
+      id,
+      title,
+      body,
+      RepeatInterval.daily,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          _channelName,
+          channelDescription: _channelDesc,
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+    );
   }
 
   /// Schedule streak-at-risk notification (sent in evening if no activity).
   Future<void> scheduleStreakReminder(String profileId) async {
-    await scheduleDailyReminder(19, 0, '🔥 Streak at risk!',
-        'Complete a mission to keep your streak alive!');
+    await scheduleDaily(
+      id: 1001,
+      hour: 19,
+      minute: 0,
+      title: '🔥 Streak at risk!',
+      body: 'Complete a mission to keep your streak alive!',
+    );
   }
 
   /// Schedule daily quest reminder.
   Future<void> scheduleQuestReminder(String profileId) async {
-    await scheduleDailyReminder(10, 0, '🗺️ Daily Quests Await',
-        'Your 3 daily quests are ready — big XP rewards!');
+    await scheduleDaily(
+      id: 1002,
+      hour: 10,
+      minute: 0,
+      title: '🗺️ Daily Quests Await',
+      body: 'Your 3 daily quests are ready — big XP rewards!',
+    );
+  }
+
+  /// Cancel all scheduled notifications.
+  Future<void> cancelAll() async {
+    await _plugin.cancelAll();
+  }
+
+  /// Cancel a specific notification.
+  Future<void> cancel(int id) async {
+    await _plugin.cancel(id);
   }
 }
 
+final notificationPluginProvider = Provider<FlutterLocalNotificationsPlugin>((ref) {
+  return FlutterLocalNotificationsPlugin();
+});
+
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  return NotificationService();
+  final plugin = ref.watch(notificationPluginProvider);
+  return NotificationService(plugin);
 });
