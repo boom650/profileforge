@@ -26,6 +26,9 @@ LOG="/data/data/com.termux/files/home/flutter_local.log"
 
 export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 export PUB_HOSTED_URL="https://pub.dev"
+export ANDROID_HOME="/data/data/com.termux/files/home/android-sdk"
+export JAVA_HOME="/data/data/com.termux/files/usr/lib/jvm/java-17-openjdk"
+export PATH="$ANDROID_HOME/platform-tools:$JAVA_HOME/bin:$PATH"
 
 CMD="$1"; shift || true
 
@@ -34,6 +37,8 @@ run_in_proot() {
     export PATH=\"$FLUTTER_DIR/bin:\$PATH\"
     export FLUTTER_STORAGE_BASE_URL=\"$FLUTTER_STORAGE_BASE_URL\"
     export PUB_HOSTED_URL=\"$PUB_HOSTED_URL\"
+    export ANDROID_HOME=\"$ANDROID_HOME\"
+    export JAVA_HOME=\"$JAVA_HOME\"
     cd $WORKSPACE
     $*
   " 2>&1 | tee "$LOG"
