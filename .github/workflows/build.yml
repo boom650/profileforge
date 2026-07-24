@@ -42,11 +42,13 @@ jobs:
           flutter create --platforms android .
           rm -f test/widget_test.dart
 
-      - name: Inject runtime permissions (INTERNET)
+      - name: Inject runtime permissions
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
-          grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
+          for perm in INTERNET POST_NOTIFICATIONS RECEIVE_BOOT_COMPLETED VIBRATE; do
+            grep -q "android.permission.$perm" "$MAN" || \
+              sed -i "s#</manifest>#  <uses-permission android:name="android.permission.$perm"/>\\n</manifest>#" "$MAN"
+          done
 
       - name: Enable core library desugaring
         run: |
@@ -115,11 +117,13 @@ jobs:
           flutter create --platforms android .
           rm -f test/widget_test.dart
 
-      - name: Inject runtime permissions (INTERNET)
+      - name: Inject runtime permissions
         run: |
           MAN=android/app/src/main/AndroidManifest.xml
-          grep -q "android.permission.INTERNET" "$MAN" || \
-            sed -i 's#</manifest>#  <uses-permission android:name="android.permission.INTERNET"/>\n</manifest>#' "$MAN"
+          for perm in INTERNET POST_NOTIFICATIONS RECEIVE_BOOT_COMPLETED VIBRATE; do
+            grep -q "android.permission.$perm" "$MAN" || \
+              sed -i "s#</manifest>#  <uses-permission android:name="android.permission.$perm"/>\\n</manifest>#" "$MAN"
+          done
 
       - name: Enable core library desugaring
         run: |
