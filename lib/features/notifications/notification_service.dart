@@ -46,7 +46,6 @@ class NotificationService {
         _channelName,
         description: _channelDesc,
         importance: Importance.high,
-        priority: Priority.high,
         playSound: true,
         enableVibration: true,
       ),

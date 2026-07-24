@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:profileforge/core/navigation/app_router.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:profileforge/features/notifications/notification_service.dart';
 
 /// ProfileForge — gamified admission-journey companion.

@@ -77,6 +77,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
 
     final theme = Theme.of(context);
     final notifier = ref.read(timerStateProvider.notifier);
+    final timerState = ref.watch(timerStateProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Focus Timer'), centerTitle: true),

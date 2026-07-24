@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/data/tables.dart';
+import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:drift/drift.dart' as drift;
 
 final xpDebtProvider = Provider<XpDebtRepository>((ref) {

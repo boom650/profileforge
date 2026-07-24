@@ -13,7 +13,7 @@ import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 class VariableRewardEngine {
   final math.Random _rng;
 
-  const VariableRewardEngine([this._rng = const math.Random()]);
+  VariableRewardEngine([math.Random? rng]) : _rng = rng ?? math.Random();
 
   /// 1–3× XP bonus at random on completed sessions.
   int applyXpBonus(int baseXp) {
@@ -44,7 +44,7 @@ class VariableRewardEngine {
 }
 
 final variableRewardEngineProvider = Provider<VariableRewardEngine>((ref) {
-  return const VariableRewardEngine();
+  return VariableRewardEngine();
 });
 
 /// Notifier that applies variable rewards after a focus session.
