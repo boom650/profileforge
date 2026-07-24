@@ -101,14 +101,14 @@ class AmbientAudioPanel extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
-              ? [Palette.ink.withOpacity(0.6), Palette.inkSurface]
+              ? [Palette.ink.withValues(alpha: 0.6), Palette.inkSurface]
               : [Colors.white, Colors.grey.shade50],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: svc.isPlaying
-              ? Palette.green.withOpacity(0.5)
-              : theme.dividerColor.withOpacity(0.3),
+              ? Palette.green.withValues(alpha: 0.5)
+              : theme.dividerColor.withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -130,7 +130,7 @@ class AmbientAudioPanel extends ConsumerWidget {
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.15),
+                      color: Colors.red.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(Icons.stop, size: 16, color: Colors.red),
@@ -152,11 +152,11 @@ class AmbientAudioPanel extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
                     color: selected
-                        ? Palette.green.withOpacity(0.2)
+                        ? Palette.green.withValues(alpha: 0.2)
                         : (isDark ? Palette.inkSurface2 : Colors.grey.shade100),
                     borderRadius: BorderRadius.circular(14),
                     border: selected
-                        ? Border.all(color: Palette.green.withOpacity(0.6), width: 2)
+                        ? Border.all(color: Palette.green.withValues(alpha: 0.6), width: 2)
                         : null,
                   ),
                   child: Row(
@@ -185,7 +185,7 @@ class AmbientAudioPanel extends ConsumerWidget {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Palette.green.withOpacity(0.2),
+                      color: Palette.green.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
@@ -202,7 +202,7 @@ class AmbientAudioPanel extends ConsumerWidget {
                       overlayShape: SliderComponentShape.noThumb,
                       thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
                       activeTrackColor: Palette.green,
-                      inactiveTrackColor: theme.disabledColor.withOpacity(0.3),
+                      inactiveTrackColor: theme.disabledColor.withValues(alpha: 0.3),
                     ),
                     child: Slider(
                       value: svc.volume,

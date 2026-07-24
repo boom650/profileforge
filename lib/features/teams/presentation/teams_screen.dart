@@ -36,7 +36,7 @@ class TeamsScreen extends ConsumerWidget {
                 Text(
                     'Form a team, compete on the leaderboard, and push each other to finish applications.',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.92), fontSize: 13)),
+                        color: Colors.white.withValues(alpha: 0.92), fontSize: 13)),
               ],
             ),
           ),

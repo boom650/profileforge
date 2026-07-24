@@ -112,7 +112,7 @@ class _CelebrateLayerState extends State<_CelebrateLayer>
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withValues(alpha: 0.25),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -178,7 +178,7 @@ class _ConfettiPainter extends CustomPainter {
               center: Offset.zero, width: p.size, height: p.size * 0.6),
           Radius.circular(p.size * 0.25),
         ),
-        Paint()..color = p.color.withOpacity(1 - t * 0.3),
+        Paint()..color = p.color.withValues(alpha: 1 - t * 0.3),
       );
       canvas.restore();
     }
@@ -254,7 +254,7 @@ class _XpPopupState extends State<_XpPopup>
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),

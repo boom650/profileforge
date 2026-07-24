@@ -106,7 +106,7 @@ class PillarChip extends StatelessWidget {
       label: Text(pillar[0].toUpperCase() + pillar.substring(1),
           style: TextStyle(
               color: selected ? Colors.white : c, fontWeight: FontWeight.w800)),
-      backgroundColor: selected ? c : c.withOpacity(0.12),
+      backgroundColor: selected ? c : c.withValues(alpha: 0.12),
       side: BorderSide.none,
       visualDensity: VisualDensity.compact,
     );
@@ -130,7 +130,7 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: c.withOpacity(0.12),
+        color: c.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -179,7 +179,7 @@ class XpRing extends StatelessWidget {
               value: progress.clamp(0.0, 1.0),
               strokeWidth: 9,
               color: c,
-              backgroundColor: c.withOpacity(0.18),
+              backgroundColor: c.withValues(alpha: 0.18),
             ),
           ),
           Column(

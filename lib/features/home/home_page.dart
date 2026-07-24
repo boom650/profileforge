@@ -68,7 +68,7 @@ class HomePage extends ConsumerWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Palette.yellow.withOpacity(0.18),
+                      color: Palette.yellow.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -192,10 +192,10 @@ class HomePage extends ConsumerWidget {
                     margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: pillarColor(m.pillar).withOpacity(0.10),
+                      color: pillarColor(m.pillar).withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: pillarColor(m.pillar).withOpacity(0.25)),
+                          color: pillarColor(m.pillar).withValues(alpha: 0.25)),
                     ),
                     child: Row(
                       children: [
@@ -230,7 +230,7 @@ class HomePage extends ConsumerWidget {
             // Galaxy progress chart.
             const SectionTitle('Your galaxy'),
             const SizedBox(height: 8),
-            const GalaxyChart(),
+            GalaxyChart(profileId: profileId),
             const SizedBox(height: 18),
 
             // Ambient sound panel.
@@ -249,7 +249,7 @@ class HomePage extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: tier.tierColor.withOpacity(0.12),
+                  color: tier.tierColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: tier.tierColor),
                 ),
@@ -335,7 +335,7 @@ class _QuickAction extends StatelessWidget {
     return SizedBox(
       width: 90, height: 90,
       child: Material(
-        color: color.withOpacity(0.10),
+        color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),

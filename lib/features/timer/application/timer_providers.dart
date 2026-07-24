@@ -27,8 +27,18 @@ class TimerStateNotifier extends Notifier<TimerSnapshot> {
         label: '',
       );
     };
-    return TimerSnapshot(
-      secondsRemaining: 25 * 60,
+    _engine.onComplete = () {
+      // Timer finished naturally — mark as completed
+      state = TimerSnapshot(
+        secondsRemaining: 0,
+        durationMinutes: _engine.durationMinutes,
+        isRunning: false,
+        isPaused: false,
+        label: 'Complete',
+      );
+    };
+    return const TimerSnapshot(
+      secondsRemaining: 1500,
       durationMinutes: 25,
       isRunning: false,
       isPaused: false,

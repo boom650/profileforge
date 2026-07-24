@@ -154,7 +154,7 @@ class _ThemeTile extends StatelessWidget {
             : null,
         onTap: onTap,
         selected: selected,
-        selectedTileColor: Palette.green.withOpacity(0.1),
+        selectedTileColor: Palette.green.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       );
 }

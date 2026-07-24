@@ -40,7 +40,7 @@ class MissionsScreen extends ConsumerWidget {
                 Text(
                     'Complete missions to earn XP and gems. They\'re generated from your profile.',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.9), fontSize: 14)),
+                        color: Colors.white.withValues(alpha: 0.9), fontSize: 14)),
                 const SizedBox(height: 12),
                 FilledButton.icon(
                   onPressed: () {
@@ -140,9 +140,9 @@ class _MissionTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: c.withOpacity(0.10),
+        color: c.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: c.withOpacity(0.25)),
+        border: Border.all(color: c.withValues(alpha: 0.25)),
       ),
       child: Row(
         children: [
@@ -187,7 +187,7 @@ class _MissionTile extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: c.withOpacity(0.15),
+                    color: c.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10)),
                   child: const Icon(Icons.check, size: 18),
                 ),

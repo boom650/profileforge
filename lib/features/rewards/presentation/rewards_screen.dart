@@ -42,7 +42,7 @@ class RewardsScreen extends ConsumerWidget {
                 const SizedBox(height: 6),
                 Text('Come back every day. Day 7 is a jackpot!',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.92), fontSize: 14)),
+                        color: Colors.white.withValues(alpha: 0.92), fontSize: 14)),
                 const SizedBox(height: 10),
                 Text('💎 $gems gems saved',
                     style: const TextStyle(
@@ -69,7 +69,7 @@ class RewardsScreen extends ConsumerWidget {
                     color: isToday
                         ? Palette.yellow
                         : claimed
-                            ? Palette.green.withOpacity(0.25)
+                            ? Palette.green.withValues(alpha: 0.25)
                             : theme.cardColor,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
@@ -113,7 +113,7 @@ class RewardsScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Palette.green.withOpacity(0.12),
+                color: Palette.green.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16)),
               child: const Center(
                 child: Text('✅ Reward claimed today. Come back tomorrow!',

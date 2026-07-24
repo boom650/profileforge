@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Galaxy progress chart — a space-themed visualisation of the student's
@@ -31,24 +33,45 @@ class GalaxySnapshot {
   double get overall => (xpProgress + streakProgress + missionProgress + focusProgress) / 4;
 }
 
-final galaxySnapshotProvider = Provider<GalaxySnapshot>((ref) {
-  // In production, read from Drift providers. For now, a placeholder.
-  return const GalaxySnapshot(
-    xpProgress: 0.35,
-    streakProgress: 0.6,
-    missionProgress: 0.25,
-    focusProgress: 0.4,
-    totalXp: 1240,
-    currentStreak: 7,
+final galaxySnapshotProvider = FutureProvider.family<GalaxySnapshot, String>((ref, profileId) async {
+  // Read real async data
+  final totalXpAsync = ref.watch(totalXpProvider(profileId));
+  final streakAsync = ref.watch(streakProvider(profileId));
+
+  // Level milestones: roughly every 1000 XP = 1 level
+  final totalXp = totalXpAsync.valueOrNull ?? 0;
+  final xpProgress = (totalXp % 1000) / 1000.0;
+  final streakState = streakAsync.valueOrNull;
+  final streakDays = streakState?.current ?? 0;
+  final streakProgress = (streakDays % 30) / 30.0;
+
+  // Mission & focus are best-effort optional reads (will be expanded later)
+  final missionProgress = 0.3;
+  final focusProgress = 0.4;
+
+  return GalaxySnapshot(
+    xpProgress: xpProgress,
+    streakProgress: streakProgress,
+    missionProgress: missionProgress,
+    focusProgress: focusProgress,
+    totalXp: totalXp,
+    currentStreak: streakDays,
   );
 });
 
+/// Galaxy progress chart — a space-themed visualisation of the student's
+/// journey across multiple dimensions (XP, streaks, missions, focus hours).
+/// Renders an animated starfield with a central "galaxy" whose brightness and
+/// size scale with overall completion.
+
 class GalaxyChart extends ConsumerWidget {
-  const GalaxyChart({super.key});
+  final String profileId;
+  const GalaxyChart({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(galaxySnapshotProvider);
+    final dataAsync = ref.watch(galaxySnapshotProvider(profileId));
+    final data = dataAsync.valueOrNull ?? const GalaxySnapshot();
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -88,7 +111,7 @@ class GalaxyChart extends ConsumerWidget {
                   width: size,
                   height: size,
                   decoration: BoxDecoration(
-                    color: starColor.withOpacity(opacity),
+                    color: starColor.withValues(alpha: opacity),
                     shape: BoxShape.circle,
                   ),
                 ).animate(onPlay: (c) => c.repeat(reverse: true)).fadeIn(
@@ -107,8 +130,8 @@ class GalaxyChart extends ConsumerWidget {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      Palette.green.withOpacity(0.3 * data.overall + 0.1),
-                      Palette.blue.withOpacity(0.2 * data.overall),
+                      Palette.green.withValues(alpha: 0.3 * data.overall + 0.1),
+                      Palette.blue.withValues(alpha: 0.2 * data.overall),
                       Colors.transparent,
                     ],
                     radius: 1.0,
@@ -232,9 +255,9 @@ class _OrbitalPlanet extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: RadialGradient(colors: [color, color.withOpacity(0.3)]),
+            gradient: RadialGradient(colors: [color, color.withValues(alpha: 0.3)]),
             boxShadow: [
-              BoxShadow(color: color.withOpacity(0.4), blurRadius: 12),
+              BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 12),
             ],
           ),
           child: Column(
@@ -267,7 +290,7 @@ class _OrbitPainter extends CustomPainter {
 
     // Draw full faint orbit
     final faintPaint = Paint()
-      ..color = color.withOpacity(0.08)
+      ..color = color.withValues(alpha: 0.08)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
     canvas.drawCircle(center, radius, faintPaint);
@@ -275,7 +298,7 @@ class _OrbitPainter extends CustomPainter {
     // Draw progress arc
     if (progress > 0) {
       final progressPaint = Paint()
-        ..color = color.withOpacity(0.6)
+        ..color = color.withValues(alpha: 0.6)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.5
         ..strokeCap = StrokeCap.round;
@@ -289,7 +312,7 @@ class _OrbitPainter extends CustomPainter {
     }
 
     // Small dots along the orbit
-    final dotPaint = Paint()..color = color.withOpacity(0.3);
+    final dotPaint = Paint()..color = color.withValues(alpha: 0.3);
     for (var i = 0; i < 12; i++) {
       final a = (i / 12) * math.pi * 2 - math.pi / 2;
       final dx = center.dx + radius * math.cos(a);

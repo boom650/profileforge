@@ -537,7 +537,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         duration: 200.ms,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? Palette.green.withOpacity(0.2) : null,
+          color: selected ? Palette.green.withValues(alpha: 0.2) : null,
           borderRadius: BorderRadius.circular(14),
           border: selected ? Border.all(color: Palette.green, width: 2) : null,
         ),
@@ -613,7 +613,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         duration: 200.ms,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? Palette.blue.withOpacity(0.2) : null,
+          color: selected ? Palette.blue.withValues(alpha: 0.2) : null,
           borderRadius: BorderRadius.circular(14),
           border: selected ? Border.all(color: Palette.blue, width: 2) : null,
         ),
@@ -681,7 +681,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         duration: 200.ms,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? Palette.orange.withOpacity(0.2) : null,
+          color: selected ? Palette.orange.withValues(alpha: 0.2) : null,
           borderRadius: BorderRadius.circular(14),
           border: selected ? Border.all(color: Palette.orange, width: 2) : null,
         ),
@@ -699,7 +699,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         duration: 200.ms,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? Palette.purple.withOpacity(0.2) : null,
+          color: selected ? Palette.purple.withValues(alpha: 0.2) : null,
           borderRadius: BorderRadius.circular(14),
           border: selected ? Border.all(color: Palette.purple, width: 2) : null,
         ),
@@ -789,7 +789,7 @@ class _TimePicker extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.cardColor,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: theme.dividerColor.withOpacity(0.3)),
+            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.3)),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<int>(
@@ -810,7 +810,7 @@ class _TimePicker extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.cardColor,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: theme.dividerColor.withOpacity(0.3)),
+            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.3)),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<int>(

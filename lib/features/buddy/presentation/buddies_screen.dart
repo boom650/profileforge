@@ -39,7 +39,7 @@ class BuddiesScreen extends ConsumerWidget {
                 Text(
                     'Add friends, check in, and keep each other on track for the admission grind.',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.92), fontSize: 13)),
+                        color: Colors.white.withValues(alpha: 0.92), fontSize: 13)),
               ],
             ),
           ),
@@ -48,7 +48,7 @@ class BuddiesScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Palette.orange.withOpacity(0.15),
+                color: Palette.orange.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(

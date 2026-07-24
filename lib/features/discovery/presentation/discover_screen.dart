@@ -57,7 +57,7 @@ class _UniversityList extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Palette.blue.withOpacity(0.10),
+                  color: Palette.blue.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -106,7 +106,7 @@ class _StudyList extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Palette.green.withOpacity(0.10),
+                        color: Palette.green.withValues(alpha: 0.10),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
@@ -139,7 +139,7 @@ class _CompetitionList extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Palette.purple.withOpacity(0.10),
+                        color: Palette.purple.withValues(alpha: 0.10),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
@@ -174,7 +174,7 @@ class _FundingList extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Palette.yellow.withOpacity(0.14),
+                        color: Palette.yellow.withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(

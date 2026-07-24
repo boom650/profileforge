@@ -40,7 +40,7 @@ class LeaguesScreen extends ConsumerWidget {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
-                    color: isMe ? t.tierColor : t.tierColor.withOpacity(0.15),
+                    color: isMe ? t.tierColor : t.tierColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: t.tierColor),
                   ),
@@ -75,7 +75,7 @@ class LeaguesScreen extends ConsumerWidget {
                 Text(
                     'Top 10% get promoted, bottom 10% drop a tier. Shields save you from demotion.',
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.9), fontSize: 13)),
+                        color: Colors.white.withValues(alpha: 0.9), fontSize: 13)),
               ],
             ),
           ),
@@ -100,7 +100,7 @@ class LeaguesScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isMe
-                        ? Palette.green.withOpacity(0.18)
+                        ? Palette.green.withValues(alpha: 0.18)
                         : theme.cardColor,
                     borderRadius: BorderRadius.circular(14),
                     border: isMe

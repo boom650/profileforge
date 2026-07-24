@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
 import 'package:profileforge/core/data/tables.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/xp/application/variable_rewards.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
@@ -50,8 +51,11 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
       _earnedXp = xp;
       _showCompletion = true;
     });
-    // Award XP
-    ref.read(addXpProvider.notifier).execute(widget.profileId, xp, 'focus_timer');
+    // Apply variable‑ratio rewards (bonus XP + gems)
+    ref.read(applyVariableRewardsProvider(ApplyRewardsArgs(
+      profileId: widget.profileId,
+      baseXp: xp,
+    )));
     // Save session
     ref.read(saveFocusSessionProvider(
       (profileId: widget.profileId, durationMinutes: minutes, xpEarned: xp, tag: _selectedTag),
@@ -61,7 +65,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     // Sound
     ref.read(soundServiceProvider).success();
     // Celebrate
-    showXpPopup(context, xp);
+    celebrate(context, message: '+$xp XP');
   }
 
   String _formatTime(int secs) {
@@ -78,6 +82,13 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final theme = Theme.of(context);
     final notifier = ref.read(timerStateProvider.notifier);
     final timerState = ref.watch(timerStateProvider);
+
+    // When timer completes naturally, trigger rewards & celebration.
+    ref.listen<TimerSnapshot>(timerStateProvider, (prev, next) {
+      if (prev != null && prev.isRunning && !next.isRunning && next.secondsRemaining == 0) {
+        _handleComplete(next.durationMinutes);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(title: const Text('Focus Timer'), centerTitle: true),
