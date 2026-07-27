@@ -1,0 +1,564 @@
+                                Installed Skills                                
+┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┓
+┃ Name                 ┃ Category            ┃ Source    ┃ Trust     ┃ Status  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━┩
+│ Agent                │                     │ local     │ local     │ enabled │
+│ AutoGen              │                     │ local     │ local     │ enabled │
+│ CrewAI               │                     │ local     │ local     │ enabled │
+│ Flutter              │                     │ local     │ local     │ enabled │
+│ a11y-audit           │                     │ local     │ local     │ enabled │
+│ ab-testing           │                     │ local     │ local     │ enabled │
+│ abusing-dpapi-for-c… │                     │ local     │ local     │ enabled │
+│ acquisition-channel… │                     │ local     │ local     │ enabled │
+│ activator-authoring… │                     │ local     │ local     │ enabled │
+│ adaptyv              │                     │ local     │ local     │ enabled │
+│ advanced-design      │                     │ local     │ local     │ enabled │
+│ agent-architecture-… │                     │ local     │ local     │ enabled │
+│ agent-factory        │                     │ local     │ local     │ enabled │
+│ agent-framework-azu… │                     │ clawhub   │ community │ enabled │
+│ agent-harness-engin… │                     │ local     │ local     │ enabled │
+│ agent-self-evaluati… │                     │ local     │ local     │ enabled │
+│ agent-sort           │                     │ local     │ local     │ enabled │
+│ agentic-engineering  │                     │ local     │ local     │ enabled │
+│ agentic-os           │                     │ local     │ local     │ enabled │
+│ ainative-agent-fram… │                     │ clawhub   │ community │ enabled │
+│ android              │                     │ clawhub   │ community │ enabled │
+│ android-accessibili… │                     │ skills.sh │ community │ enabled │
+│ android-adb          │                     │ skills.sh │ community │ enabled │
+│ android-architecture │                     │ skills.sh │ community │ enabled │
+│ android-aso          │                     │ skills.sh │ community │ enabled │
+│ android-clean-archi… │                     │ local     │ local     │ enabled │
+│ api-connector-build… │                     │ local     │ local     │ enabled │
+│ api-design           │                     │ local     │ local     │ enabled │
+│ artifacts-builder    │                     │ local     │ local     │ enabled │
+│ ask-matt             │                     │ local     │ local     │ enabled │
+│ autonomous-agent-ha… │                     │ local     │ local     │ enabled │
+│ autoresearch         │                     │ local     │ local     │ enabled │
+│ batch-grill-me       │                     │ local     │ local     │ enabled │
+│ benchmark-optimizat… │                     │ local     │ local     │ enabled │
+│ brandkit             │                     │ local     │ local     │ enabled │
+│ browser-qa           │                     │ local     │ local     │ enabled │
+│ chef-assistant       │                     │ local     │ local     │ enabled │
+│ ci-build-verificati… │                     │ local     │ local     │ enabled │
+│ claude-handoff       │                     │ local     │ local     │ enabled │
+│ code-review          │                     │ local     │ local     │ enabled │
+│ codebase-design      │                     │ local     │ local     │ enabled │
+│ comfyui-node-advanc… │                     │ local     │ local     │ enabled │
+│ component-common-do… │                     │ local     │ local     │ enabled │
+│ computer-use         │                     │ local     │ local     │ enabled │
+│ context-engineering… │                     │ local     │ local     │ enabled │
+│ continuous-agent-lo… │                     │ local     │ local     │ enabled │
+│ dart-flutter-patter… │                     │ local     │ local     │ enabled │
+│ data-scraper-agent   │                     │ local     │ local     │ enabled │
+│ deep-research        │                     │ local     │ local     │ enabled │
+│ defuddle             │                     │ local     │ local     │ enabled │
+│ deployment-patterns  │                     │ local     │ local     │ enabled │
+│ design-system        │                     │ local     │ local     │ enabled │
+│ diagnosing-bugs      │                     │ local     │ local     │ enabled │
+│ documentation-lookup │                     │ local     │ local     │ enabled │
+│ dogfood              │                     │ builtin   │ builtin   │ enabled │
+│ domain-modeling      │                     │ local     │ local     │ enabled │
+│ e2e-testing          │                     │ local     │ local     │ enabled │
+│ earnings-calendar    │                     │ local     │ local     │ enabled │
+│ ecc-agent-router     │                     │ local     │ local     │ enabled │
+│ edit-article         │                     │ local     │ local     │ enabled │
+│ fireworks-tech-graph │                     │ local     │ local     │ enabled │
+│ flutter-app-release  │                     │ local     │ local     │ enabled │
+│ flutter-codebase-in… │                     │ local     │ local     │ enabled │
+│ flutter-termux-work… │                     │ local     │ local     │ enabled │
+│ get-pr-review        │                     │ browse-sh │ community │ enabled │
+│ git-guardrails-clau… │                     │ local     │ local     │ enabled │
+│ github-actions-work… │                     │ local     │ local     │ enabled │
+│ grill-me             │                     │ local     │ local     │ enabled │
+│ grilling             │                     │ local     │ local     │ enabled │
+│ gsap-core            │                     │ local     │ local     │ enabled │
+│ guizang-ppt-skill    │                     │ local     │ local     │ enabled │
+│ guizang-social-card… │                     │ local     │ local     │ enabled │
+│ hai-agent-framework  │                     │ clawhub   │ community │ enabled │
+│ handoff              │                     │ local     │ local     │ enabled │
+│ headline-matrix      │                     │ local     │ local     │ enabled │
+│ hermes-provider-cha… │                     │ local     │ local     │ enabled │
+│ hermes-skills-compa… │                     │ local     │ local     │ enabled │
+│ higgsfield           │                     │ local     │ local     │ enabled │
+│ hue                  │                     │ local     │ local     │ enabled │
+│ iterative-quality-i… │                     │ local     │ local     │ enabled │
+│ knowledge-graph-que… │                     │ local     │ local     │ enabled │
+│ langgraph            │                     │ clawhub   │ community │ enabled │
+│ last30days           │                     │ local     │ local     │ enabled │
+│ md2html              │                     │ local     │ local     │ enabled │
+│ migrate-to-shoehorn  │                     │ local     │ local     │ enabled │
+│ multi-agent-pipeline │                     │ local     │ local     │ enabled │
+│ my-first-skill       │                     │ local     │ local     │ enabled │
+│ notebooklm           │                     │ local     │ local     │ enabled │
+│ obsidian-vault       │                     │ local     │ local     │ enabled │
+│ openclaw-memory-ten… │                     │ local     │ local     │ enabled │
+│ pydantic-ai-agents   │                     │ local     │ local     │ enabled │
+│ qiaomu-design        │                     │ local     │ local     │ enabled │
+│ router-skill         │                     │ local     │ local     │ enabled │
+│ ruflo-agent          │                     │ local     │ local     │ enabled │
+│ ruflo-daa            │                     │ local     │ local     │ enabled │
+│ ruflo-hive           │                     │ local     │ local     │ enabled │
+│ ruflo-hooks          │                     │ local     │ local     │ enabled │
+│ ruflo-memory         │                     │ local     │ local     │ enabled │
+│ ruflo-swarm          │                     │ local     │ local     │ enabled │
+│ ruflo-system         │                     │ local     │ local     │ enabled │
+│ ruflo-wasm           │                     │ local     │ local     │ enabled │
+│ ruflo-workflow       │                     │ local     │ local     │ enabled │
+│ skill-creator        │                     │ local     │ local     │ enabled │
+│ smart-illustrator    │                     │ local     │ local     │ enabled │
+│ test-quality-audit   │                     │ local     │ local     │ enabled │
+│ thinking-archetypes  │                     │ local     │ local     │ enabled │
+│ ui-ux-pro-max        │                     │ local     │ local     │ enabled │
+│ voice                │                     │ clawhub   │ community │ enabled │
+│ web-scraping-toolki… │                     │ local     │ local     │ enabled │
+│ yao-meta-skill       │                     │ local     │ local     │ enabled │
+│ yuanbao              │                     │ builtin   │ builtin   │ enabled │
+│ claude-flow-agents   │ agent-orchestration │ local     │ local     │ enabled │
+│ judge-agents-code-r… │ agent-orchestration │ local     │ local     │ enabled │
+│ autonomous-quality-… │ autonomous-ai-agen… │ local     │ local     │ enabled │
+│ claude-code          │ autonomous-ai-agen… │ builtin   │ builtin   │ enabled │
+│ codex                │ autonomous-ai-agen… │ builtin   │ builtin   │ enabled │
+│ hermes-agent         │ autonomous-ai-agen… │ builtin   │ builtin   │ enabled │
+│ kanban-codex-lane    │ autonomous-ai-agen… │ builtin   │ builtin   │ enabled │
+│ opencode             │ autonomous-ai-agen… │ builtin   │ builtin   │ enabled │
+│ architecture-diagram │ creative            │ builtin   │ builtin   │ enabled │
+│ ascii-art            │ creative            │ builtin   │ builtin   │ enabled │
+│ ascii-video          │ creative            │ builtin   │ builtin   │ enabled │
+│ baoyu-article-illus… │ creative            │ builtin   │ builtin   │ enabled │
+│ baoyu-comic          │ creative            │ builtin   │ builtin   │ enabled │
+│ baoyu-infographic    │ creative            │ builtin   │ builtin   │ enabled │
+│ claude-design        │ creative            │ builtin   │ builtin   │ enabled │
+│ comfyui              │ creative            │ builtin   │ builtin   │ enabled │
+│ design-md            │ creative            │ builtin   │ builtin   │ enabled │
+│ excalidraw           │ creative            │ builtin   │ builtin   │ enabled │
+│ humanizer            │ creative            │ builtin   │ builtin   │ enabled │
+│ ideation             │ creative            │ builtin   │ builtin   │ enabled │
+│ manim-video          │ creative            │ builtin   │ builtin   │ enabled │
+│ p5js                 │ creative            │ builtin   │ builtin   │ enabled │
+│ pixel-art            │ creative            │ builtin   │ builtin   │ enabled │
+│ popular-web-designs  │ creative            │ builtin   │ builtin   │ enabled │
+│ pretext              │ creative            │ builtin   │ builtin   │ enabled │
+│ sketch               │ creative            │ builtin   │ builtin   │ enabled │
+│ songwriting-and-ai-… │ creative            │ builtin   │ builtin   │ enabled │
+│ touchdesigner-mcp    │ creative            │ builtin   │ builtin   │ enabled │
+│ jupyter-live-kernel  │ data-science        │ builtin   │ builtin   │ enabled │
+│ design-an-interface  │ deprecated          │ local     │ local     │ enabled │
+│ qa                   │ deprecated          │ local     │ local     │ enabled │
+│ request-refactor-pl… │ deprecated          │ local     │ local     │ enabled │
+│ ubiquitous-language  │ deprecated          │ local     │ local     │ enabled │
+│ ui-ux-audit          │ design              │ local     │ local     │ enabled │
+│ agentic-toolchain-t… │ devops              │ local     │ local     │ enabled │
+│ flutter-ci-debug     │ devops              │ local     │ local     │ enabled │
+│ flutter-termux-local │ devops              │ local     │ local     │ enabled │
+│ kanban-orchestrator  │ devops              │ builtin   │ builtin   │ enabled │
+│ kanban-worker        │ devops              │ builtin   │ builtin   │ enabled │
+│ termux-agentic-stack │ devops              │ local     │ local     │ enabled │
+│ webhook-subscriptio… │ devops              │ builtin   │ builtin   │ enabled │
+│ accessibility        │ ecc-skills          │ local     │ local     │ enabled │
+│ agent-eval           │ ecc-skills          │ local     │ local     │ enabled │
+│ agent-harness-const… │ ecc-skills          │ local     │ local     │ enabled │
+│ agent-introspection… │ ecc-skills          │ local     │ local     │ enabled │
+│ agent-payment-x402   │ ecc-skills          │ local     │ local     │ enabled │
+│ ai-first-engineering │ ecc-skills          │ local     │ local     │ enabled │
+│ ai-regression-testi… │ ecc-skills          │ local     │ local     │ enabled │
+│ angular-developer    │ ecc-skills          │ local     │ local     │ enabled │
+│ architecture-decisi… │ ecc-skills          │ local     │ local     │ enabled │
+│ article-writing      │ ecc-skills          │ local     │ local     │ enabled │
+│ automation-audit-ops │ ecc-skills          │ local     │ local     │ enabled │
+│ autonomous-loops     │ ecc-skills          │ local     │ local     │ enabled │
+│ backend-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ benchmark            │ ecc-skills          │ local     │ local     │ enabled │
+│ benchmark-methodolo… │ ecc-skills          │ local     │ local     │ enabled │
+│ blender-motion-stat… │ ecc-skills          │ local     │ local     │ enabled │
+│ blueprint            │ ecc-skills          │ local     │ local     │ enabled │
+│ brand-discovery      │ ecc-skills          │ local     │ local     │ enabled │
+│ brand-voice          │ ecc-skills          │ local     │ local     │ enabled │
+│ bun-runtime          │ ecc-skills          │ local     │ local     │ enabled │
+│ canary-watch         │ ecc-skills          │ local     │ local     │ enabled │
+│ carrier-relationshi… │ ecc-skills          │ local     │ local     │ enabled │
+│ cisco-ios-patterns   │ ecc-skills          │ local     │ local     │ enabled │
+│ ck                   │ ecc-skills          │ local     │ local     │ enabled │
+│ claude-devfleet      │ ecc-skills          │ local     │ local     │ enabled │
+│ click-path-audit     │ ecc-skills          │ local     │ local     │ enabled │
+│ clickhouse-io        │ ecc-skills          │ local     │ local     │ enabled │
+│ code-tour            │ ecc-skills          │ local     │ local     │ enabled │
+│ codebase-onboarding  │ ecc-skills          │ local     │ local     │ enabled │
+│ codehealth-mcp       │ ecc-skills          │ local     │ local     │ enabled │
+│ coding-standards     │ ecc-skills          │ local     │ local     │ enabled │
+│ competitive-platfor… │ ecc-skills          │ local     │ local     │ enabled │
+│ competitive-report-… │ ecc-skills          │ local     │ local     │ enabled │
+│ compose-multiplatfo… │ ecc-skills          │ local     │ local     │ enabled │
+│ config-gc            │ ecc-skills          │ local     │ local     │ enabled │
+│ configure-ecc        │ ecc-skills          │ local     │ local     │ enabled │
+│ connections-optimiz… │ ecc-skills          │ local     │ local     │ enabled │
+│ content-engine       │ ecc-skills          │ local     │ local     │ enabled │
+│ content-hash-cache-… │ ecc-skills          │ local     │ local     │ enabled │
+│ context-budget       │ ecc-skills          │ local     │ local     │ enabled │
+│ continuous-learning  │ ecc-skills          │ local     │ local     │ enabled │
+│ continuous-learning… │ ecc-skills          │ local     │ local     │ enabled │
+│ cost-aware-llm-pipe… │ ecc-skills          │ local     │ local     │ enabled │
+│ cost-tracking        │ ecc-skills          │ local     │ local     │ enabled │
+│ council              │ ecc-skills          │ local     │ local     │ enabled │
+│ cpp-coding-standards │ ecc-skills          │ local     │ local     │ enabled │
+│ cpp-testing          │ ecc-skills          │ local     │ local     │ enabled │
+│ crosspost            │ ecc-skills          │ local     │ local     │ enabled │
+│ csharp-testing       │ ecc-skills          │ local     │ local     │ enabled │
+│ customer-billing-ops │ ecc-skills          │ local     │ local     │ enabled │
+│ customs-trade-compl… │ ecc-skills          │ local     │ local     │ enabled │
+│ dashboard-builder    │ ecc-skills          │ local     │ local     │ enabled │
+│ data-throughput-acc… │ ecc-skills          │ local     │ local     │ enabled │
+│ database-design-aud… │ ecc-skills          │ local     │ local     │ enabled │
+│ database-migrations  │ ecc-skills          │ local     │ local     │ enabled │
+│ defi-amm-security    │ ecc-skills          │ local     │ local     │ enabled │
+│ delivery-gate        │ ecc-skills          │ local     │ local     │ enabled │
+│ django-celery        │ ecc-skills          │ local     │ local     │ enabled │
+│ django-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ django-security      │ ecc-skills          │ local     │ local     │ enabled │
+│ django-tdd           │ ecc-skills          │ local     │ local     │ enabled │
+│ django-verification  │ ecc-skills          │ local     │ local     │ enabled │
+│ dmux-workflows       │ ecc-skills          │ local     │ local     │ enabled │
+│ docker-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ dotnet-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ dynamic-workflow-mo… │ ecc-skills          │ local     │ local     │ enabled │
+│ ecc-guide            │ ecc-skills          │ local     │ local     │ enabled │
+│ ecc-recipes          │ ecc-skills          │ local     │ local     │ enabled │
+│ ecc-tools-cost-audit │ ecc-skills          │ local     │ local     │ enabled │
+│ email-ops            │ ecc-skills          │ local     │ local     │ enabled │
+│ energy-procurement   │ ecc-skills          │ local     │ local     │ enabled │
+│ enterprise-agent-ops │ ecc-skills          │ local     │ local     │ enabled │
+│ error-handling       │ ecc-skills          │ local     │ local     │ enabled │
+│ eval-harness         │ ecc-skills          │ local     │ local     │ enabled │
+│ evm-token-decimals   │ ecc-skills          │ local     │ local     │ enabled │
+│ exa-search           │ ecc-skills          │ local     │ local     │ enabled │
+│ fal-ai-media         │ ecc-skills          │ local     │ local     │ enabled │
+│ fastapi-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ finance-billing-ops  │ ecc-skills          │ local     │ local     │ enabled │
+│ flox-environments    │ ecc-skills          │ local     │ local     │ enabled │
+│ flutter-dart-code-r… │ ecc-skills          │ local     │ local     │ enabled │
+│ foundation-models-o… │ ecc-skills          │ local     │ local     │ enabled │
+│ frontend-a11y        │ ecc-skills          │ local     │ local     │ enabled │
+│ frontend-design-dir… │ ecc-skills          │ local     │ local     │ enabled │
+│ frontend-patterns    │ ecc-skills          │ local     │ local     │ enabled │
+│ frontend-slides      │ ecc-skills          │ local     │ local     │ enabled │
+│ fsharp-testing       │ ecc-skills          │ local     │ local     │ enabled │
+│ gan-style-harness    │ ecc-skills          │ local     │ local     │ enabled │
+│ gateguard            │ ecc-skills          │ local     │ local     │ enabled │
+│ generating-python-i… │ ecc-skills          │ local     │ local     │ enabled │
+│ gget                 │ ecc-skills          │ local     │ local     │ enabled │
+│ git-workflow         │ ecc-skills          │ local     │ local     │ enabled │
+│ github-ops           │ ecc-skills          │ local     │ local     │ enabled │
+│ golang-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ golang-testing       │ ecc-skills          │ local     │ local     │ enabled │
+│ google-workspace-ops │ ecc-skills          │ local     │ local     │ enabled │
+│ growth-log           │ ecc-skills          │ local     │ local     │ enabled │
+│ healthcare-cdss-pat… │ ecc-skills          │ local     │ local     │ enabled │
+│ healthcare-emr-patt… │ ecc-skills          │ local     │ local     │ enabled │
+│ healthcare-eval-har… │ ecc-skills          │ local     │ local     │ enabled │
+│ healthcare-phi-comp… │ ecc-skills          │ local     │ local     │ enabled │
+│ hermes-imports       │ ecc-skills          │ local     │ local     │ enabled │
+│ hexagonal-architect… │ ecc-skills          │ local     │ local     │ enabled │
+│ hipaa-compliance     │ ecc-skills          │ local     │ local     │ enabled │
+│ homelab-network-rea… │ ecc-skills          │ local     │ local     │ enabled │
+│ homelab-network-set… │ ecc-skills          │ local     │ local     │ enabled │
+│ homelab-pihole-dns   │ ecc-skills          │ local     │ local     │ enabled │
+│ homelab-vlan-segmen… │ ecc-skills          │ local     │ local     │ enabled │
+│ homelab-wireguard-v… │ ecc-skills          │ local     │ local     │ enabled │
+│ hookify-rules        │ ecc-skills          │ local     │ local     │ enabled │
+│ inherit-legacy-style │ ecc-skills          │ local     │ local     │ enabled │
+│ intent-driven-devel… │ ecc-skills          │ local     │ local     │ enabled │
+│ inventory-demand-pl… │ ecc-skills          │ local     │ local     │ enabled │
+│ investor-materials   │ ecc-skills          │ local     │ local     │ enabled │
+│ investor-outreach    │ ecc-skills          │ local     │ local     │ enabled │
+│ ios-icon-gen         │ ecc-skills          │ local     │ local     │ enabled │
+│ iterative-retrieval  │ ecc-skills          │ local     │ local     │ enabled │
+│ ito-basket-compare   │ ecc-skills          │ local     │ local     │ enabled │
+│ ito-data-atlas-agent │ ecc-skills          │ local     │ local     │ enabled │
+│ ito-market-intellig… │ ecc-skills          │ local     │ local     │ enabled │
+│ ito-trade-planner    │ ecc-skills          │ local     │ local     │ enabled │
+│ java-coding-standar… │ ecc-skills          │ local     │ local     │ enabled │
+│ jira-integration     │ ecc-skills          │ local     │ local     │ enabled │
+│ jpa-patterns         │ ecc-skills          │ local     │ local     │ enabled │
+│ knowledge-ops        │ ecc-skills          │ local     │ local     │ enabled │
+│ kotlin-coroutines-f… │ ecc-skills          │ local     │ local     │ enabled │
+│ kotlin-exposed-patt… │ ecc-skills          │ local     │ local     │ enabled │
+│ kotlin-ktor-patterns │ ecc-skills          │ local     │ local     │ enabled │
+│ kotlin-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ kotlin-testing       │ ecc-skills          │ local     │ local     │ enabled │
+│ kubernetes-patterns  │ ecc-skills          │ local     │ local     │ enabled │
+│ laravel-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ laravel-plugin-disc… │ ecc-skills          │ local     │ local     │ enabled │
+│ laravel-security     │ ecc-skills          │ local     │ local     │ enabled │
+│ laravel-tdd          │ ecc-skills          │ local     │ local     │ enabled │
+│ laravel-verification │ ecc-skills          │ local     │ local     │ enabled │
+│ latency-critical-sy… │ ecc-skills          │ local     │ local     │ enabled │
+│ lead-intelligence    │ ecc-skills          │ local     │ local     │ enabled │
+│ liquid-glass-design  │ ecc-skills          │ local     │ local     │ enabled │
+│ literature-review    │ ecc-skills          │ local     │ local     │ enabled │
+│ llm-trading-agent-s… │ ecc-skills          │ local     │ local     │ enabled │
+│ logistics-exception… │ ecc-skills          │ local     │ local     │ enabled │
+│ loop-design-check    │ ecc-skills          │ local     │ local     │ enabled │
+│ mailtrap-email-inte… │ ecc-skills          │ local     │ local     │ enabled │
+│ make-interfaces-fee… │ ecc-skills          │ local     │ local     │ enabled │
+│ market-research      │ ecc-skills          │ local     │ local     │ enabled │
+│ marketing-campaign   │ ecc-skills          │ local     │ local     │ enabled │
+│ mcp-server-patterns  │ ecc-skills          │ local     │ local     │ enabled │
+│ messages-ops         │ ecc-skills          │ local     │ local     │ enabled │
+│ ml-adoption-playbook │ ecc-skills          │ local     │ local     │ enabled │
+│ mle-workflow         │ ecc-skills          │ local     │ local     │ enabled │
+│ motion-advanced      │ ecc-skills          │ local     │ local     │ enabled │
+│ motion-foundations   │ ecc-skills          │ local     │ local     │ enabled │
+│ motion-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ motion-ui            │ ecc-skills          │ local     │ local     │ enabled │
+│ mysql-patterns       │ ecc-skills          │ local     │ local     │ enabled │
+│ nanoclaw-repl        │ ecc-skills          │ local     │ local     │ enabled │
+│ nestjs-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ netmiko-ssh-automat… │ ecc-skills          │ local     │ local     │ enabled │
+│ network-bgp-diagnos… │ ecc-skills          │ local     │ local     │ enabled │
+│ network-config-vali… │ ecc-skills          │ local     │ local     │ enabled │
+│ network-interface-h… │ ecc-skills          │ local     │ local     │ enabled │
+│ nextjs-turbopack     │ ecc-skills          │ local     │ local     │ enabled │
+│ nodejs-keccak256     │ ecc-skills          │ local     │ local     │ enabled │
+│ nutrient-document-p… │ ecc-skills          │ local     │ local     │ enabled │
+│ nuxt4-patterns       │ ecc-skills          │ local     │ local     │ enabled │
+│ openclaw-persona-fo… │ ecc-skills          │ local     │ local     │ enabled │
+│ opensource-pipeline  │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-add-feature     │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-build-mvp       │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-change-feature  │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-fix-defect      │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-pipeline        │ ecc-skills          │ local     │ local     │ enabled │
+│ orch-refine-code     │ ecc-skills          │ local     │ local     │ enabled │
+│ parallel-execution-… │ ecc-skills          │ local     │ local     │ enabled │
+│ perl-patterns        │ ecc-skills          │ local     │ local     │ enabled │
+│ perl-security        │ ecc-skills          │ local     │ local     │ enabled │
+│ perl-testing         │ ecc-skills          │ local     │ local     │ enabled │
+│ plan-canvas          │ ecc-skills          │ local     │ local     │ enabled │
+│ plan-orchestrate     │ ecc-skills          │ local     │ local     │ enabled │
+│ plankton-code-quali… │ ecc-skills          │ local     │ local     │ enabled │
+│ postgres-patterns    │ ecc-skills          │ local     │ local     │ enabled │
+│ prediction-market-o… │ ecc-skills          │ local     │ local     │ enabled │
+│ prediction-market-r… │ ecc-skills          │ local     │ local     │ enabled │
+│ prisma-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ product-capability   │ ecc-skills          │ local     │ local     │ enabled │
+│ product-lens         │ ecc-skills          │ local     │ local     │ enabled │
+│ production-audit     │ ecc-skills          │ local     │ local     │ enabled │
+│ production-scheduli… │ ecc-skills          │ local     │ local     │ enabled │
+│ project-flow-ops     │ ecc-skills          │ local     │ local     │ enabled │
+│ prompt-optimizer     │ ecc-skills          │ local     │ local     │ enabled │
+│ pubmed-database      │ ecc-skills          │ local     │ local     │ enabled │
+│ python-patterns      │ ecc-skills          │ local     │ local     │ enabled │
+│ python-testing       │ ecc-skills          │ local     │ local     │ enabled │
+│ pytorch-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ quality-nonconforma… │ ecc-skills          │ local     │ local     │ enabled │
+│ quarkus-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ quarkus-security     │ ecc-skills          │ local     │ local     │ enabled │
+│ quarkus-tdd          │ ecc-skills          │ local     │ local     │ enabled │
+│ quarkus-verification │ ecc-skills          │ local     │ local     │ enabled │
+│ ralphinho-rfc-pipel… │ ecc-skills          │ local     │ local     │ enabled │
+│ react-native-patter… │ ecc-skills          │ local     │ local     │ enabled │
+│ react-patterns       │ ecc-skills          │ local     │ local     │ enabled │
+│ react-performance    │ ecc-skills          │ local     │ local     │ enabled │
+│ react-testing        │ ecc-skills          │ local     │ local     │ enabled │
+│ recsys-pipeline-arc… │ ecc-skills          │ local     │ local     │ enabled │
+│ recursive-decision-… │ ecc-skills          │ local     │ local     │ enabled │
+│ redis-patterns       │ ecc-skills          │ local     │ local     │ enabled │
+│ regex-vs-llm-struct… │ ecc-skills          │ local     │ local     │ enabled │
+│ remotion-video-crea… │ ecc-skills          │ local     │ local     │ enabled │
+│ repo-scan            │ ecc-skills          │ local     │ local     │ enabled │
+│ research-ops         │ ecc-skills          │ local     │ local     │ enabled │
+│ returns-reverse-log… │ ecc-skills          │ local     │ local     │ enabled │
+│ rules-distill        │ ecc-skills          │ local     │ local     │ enabled │
+│ rust-patterns        │ ecc-skills          │ local     │ local     │ enabled │
+│ rust-testing         │ ecc-skills          │ local     │ local     │ enabled │
+│ safety-guard         │ ecc-skills          │ local     │ local     │ enabled │
+│ santa-method         │ ecc-skills          │ local     │ local     │ enabled │
+│ scholar-evaluation   │ ecc-skills          │ local     │ local     │ enabled │
+│ search-first         │ ecc-skills          │ local     │ local     │ enabled │
+│ security-bounty-hun… │ ecc-skills          │ local     │ local     │ enabled │
+│ security-review      │ ecc-skills          │ local     │ local     │ enabled │
+│ security-scan        │ ecc-skills          │ local     │ local     │ enabled │
+│ seo                  │ ecc-skills          │ local     │ local     │ enabled │
+│ skill-comply         │ ecc-skills          │ local     │ local     │ enabled │
+│ skill-scout          │ ecc-skills          │ local     │ local     │ enabled │
+│ skill-stocktake      │ ecc-skills          │ local     │ local     │ enabled │
+│ social-graph-ranker  │ ecc-skills          │ local     │ local     │ enabled │
+│ social-publisher     │ ecc-skills          │ local     │ local     │ enabled │
+│ springboot-patterns  │ ecc-skills          │ local     │ local     │ enabled │
+│ springboot-security  │ ecc-skills          │ local     │ local     │ enabled │
+│ springboot-tdd       │ ecc-skills          │ local     │ local     │ enabled │
+│ springboot-verifica… │ ecc-skills          │ local     │ local     │ enabled │
+│ strategic-compact    │ ecc-skills          │ local     │ local     │ enabled │
+│ swift-actor-persist… │ ecc-skills          │ local     │ local     │ enabled │
+│ swift-concurrency-6… │ ecc-skills          │ local     │ local     │ enabled │
+│ swift-protocol-di-t… │ ecc-skills          │ local     │ local     │ enabled │
+│ swiftui-patterns     │ ecc-skills          │ local     │ local     │ enabled │
+│ taste                │ ecc-skills          │ local     │ local     │ enabled │
+│ tdd-workflow         │ ecc-skills          │ local     │ local     │ enabled │
+│ team-agent-orchestr… │ ecc-skills          │ local     │ local     │ enabled │
+│ team-builder         │ ecc-skills          │ local     │ local     │ enabled │
+│ terminal-ops         │ ecc-skills          │ skills.sh │ community │ enabled │
+│ tinystruct-patterns  │ ecc-skills          │ local     │ local     │ enabled │
+│ token-budget-advisor │ ecc-skills          │ local     │ local     │ enabled │
+│ ui-demo              │ ecc-skills          │ local     │ local     │ enabled │
+│ ui-to-vue            │ ecc-skills          │ local     │ local     │ enabled │
+│ uncloud              │ ecc-skills          │ local     │ local     │ enabled │
+│ unified-notificatio… │ ecc-skills          │ local     │ local     │ enabled │
+│ uspto-database       │ ecc-skills          │ local     │ local     │ enabled │
+│ verification-loop    │ ecc-skills          │ local     │ local     │ enabled │
+│ video-editing        │ ecc-skills          │ local     │ local     │ enabled │
+│ videodb              │ ecc-skills          │ local     │ local     │ enabled │
+│ visa-doc-translate   │ ecc-skills          │ local     │ local     │ enabled │
+│ vite-patterns        │ ecc-skills          │ local     │ local     │ enabled │
+│ vue-patterns         │ ecc-skills          │ local     │ local     │ enabled │
+│ windows-desktop-e2e  │ ecc-skills          │ local     │ local     │ enabled │
+│ workspace-surface-a… │ ecc-skills          │ local     │ local     │ enabled │
+│ x-api                │ ecc-skills          │ local     │ local     │ enabled │
+│ agentmail            │ email               │ official  │ official  │ enabled │
+│ himalaya             │ email               │ builtin   │ builtin   │ enabled │
+│ grill-with-docs      │ engineering         │ local     │ local     │ enabled │
+│ implement            │ engineering         │ local     │ local     │ enabled │
+│ improve-codebase-ar… │ engineering         │ local     │ local     │ enabled │
+│ prototype            │ engineering         │ local     │ local     │ enabled │
+│ research             │ engineering         │ local     │ local     │ enabled │
+│ resolving-merge-con… │ engineering         │ local     │ local     │ enabled │
+│ setup-matt-pocock-s… │ engineering         │ local     │ local     │ enabled │
+│ tdd                  │ engineering         │ local     │ local     │ enabled │
+│ to-spec              │ engineering         │ local     │ local     │ enabled │
+│ to-tickets           │ engineering         │ local     │ local     │ enabled │
+│ triage               │ engineering         │ local     │ local     │ enabled │
+│ wayfinder            │ engineering         │ local     │ local     │ enabled │
+│ Flutter Multi-Agent  │ flutter             │ local     │ local     │ enabled │
+│ Improvement          │                     │           │           │         │
+│ Flutter Theming      │ flutter             │ local     │ local     │ enabled │
+│ Flutter i18n         │ flutter             │ local     │ local     │ enabled │
+│ flutter-architecture │ flutter             │ local     │ local     │ enabled │
+│ flutter-ci-deferred… │ flutter             │ local     │ local     │ enabled │
+│ flutter-cicd-no-sdk  │ flutter             │ local     │ local     │ enabled │
+│ flutter-drift-gamif… │ flutter             │ local     │ local     │ enabled │
+│ flutter-performance… │ flutter             │ local     │ local     │ enabled │
+│ flutter-riverpod-an… │ flutter             │ local     │ local     │ enabled │
+│ flutter-web-perform… │ flutter             │ local     │ local     │ enabled │
+│ ux-flow-evaluation   │ flutter             │ local     │ local     │ enabled │
+│ minecraft-modpack-s… │ gaming              │ builtin   │ builtin   │ enabled │
+│ pokemon-player       │ gaming              │ builtin   │ builtin   │ enabled │
+│ codebase-inspection  │ github              │ builtin   │ builtin   │ enabled │
+│ github-auth          │ github              │ builtin   │ builtin   │ enabled │
+│ github-code-review   │ github              │ builtin   │ builtin   │ enabled │
+│ github-issues        │ github              │ builtin   │ builtin   │ enabled │
+│ github-pr-workflow   │ github              │ builtin   │ builtin   │ enabled │
+│ github-repo-managem… │ github              │ builtin   │ builtin   │ enabled │
+│ hermes-capability-e… │ hermes              │ local     │ local     │ enabled │
+│ loop-me              │ in-progress         │ local     │ local     │ enabled │
+│ setup-ts-deep-modul… │ in-progress         │ local     │ local     │ enabled │
+│ to-questionnaire     │ in-progress         │ local     │ local     │ enabled │
+│ wizard               │ in-progress         │ local     │ local     │ enabled │
+│ writing-beats        │ in-progress         │ local     │ local     │ enabled │
+│ writing-fragments    │ in-progress         │ local     │ local     │ enabled │
+│ writing-shape        │ in-progress         │ local     │ local     │ enabled │
+│ native-mcp           │ mcp                 │ builtin   │ builtin   │ enabled │
+│ gif-search           │ media               │ builtin   │ builtin   │ enabled │
+│ heartmula            │ media               │ builtin   │ builtin   │ enabled │
+│ songsee              │ media               │ builtin   │ builtin   │ enabled │
+│ spotify              │ media               │ builtin   │ builtin   │ enabled │
+│ youtube-content      │ media               │ builtin   │ builtin   │ enabled │
+│ scaffold-exercises   │ misc                │ local     │ local     │ enabled │
+│ setup-pre-commit     │ misc                │ local     │ local     │ enabled │
+│ audiocraft-audio-ge… │ mlops               │ builtin   │ builtin   │ enabled │
+│ dspy                 │ mlops               │ builtin   │ builtin   │ enabled │
+│ evaluating-llms-har… │ mlops               │ builtin   │ builtin   │ enabled │
+│ huggingface-hub      │ mlops               │ builtin   │ builtin   │ enabled │
+│ llama-cpp            │ mlops               │ builtin   │ builtin   │ enabled │
+│ obliteratus          │ mlops               │ builtin   │ builtin   │ enabled │
+│ segment-anything-mo… │ mlops               │ builtin   │ builtin   │ enabled │
+│ serving-llms-vllm    │ mlops               │ builtin   │ builtin   │ enabled │
+│ weights-and-biases   │ mlops               │ builtin   │ builtin   │ enabled │
+│ Flutter CI-Only &    │ mobile              │ local     │ local     │ enabled │
+│ 30-Judge Harness     │                     │           │           │         │
+│ obsidian             │ note-taking         │ builtin   │ builtin   │ enabled │
+│ frontend-performanc… │ performance         │ local     │ local     │ enabled │
+│ ai-ml-engineer       │ persona             │ local     │ local     │ enabled │
+│ ai-product-manager   │ persona             │ local     │ local     │ enabled │
+│ algorithm-engineer   │ persona             │ local     │ local     │ enabled │
+│ apple                │ persona             │ local     │ local     │ enabled │
+│ data-engineer        │ persona             │ local     │ local     │ enabled │
+│ devops-engineer      │ persona             │ local     │ local     │ enabled │
+│ embedded-systems-en… │ persona             │ local     │ local     │ enabled │
+│ frontend-developer   │ persona             │ local     │ local     │ enabled │
+│ full-stack-developer │ persona             │ local     │ local     │ enabled │
+│ graphic-designer     │ persona             │ local     │ local     │ enabled │
+│ mobile-app-developer │ persona             │ local     │ local     │ enabled │
+│ product-manager      │ persona             │ local     │ local     │ enabled │
+│ qa-engineer          │ persona             │ local     │ local     │ enabled │
+│ security-engineer    │ persona             │ local     │ local     │ enabled │
+│ site-reliability-en… │ persona             │ local     │ local     │ enabled │
+│ tesla-software-engi… │ persona             │ local     │ local     │ enabled │
+│ ui-designer          │ persona             │ local     │ local     │ enabled │
+│ ui-ux-designer       │ persona             │ local     │ local     │ enabled │
+│ ux-designer          │ persona             │ local     │ local     │ enabled │
+│ airtable             │ productivity        │ builtin   │ builtin   │ enabled │
+│ google-workspace     │ productivity        │ builtin   │ builtin   │ enabled │
+│ linear               │ productivity        │ builtin   │ builtin   │ enabled │
+│ maps                 │ productivity        │ builtin   │ builtin   │ enabled │
+│ nano-pdf             │ productivity        │ builtin   │ builtin   │ enabled │
+│ notion               │ productivity        │ builtin   │ builtin   │ enabled │
+│ ocr-and-documents    │ productivity        │ builtin   │ builtin   │ enabled │
+│ petdex               │ productivity        │ local     │ local     │ enabled │
+│ powerpoint           │ productivity        │ builtin   │ builtin   │ enabled │
+│ teach                │ productivity        │ local     │ local     │ enabled │
+│ teams-meeting-pipel… │ productivity        │ builtin   │ builtin   │ enabled │
+│ writing-great-skills │ productivity        │ local     │ local     │ enabled │
+│ godmode              │ red-teaming         │ builtin   │ builtin   │ enabled │
+│ arxiv                │ research            │ builtin   │ builtin   │ enabled │
+│ blogwatcher          │ research            │ builtin   │ builtin   │ enabled │
+│ llm-wiki             │ research            │ builtin   │ builtin   │ enabled │
+│ polymarket           │ research            │ builtin   │ builtin   │ enabled │
+│ research-paper-writ… │ research            │ builtin   │ builtin   │ enabled │
+│ technical-reconnais… │ research            │ local     │ local     │ enabled │
+│ termux-research-web  │ research            │ local     │ local     │ enabled │
+│ code-audit           │ security            │ local     │ local     │ enabled │
+│ dependency-audit     │ security            │ local     │ local     │ enabled │
+│ openhue              │ smart-home          │ builtin   │ builtin   │ enabled │
+│ xurl                 │ social-media        │ builtin   │ builtin   │ enabled │
+│ agent-orchestration  │ software-developme… │ local     │ local     │ enabled │
+│ autonomous-ci-pipel… │ software-developme… │ local     │ local     │ enabled │
+│ bulk-file-updates    │ software-developme… │ local     │ local     │ enabled │
+│ code-quality-evalua… │ software-developme… │ local     │ local     │ enabled │
+│ debugging-hermes-tu… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ hermes-agent-skill-… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ hermes-s6-container… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ multi-agent-app-eva… │ software-developme… │ local     │ local     │ enabled │
+│ multi-agent-judging… │ software-developme… │ local     │ local     │ enabled │
+│ node-inspect-debugg… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ plan                 │ software-developme… │ builtin   │ builtin   │ enabled │
+│ product-feature-aud… │ software-developme… │ local     │ local     │ enabled │
+│ python-debugpy       │ software-developme… │ builtin   │ builtin   │ enabled │
+│ requesting-code-rev… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ routing-agent-master │ software-developme… │ local     │ local     │ enabled │
+│ simplify-code        │ software-developme… │ local     │ local     │ enabled │
+│ spike                │ software-developme… │ builtin   │ builtin   │ enabled │
+│ subagent-driven-dev… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ systematic-debugging │ software-developme… │ builtin   │ builtin   │ enabled │
+│ technical-debt-anal… │ software-developme… │ local     │ local     │ enabled │
+│ termux-hermes-bulk-… │ software-developme… │ local     │ local     │ enabled │
+│ termux-software-inc… │ software-developme… │ local     │ local     │ enabled │
+│ test-driven-develop… │ software-developme… │ builtin   │ builtin   │ enabled │
+│ verify-before-claim… │ software-developme… │ local     │ local     │ enabled │
+│ version-verification │ software-developme… │ local     │ local     │ enabled │
+│ writing-plans        │ software-developme… │ builtin   │ builtin   │ enabled │
+│ design-taste-fronte… │ taste               │ local     │ local     │ enabled │
+│ design-taste-fronte… │ taste               │ local     │ local     │ enabled │
+│ full-output-enforce… │ taste               │ local     │ local     │ enabled │
+│ gpt-taste            │ taste               │ local     │ local     │ enabled │
+│ high-end-visual-des… │ taste               │ local     │ local     │ enabled │
+│ image-to-code        │ taste               │ local     │ local     │ enabled │
+│ imagegen-frontend-m… │ taste               │ local     │ local     │ enabled │
+│ imagegen-frontend-w… │ taste               │ local     │ local     │ enabled │
+│ industrial-brutalis… │ taste               │ local     │ local     │ enabled │
+│ minimalist-ui        │ taste               │ local     │ local     │ enabled │
+│ redesign-existing-p… │ taste               │ local     │ local     │ enabled │
+│ stitch-design-taste  │ taste               │ local     │ local     │ enabled │
+│ flutter-ci-build-de… │ testing             │ local     │ local     │ enabled │
+│ flutter-test-ci-aud… │ testing             │ local     │ local     │ enabled │
+└──────────────────────┴─────────────────────┴───────────┴───────────┴─────────┘
+13 hub-installed, 85 builtin, 457 local — 555 enabled, 0 disabled
+
