@@ -10,8 +10,12 @@ void main() {
         child: MaterialApp(home: Scaffold(body: AmbientAudioPanel())),
       ),
     );
+    // Advance past initial flutter_animate timers
+    await tester.pump(const Duration(milliseconds: 500));
     
-    // Should render the container
+    // Verify widget exists
     expect(find.byType(AmbientAudioPanel), findsOneWidget);
+    // Verify some UI elements
+    expect(find.text('Ambient Sound'), findsOneWidget);
   });
 }
