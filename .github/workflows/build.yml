@@ -144,7 +144,14 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build APK (release, split-per-abi)
-        run: flutter build apk --release --split-per-abi
+        run: |
+          echo "=== Generated manifest ==="
+          cat android/app/src/main/AndroidManifest.xml
+          echo "=== gradle.properties ==="
+          cat android/gradle.properties
+          echo "=== build.gradle.kts ==="
+          cat android/app/build.gradle.kts
+          flutter build apk --release --split-per-abi --verbose 2>&1 | tail -100
 
       - name: Build App Bundle (release)
         run: flutter build appbundle --release
