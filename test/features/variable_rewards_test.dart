@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:profileforge/features/timer/domain/variable_rewards.dart';
+import 'package:profileforge/features/xp/application/variable_rewards.dart';
 
 void main() {
   group('VariableRewardEngine', () {
