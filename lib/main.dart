@@ -15,18 +15,33 @@ Future<void> main() async {
   // Initialise local notifications for streak/quest reminders.
   final notifPlugin = FlutterLocalNotificationsPlugin();
   final notifService = NotificationService(notifPlugin);
-  await notifService.initialize();
-  // Schedule recurring reminders.
-  await notifService.scheduleStreakReminder('default-profile');
-  await notifService.scheduleQuestReminder('default-profile');
+  try {
+    await notifService.initialize();
+    await notifService.scheduleStreakReminder('default-profile');
+    await notifService.scheduleQuestReminder('default-profile');
+  } catch (e, st) {
+    debugPrint('FAILED TO INIT NOTIFICATIONS: $e\n$st');
+  }
 
   runApp(ProviderScope(
+    observers: [LoggerProviderObserver()], // Added logging
     overrides: [
       notificationPluginProvider.overrideWithValue(notifPlugin),
       notificationServiceProvider.overrideWithValue(notifService),
     ],
     child: const ProfileForgeApp(),
   ));
+}
+
+class LoggerProviderObserver extends ProviderObserver {
+  @override
+  void didUpdateProvider(ProviderBase provider, Object? previousValue, Object? newValue, ProviderContainer container) {
+    debugPrint('Provider $provider updated from $previousValue to $newValue');
+  }
+  @override
+  void providerDidFail(ProviderBase provider, Object error, StackTrace stackTrace, ProviderContainer container) {
+    debugPrint('Provider $provider failed: $error');
+  }
 }
 
 class ProfileForgeApp extends ConsumerWidget {
