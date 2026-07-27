@@ -9,44 +9,47 @@ void main() {
       engine = VariableRewardEngine();
     });
 
-    test('generates rewards within expected ranges', () {
+    test('applyXpBonus returns multiplier results', () {
       for (int i = 0; i < 100; i++) {
-        final reward = engine.generateReward(30); // 30 min session
-        expect(reward.totalXp, greaterThan(0));
-        expect(reward.totalXp, lessThanOrEqualTo(300));
-        expect(reward.bonusXp, greaterThanOrEqualTo(0));
-        expect(reward.tokens, greaterThanOrEqualTo(0));
+        final bonus = engine.applyXpBonus(100);
+        expect(bonus, greaterThanOrEqualTo(100));
+        expect(bonus, lessThanOrEqualTo(300));
       }
     });
 
-    test('longer sessions give more rewards on average', () {
-      int totalXpShort = 0, totalXpLong = 0;
-      for (int i = 0; i < 50; i++) {
-        totalXpShort += engine.generateReward(15).totalXp;
-        totalXpLong += engine.generateReward(60).totalXp;
+    test('bonusGems returns 0-3 gems', () {
+      for (int i = 0; i < 200; i++) {
+        final gems = engine.bonusGems();
+        expect(gems, greaterThanOrEqualTo(0));
+        expect(gems, lessThanOrEqualTo(3));
       }
-      // Longer sessions should average higher total XP
-      expect(totalXpShort, lessThan(totalXpLong));
     });
 
-    test('has variable ratio streak', () {
-      final rewards = List.generate(10, (i) => engine.generateReward(25));
-      final streakCounts = rewards.map((r) => r.streakBonus).toSet();
-      // Not all rewards have the same streak bonus (it's variable)
-      expect(streakCounts.length, greaterThan(1));
-    });
-
-    test('has rare bonus jackpot', () {
-      // Run many times; at least some should have >100 bonus
-      int jackpotCount = 0;
+    test('luckyFragmentDrop is sometimes true', () {
+      int trueCount = 0;
       for (int i = 0; i < 500; i++) {
-        if (engine.generateReward(30).bonusXp > 100) {
-          jackpotCount++;
-        }
+        if (engine.luckyFragmentDrop) trueCount++;
       }
-      expect(jackpotCount, greaterThan(0));
-      // Jackpot should be rare (<10% of the time)
-      expect(jackpotCount, lessThan(150));
+      // Should fire at least once in 500 tries (8% chance)
+      expect(trueCount, greaterThan(0));
+      // Should not be too common
+      expect(trueCount, lessThan(150));
+    });
+
+    test('streakRecoveryLuck is sometimes true', () {
+      int trueCount = 0;
+      for (int i = 0; i < 500; i++) {
+        if (engine.streakRecoveryLuck) trueCount++;
+      }
+      expect(trueCount, greaterThan(0));
+    });
+
+    test('rewardDelay is reasonable', () {
+      for (int i = 0; i < 100; i++) {
+        final delay = engine.rewardDelay;
+        expect(delay.inMilliseconds, greaterThanOrEqualTo(300));
+        expect(delay.inMilliseconds, lessThan(1000));
+      }
     });
   });
 }
