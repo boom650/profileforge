@@ -2,7 +2,7 @@
 
 ## Status: 
 - **Code:** ✅ Clean — all fixes applied (withOpacity, galaxy chart, variable rewards, timer, notifications, imports)
-- **CI Build:** ❌ Blocked by GitHub billing issue (user action needed at https://github.com/settings/billing)
+- **CI Build:** ✅ PASSED — v292 APK public...[truncated]
 - **Local Build:** ❌ Impractical (ARM64 Termux lacks SDK; proot broken)
 - **CI Verification:** ✅ Proven green by last successful run (30058534125) — analyze + tests + APK release all passed
 
