@@ -47,7 +47,7 @@ jobs:
           MAN=android/app/src/main/AndroidManifest.xml
           for perm in INTERNET POST_NOTIFICATIONS RECEIVE_BOOT_COMPLETED VIBRATE; do
             grep -q "android.permission.$perm" "$MAN" || \
-              sed -i "s#</manifest>#  <uses-permission android:name="android.permission.$perm"/>\\n</manifest>#" "$MAN"
+              sed -i "s#</manifest>#  <uses-permission android:name='android.permission.$perm'/>\\\\n</manifest>#" "$MAN"
           done
 
       - name: Enable core library desugaring
@@ -122,7 +122,7 @@ jobs:
           MAN=android/app/src/main/AndroidManifest.xml
           for perm in INTERNET POST_NOTIFICATIONS RECEIVE_BOOT_COMPLETED VIBRATE; do
             grep -q "android.permission.$perm" "$MAN" || \
-              sed -i "s#</manifest>#  <uses-permission android:name="android.permission.$perm"/>\\n</manifest>#" "$MAN"
+              sed -i "s#</manifest>#  <uses-permission android:name='android.permission.$perm'/>\\\\n</manifest>#" "$MAN"
           done
 
       - name: Enable core library desugaring
