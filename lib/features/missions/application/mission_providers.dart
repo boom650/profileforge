@@ -41,21 +41,21 @@ final completeMissionProvider = Provider.family<
     ({String profileId, String missionId, int xp, String pillar})>((ref, args) async {
   await ref.watch(missionRepositoryProvider).complete(args.missionId);
   // Award XP via the XP ledger (handles skin multiplier through provided xp).
-  await ref.watch(xpRepositoryProvider).add(
+  await ref.read(xpRepositoryProvider).add(
         args.profileId,
         args.xp,
         'mission:${args.missionId}',
       );
   // Award gems (1 gem per 5 XP, min 2).
   final gems = (args.xp / 5).ceil().clamp(2, 50);
-  ref.read(addGemsProvider((profileId: args.profileId, amount: gems)));
+  await ref.read(walletRepositoryProvider).add(args.profileId, gems);
   ref.invalidate(todaysMissionsProvider(args.profileId));
   ref.invalidate(totalXpProvider(args.profileId));
   ref.invalidate(gemsProvider(args.profileId));
 });
 
 /// Regenerates today's missions, *personalized* from the onboarding profile.
-final generateMissionsProvider = Provider.family<void, String>((ref, profileId) {
+final generateMissionsProvider = FutureProvider.family<void, String>((ref, profileId) async {
   final onboarding =
       ref.read(onboardingProvider(profileId)).valueOrNull;
   final gen = MissionGenerator();
@@ -74,7 +74,7 @@ final generateMissionsProvider = Provider.family<void, String>((ref, profileId) 
                 completed: false,
               ))
           .toList();
-  ref.read(missionRepositoryProvider).upsertGenerated(generated);
+  await ref.read(missionRepositoryProvider).upsertGenerated(generated);
   ref.invalidate(todaysMissionsProvider(profileId));
 });
 

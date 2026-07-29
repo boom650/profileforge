@@ -33,9 +33,20 @@ class HomePage extends ConsumerWidget {
     final standingsAsync = ref.watch(leagueStandingsProvider(profileId));
     final rewardAsync = ref.watch(dailyRewardProvider(profileId));
 
+    // Handle global loading state
+    final isLoading = xpAsync.isLoading || gemsAsync.isLoading ||
+        streakAsync.isLoading || missionsAsync.isLoading;
+
     final level = LevelEngine();
     final totalXp = xpAsync.valueOrNull ?? 0;
     final lv = level.resolve(totalXp);
+
+    if (isLoading && totalXp == 0) {
+      return Scaffold(
+        bottomNavigationBar: appBottomNav(context, '/home'),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
       bottomNavigationBar: appBottomNav(context, '/home'),
@@ -223,7 +234,10 @@ class HomePage extends ConsumerWidget {
                     ),
                   );
                 }).toList() ??
-                [const Text('Generate your plan to see missions →')],
+                [const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text('Generate your plan to see missions →'),
+                )],
 
             const SizedBox(height: 18),
 
@@ -282,7 +296,7 @@ class HomePage extends ConsumerWidget {
             }),
             const SizedBox(height: 24),
 
-            // Quick actions grid — new features
+            // Quick actions grid
             SectionTitle('Quick Actions'),
             const SizedBox(height: 8),
             Wrap(
@@ -309,9 +323,10 @@ class HomePage extends ConsumerWidget {
                   context.push('/onboarding');
                   return;
                 }
-                ref.read(generateMissionsProvider(profileId));
-                SoundService.instance.success();
-                celebrate(context, message: 'New missions! 🚀');
+                ref.read(generateMissionsProvider(profileId).future).then((_) {
+                  SoundService.instance.success();
+                  celebrate(context, message: 'New missions! 🚀');
+                });
               },
             ),
           ],

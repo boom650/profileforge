@@ -40,7 +40,6 @@ dependencies:
   dio: ^5.4.3
   # PDF (offline export)
   pdf: ^3.11.1
-  share_plus: ^7.2.2
   # Charts
   fl_chart: ^0.69.2
   # Local notifications (no API key needed)

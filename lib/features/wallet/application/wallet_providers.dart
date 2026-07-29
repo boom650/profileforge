@@ -12,10 +12,10 @@ final gemsProvider =
   return ref.watch(walletRepositoryProvider).get(profileId);
 });
 
-/// Add gems (called when missions/streaks award currency).
+/// Add gems (called when missions/streaks award currency). Awaitable.
 final addGemsProvider =
-    Provider.family<void, ({String profileId, int amount})>((ref, args) {
-  ref.watch(walletRepositoryProvider).add(args.profileId, args.amount);
+    FutureProvider.family<void, ({String profileId, int amount})>((ref, args) async {
+  await ref.watch(walletRepositoryProvider).add(args.profileId, args.amount);
   ref.invalidate(gemsProvider(args.profileId));
 });
 

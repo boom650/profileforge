@@ -39,16 +39,54 @@ class DiscoverScreen extends ConsumerWidget {
   }
 }
 
+/// Attempts to load and decode a JSON asset; returns null on any failure.
+Future<Map<String, dynamic>?> _loadJson(String path) async {
+  try {
+    final raw = await rootBundle.loadString(path);
+    return jsonDecode(raw) as Map<String, dynamic>;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Fallback widget shown when data fails to load or is empty.
+Widget _emptyState(String message, {String emoji = '📭'}) {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 48)),
+          const SizedBox(height: 12),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 15, color: Colors.grey),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 class _UniversityList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
-        future: rootBundle
-            .loadString('assets/content_pack.json')
-            .then((s) => jsonDecode(s) as Map<String, dynamic>),
+        future: _loadJson('assets/content_pack.json'),
         builder: (ctx, snap) {
-          if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-          final guides =
-              (snap.data!['university_guides'] as Map).cast<String, dynamic>();
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snap.data;
+          if (data == null || !data.containsKey('university_guides')) {
+            return _emptyState('Could not load university guides. Pull latest data via sync.',
+                emoji: '🏛️');
+          }
+          final guides = (data['university_guides'] as Map).cast<String, dynamic>();
+          if (guides.isEmpty) {
+            return _emptyState('No university guides available yet.', emoji: '🏛️');
+          }
           return ListView(
             padding: const EdgeInsets.all(16),
             children: guides.entries.map((e) {
@@ -67,20 +105,22 @@ class _UniversityList extends StatelessWidget {
                         style: const TextStyle(
                             fontWeight: FontWeight.w900, fontSize: 18)),
                     const SizedBox(height: 6),
-                    Text(g['overview'] as String),
+                    Text(g['overview'] as String? ?? ''),
                     const SizedBox(height: 8),
-                    ...(g['what_matters'] as List).map((m) => Padding(
-                          padding: const EdgeInsets.only(bottom: 3),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('• ',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w900)),
-                              Expanded(child: Text(m.toString())),
-                            ],
-                          ),
-                        )),
+                    ...(g['what_matters'] is List
+                        ? (g['what_matters'] as List).map((m) => Padding(
+                              padding: const EdgeInsets.only(bottom: 3),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('• ',
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.w900)),
+                                  Expanded(child: Text(m.toString())),
+                                ],
+                              ),
+                            ))
+                        : []),
                   ],
                 ),
               ).animate().fadeIn();
@@ -93,12 +133,19 @@ class _UniversityList extends StatelessWidget {
 class _StudyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
-        future: rootBundle
-            .loadString('assets/facts.json')
-            .then((s) => jsonDecode(s) as Map<String, dynamic>),
+        future: _loadJson('assets/facts.json'),
         builder: (ctx, snap) {
-          if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-          final tips = (snap.data!['study_tips'] as List).cast<String>();
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snap.data;
+          if (data == null || !data.containsKey('study_tips')) {
+            return _emptyState('Study tips not loaded yet.', emoji: '💡');
+          }
+          final tips = (data['study_tips'] as List?)?.cast<String>() ?? [];
+          if (tips.isEmpty) {
+            return _emptyState('No study tips available.', emoji: '💡');
+          }
           return ListView(
             padding: const EdgeInsets.all(16),
             children: tips
@@ -126,12 +173,19 @@ class _StudyList extends StatelessWidget {
 class _CompetitionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
-        future: rootBundle
-            .loadString('assets/extra_content.json')
-            .then((s) => jsonDecode(s) as Map<String, dynamic>),
+        future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
-          if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-          final list = (snap.data!['olympiads'] as List).cast<Map>();
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snap.data;
+          if (data == null || !data.containsKey('olympiads')) {
+            return _emptyState('Competition data could not be loaded.', emoji: '🏆');
+          }
+          final list = (data['olympiads'] as List?)?.cast<Map>() ?? [];
+          if (list.isEmpty) {
+            return _emptyState('No competitions listed yet.', emoji: '🏆');
+          }
           return ListView(
             padding: const EdgeInsets.all(16),
             children: list
@@ -147,7 +201,8 @@ class _CompetitionList extends StatelessWidget {
                           const Text('🏆', style: TextStyle(fontSize: 20)),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: Text('${o['name']} — ${o['subject']} (${o['region']})'),
+                            child: Text(
+                                '${o['name']} — ${o['subject']} (${o['region']})'),
                           ),
                         ],
                       ),
@@ -161,12 +216,19 @@ class _CompetitionList extends StatelessWidget {
 class _FundingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
-        future: rootBundle
-            .loadString('assets/extra_content.json')
-            .then((s) => jsonDecode(s) as Map<String, dynamic>),
+        future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
-          if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-          final list = (snap.data!['scholarships'] as List).cast<Map>();
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snap.data;
+          if (data == null || !data.containsKey('scholarships')) {
+            return _emptyState('Scholarship data missing. Sync to update.', emoji: '💰');
+          }
+          final list = (data['scholarships'] as List?)?.cast<Map>() ?? [];
+          if (list.isEmpty) {
+            return _emptyState('No scholarships listed yet.', emoji: '💰');
+          }
           return ListView(
             padding: const EdgeInsets.all(16),
             children: list

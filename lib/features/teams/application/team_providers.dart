@@ -30,10 +30,10 @@ final teamLeaderboardProvider =
 
 final createTeamProvider =
     Provider.family<void, ({String id, String name, String owner})>((ref, args) {
-  ref.watch(teamRepositoryProvider).createTeam(args.id, args.name, args.owner);
+  ref.read(teamRepositoryProvider).createTeam(args.id, args.name, args.owner);
 });
 
 final joinTeamProvider =
     Provider.family<void, ({String teamId, String profileId})>((ref, args) {
-  ref.watch(teamRepositoryProvider).joinTeam(args.teamId, args.profileId);
+  ref.read(teamRepositoryProvider).joinTeam(args.teamId, args.profileId);
 });

@@ -11,7 +11,6 @@ final skinRepositoryProvider = Provider<SkinRepository>((ref) {
 
 /// Computes the set of unlocked skin ids for a profile based on total XP.
 final unlockedSkinsProvider = FutureProvider.family<List<Skin>, String>((ref, profileId) async {
-  ref.keepAlive();
   final repo = ref.watch(skinRepositoryProvider);
   final totalXp = await ref.watch(totalXpProvider(profileId).future);
   final unlocked = <Skin>[];
@@ -34,7 +33,7 @@ final equippedSkinProvider = FutureProvider.family<Skin, String>((ref, profileId
 /// Equip a skin (UI action).
 final equipSkinProvider =
     Provider.family<void, ({String profileId, String skinId})>((ref, args) {
-  ref.watch(skinRepositoryProvider).equip(args.profileId, args.skinId);
+  ref.read(skinRepositoryProvider).equip(args.profileId, args.skinId);
   ref.invalidate(equippedSkinProvider(args.profileId));
 });
 
@@ -42,16 +41,17 @@ final equipSkinProvider =
 final purchaseSkinProvider =
     FutureProvider.family<bool, ({String profileId, String skinId})>((ref, args) async {
   final cost = kSkinGemCost[args.skinId] ?? 0;
+  final repo = ref.read(skinRepositoryProvider);
   if (cost <= 0) {
-    ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
+    await repo.unlock(args.profileId, args.skinId);
     ref.invalidate(unlockedSkinsProvider(args.profileId));
     return true;
   }
-  final ok = await ref
-      .read(spendGemsProvider((profileId: args.profileId, cost: cost)).future);
+  final ok = await ref.read(walletRepositoryProvider).spend(args.profileId, cost);
   if (ok) {
-    ref.read(skinRepositoryProvider).unlock(args.profileId, args.skinId);
+    await repo.unlock(args.profileId, args.skinId);
     ref.invalidate(unlockedSkinsProvider(args.profileId));
+    ref.invalidate(gemsProvider(args.profileId));
   }
   return ok;
 });

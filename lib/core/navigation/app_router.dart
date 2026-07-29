@@ -11,6 +11,8 @@ import 'package:profileforge/features/teams/presentation/teams_screen.dart';
 import 'package:profileforge/features/discovery/presentation/discover_screen.dart';
 import 'package:profileforge/features/rewards/presentation/rewards_screen.dart';
 import 'package:profileforge/features/profile/presentation/profile_screen.dart';
+import 'package:profileforge/features/profile/presentation/profile_page.dart';
+import 'package:profileforge/features/profile/presentation/badges_page.dart';
 import 'package:profileforge/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:profileforge/features/timer/presentation/timer_screen.dart';
 import 'package:profileforge/features/analytics/presentation/analytics_screen.dart';
@@ -20,6 +22,8 @@ import 'package:profileforge/features/goals/presentation/goal_screen.dart';
 import 'package:profileforge/features/challenges/presentation/challenges_screen.dart';
 import 'package:profileforge/features/summary/presentation/weekly_summary_screen.dart';
 import 'package:profileforge/features/share/presentation/share_screen.dart';
+import 'package:profileforge/features/calendar/presentation/calendar_screen.dart';
+import 'package:profileforge/features/geo/presentation/geo_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
@@ -58,6 +62,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/discover', (c, s) => DiscoverScreen(profileId: pid)),
       _route('/rewards', (c, s) => RewardsScreen(profileId: pid)),
       _route('/profile', (c, s) => ProfileScreen(profileId: pid)),
+      _route('/profile/edit', (c, s) => ProfilePage(profileId: pid)),
+      _route('/badges', (c, s) => BadgesPage(profileId: pid)),
       _route('/onboarding', (c, s) => OnboardingScreen(profileId: pid)),
       _route('/timer', (c, s) => TimerScreen(profileId: pid)),
       _route('/analytics', (c, s) => AnalyticsScreen(profileId: pid)),
@@ -67,6 +73,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/challenges', (c, s) => ChallengesScreen(profileId: pid)),
       _route('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
+      _route('/calendar', (c, s) => const CalendarScreen()),
+      _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
     ],
   );
 });
+
+const _defaultLat = 1.3521;
+const _defaultLng = 103.8198;

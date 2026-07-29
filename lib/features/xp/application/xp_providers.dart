@@ -8,7 +8,6 @@ final xpRepositoryProvider = Provider<XpRepository>((ref) {
 
 /// Running total XP for a profile (single source of truth via XpEvents ledger).
 final totalXpProvider = FutureProvider.family<int, String>((ref, profileId) async {
-  ref.keepAlive();
   return ref.watch(xpRepositoryProvider).totalXp(profileId);
 });
 
@@ -18,7 +17,7 @@ final weeklyXpProvider = FutureProvider.family<int, String>((ref, profileId) asy
   return ref.watch(xpRepositoryProvider).xpSince(profileId, weekAgo);
 });
 
-/// Add XP to a profile and invalidate caches.
+/// Add XP to a profile and invalidate caches. Use .execute(...) and await.
 final addXpProvider = NotifierProvider<AddXpNotifier, void>(AddXpNotifier.new);
 
 class AddXpNotifier extends Notifier<void> {
@@ -28,7 +27,6 @@ class AddXpNotifier extends Notifier<void> {
   Future<void> execute(String profileId, int amount, String source) async {
     final repo = ref.read(xpRepositoryProvider);
     await repo.add(profileId, amount, source);
-    // Invalidate dependent providers
     ref.invalidate(totalXpProvider(profileId));
     ref.invalidate(weeklyXpProvider(profileId));
   }
