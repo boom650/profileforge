@@ -77,7 +77,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
   @override
   Widget build(BuildContext context) {
     // Activate debt listener – ensures early‑stop debts are recorded.
-    ref.watch(timerDebtListener);
+    ref.watch(timerDebtListener(profileId));
 
     final theme = Theme.of(context);
     final notifier = ref.read(timerStateProvider.notifier);
