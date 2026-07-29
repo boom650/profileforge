@@ -72,7 +72,7 @@ Widget _emptyState(String message, {String emoji = '📭'}) {
 
 class _UniversityList extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>?>(
         future: _loadJson('assets/content_pack.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
@@ -132,7 +132,7 @@ class _UniversityList extends StatelessWidget {
 
 class _StudyList extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>?>(
         future: _loadJson('assets/facts.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
@@ -172,7 +172,7 @@ class _StudyList extends StatelessWidget {
 
 class _CompetitionList extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>?>(
         future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
@@ -215,7 +215,7 @@ class _CompetitionList extends StatelessWidget {
 
 class _FundingList extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>?>(
         future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
