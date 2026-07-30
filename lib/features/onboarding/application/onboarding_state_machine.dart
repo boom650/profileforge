@@ -49,10 +49,8 @@ class OnboardingData {
     this.hoursPerSession = 2,
     this.weeklyGoal = '20',
     this.competitionTypes = const [],
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime(2024),
-        updatedAt = updatedAt ?? DateTime(2024);
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   /// Score how complete this onboarding data is (0.0 to 1.0).
@@ -196,13 +194,16 @@ class OnboardingState {
   final bool isSubmitting;
   final String? error;
 
-  const OnboardingState({
+  OnboardingState({
     this.currentStep = OnboardingStep.goal,
-    this.data = const OnboardingData(),
+    OnboardingData? data,
     this.completedSteps = const {},
     this.isSubmitting = false,
     this.error,
-  });
+  }) : data = data ?? OnboardingData(
+    createdAt: DateTime(2024),
+    updatedAt: DateTime(2024),
+  );
 
   /// Whether the current step is valid.
   bool get isCurrentStepValid {
@@ -254,7 +255,7 @@ class OnboardingState {
 /// OnboardingNotifier — State machine controller.
 /// ────────────────────────────────────────────────────────────────────────────
 class OnboardingNotifier extends StateNotifier<OnboardingState> {
-  OnboardingNotifier() : super(const OnboardingState()) {
+  OnboardingNotifier() : super(OnboardingState()) {
     _loadFromStorage();
   }
 
@@ -363,7 +364,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
   /// Reset onboarding (for testing).
   Future<void> reset() async {
-    state = const OnboardingState();
+    state = OnboardingState();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('pf_onboarding_data');
