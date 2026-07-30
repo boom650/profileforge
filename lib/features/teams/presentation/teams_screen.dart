@@ -141,8 +141,7 @@ class TeamsScreen extends ConsumerWidget {
           // Invite button
           GlassCard(
             padding: const EdgeInsets.all(0),
-            border: Palette.accentBlue,
-            borderWidth: 1.5,
+            border: Border.all(color: Palette.accentBlue, width: 1.5),
             child: Material(
               color: Colors.transparent,
               child: InkWell(

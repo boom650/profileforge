@@ -49,8 +49,10 @@ class OnboardingData {
     this.hoursPerSession = 2,
     this.weeklyGoal = '20',
     this.competitionTypes = const [],
-    required this.createdAt,
-    required this.updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : createdAt = createdAt ?? DateTime(2024),
+        updatedAt = updatedAt ?? DateTime(2024);
   });
 
   /// Score how complete this onboarding data is (0.0 to 1.0).
@@ -196,7 +198,7 @@ class OnboardingState {
 
   const OnboardingState({
     this.currentStep = OnboardingStep.goal,
-    this.data = const OnboardingData.empty(),
+    this.data = const OnboardingData(),
     this.completedSteps = const {},
     this.isSubmitting = false,
     this.error,

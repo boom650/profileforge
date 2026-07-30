@@ -14,6 +14,7 @@ import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// HomePage v2 — Premium Lusion-inspired layout.

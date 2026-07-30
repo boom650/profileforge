@@ -178,8 +178,7 @@ class LeaguesScreen extends ConsumerWidget {
                           padding: const EdgeInsets.only(bottom: 8),
                           child: GlassCard(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            borderColor: isMe ? Palette.primary : null,
-                            borderWidth: isMe ? 2 : 1,
+                            border: isMe ? Border.all(color: Palette.primary, width: 2) : null,
                             child: Row(
                               children: [
                                 // Rank.

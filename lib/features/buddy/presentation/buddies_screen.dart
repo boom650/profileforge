@@ -65,7 +65,7 @@ class BuddiesScreen extends ConsumerWidget {
           if (nudge.valueOrNull != null)
             GlassCard(
               padding: const EdgeInsets.all(14),
-              border: Palette.accentOrange,
+              border: Border.all(color: Palette.accentOrange),
               child: Row(
                 children: [
                   Text('🔥', style: TextStyle(fontSize: 22)),
@@ -187,8 +187,7 @@ class BuddiesScreen extends ConsumerWidget {
           // Teams link
           GlassCard(
             padding: const EdgeInsets.all(0),
-            border: Palette.accentBlue,
-            borderWidth: 1.5,
+            border: Border.all(color: Palette.accentBlue, width: 1.5),
             child: Material(
               color: Colors.transparent,
               child: InkWell(

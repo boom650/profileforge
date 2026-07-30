@@ -178,8 +178,7 @@ class _BadgeCard extends StatelessWidget {
     final dark = isDark(context);
     return GlassCard(
       padding: const EdgeInsets.all(10),
-      borderColor: unlocked ? Palette.primary : null,
-      borderWidth: unlocked ? 2 : 1,
+      border: unlocked ? Border.all(color: Palette.primary, width: 2) : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -320,7 +320,6 @@ ThemeData lightTheme() {
     ),
     chipTheme: ChipThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 13),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       side: const BorderSide(color: border),
       backgroundColor: surface,
@@ -456,7 +455,6 @@ ThemeData darkTheme() {
     ),
     chipTheme: ChipThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 13),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       side: const BorderSide(color: Palette.border),
       backgroundColor: Palette.surface2,

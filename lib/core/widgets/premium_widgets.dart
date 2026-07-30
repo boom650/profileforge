@@ -279,6 +279,52 @@ class GradientBanner extends StatelessWidget {
 }
 
 /// ────────────────────────────────────────────────────────────────────────────
+/// GlassIconButton — Small glass icon button for actions.
+/// ────────────────────────────────────────────────────────────────────────────
+class GlassIconButton extends StatelessWidget {
+  const GlassIconButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+    this.size = 40,
+    this.color,
+  });
+
+  final IconData icon;
+  final VoidCallback? onTap;
+  final double size;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: dark
+              ? Palette.surface2.withValues(alpha: 0.7)
+              : Colors.white.withValues(alpha: 0.8),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: dark
+                ? Palette.border.withValues(alpha: 0.5)
+                : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: size * 0.5,
+          color: color ?? (dark ? Palette.textPrimary : Palette.primary),
+        ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
 /// SectionTitle — Consistent section headers.
 /// ────────────────────────────────────────────────────────────────────────────
 class SectionTitle extends StatelessWidget {

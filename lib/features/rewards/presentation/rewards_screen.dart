@@ -141,8 +141,7 @@ class RewardsScreen extends ConsumerWidget {
           if (canClaim)
             GlassCard(
               padding: const EdgeInsets.all(0),
-              border: Palette.accentViolet,
-              borderWidth: 2,
+              border: Border.all(color: Palette.accentViolet, width: 2),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(

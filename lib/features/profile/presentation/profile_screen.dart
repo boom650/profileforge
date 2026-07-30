@@ -119,7 +119,7 @@ class ProfileScreen extends ConsumerWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
-                                value: lv.progress,
+                                value: lv.intoLevel / lv.levelSpan,
                                 minHeight: 6,
                                 backgroundColor: Colors.white.withValues(alpha: 0.2),
                                 valueColor: const AlwaysStoppedAnimation(Colors.white),

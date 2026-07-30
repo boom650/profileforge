@@ -234,10 +234,10 @@ class _SkinCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlassCard(
       padding: const EdgeInsets.all(12),
-      border: isEquipped
-          ? Palette.accentViolet
-          : rarity.withValues(alpha: 0.4),
-      borderWidth: isEquipped ? 2 : 1,
+      border: Border.all(
+        color: isEquipped ? Palette.accentViolet : rarity.withValues(alpha: 0.4),
+        width: isEquipped ? 2 : 1,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
