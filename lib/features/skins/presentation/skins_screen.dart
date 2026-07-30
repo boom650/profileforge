@@ -73,7 +73,7 @@ class SkinsScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w900,
-                          color: Palette.textPrimary(dark),
+                          color: Palette.textPrimary,
                           letterSpacing: -1,
                         ),
                       ),
@@ -81,7 +81,7 @@ class SkinsScreen extends ConsumerWidget {
                         'gems available · ${unlocked.length}/${kSkins.length} unlocked',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Palette.textSecondary(dark),
+                          color: Palette.textSecondary,
                         ),
                       ),
                     ],
@@ -99,7 +99,7 @@ class SkinsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: Palette.textPrimary(dark),
+              color: Palette.textPrimary,
             ),
           ),
           const SizedBox(height: 4),
@@ -107,7 +107,7 @@ class SkinsScreen extends ConsumerWidget {
             'Earn gems from missions & daily rewards',
             style: TextStyle(
               fontSize: 13,
-              color: Palette.textSecondary(dark),
+              color: Palette.textSecondary,
             ),
           ),
           const SizedBox(height: 16),
@@ -188,7 +188,7 @@ class SkinsScreen extends ConsumerWidget {
                     'Skins boost XP multiplier and show off your pillar progress to teammates.',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Palette.textSecondary(dark),
+                      color: Palette.textSecondary,
                       height: 1.4,
                     ),
                   ),
@@ -280,7 +280,7 @@ class _SkinCard extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 13,
-              color: Palette.textPrimary(dark),
+              color: Palette.textPrimary,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -391,12 +391,12 @@ class _ActionBtn extends StatelessWidget {
         decoration: BoxDecoration(
           color: accent
               ? Palette.accentViolet.withValues(alpha: 0.2)
-              : Palette.surface2(dark),
+              Palette.surface1
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: accent
                 ? Palette.accentViolet.withValues(alpha: 0.4)
-                : Palette.border(dark),
+                : Palette.border,
           ),
         ),
         child: Text(
@@ -404,7 +404,7 @@ class _ActionBtn extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 11,
-            color: accent ? Palette.accentViolet : Palette.textSecondary(dark),
+            color: accent ? Palette.accentViolet : Palette.textSecondary,
           ),
         ),
       ),

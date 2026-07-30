@@ -73,6 +73,17 @@ class Palette {
   static const inkSurface = Color(0xFF334155); // Ink surface
   static const inkSurface2 = Color(0xFF475569); // Ink surface 2
 
+  // Named accent colors for screen use.
+  static const accentViolet = Color(0xFF8B5CF6);
+  static const accentBlue = Color(0xFF3B82F6);
+  static const accentTeal = Color(0xFF14B8A6);
+  static const accentOrange = Color(0xFFF97316);
+  static const accentYellow = Color(0xFFFACC15);
+  static const accentPink = Color(0xFFEC4899);
+  static const accentCyan = Color(0xFF06B6D4);
+
+  static const textMuted = Color(0xFF64748B); // Dimmer muted text
+
   static const gradientCard = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

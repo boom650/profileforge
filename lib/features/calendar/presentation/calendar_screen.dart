@@ -53,7 +53,7 @@ class CalendarScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
-                          color: Palette.textPrimary(dark),
+                          color: Palette.textPrimary,
                         ),
                       ),
                     ],
@@ -87,7 +87,7 @@ class CalendarScreen extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
-                            color: Palette.textPrimary(dark),
+                            color: Palette.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -113,7 +113,7 @@ class CalendarScreen extends ConsumerWidget {
                   // Chevron
                   Icon(
                     Icons.chevron_right,
-                    color: Palette.textMuted(dark),
+                    color: Palette.textMuted,
                     size: 20,
                   ),
                 ],

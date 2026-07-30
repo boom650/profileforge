@@ -52,14 +52,14 @@ class RewardsScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
-                              color: Palette.textPrimary(dark),
+                              color: Palette.textPrimary,
                             ),
                           ),
                           Text(
                             'Come back every day. Day 7 is a jackpot!',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Palette.textSecondary(dark),
+                              color: Palette.textSecondary,
                             ),
                           ),
                         ],
@@ -75,7 +75,7 @@ class RewardsScreen extends ConsumerWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: Palette.surface2(dark),
+                    color: Palette.surface2,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -88,7 +88,7 @@ class RewardsScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: Palette.textPrimary(dark),
+                          color: Palette.textPrimary,
                         ),
                       ),
                     ],
@@ -106,7 +106,7 @@ class RewardsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: Palette.textPrimary(dark),
+              color: Palette.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -193,7 +193,7 @@ class RewardsScreen extends ConsumerWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
-                      color: Palette.textSecondary(dark),
+                      color: Palette.textSecondary,
                     ),
                   ),
                 ],
@@ -248,19 +248,19 @@ class _DayCard extends StatelessWidget {
         ? Palette.accentViolet
         : claimed
             ? Palette.accentViolet.withValues(alpha: 0.12)
-            : Palette.surface1(dark);
+            : Palette.surface1;
 
     final borderColor = isToday
         ? Palette.accentViolet
         : claimed
             ? Palette.accentViolet.withValues(alpha: 0.3)
-            : Palette.border(dark);
+            : Palette.border;
 
     final textColor = isToday
         ? Colors.white
         : claimed
             ? Palette.accentViolet
-            : Palette.textSecondary(dark);
+            : Palette.textSecondary;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),

@@ -82,7 +82,7 @@ class AnalyticsScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w900,
-                              color: Palette.textPrimary(dark),
+                              color: Palette.textPrimary,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -90,7 +90,7 @@ class AnalyticsScreen extends ConsumerWidget {
                             '${focusMinAsync.valueOrNull ?? 0} min total focus',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Palette.textSecondary(dark),
+                              color: Palette.textSecondary,
                             ),
                           ),
                         ],
@@ -155,7 +155,7 @@ class AnalyticsScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Palette.textPrimary(dark),
+                  color: Palette.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -175,7 +175,7 @@ class AnalyticsScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Palette.textSecondary(dark),
+                                color: Palette.textSecondary,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -252,7 +252,7 @@ class AnalyticsScreen extends ConsumerWidget {
                                       '${entry.key} (${entry.value}m)',
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: Palette.textSecondary(dark),
+                                        color: Palette.textSecondary,
                                       ),
                                     ),
                                   ],
@@ -329,7 +329,7 @@ class _StatTile extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: Palette.textMuted(dark),
+              color: Palette.textMuted,
             ),
           ),
         ],
@@ -379,7 +379,7 @@ class _XpHistorySection extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: Palette.textPrimary(dark),
+                color: Palette.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -410,7 +410,7 @@ class _XpHistorySection extends ConsumerWidget {
                                 entries[idx].key,
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: Palette.textMuted(dark),
+                                  color: Palette.textMuted,
                                 ),
                               ),
                             );

@@ -40,7 +40,7 @@ class TeamsScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
-                    color: Palette.textPrimary(dark),
+                    color: Palette.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -48,7 +48,7 @@ class TeamsScreen extends ConsumerWidget {
                   'Form a team, compete on the leaderboard, and push each other to finish applications.',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Palette.textSecondary(dark),
+                    color: Palette.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -67,7 +67,7 @@ class TeamsScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Palette.textPrimary(dark),
+                  color: Palette.textPrimary,
                 ),
               ),
               GlassIconButton(
@@ -98,7 +98,7 @@ class TeamsScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
-                                color: Palette.textPrimary(dark),
+                                color: Palette.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -106,7 +106,7 @@ class TeamsScreen extends ConsumerWidget {
                               'Tap + to create one',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Palette.textSecondary(dark),
+                                color: Palette.textSecondary,
                               ),
                             ),
                           ],
@@ -181,7 +181,7 @@ class TeamsScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: Palette.surface1(dark),
+        backgroundColor: Palette.surface1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -189,33 +189,33 @@ class TeamsScreen extends ConsumerWidget {
           'New team',
           style: TextStyle(
             fontWeight: FontWeight.w800,
-            color: Palette.textPrimary(dark),
+            color: Palette.textPrimary,
           ),
         ),
         content: TextField(
           controller: ctrl,
           decoration: InputDecoration(
             hintText: 'Team name',
-            hintStyle: TextStyle(color: Palette.textMuted(dark)),
+            hintStyle: TextStyle(color: Palette.textMuted),
             filled: true,
-            fillColor: Palette.surface2(dark),
+            fillColor: Palette.surface2,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Palette.border(dark)),
+              borderSide: BorderSide(color: Palette.border),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Palette.border(dark)),
+              borderSide: BorderSide(color: Palette.border),
             ),
           ),
-          style: TextStyle(color: Palette.textPrimary(dark)),
+          style: TextStyle(color: Palette.textPrimary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: TextStyle(color: Palette.textSecondary(dark)),
+              style: TextStyle(color: Palette.textSecondary),
             ),
           ),
           FilledButton(
@@ -283,14 +283,14 @@ class _TeamCard extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
-                    color: Palette.textPrimary(dark),
+                    color: Palette.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   'Owner: ${team.ownerProfileId}',
                   style: TextStyle(
-                    color: Palette.textMuted(dark),
+                    color: Palette.textMuted,
                     fontSize: 12,
                   ),
                 ),
