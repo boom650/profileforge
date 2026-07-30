@@ -391,7 +391,7 @@ class _ActionBtn extends StatelessWidget {
         decoration: BoxDecoration(
           color: accent
               ? Palette.accentViolet.withValues(alpha: 0.2)
-              Palette.surface1
+              : Palette.surface1,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: accent
