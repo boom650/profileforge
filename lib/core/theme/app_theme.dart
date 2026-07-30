@@ -69,6 +69,9 @@ class Palette {
   static const orange = Color(0xFFF97316);  // Orange
   static const gray = Palette.textSecondary;
   static const pink = Color(0xFFEC4899);     // Pink
+  static const ink = Color(0xFF1E293B);       // Dark ink
+  static const inkSurface = Color(0xFF334155); // Ink surface
+  static const inkSurface2 = Color(0xFF475569); // Ink surface 2
 
   static const gradientCard = LinearGradient(
     begin: Alignment.topLeft,
