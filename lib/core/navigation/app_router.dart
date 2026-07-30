@@ -24,6 +24,11 @@ import 'package:profileforge/features/summary/presentation/weekly_summary_screen
 import 'package:profileforge/features/share/presentation/share_screen.dart';
 import 'package:profileforge/features/calendar/presentation/calendar_screen.dart';
 import 'package:profileforge/features/geo/presentation/geo_screen.dart';
+// New v2 screens.
+import 'package:profileforge/features/splash/presentation/splash_screen.dart';
+import 'package:profileforge/features/auth/presentation/welcome_screen.dart';
+import 'package:profileforge/features/auth/presentation/magic_link_screen.dart';
+import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
@@ -34,6 +39,17 @@ Page<Object> _slidePage(Widget child) {
         begin: const Offset(0.3, 0),
         end: Offset.zero,
       ).animate(CurvedAnimation(parent: a, curve: Curves.easeOutCubic)),
+      child: ch,
+    ),
+  );
+}
+
+/// Fade transition for auth/splash screens.
+Page<Object> _fadePage(Widget child) {
+  return CustomTransitionPage<Object>(
+    child: child,
+    transitionsBuilder: (c, a, s, ch) => FadeTransition(
+      opacity: a,
       child: ch,
     ),
   );
@@ -51,8 +67,27 @@ final routerProvider = Provider<GoRouter>((ref) {
   final profileId = ref.watch(activeProfileIdProvider);
   final pid = profileId.value ?? 'local-profile';
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/splash',
     routes: [
+      // Auth & splash (fade transitions).
+      GoRoute(
+        path: '/splash',
+        pageBuilder: (c, s) => _fadePage(const SplashScreen()),
+      ),
+      GoRoute(
+        path: '/welcome',
+        pageBuilder: (c, s) => _fadePage(const WelcomeScreen()),
+      ),
+      GoRoute(
+        path: '/magic-link',
+        pageBuilder: (c, s) => _fadePage(const MagicLinkScreen()),
+      ),
+      GoRoute(
+        path: '/auth-prompt',
+        pageBuilder: (c, s) => _fadePage(const AuthPromptScreen()),
+      ),
+
+      // Main app routes (slide transitions).
       _route('/home', (c, s) => HomePage(profileId: pid)),
       _route('/missions', (c, s) => MissionsScreen(profileId: pid)),
       _route('/leagues', (c, s) => LeaguesScreen(profileId: pid)),

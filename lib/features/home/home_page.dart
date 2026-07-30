@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
-import 'package:profileforge/core/game/level.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/core/widgets/galaxy_chart.dart';
-import 'package:profileforge/core/widgets/poppy.dart';
+import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
-import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
-import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 
+/// ────────────────────────────────────────────────────────────────────────────
+/// HomePage v2 — Premium Lusion-inspired layout.
+/// Clean hierarchy: header → hero → daily focus → missions → progress → league.
+/// ────────────────────────────────────────────────────────────────────────────
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.profileId});
   final String profileId;
@@ -25,6 +26,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final dark = isDark(context);
     final xpAsync = ref.watch(totalXpProvider(profileId));
     final gemsAsync = ref.watch(gemsProvider(profileId));
     final streakAsync = ref.watch(streakProvider(profileId));
@@ -33,336 +35,706 @@ class HomePage extends ConsumerWidget {
     final standingsAsync = ref.watch(leagueStandingsProvider(profileId));
     final rewardAsync = ref.watch(dailyRewardProvider(profileId));
 
-    // Handle global loading state
-    final isLoading = xpAsync.isLoading || gemsAsync.isLoading ||
-        streakAsync.isLoading || missionsAsync.isLoading;
-
-    final level = LevelEngine();
+    final isLoading = xpAsync.isLoading || gemsAsync.isLoading;
     final totalXp = xpAsync.valueOrNull ?? 0;
-    final lv = level.resolve(totalXp);
+    final gems = gemsAsync.valueOrNull ?? 0;
+    final streak = streakAsync.valueOrNull?.current ?? 0;
+    final missions = missionsAsync.valueOrNull ?? [];
+
+    // Level calculation.
+    final level = totalXp ~/ 100 + 1;
+    final xpInLevel = totalXp % 100;
+
+    // Get user name.
+    String userName = 'there';
+    SharedPreferences.getInstance().then((p) {
+      userName = p.getString('pf_user_name') ?? 'there';
+    });
 
     if (isLoading && totalXp == 0) {
       return Scaffold(
-        bottomNavigationBar: appBottomNav(context, '/home'),
+        bottomNavigationBar: _BottomNav(context, '/home'),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      bottomNavigationBar: appBottomNav(context, '/home'),
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      bottomNavigationBar: _BottomNav(context, '/home'),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          children: [
-            // Header: greeting + level + gems.
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Hi there! 👋',
-                          style: theme.textTheme.titleSmall
-                              ?.copyWith(color: theme.hintColor)),
-                      const SizedBox(height: 2),
-                      Text('Let\'s level up today',
-                          style: theme.textTheme.headlineSmall),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    SoundService.instance.tap();
-                    context.push('/profile');
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Palette.yellow.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.diamond, color: Palette.yellow, size: 18),
-                        const SizedBox(width: 4),
-                        Text('${gemsAsync.valueOrNull ?? 0}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Hero gradient banner: level ring + title + streak.
-            GradientBanner(
-              from: Palette.green,
-              to: Palette.blue,
-              child: Row(
-                children: [
-                  XpRing(
-                    progress: lv.levelSpan == 0
-                        ? 1
-                        : lv.intoLevel / lv.levelSpan,
-                    centerTop: '${lv.level}',
-                    centerBottom: 'LVL',
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(level.titleFor(lv.level),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900)),
-                        const SizedBox(height: 4),
-                        Text('$totalXp XP total',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 14)),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text('🔥',
-                                  style: TextStyle(fontSize: 16)),
-                              const SizedBox(width: 4),
-                              Text(
-                                  '${streakAsync.valueOrNull?.current ?? 0} day streak',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ).animate().fadeIn().slideY(begin: 0.05),
-
-            const SizedBox(height: 18),
-
-            // Daily reward CTA.
-            if (rewardAsync.valueOrNull?.canClaim ?? false)
-              GestureDetector(
-                onTap: () async {
-                  final g = await ref.read(claimDailyRewardProvider(profileId).future);
-                  SoundService.instance.coin();
-                  celebrate(context, message: '+$g 💎');
-                  ref.invalidate(dailyRewardProvider(profileId));
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Palette.yellow,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text('🎁', style: TextStyle(fontSize: 28)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Day ${rewardAsync.valueOrNull?.day ?? 1} reward waiting!',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16),
-                        ),
-                      ),
-                      const Icon(Icons.arrow_forward, color: Colors.white),
-                    ],
-                  ),
-                ),
-              ).animate().shake(delay: 600.ms, duration: 500.ms),
-
-            if (rewardAsync.valueOrNull?.canClaim ?? false)
-              const SizedBox(height: 18),
-
-            // Today's missions preview.
-            SectionTitle('Today\'s missions', action: TextButton(
-              onPressed: () => context.push('/missions'),
-              child: const Text('See all'),
-            )),
-            ...missionsAsync.valueOrNull?.take(3).map((m) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: pillarColor(m.pillar).withValues(alpha: 0.10),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                          color: pillarColor(m.pillar).withValues(alpha: 0.25)),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.flag, color: pillarColor(m.pillar)),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(m.title,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w700)),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: pillarColor(m.pillar),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text('+${m.xpReward}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12)),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList() ??
-                [const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text('Generate your plan to see missions →'),
-                )],
-
-            const SizedBox(height: 18),
-
-            // Galaxy progress chart.
-            const SectionTitle('Your galaxy'),
-            const SizedBox(height: 8),
-            GalaxyChart(profileId: profileId),
-            const SizedBox(height: 18),
-
-            // Ambient sound panel.
-            const AmbientAudioPanel(),
-            const SizedBox(height: 18),
-
-            // League mini card.
-            SectionTitle('Your league'),
-            Builder(builder: (context) {
-              final standings = standingsAsync.valueOrNull ?? [];
-              final tierStr = leagueAsync.valueOrNull?.tier ?? 'bronze';
-              final tier = LeagueTier.values.firstWhere(
-                  (t) => t.name == tierStr,
-                  orElse: () => LeagueTier.bronze);
-              final rank = standings.indexWhere((m) => m.profileId == profileId) + 1;
-              return Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: tier.tierColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: tier.tierColor),
-                ),
+        child: CustomScrollView(
+          slivers: [
+            // ── Header bar ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: Row(
                   children: [
-                    Text(tier.tierEmoji, style: const TextStyle(fontSize: 30)),
+                    // Avatar.
+                    GestureDetector(
+                      onTap: () => context.push('/profile'),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: Palette.gradientPrimary,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'U',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(tier.tierLabel,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w900, fontSize: 16)),
                           Text(
-                              rank > 0
-                                  ? '#$rank of ${standings.length}'
-                                  : 'Join a league',
-                              style: TextStyle(color: theme.hintColor)),
+                            'Hi $userName 👋',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            'Level $level',
+                            style: theme.textTheme.bodySmall,
+                          ),
                         ],
                       ),
                     ),
-                    TextButton(
-                      onPressed: () => context.push('/leagues'),
-                      child: const Text('Open'),
+                    // XP badge.
+                    _StatBadge(
+                      icon: Icons.bolt,
+                      value: '$totalXp',
+                      color: Palette.warning,
+                    ),
+                    const SizedBox(width: 8),
+                    // Gems badge.
+                    _StatBadge(
+                      icon: Icons.diamond,
+                      value: '$gems',
+                      color: Palette.info,
                     ),
                   ],
                 ),
-              );
-            }),
-            const SizedBox(height: 24),
-
-            // Quick actions grid
-            SectionTitle('Quick Actions'),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8, runSpacing: 8,
-              children: [
-                _QuickAction(icon: '⏱️', label: 'Focus Timer', route: '/timer', color: Colors.blue),
-                _QuickAction(icon: '📊', label: 'Analytics', route: '/analytics', color: Colors.purple),
-                _QuickAction(icon: '🏆', label: 'Achievements', route: '/achievements', color: Colors.amber),
-                _QuickAction(icon: '🗺️', label: 'Quests', route: '/quests', color: Colors.green),
-                _QuickAction(icon: '🎯', label: 'Goal', route: '/goal', color: Colors.teal),
-                _QuickAction(icon: '⚔️', label: 'Challenges', route: '/challenges', color: Colors.orange),
-                _QuickAction(icon: '📅', label: 'Summary', route: '/summary', color: Colors.indigo),
-                _QuickAction(icon: '📤', label: 'Share', route: '/share', color: Colors.pink),
-              ],
+              ).animate().fadeIn(duration: 300.ms),
             ),
-            const SizedBox(height: 24),
 
-            PoppyButton(
-              label: 'Generate / refresh my plan',
-              onTap: () {
-                final onboarding =
-                    ref.read(onboardingProvider(profileId)).valueOrNull;
-                if (onboarding == null) {
-                  context.push('/onboarding');
-                  return;
-                }
-                ref.read(generateMissionsProvider(profileId).future).then((_) {
-                  SoundService.instance.success();
-                  celebrate(context, message: 'New missions! 🚀');
-                });
-              },
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── Hero card: level ring + streak ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GradientBanner(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+                  ),
+                  child: Row(
+                    children: [
+                      XpRing(
+                        progress: xpInLevel / 100,
+                        size: 72,
+                        strokeWidth: 6,
+                        color: Colors.white,
+                        centerTop: '$level',
+                        centerBottom: 'LVL',
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _levelTitle(level),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '$totalXp XP total',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            // XP progress bar.
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: LinearProgressIndicator(
+                                value: xpInLevel / 100,
+                                minHeight: 6,
+                                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                                valueColor: const AlwaysStoppedAnimation(Colors.white),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            // Streak badge.
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('🔥', style: TextStyle(fontSize: 14)),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '$streak day streak',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.05),
+              ),
             ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+            // ── Daily reward CTA ──
+            if (rewardAsync.valueOrNull?.canClaim ?? false)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final g = await ref.read(
+                          claimDailyRewardProvider(profileId).future);
+                      SoundService.instance.coin();
+                      celebrate(context, message: '+$g 💎');
+                      ref.invalidate(dailyRewardProvider(profileId));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: Palette.gradientGold,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Palette.warning.withValues(alpha: 0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const Text('🎁', style: TextStyle(fontSize: 28)),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Daily reward available!',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  'Day ${rewardAsync.valueOrNull?.day ?? 1} — tap to claim',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios,
+                              color: Colors.white, size: 16),
+                        ],
+                      ),
+                    ),
+                  ).animate().shake(delay: 500.ms, duration: 500.ms),
+                ),
+              ),
+
+            if (rewardAsync.valueOrNull?.canClaim ?? false)
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+            // ── Today's missions ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: SectionTitle(
+                  "Today's missions",
+                  action: TextButton(
+                    onPressed: () => context.push('/missions'),
+                    child: const Text('See all'),
+                  ),
+                ),
+              ).animate().fadeIn(delay: 200.ms),
+            ),
+
+            // Mission cards.
+            if (missions.isNotEmpty)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final m = missions[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _MissionCard(
+                          icon: _missionIcon(m.pillar),
+                          title: m.title,
+                          xpReward: m.xpReward,
+                          pillar: m.pillar,
+                        ),
+                      );
+                    },
+                    childCount: missions.length > 3 ? 3 : missions.length,
+                  ),
+                ),
+              )
+            else
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GlassCard(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.flag_outlined,
+                          size: 32,
+                          color: Palette.primary.withValues(alpha: 0.5),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'No missions yet',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.hintColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Complete onboarding to get started',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── Weekly progress heatmap ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SectionTitle('This week'),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _WeeklyHeatmap(streak: streak),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── League card ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Builder(builder: (context) {
+                  final standings = standingsAsync.valueOrNull ?? [];
+                  final tierStr = leagueAsync.valueOrNull?.tier ?? 'bronze';
+                  final tier = LeagueTier.values.firstWhere(
+                      (t) => t.name == tierStr,
+                      orElse: () => LeagueTier.bronze);
+                  final rank = standings
+                          .indexWhere((m) => m.profileId == profileId) +
+                      1;
+                  return GlassCard(
+                    onTap: () => context.push('/leagues'),
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: tier.tierColor.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Center(
+                            child: Text(
+                              tier.tierEmoji,
+                              style: const TextStyle(fontSize: 24),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tier.tierLabel,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                rank > 0
+                                    ? '#$rank of ${standings.length}'
+                                    : 'Join a league',
+                                style: TextStyle(
+                                  color: theme.hintColor,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: theme.hintColor,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ).animate().fadeIn(delay: 300.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── Ambient sound ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const AmbientAudioPanel(),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
       ),
     );
   }
+
+  String _missionIcon(String pillar) {
+    switch (pillar.toLowerCase()) {
+      case 'academics':
+        return '📚';
+      case 'leadership':
+        return '👥';
+      case 'research':
+        return '🔬';
+      case 'creativity':
+        return '🎨';
+      case 'community':
+        return '🤝';
+      case 'service':
+        return '❤️';
+      case 'sports':
+        return '⚽';
+      default:
+        return '🎯';
+    }
+  }
+
+  String _levelTitle(int level) {
+    if (level >= 50) return 'Grandmaster';
+    if (level >= 40) return 'Master';
+    if (level >= 30) return 'Expert';
+    if (level >= 20) return 'Advanced';
+    if (level >= 10) return 'Skilled';
+    if (level >= 5) return 'Apprentice';
+    return 'Beginner';
+  }
 }
 
-/// Quick action button for the home page feature grid.
-class _QuickAction extends StatelessWidget {
-  final String icon;
-  final String label;
-  final String route;
+/// Stat badge in header.
+class _StatBadge extends StatelessWidget {
+  const _StatBadge({
+    required this.icon,
+    required this.value,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String value;
   final Color color;
-  const _QuickAction({required this.icon, required this.label, required this.route, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return SizedBox(
-      width: 90, height: 90,
-      child: Material(
-        color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => context.push(route),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(icon, style: const TextStyle(fontSize: 28)),
-              const SizedBox(height: 4),
-              Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface)),
-            ],
+    final dark = isDark(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: dark ? 0.15 : 0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 16),
+          const SizedBox(width: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+              color: dark ? Palette.textPrimary : Palette.textInverse,
+            ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Mission card.
+class _MissionCard extends StatelessWidget {
+  const _MissionCard({
+    required this.icon,
+    required this.title,
+    required this.xpReward,
+    required this.pillar,
+  });
+
+  final String icon;
+  final String title;
+  final int xpReward;
+  final String pillar;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = pillarColor(pillar);
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          // Icon.
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 18)),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Title.
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          // XP reward.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              '+$xpReward',
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Weekly heatmap — GitHub-style dots.
+class _WeeklyHeatmap extends StatelessWidget {
+  const _WeeklyHeatmap({required this.streak});
+  final int streak;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    // Simple: fill dots based on streak (up to 7 days).
+    final filled = streak.clamp(0, 7);
+
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(7, (i) {
+          final isFilled = i < filled;
+          return Column(
+            children: [
+              Text(
+                days[i],
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: dark ? Palette.textSecondary : Palette.textTertiary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: isFilled
+                      ? Palette.primary
+                      : dark
+                          ? Palette.surface3
+                          : const Color(0xFFE2E8F0),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: isFilled
+                    ? const Icon(Icons.check, color: Colors.white, size: 16)
+                    : null,
+              ),
+            ],
+          );
+        }),
+      ),
+    );
+  }
+}
+
+/// Bottom navigation bar.
+Widget _BottomNav(BuildContext context, String current) {
+  final dark = isDark(context);
+  return Container(
+    decoration: BoxDecoration(
+      color: dark ? Palette.surface0 : Colors.white,
+      border: Border(
+        top: BorderSide(
+          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+      ),
+    ),
+    child: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _NavItem(
+              icon: Icons.home_rounded,
+              label: 'Home',
+              isSelected: current == '/home',
+              onTap: () => context.go('/home'),
+            ),
+            _NavItem(
+              icon: Icons.flag_rounded,
+              label: 'Missions',
+              isSelected: current == '/missions',
+              onTap: () => context.push('/missions'),
+            ),
+            _NavItem(
+              icon: Icons.person_rounded,
+              label: 'Profile',
+              isSelected: current == '/profile',
+              onTap: () => context.push('/profile'),
+            ),
+            _NavItem(
+              icon: Icons.diamond_rounded,
+              label: 'Shop',
+              isSelected: current == '/skins',
+              onTap: () => context.push('/skins'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+/// Bottom nav item.
+class _NavItem extends StatelessWidget {
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 64,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 24,
+              color: isSelected
+                  ? Palette.primary
+                  : (dark ? Palette.textTertiary : Palette.textTertiary),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                color: isSelected
+                    ? Palette.primary
+                    : (dark ? Palette.textTertiary : Palette.textTertiary),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -28,6 +28,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   # Animations
   flutter_animate: ^4.5.0
+  # Typography
+  google_fonts: ^6.2.1
   # Sound effects (game-feel)
   audioplayers: ^5.2.0
   # Routing

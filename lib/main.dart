@@ -24,24 +24,12 @@ Future<void> main() async {
   }
 
   runApp(ProviderScope(
-    observers: [LoggerProviderObserver()], // Added logging
     overrides: [
       notificationPluginProvider.overrideWithValue(notifPlugin),
       notificationServiceProvider.overrideWithValue(notifService),
     ],
     child: const ProfileForgeApp(),
   ));
-}
-
-class LoggerProviderObserver extends ProviderObserver {
-  @override
-  void didUpdateProvider(ProviderBase provider, Object? previousValue, Object? newValue, ProviderContainer container) {
-    debugPrint('Provider $provider updated from $previousValue to $newValue');
-  }
-  @override
-  void providerDidFail(ProviderBase provider, Object error, StackTrace stackTrace, ProviderContainer container) {
-    debugPrint('Provider $provider failed: $error');
-  }
 }
 
 class ProfileForgeApp extends ConsumerWidget {
