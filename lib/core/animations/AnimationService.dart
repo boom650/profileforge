@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 /// Central animation and haptic feedback service for ProfileForge
 /// Provides premium micro-interactions and celebration effects
@@ -178,7 +179,8 @@ class AnimationService {
 }
 
 /// Mixin for widgets that need standard animation behaviors
-mixin PremiumAnimationMixin<T extends StatefulWidget> on State<T> {
+mixin PremiumAnimationMixin<T extends StatefulWidget> on State<T>
+    with SingleTickerProviderStateMixin {
   AnimationController? _pressController;
   Animation<double>? _scaleAnimation;
 
