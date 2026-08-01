@@ -32,6 +32,7 @@ import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart'
 import 'package:profileforge/features/ai_chat/presentation/ai_chat_screen.dart';
 import 'package:profileforge/features/ai_chat/presentation/artifact_analyzer_screen.dart';
 import 'package:profileforge/features/ai_chat/presentation/ai_settings_screen.dart';
+import 'package:profileforge/features/ai_chat/presentation/readiness_check_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
@@ -131,6 +132,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/ai-chat', (c, s) => const AiChatScreen()),
       _route('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
       _route('/ai-settings', (c, s) => const AiSettingsScreen()),
+      _route('/ai-readiness', (c, s) => const ReadinessCheckScreen()),
     ],
   );
 });

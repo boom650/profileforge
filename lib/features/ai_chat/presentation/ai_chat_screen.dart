@@ -218,7 +218,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               children: [
                 _quickAction('Analyze my activities', Icons.psychology),
                 _quickAction('Review my essay', Icons.article),
-                _quickAction('Readiness check', Icons.assessment),
+                _quickActionNav('Readiness check', Icons.assessment, '/ai-readiness'),
                 _quickAction('Daily mission', Icons.flag),
               ],
             ).animate().fadeIn(delay: 400.ms),
@@ -238,6 +238,16 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         _controller.text = label;
         _send();
       },
+    );
+  }
+
+  Widget _quickActionNav(String label, IconData icon, String route) {
+    return ActionChip(
+      avatar: Icon(icon, size: 16, color: Palette.primary),
+      label: Text(label, style: TextStyle(color: Palette.textPrimary, fontSize: 12)),
+      backgroundColor: Palette.surface1,
+      side: BorderSide(color: Palette.primary.withOpacity(0.3)),
+      onPressed: () => context.push(route),
     );
   }
 
