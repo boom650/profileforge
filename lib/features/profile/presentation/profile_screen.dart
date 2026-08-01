@@ -11,13 +11,62 @@ import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:flutter/services.dart';
 
-/// ────────────────────────────────────────────────────────────────────────────
-/// ProfileScreen v2 — Premium dark profile with glassmorphism cards.
-/// Hero header → stats grid → appearance → profile settings → footer.
-/// ────────────────────────────────────────────────────────────────────────────
+/// Profile screen — shows user stats, settings, achievements.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key, required this.profileId});
   final String profileId;
+
+  /// Show avatar picker bottom sheet.
+  void _showAvatarPicker(BuildContext context) {
+    final avatars = ['🦉', '🐱', '🐶', '🦊', '🐼', '🦁', '🐸', '🦄', '🐲', '🦅'];
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Choose Avatar',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Palette.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: avatars.map((a) => GestureDetector(
+                onTap: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Avatar selected: $a'),
+                      backgroundColor: Palette.primary,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Palette.surface2,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Palette.border),
+                  ),
+                  child: Center(child: Text(a, style: const TextStyle(fontSize: 28))),
+                ),
+              )).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,21 +127,51 @@ class ProfileScreen extends ConsumerWidget {
                   gradient: Palette.gradientPrimary,
                   child: Row(
                     children: [
-                      // Avatar.
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            width: 2,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text('🦉', style: TextStyle(fontSize: 32)),
-                        ),
+                      // Avatar — tappable for editing.
+                      GestureDetector(
+                        onTap: () => _showAvatarPicker(context),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.3),
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text('🦉', style: TextStyle(fontSize: 32)),
+                              ),
+                            ),
+                            Positioned(
+                              right: -2,
+                              bottom: -2,
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(7),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.15),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  size: 12,
+                                  color: Palette.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ).animate().scale(delay: 200.ms, duration: 300.ms, curve: Curves.elasticOut),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -278,7 +357,7 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 /// Stat card with glassmorphism.
-class _StatCard extends StatelessWidget {
+class _StatCard extends StatefulWidget {
   const _StatCard({
     required this.icon,
     required this.value,
@@ -292,36 +371,63 @@ class _StatCard extends StatelessWidget {
   final Color color;
 
   @override
+  State<_StatCard> createState() => _StatCardState();
+}
+
+class _StatCardState extends State<_StatCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: 400.ms);
+    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    return GlassCard(
-      padding: const EdgeInsets.all(14),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: GlassCard(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: widget.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(widget.icon, color: widget.color, size: 20),
             ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: dark ? Palette.textPrimary : Palette.textInverse,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.value,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                      color: dark ? Palette.textPrimary : Palette.textInverse,
                   ),
                 ),
                 Text(
-                  label,
+                  widget.label,
                   style: TextStyle(
                     fontSize: 12,
                     color: dark ? Palette.textSecondary : Palette.textTertiary,
