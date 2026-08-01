@@ -10,7 +10,7 @@ import 'package:profileforge/features/achievements/domain/achievement_defs.dart'
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// AchievementsScreen v2 — Premium dark achievements with glassmorphism grid.
-/// Progress header → badge grid.
+/// Staggered entrance, golden glow, lock overlay, progress header.
 /// ────────────────────────────────────────────────────────────────────────────
 class AchievementsScreen extends ConsumerWidget {
   final String profileId;
@@ -79,16 +79,39 @@ class AchievementsScreen extends ConsumerWidget {
                         gradient: Palette.gradientPrimary,
                         child: Column(
                           children: [
-                            Text(
-                              '$done / $total',
-                              style: theme.textTheme.headlineLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$done',
+                                  style: theme.textTheme.headlineLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Text(
+                                    'of',
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.7),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  '$total',
+                                  style: theme.textTheme.headlineLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white.withValues(alpha: 0.7),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Badges Collected',
+                              'Badges Unlocked',
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.8),
                                 fontSize: 14,
@@ -98,13 +121,41 @@ class AchievementsScreen extends ConsumerWidget {
                             // Progress bar.
                             ClipRRect(
                               borderRadius: BorderRadius.circular(6),
-                              child: LinearProgressIndicator(
-                                value: percent,
-                                minHeight: 8,
-                                backgroundColor: Colors.white.withValues(alpha: 0.2),
-                                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                              child: Stack(
+                                children: [
+                                  // Track
+                                  LinearProgressIndicator(
+                                    value: 1.0,
+                                    minHeight: 8,
+                                    backgroundColor: Colors.white.withValues(alpha: 0.2),
+                                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.transparent),
+                                  ),
+                                  // Filled portion
+                                  FractionallySizedBox(
+                                    widthFactor: percent.clamp(0.0, 1.0),
+                                    child: Container(
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [Colors.white, Color(0xFFE0F2FE)],
+                                        ),
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(6),
+                                          bottomRight: Radius.circular(6),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
+                                .animate()
+                                .shimmer(
+                                  duration: 2000.ms,
+                                  color: Colors.white.withValues(alpha: 0.15),
+                                  delay: 600.ms,
+                                  interval: const Duration(milliseconds: 3000),
+                                ),
                             const SizedBox(height: 8),
                             Text(
                               '${(percent * 100).toInt()}% complete',
@@ -141,7 +192,7 @@ class AchievementsScreen extends ConsumerWidget {
                             unlocked: isUnlocked,
                             index: i,
                           ).animate(
-                            delay: Duration(milliseconds: i * 60),
+                            delay: Duration(milliseconds: i * 50),
                             duration: 400.ms,
                           ).fadeIn(
                             curve: Curves.easeOutCubic,
@@ -175,8 +226,9 @@ class AchievementsScreen extends ConsumerWidget {
   }
 }
 
-/// Badge card with glassmorphism.
-class _BadgeCard extends StatelessWidget {
+/// Badge card with glassmorphism, golden glow for unlocked, lock overlay for locked,
+/// and a tap bounce micro-interaction.
+class _BadgeCard extends StatefulWidget {
   final AchievementDef def;
   final bool unlocked;
   final int index;
@@ -188,73 +240,176 @@ class _BadgeCard extends StatelessWidget {
   });
 
   @override
+  State<_BadgeCard> createState() => _BadgeCardState();
+}
+
+class _BadgeCardState extends State<_BadgeCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bounceController;
+  late final Animation<double> _bounceAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _bounceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _bounceAnim = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.15), weight: 40),
+      TweenSequenceItem(tween: Tween(begin: 1.15, end: 0.95), weight: 30),
+      TweenSequenceItem(tween: Tween(begin: 0.95, end: 1.0), weight: 30),
+    ]).animate(CurvedAnimation(
+      parent: _bounceController,
+      curve: Curves.easeOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _bounceController.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    _bounceController.forward(from: 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    return GlassCard(
+
+    Widget card = GlassCard(
       padding: const EdgeInsets.all(10),
-      border: unlocked ? Border.all(color: Palette.primary, width: 2) : null,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      border: widget.unlocked
+          ? Border.all(color: Palette.warning, width: 2)
+          : null,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          // Icon.
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: unlocked
-                  ? Palette.primary.withValues(alpha: 0.12)
-                  : dark
-                      ? Palette.surface3
-                      : const Color(0xFFE2E8F0),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(
-              child: Text(
-                unlocked ? def.icon : '❓',
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Icon.
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: widget.unlocked
+                      ? Palette.warning.withValues(alpha: 0.12)
+                      : dark
+                          ? Palette.surface3
+                          : const Color(0xFFE2E8F0),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Center(
+                  child: Text(
+                    widget.unlocked ? widget.def.icon : '❓',
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: dark ? Palette.textTertiary : Palette.textTertiary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Name.
+              Text(
+                widget.def.name,
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 26,
-                  color: unlocked ? null : (dark ? Palette.textTertiary : Palette.textTertiary),
+                  fontWeight: widget.unlocked ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 12,
+                  color: widget.unlocked
+                      ? (dark ? Palette.textPrimary : Palette.textInverse)
+                      : (dark ? Palette.textSecondary : Palette.textTertiary),
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // Criteria (for locked badges).
+              if (!widget.unlocked) ...[
+                const SizedBox(height: 2),
+                Text(
+                  '${widget.def.criteriaValue} ${widget.def.criteriaType.replaceAll('_', ' ')}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: dark ? Palette.textTertiary : Palette.textTertiary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          ),
+
+          // Lock overlay for locked badges.
+          if (!widget.unlocked)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: (dark ? Palette.black : Colors.white).withValues(alpha: 0.15),
+                ),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: dark ? Palette.surface2 : Palette.surface1,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.lock_rounded,
+                      size: 14,
+                      color: dark ? Palette.textTertiary : Palette.textTertiary,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          // Name.
-          Text(
-            def.name,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: unlocked ? FontWeight.w700 : FontWeight.w500,
-              fontSize: 12,
-              color: unlocked
-                  ? (dark ? Palette.textPrimary : Palette.textInverse)
-                  : (dark ? Palette.textSecondary : Palette.textTertiary),
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          // Criteria (for locked badges).
-          if (!unlocked) ...[
-            const SizedBox(height: 2),
-            Text(
-              '${def.criteriaValue} ${def.criteriaType.replaceAll('_', ' ')}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-                color: dark ? Palette.textTertiary : Palette.textTertiary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
         ],
       ),
-    ).animate().scale(
-          duration: 300.ms,
-          delay: (50 * index).ms,
-          begin: const Offset(0.85, 0.85),
-          end: const Offset(1, 1),
-        );
+    );
+
+    // Apply golden glow animation for unlocked badges.
+    if (widget.unlocked) {
+      card = Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Palette.warning.withValues(alpha: 0.25),
+              blurRadius: 12,
+              spreadRadius: 1,
+            ),
+            BoxShadow(
+              color: Palette.warning.withValues(alpha: 0.10),
+              blurRadius: 24,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: card,
+      );
+    }
+
+    // Apply dimmed opacity for locked badges.
+    if (!widget.unlocked) {
+      card = Opacity(
+        opacity: 0.4,
+        child: card,
+      );
+    }
+
+    // Tap bounce animation.
+    return ScaleTransition(
+      scale: _bounceAnim,
+      child: GestureDetector(
+        onTap: _onTap,
+        child: card,
+      ),
+    );
   }
 }
 
