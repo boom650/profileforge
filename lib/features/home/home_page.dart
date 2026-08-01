@@ -13,6 +13,7 @@ import 'package:profileforge/core/widgets/streak_fire.dart';
 import 'package:profileforge/core/widgets/animated_counter.dart';
 import 'package:profileforge/core/widgets/daily_reward_claim.dart';
 import 'package:profileforge/core/widgets/magnetic_button.dart';
+import 'package:profileforge/core/widgets/parallax_header.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
@@ -73,8 +74,14 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       bottomNavigationBar: _BottomNav(context, '/home'),
-      body: SafeArea(
-        child: CustomScrollView(
+      body: AnimatedBackground(
+        child: Stack(
+          children: [
+            // Ambient floating orbs for depth.
+            const FloatingOrbs(orbCount: 3),
+            // Main content.
+            SafeArea(
+              child: CustomScrollView(
           slivers: [
             // ── Header bar ──
             SliverToBoxAdapter(
@@ -1665,9 +1672,12 @@ class _HomeSkeleton extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
+          ],  // end of slivers
+        ),    // end of CustomScrollView
+      ),      // end of SafeArea
+          ],  // end of Stack children
+        ),    // end of Stack
+      ),      // end of AnimatedBackground
     );
   }
 }
