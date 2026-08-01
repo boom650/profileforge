@@ -68,10 +68,10 @@ class AnalyticsScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text('🔥', style: TextStyle(fontSize: 28)),
                       ),
-                    ),
+                    ).animate().scale(delay: 100.ms, duration: 400.ms, curve: Curves.elasticOut),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
@@ -96,6 +96,29 @@ class AnalyticsScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
+                    // Weekly trend indicator
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Palette.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.trending_up_rounded, size: 16, color: Palette.primary),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${weeklyXpAsync.valueOrNull ?? 0}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Palette.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ).animate().fadeIn(delay: 300.ms),
                   ],
                 ),
               ).animate().fadeIn().slideY(begin: 0.1),
@@ -290,7 +313,7 @@ class AnalyticsScreen extends ConsumerWidget {
   }
 }
 
-class _StatTile extends StatelessWidget {
+class _StatTile extends StatefulWidget {
   final String icon;
   final String label;
   final String value;
@@ -308,36 +331,64 @@ class _StatTile extends StatelessWidget {
   });
 
   @override
+  State<_StatTile> createState() => _StatTileState();
+}
+
+class _StatTileState extends State<_StatTile>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: 300.ms);
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              color: color,
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: GlassCard(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          children: [
+            Text(widget.icon, style: const TextStyle(fontSize: 24)),
+            const SizedBox(height: 6),
+            Text(
+              widget.value,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                color: widget.color,
+              ),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Palette.textMuted,
+            const SizedBox(height: 2),
+            Text(
+              widget.label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Palette.textMuted,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ).animate().fadeIn(delay: (widget.index * 80).ms).slideY(
+        begin: 0.15,
+        duration: 400.ms,
+        curve: Curves.easeOutCubic,
       ),
-    ).animate().fadeIn(delay: (index * 80).ms).slideY(
-      begin: 0.15,
-      duration: 400.ms,
-      curve: Curves.easeOutCubic,
     );
   }
 }
