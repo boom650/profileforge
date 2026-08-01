@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/xp/data/xp_repository.dart';
+import 'package:profileforge/features/leagues/application/league_providers.dart';
+import 'package:profileforge/features/leagues/data/league_repository.dart';
+import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 
 final xpRepositoryProvider = Provider<XpRepository>((ref) {
   return XpRepository(ref.watch(appDatabaseProvider));
@@ -29,5 +32,13 @@ class AddXpNotifier extends Notifier<void> {
     await repo.add(profileId, amount, source);
     ref.invalidate(totalXpProvider(profileId));
     ref.invalidate(weeklyXpProvider(profileId));
+    
+    // Record XP in leagues
+    try {
+      final leagueRepo = ref.read(leagueRepositoryProvider);
+      final membership = await leagueRepo.mine(profileId, kActiveSeason);
+      final tier = membership == null ? LeagueTier.bronze : LeagueTier.values[membership.tier.index];
+      await leagueRepo.recordXp(profileId, kActiveSeason, tier, amount);
+    } catch (_) {}
   }
 }
