@@ -289,7 +289,16 @@ class HomePage extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        gradient: Palette.gradientGold,
+                        gradient: LinearGradient(
+                          colors: [
+                            Palette.warning,
+                            Palette.warning.withValues(alpha: 0.8),
+                            Palette.primary,
+                            Palette.primary.withValues(alpha: 0.8),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(

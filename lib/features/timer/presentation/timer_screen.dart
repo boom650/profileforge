@@ -136,7 +136,17 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                           alignment: Alignment.center,
                           children: [
                             Container(width: 260, height: 260,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: theme.colorScheme.surfaceContainerHighest),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: theme.colorScheme.surfaceContainerHighest,
+                                boxShadow: timerState.isRunning ? [
+                                  BoxShadow(
+                                    color: (timerState.isPaused ? Colors.orange : theme.colorScheme.primary).withValues(alpha: 0.3),
+                                    blurRadius: 40,
+                                    spreadRadius: 8,
+                                  ),
+                                ] : [],
+                              ),
                             ),
                             SizedBox(width: 260, height: 260, child: CustomPaint(
                               painter: _CircleProgressPainter(progress: progress, color: timerState.isRunning
