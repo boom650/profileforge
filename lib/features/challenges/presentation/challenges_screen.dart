@@ -37,19 +37,10 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
           const SizedBox(height: 8),
           activeAsync.when(
             data: (active) => active.isEmpty
-                ? Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          const Text('⚔️', style: TextStyle(fontSize: 40)),
-                          const SizedBox(height: 8),
-                          Text('No active challenges', style: theme.textTheme.bodyMedium),
-                          const SizedBox(height: 8),
-                          Text('Challenge yourself to earn bonus XP!', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-                        ],
-                      ),
-                    ),
+                ? EmptyState(
+                    icon: Icons.swords_outlined,
+                    title: 'No active challenges',
+                    subtitle: 'Challenge yourself to earn bonus XP!',
                   )
                 : Column(children: active.map((c) => _ActiveChallengeCard(
                     challenge: c, profileId: widget.profileId, onResolve: _resolve, theme: theme,
