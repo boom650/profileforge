@@ -34,6 +34,7 @@ class HomePage extends ConsumerWidget {
     final xpAsync = ref.watch(totalXpProvider(profileId));
     final gemsAsync = ref.watch(gemsProvider(profileId));
     final streakAsync = ref.watch(streakProvider(profileId));
+    final weeklyXpAsync = ref.watch(weeklyXpProvider(profileId));
     final missionsAsync = ref.watch(todaysMissionsProvider(profileId));
     final leagueAsync = ref.watch(myLeagueProvider(profileId));
     final standingsAsync = ref.watch(leagueStandingsProvider(profileId));
@@ -43,6 +44,7 @@ class HomePage extends ConsumerWidget {
     final totalXp = xpAsync.valueOrNull ?? 0;
     final gems = gemsAsync.valueOrNull ?? 0;
     final streak = streakAsync.valueOrNull?.current ?? 0;
+    final weeklyXp = weeklyXpAsync.valueOrNull ?? 0;
     final missions = missionsAsync.valueOrNull ?? [];
 
     // Level calculation.
@@ -224,6 +226,84 @@ class HomePage extends ConsumerWidget {
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+            // ── Weekly goal progress ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GlassCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              value: (weeklyXp / 500).clamp(0.0, 1.0),
+                              strokeWidth: 4,
+                              backgroundColor: Palette.surface3,
+                              valueColor: AlwaysStoppedAnimation(Palette.primary),
+                            ),
+                            Text(
+                              '${((weeklyXp / 500).clamp(0.0, 1.0) * 100).round()}%',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Palette.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Weekly Goal',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Palette.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              '$weeklyXp / 500 XP this week',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Palette.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (weeklyXp >= 500)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Palette.success.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '✓ Complete',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Palette.success,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(delay: 120.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
             // ── Quick actions grid ──
             SliverToBoxAdapter(
