@@ -37,6 +37,7 @@ class HomePage extends ConsumerWidget {
     final weeklyXpAsync = ref.watch(weeklyXpProvider(profileId));
     final missionsAsync = ref.watch(todaysMissionsProvider(profileId));
     final leagueAsync = ref.watch(myLeagueProvider(profileId));
+    final recentSessionsAsync = ref.watch(recentSessionsProvider(profileId));
     final standingsAsync = ref.watch(leagueStandingsProvider(profileId));
     final rewardAsync = ref.watch(dailyRewardProvider(profileId));
 
@@ -699,6 +700,60 @@ class HomePage extends ConsumerWidget {
                 ),
               ).animate().fadeIn(delay: 320.ms),
             ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── Recent focus sessions ──
+            if (recentSessionsAsync.valueOrNull != null && recentSessionsAsync.valueOrNull!.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SectionTitle('Recent Sessions'),
+                ).animate().fadeIn(delay: 380.ms),
+              ),
+            if (recentSessionsAsync.valueOrNull != null && recentSessionsAsync.valueOrNull!.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GlassCard(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      children: recentSessionsAsync.valueOrNull!.take(3).map((s) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: Palette.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(child: Icon(Icons.timer_outlined, size: 16, color: Palette.primary)),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    s.tag.isNotEmpty ? s.tag : 'Focus Session',
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Palette.textPrimary),
+                                  ),
+                                  Text(
+                                    '${s.durationMinutes} min · +${s.xpEarned} XP',
+                                    style: TextStyle(fontSize: 11, color: Palette.textSecondary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )).toList(),
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 400.ms),
+              ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
