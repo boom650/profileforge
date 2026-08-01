@@ -127,7 +127,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       _scaleRoute('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
       _route('/calendar', (c, s) => const CalendarScreen()),
-      _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
+      _route('/geo', (c, s) => const GeoScreen(location: 'Singapore')),
       // AI features
       _route('/ai-chat', (c, s) => const AiChatScreen()),
       _route('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
@@ -136,6 +136,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-const _defaultLat = 1.3521;
-const _defaultLng = 103.8198;
