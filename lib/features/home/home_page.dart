@@ -142,10 +142,12 @@ class HomePage extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GradientBanner(
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+                    colors: xpInLevel >= 80
+                        ? [const Color(0xFF8B5CF6), const Color(0xFFEC4899)]
+                        : [const Color(0xFF3B82F6), const Color(0xFF8B5CF6)],
                   ),
                   child: Row(
                     children: [
