@@ -6,6 +6,7 @@ import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/effects/achievement_unlock.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:flutter/services.dart';
@@ -177,6 +178,7 @@ class MissionsScreen extends ConsumerWidget {
                                 pillar: m.pillar,
                                 xp: m.xpReward,
                                 onDone: () async {
+                                  HapticFeedback.heavyImpact();
                                   SoundService.instance.success();
                                   await ref.read(completeMissionProvider((
                                     profileId: profileId,
@@ -185,6 +187,16 @@ class MissionsScreen extends ConsumerWidget {
                                     pillar: m.pillar,
                                   )));
                                   celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                  // Show achievement unlock overlay
+                                  if (context.mounted) {
+                                    AchievementUnlockOverlay.show(
+                                      context,
+                                      title: 'Mission Complete!',
+                                      description: m.title,
+                                      icon: Icons.check_circle_rounded,
+                                      xpReward: m.xpReward,
+                                    );
+                                  }
                                 },
                               ).animate(
                                 delay: Duration(milliseconds: index * 80),
@@ -251,6 +263,7 @@ class MissionsScreen extends ConsumerWidget {
                                 pillar: m.pillar,
                                 xp: m.xpReward,
                                 onDone: () async {
+                                  HapticFeedback.heavyImpact();
                                   SoundService.instance.success();
                                   await ref.read(completeMissionProvider((
                                     profileId: profileId,
@@ -259,6 +272,16 @@ class MissionsScreen extends ConsumerWidget {
                                     pillar: m.pillar,
                                   )));
                                   celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                  // Show achievement unlock overlay
+                                  if (context.mounted) {
+                                    AchievementUnlockOverlay.show(
+                                      context,
+                                      title: 'Mission Complete!',
+                                      description: m.title,
+                                      icon: Icons.check_circle_rounded,
+                                      xpReward: m.xpReward,
+                                    );
+                                  }
                                 },
                               ).animate(
                                 delay: Duration(milliseconds: index * 80),

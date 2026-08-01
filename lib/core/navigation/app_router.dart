@@ -38,13 +38,19 @@ import 'package:profileforge/features/ai_chat/presentation/readiness_check_scree
 Page<Object> _slidePage(Widget child) {
   return CustomTransitionPage<Object>(
     child: child,
-    transitionsBuilder: (c, a, s, ch) => SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0.3, 0),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(parent: a, curve: Curves.easeOutCubic)),
-      child: ch,
-    ),
+    transitionsBuilder: (c, a, s, ch) {
+      final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.12, 0),
+          end: Offset.zero,
+        ).animate(curved),
+        child: FadeTransition(
+          opacity: Tween<double>(begin: 0, end: 1).animate(curved),
+          child: ch,
+        ),
+      );
+    },
   );
 }
 
@@ -52,10 +58,16 @@ Page<Object> _slidePage(Widget child) {
 Page<Object> _fadePage(Widget child) {
   return CustomTransitionPage<Object>(
     child: child,
-    transitionsBuilder: (c, a, s, ch) => FadeTransition(
-      opacity: a,
-      child: ch,
-    ),
+    transitionsBuilder: (c, a, s, ch) {
+      final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+      return FadeTransition(
+        opacity: curved,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.95, end: 1).animate(curved),
+          child: ch,
+        ),
+      );
+    },
   );
 }
 
@@ -73,10 +85,33 @@ GoRoute _scaleRoute(String path, Widget Function(BuildContext, GoRouterState) bu
     path: path,
     pageBuilder: (c, s) => CustomTransitionPage<Object>(
       child: builder(c, s),
-      transitionsBuilder: (c, a, s, ch) => ScaleTransition(
-        scale: CurvedAnimation(parent: a, curve: Curves.easeOutCubic),
-        child: FadeTransition(opacity: a, child: ch),
-      ),
+      transitionsBuilder: (c, a, s, ch) {
+        final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+        return ScaleTransition(
+          scale: Tween<double>(begin: 0.85, end: 1).animate(curved),
+          child: FadeTransition(opacity: curved, child: ch),
+        );
+      },
+    ),
+  );
+}
+
+/// Slide from bottom for sheets, settings, chat screens.
+GoRoute _bottomSheetRoute(String path, Widget Function(BuildContext, GoRouterState) builder) {
+  return GoRoute(
+    path: path,
+    pageBuilder: (c, s) => CustomTransitionPage<Object>(
+      child: builder(c, s),
+      transitionsBuilder: (c, a, s, ch) {
+        final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.06),
+            end: Offset.zero,
+          ).animate(curved),
+          child: FadeTransition(opacity: curved, child: ch),
+        );
+      },
     ),
   );
 }
@@ -128,11 +163,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
       _route('/calendar', (c, s) => const CalendarScreen()),
       _route('/geo', (c, s) => const GeoScreen(location: 'Singapore')),
-      // AI features
-      _route('/ai-chat', (c, s) => const AiChatScreen()),
-      _route('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
-      _route('/ai-settings', (c, s) => const AiSettingsScreen()),
-      _route('/ai-readiness', (c, s) => const ReadinessCheckScreen()),
+      // AI features (slide from bottom — feels like sheets)
+      _bottomSheetRoute('/ai-chat', (c, s) => const AiChatScreen()),
+      _bottomSheetRoute('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
+      _bottomSheetRoute('/ai-settings', (c, s) => const AiSettingsScreen()),
+      _bottomSheetRoute('/ai-readiness', (c, s) => const ReadinessCheckScreen()),
     ],
   );
 });
