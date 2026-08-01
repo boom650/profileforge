@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/widgets/achievement_unlock.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/features/achievements/domain/achievement_defs.dart';
 
@@ -273,6 +274,15 @@ class _BadgeCardState extends State<_BadgeCard>
 
   void _onTap() {
     _bounceController.forward(from: 0);
+    // Show achievement unlock animation for unlocked badges.
+    if (widget.unlocked) {
+      AchievementUnlock.show(
+        context,
+        emoji: widget.def.icon,
+        title: widget.def.name,
+        description: widget.def.description ?? 'Achievement unlocked!',
+      );
+    }
   }
 
   @override
