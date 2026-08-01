@@ -263,13 +263,84 @@ class _RecentSessionsList extends ConsumerWidget {
       data: (list) {
         if (list.isEmpty) return Padding(padding: const EdgeInsets.all(20),
           child: Text('No sessions yet. Start your first focus timer!', style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant), textAlign: TextAlign.center));
-        return Column(children: list.take(5).map((s) => ListTile(
-          dense: true,
-          leading: Icon(Icons.timer_outlined, color: theme.colorScheme.primary),
-          title: Text('${s.durationMinutes} min ${s.tag.isEmpty ? '' : '· ${s.tag}'}'),
-          subtitle: Text('${s.xpEarned} XP • ${_formatDate(s.startedAt)}'),
-          trailing: Text('+${s.xpEarned}', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
-        )).toList());
+        return Column(children: list.take(5).toList().asMap().entries.map((entry) {
+          final i = entry.key;
+          final s = entry.value;
+          final tagColors = {
+            'Math': Palette.accentPurple,
+            'Science': Palette.accentTeal,
+            'English': Palette.accentPink,
+            'History': Palette.accentOrange,
+            '': Palette.textTertiary,
+          };
+          final tagColor = tagColors[s.tag] ?? Palette.primary;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: GlassCard(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: tagColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        s.tag.isNotEmpty ? s.tag[0].toUpperCase() : '⏱',
+                        style: TextStyle(
+                          fontSize: s.tag.isNotEmpty ? 14 : 16,
+                          fontWeight: FontWeight.w700,
+                          color: tagColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          s.tag.isNotEmpty ? s.tag : 'Focus Session',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Palette.textPrimary,
+                          ),
+                        ),
+                        Text(
+                          '${s.durationMinutes} min · ${_formatDate(s.startedAt)}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Palette.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Palette.green.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      '+${s.xpEarned} XP',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: Palette.green,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(delay: (i * 80).ms).slideX(begin: 0.05),
+          );
+        }).toList());
       },
       loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
       error: (_, __) => const Text('Failed to load sessions'),
@@ -291,21 +362,73 @@ class _CompletionOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(color: Colors.black54, child: Center(
-      child: Container(
-        margin: const EdgeInsets.all(32), padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(24)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Text('🎯', style: TextStyle(fontSize: 64)),
-          const SizedBox(height: 16),
-          Text('Session Complete!', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Text('+$xp XP Earned', style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 24),
-          PoppyButton(label: 'Awesome!', onPressed: onDismiss),
-        ]),
-      ).animate().scale(duration: 300.ms, begin: const Offset(0.5, 0.5), end: const Offset(1, 1), curve: Curves.elasticOut),
-    ));
+    return Material(
+      color: Colors.black54,
+      child: Stack(
+        children: [
+          // Confetti particles
+          ...List.generate(20, (i) => Positioned(
+            left: (i * 37.0) % MediaQuery.of(context).size.width,
+            top: -20 - (i * 13.0) % 100,
+            child: Text(
+              ['🎉', '⭐', '✨', '🌟', '💫', '🎊'][i % 6],
+              style: TextStyle(fontSize: 16 + (i % 4) * 4),
+            ).animate(
+              delay: (i * 50).ms,
+              onPlay: (c) => c.repeat(),
+            ).moveY(
+              begin: -20,
+              end: MediaQuery.of(context).size.height + 40,
+              duration: Duration(milliseconds: 2000 + (i * 200)),
+              curve: Curves.linear,
+            ).rotate(
+              begin: 0,
+              end: (i % 2 == 0 ? 1 : -1) * 2 * math.pi,
+              duration: Duration(milliseconds: 3000 + (i * 100)),
+            ),
+          )),
+          // Celebration card
+          Center(
+            child: Container(
+              margin: const EdgeInsets.all(32), padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Palette.green.withValues(alpha: 0.3),
+                    blurRadius: 40,
+                    spreadRadius: 8,
+                  ),
+                ],
+              ),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                const Text('🎯', style: TextStyle(fontSize: 64))
+                    .animate().scale(duration: 500.ms, curve: Curves.elasticOut),
+                const SizedBox(height: 16),
+                Text('Session Complete!', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text('+$xp XP Earned', style: theme.textTheme.headlineSmall?.copyWith(color: Palette.green, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text(
+                  _completionMessage(),
+                  style: TextStyle(fontSize: 13, color: Palette.textSecondary),
+                ),
+                const SizedBox(height: 24),
+                PoppyButton(label: 'Awesome!', onPressed: onDismiss),
+              ]),
+            ).animate().scale(duration: 300.ms, begin: const Offset(0.5, 0.5), end: const Offset(1, 1), curve: Curves.elasticOut),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _completionMessage() {
+    if (xp >= 50) return '🔥 Incredible focus! You\'re on fire!';
+    if (xp >= 30) return '💪 Great session! Keep the momentum!';
+    if (xp >= 15) return '⭐ Nice work! Every minute counts!';
+    return '👏 Good start! Try longer sessions for more XP!';
   }
 }
 
