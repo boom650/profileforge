@@ -9,6 +9,7 @@ import 'package:profileforge/features/onboarding/application/onboarding_provider
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:flutter/services.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ProfileScreen v2 — Premium dark profile with glassmorphism cards.

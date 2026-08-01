@@ -16,6 +16,7 @@ import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dar
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
+import 'package:flutter/services.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// HomePage v2 — Premium Lusion-inspired layout.
@@ -653,6 +654,7 @@ class _MissionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = pillarColor(pillar);
     return GlassCard(
+      onTap: () => HapticFeedback.lightImpact(),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
@@ -740,7 +742,10 @@ class _QuickAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: onTap,
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
