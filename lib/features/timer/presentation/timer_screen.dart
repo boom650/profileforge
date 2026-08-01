@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
 import 'package:profileforge/core/data/tables.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
