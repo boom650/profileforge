@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
+import '../../../core/ai/ai_chat_context.dart';
 
 /// Chat message model
 class ChatMessage {
@@ -67,6 +68,22 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
 
     try {
       final service = AiService.instance;
+      
+      // Inject user context on first message
+      if (_history.length == 1) {
+        try {
+          final context = _ref.read(aiChatContextProvider);
+          // TODO: Get actual profileId from session
+          final userContext = await context.buildContext('local-profile');
+          _history.insert(0, {
+            'role': 'system',
+            'content': 'USER CONTEXT:\n$userContext',
+          });
+        } catch (e) {
+          // Context injection failed — continue without it
+        }
+      }
+      
       final response = await service.chat(_history);
       _history.add({'role': 'assistant', 'content': response});
 
