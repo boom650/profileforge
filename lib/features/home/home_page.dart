@@ -767,6 +767,108 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
+            // ── Leaderboard preview ──
+            if (standingsAsync.valueOrNull != null && standingsAsync.valueOrNull!.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      SectionTitle('Leaderboard'),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () => context.push('/leagues'),
+                        child: Text(
+                          'View all',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Palette.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(delay: 420.ms),
+              ),
+            if (standingsAsync.valueOrNull != null && standingsAsync.valueOrNull!.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GlassCard(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      children: standingsAsync.valueOrNull!.take(3).toList().asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final s = entry.value;
+                        final isMe = s.profileId == profileId;
+                        final medal = i == 0 ? '🥇' : i == 1 ? '🥈' : i == 2 ? '🥉' : '${i + 1}';
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 28,
+                                child: Text(
+                                  medal,
+                                  style: TextStyle(
+                                    fontSize: i < 3 ? 16 : 13,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: isMe ? Palette.primary.withValues(alpha: 0.15) : Palette.surface3,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    isMe ? '🦉' : '👤',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  isMe ? 'You' : s.profileId,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: isMe ? FontWeight.w700 : FontWeight.w600,
+                                    color: isMe ? Palette.primary : Palette.textPrimary,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: Palette.warning.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '${s.weeklyXp} XP',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: Palette.warning,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 440.ms),
+              ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
             // ── Weekly progress heatmap ──
             SliverToBoxAdapter(
               child: Padding(
