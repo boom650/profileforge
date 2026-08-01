@@ -341,6 +341,16 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
+            // ── Profile completion indicator ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _ProfileCompletion(profileId: profileId),
+              ).animate().fadeIn(delay: 180.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
             // ── Quick actions grid ──
             SliverToBoxAdapter(
               child: Padding(
@@ -1171,6 +1181,88 @@ class _MilestoneLine extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Profile completion indicator — shows onboarding progress.
+class _ProfileCompletion extends ConsumerWidget {
+  const _ProfileCompletion({required this.profileId});
+  final String profileId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ob = ref.watch(onboardingProvider(profileId)).valueOrNull;
+    final dark = isDark(context);
+    
+    // Calculate completion based on onboarding fields
+    int completed = 0;
+    int total = 5;
+    if (ob != null) {
+      if (ob.targetUniversities.isNotEmpty) completed++;
+      if (ob.subjects.isNotEmpty) completed++;
+      if (ob.activities.isNotEmpty) completed++;
+      if (ob.budget > 0) completed++;
+      if (ob.careerInterests.isNotEmpty) completed++;
+    }
+    
+    final pct = total > 0 ? (completed / total * 100).round() : 0;
+    
+    // Don't show if fully complete
+    if (pct >= 100) return const SizedBox.shrink();
+    
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.account_circle_outlined,
+                size: 16,
+                color: Palette.accentBlue,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Complete your profile',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Palette.textPrimary,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '$pct%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.accentBlue,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: pct / 100,
+              minHeight: 6,
+              backgroundColor: dark ? Palette.surface3 : const Color(0xFFE2E8F0),
+              valueColor: AlwaysStoppedAnimation(Palette.accentBlue),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$completed of $total steps completed',
+            style: TextStyle(
+              fontSize: 11,
+              color: Palette.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(delay: 180.ms);
   }
 }
 
