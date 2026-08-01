@@ -9,6 +9,7 @@ import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/buddy/application/buddy_providers.dart';
+import 'package:profileforge/core/widgets/empty_state.dart';
 
 class BuddiesScreen extends ConsumerWidget {
   const BuddiesScreen({super.key, required this.profileId});

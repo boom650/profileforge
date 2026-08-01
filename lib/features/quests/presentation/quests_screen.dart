@@ -6,6 +6,7 @@ import 'package:profileforge/features/quests/application/quest_providers.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
+import 'package:profileforge/core/widgets/empty_state.dart';
 
 class QuestsScreen extends ConsumerWidget {
   final String profileId;
@@ -49,7 +50,13 @@ class QuestsScreen extends ConsumerWidget {
               ).animate().fadeIn(duration: 300.ms),
 
               Expanded(
-                child: ListView.builder(
+                child: quests.isEmpty
+                    ? EmptyState(
+                        icon: Icons.map_outlined,
+                        title: 'No quests today',
+                        subtitle: 'Check back tomorrow for new daily challenges.',
+                      )
+                    : ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: quests.length,
                   itemBuilder: (ctx, i) {

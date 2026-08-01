@@ -7,6 +7,7 @@ import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/teams/application/team_providers.dart';
+import 'package:profileforge/core/widgets/empty_state.dart';
 
 class TeamsScreen extends ConsumerWidget {
   const TeamsScreen({super.key, required this.profileId});

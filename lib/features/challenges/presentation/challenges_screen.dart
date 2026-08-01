@@ -5,6 +5,7 @@ import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/features/challenges/application/challenge_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
+import 'package:profileforge/core/widgets/empty_state.dart';
 
 class ChallengesScreen extends ConsumerStatefulWidget {
   final String profileId;

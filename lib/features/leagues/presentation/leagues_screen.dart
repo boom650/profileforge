@@ -7,6 +7,7 @@ import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/widgets/empty_state.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 
@@ -160,7 +161,16 @@ class LeaguesScreen extends ConsumerWidget {
             // ── Standings list ──
             standings.when(
               data: (rows) {
-                final sorted = [...rows]..sort((a, b) => b.weeklyXp.compareTo(a.weeklyXp));
+                if (rows.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: EmptyState(
+                      icon: Icons.leaderboard_outlined,
+                      title: 'No standings yet',
+                      subtitle: 'Complete missions to climb the league leaderboard.',
+                    ),
+                  );
+                }
+                final sorted = [...rows]..sort((a, b) => b.weeklyXp.compareTo(a.weekxP));
                 return SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverList(
