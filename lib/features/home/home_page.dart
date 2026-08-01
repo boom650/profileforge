@@ -223,6 +223,46 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
+            // ── Quick actions grid ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    _QuickAction(
+                      icon: Icons.auto_awesome,
+                      label: 'AI Chat',
+                      color: Palette.primary,
+                      onTap: () => context.push('/ai-chat'),
+                    ),
+                    const SizedBox(width: 10),
+                    _QuickAction(
+                      icon: Icons.analytics_outlined,
+                      label: 'Analyze',
+                      color: Palette.accent,
+                      onTap: () => context.push('/ai-analyzer'),
+                    ),
+                    const SizedBox(width: 10),
+                    _QuickAction(
+                      icon: Icons.timer_outlined,
+                      label: 'Timer',
+                      color: Palette.success,
+                      onTap: () => context.push('/timer'),
+                    ),
+                    const SizedBox(width: 10),
+                    _QuickAction(
+                      icon: Icons.assessment_outlined,
+                      label: 'Readiness',
+                      color: Palette.warning,
+                      onTap: () => context.push('/ai-readiness'),
+                    ),
+                  ],
+                ),
+              ).animate().fadeIn(delay: 150.ms).slideY(begin: 0.05),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
             // ── Daily reward CTA ──
             if (rewardAsync.valueOrNull?.canClaim ?? false)
               SliverToBoxAdapter(
@@ -629,14 +669,35 @@ class _MissionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Title.
+          // Title + pillar tag.
           Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    pillar,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           // XP reward.
@@ -656,6 +717,56 @@ class _MissionCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Quick action button for home page grid.
+class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: color.withValues(alpha: 0.2),
+              width: 1,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: color, size: 22),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
