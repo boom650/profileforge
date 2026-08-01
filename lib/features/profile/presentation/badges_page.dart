@@ -1,5 +1,6 @@
 import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/profile/application/profile_providers.dart';
@@ -16,7 +17,11 @@ class BadgesPage extends ConsumerWidget {
       appBar: AppBar(title: const Text('Badges')),
       body: profile.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => PremiumErrorWidget(
+          title: 'Failed to load badges',
+          message: '$e',
+          onRetry: () => ref.invalidate(profileProvider(profileId)),
+        ),
         data: (p) => GridView.count(
           crossAxisCount: 3,
           padding: const EdgeInsets.all(16),

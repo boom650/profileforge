@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/core/widgets/achievement_unlock.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/features/achievements/domain/achievement_defs.dart';
 
@@ -215,13 +216,21 @@ class AchievementsScreen extends ConsumerWidget {
             loading: () => const Center(
               child: _AchievementsSkeleton(),
             ),
-            error: (e, _) => Center(child: Text('Error: $e')),
+            error: (e, _) => PremiumErrorWidget(
+              title: 'Failed to load achievements',
+              message: '$e',
+              onRetry: () => ref.invalidate(unlockedAchievementIdsProvider(profileId)),
+            ),
           ),
           loading: () => const Center(
             child: _AchievementsSkeleton(),
+
           ),
-          error: (e, _) => Center(child: Text('Error: $e')),
-        ),
+          error: (e, _) => PremiumErrorWidget(
+            title: 'Failed to load achievements',
+            message: '$e',
+            onRetry: () => ref.invalidate(achievementDefsProvider),
+          ),
       ),
     );
   }

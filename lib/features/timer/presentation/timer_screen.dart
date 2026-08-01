@@ -11,6 +11,7 @@ import 'package:profileforge/features/xp/application/variable_rewards.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/features/buddy/presentation/body_double_widget.dart';
@@ -347,7 +348,11 @@ class _RecentSessionsList extends ConsumerWidget {
         }).toList());
       },
       loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-      error: (_, __) => const Text('Failed to load sessions'),
+      error: (_, __) => PremiumErrorWidget(
+        title: 'Failed to load sessions',
+        message: 'Could not load your focus history',
+        onRetry: () {},
+      ),
     );
   }
 
