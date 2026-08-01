@@ -506,6 +506,60 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
+            // ── Streak milestones ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GlassCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Streak Milestones',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Palette.textPrimary,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            '$streak days',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Palette.warning,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          _MilestoneDot(reached: streak >= 3, label: '3', emoji: '🔥'),
+                          _MilestoneLine(reached: streak >= 7),
+                          _MilestoneDot(reached: streak >= 7, label: '7', emoji: '⚡'),
+                          _MilestoneLine(reached: streak >= 14),
+                          _MilestoneDot(reached: streak >= 14, label: '14', emoji: '💎'),
+                          _MilestoneLine(reached: streak >= 30),
+                          _MilestoneDot(reached: streak >= 30, label: '30', emoji: '👑'),
+                          _MilestoneLine(reached: streak >= 60),
+                          _MilestoneDot(reached: streak >= 60, label: '60', emoji: '🏆'),
+                          _MilestoneLine(reached: streak >= 100),
+                          _MilestoneDot(reached: streak >= 100, label: '100', emoji: '🌟'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(delay: 250.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
             // ── AI quick access ──
             SliverToBoxAdapter(
               child: Padding(
@@ -881,6 +935,82 @@ class _QuickAction extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Streak milestone dot — shows progress toward streak goals.
+class _MilestoneDot extends StatelessWidget {
+  const _MilestoneDot({
+    required this.reached,
+    required this.label,
+    required this.emoji,
+  });
+
+  final bool reached;
+  final String label;
+  final String emoji;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: reached
+                  ? Palette.warning.withValues(alpha: 0.2)
+                  : Palette.surface3,
+              border: Border.all(
+                color: reached ? Palette.warning : Palette.border,
+                width: reached ? 2 : 1,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                reached ? emoji : label,
+                style: TextStyle(fontSize: reached ? 14 : 10),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              color: reached ? Palette.warning : Palette.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Streak milestone connector line.
+class _MilestoneLine extends StatelessWidget {
+  const _MilestoneLine({required this.reached});
+  final bool reached;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        margin: const EdgeInsets.only(bottom: 18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: reached
+                ? [Palette.warning, Palette.warning]
+                : [Palette.surface3, Palette.surface3],
+          ),
+          borderRadius: BorderRadius.circular(1),
         ),
       ),
     );
