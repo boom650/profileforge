@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/features/goals/application/goal_providers.dart';
 
 class GoalScreen extends ConsumerWidget {
@@ -19,6 +20,7 @@ class GoalScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentAsync = ref.watch(primaryGoalProvider(profileId));
     final theme = Theme.of(context);
+    final dark = isDark(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Goal'), centerTitle: true),
@@ -37,17 +39,64 @@ class GoalScreen extends ConsumerWidget {
               final title = g.$3;
               final desc = g.$4;
               final selected = current == id;
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListTile(
-                  leading: Text(icon, style: const TextStyle(fontSize: 28)),
-                  title: Text(title, style: TextStyle(fontWeight: selected ? FontWeight.bold : FontWeight.w500)),
-                  subtitle: Text(desc, style: const TextStyle(fontSize: 12)),
-                  trailing: selected ? Icon(Icons.check_circle, color: theme.colorScheme.primary) : const Icon(Icons.circle_outlined),
-                  selected: selected,
-                  onTap: () => ref.read(setPrimaryGoalProvider((profileId: profileId, goal: id)).future),
-                ),
-              ).animate().fadeIn(duration: 300.ms).slideX(begin: -0.1);
+              return GestureDetector(
+                onTap: () => ref.read(setPrimaryGoalProvider((profileId: profileId, goal: id)).future),
+                child: AnimatedContainer(
+                  duration: 300.ms,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: selected ? Palette.gradientPrimary : null,
+                    color: selected ? null : (dark ? Palette.surface1 : Colors.white),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: selected ? Palette.primary : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+                      width: selected ? 2 : 1,
+                    ),
+                    boxShadow: selected ? [
+                      BoxShadow(
+                        color: Palette.primary.withValues(alpha: 0.2),
+                        blurRadius: 16,
+                        spreadRadius: -4,
+                      ),
+                    ] : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(icon, style: const TextStyle(fontSize: 32)),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: selected ? Colors.white : Palette.textPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              desc,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: selected ? Colors.white70 : Palette.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        selected ? Icons.check_circle : Icons.circle_outlined,
+                        color: selected ? Colors.white : Palette.textTertiary,
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(duration: 300.ms).slideX(begin: -0.1),
+              );
             }),
           ],
         ),
