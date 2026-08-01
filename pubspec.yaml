@@ -76,6 +76,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/
     - assets/audio/ambient/
     - assets/images/buddy/
     - assets/images/skins/

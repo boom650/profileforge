@@ -122,7 +122,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       if (mounted) context.go('/auth-prompt');
     });
   }
-  }
 
   @override
   void dispose() {
