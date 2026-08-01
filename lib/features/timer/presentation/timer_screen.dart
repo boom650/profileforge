@@ -177,7 +177,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (!timerState.isRunning && timerState.secondsRemaining == timerState.durationMinutes * 60)
-                      PoppyButton(label: 'Start', icon: Icons.play_arrow_rounded, onPressed: () => notifier.start())
+                      _PulsingStartButton(onPressed: () => notifier.start())
                     else if (timerState.isRunning && !timerState.isPaused)
                       PoppyButton(label: 'Pause', icon: Icons.pause_rounded, color: Colors.orange, onPressed: () => notifier.pause())
                     else if (timerState.isPaused)
@@ -306,5 +306,62 @@ class _CompletionOverlay extends StatelessWidget {
         ]),
       ).animate().scale(duration: 300.ms, begin: const Offset(0.5, 0.5), end: const Offset(1, 1), curve: Curves.elasticOut),
     ));
+  }
+}
+
+/// Pulsing start button with glow animation.
+class _PulsingStartButton extends StatefulWidget {
+  const _PulsingStartButton({required this.onPressed});
+  final VoidCallback onPressed;
+
+  @override
+  State<_PulsingStartButton> createState() => _PulsingStartButtonState();
+}
+
+class _PulsingStartButtonState extends State<_PulsingStartButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: 1500.ms);
+    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _glowAnimation,
+      builder: (context, child) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: Palette.green.withValues(alpha: 0.3 * _glowAnimation.value),
+                blurRadius: 20 + (10 * _glowAnimation.value),
+                spreadRadius: 2 * _glowAnimation.value,
+              ),
+            ],
+          ),
+          child: PoppyButton(
+            label: 'Start',
+            icon: Icons.play_arrow_rounded,
+            onPressed: widget.onPressed,
+          ),
+        );
+      },
+    );
   }
 }
