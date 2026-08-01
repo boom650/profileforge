@@ -8,6 +8,7 @@ import 'package:profileforge/features/timer/application/timer_providers.dart';
 import 'package:profileforge/core/data/tables.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/xp/application/variable_rewards.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
@@ -63,6 +64,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     ref.read(saveFocusSessionProvider(
       (profileId: widget.profileId, durationMinutes: minutes, xpEarned: xp, tag: _selectedTag),
     ));
+    // Update streak
+    try {
+      ref.read(streakProvider(widget.profileId).notifier).recordToday();
+    } catch (_) {}
     // Check achievements
     ref.read(achievementCheckerProvider.notifier).checkAll(widget.profileId);
     // Sound
