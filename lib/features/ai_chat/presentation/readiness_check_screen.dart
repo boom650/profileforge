@@ -52,15 +52,7 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
     });
 
     try {
-      final service = await ref.read(llmServiceProvider.future);
-      if (service == null) {
-        setState(() {
-          _isLoading = false;
-          _error = 'AI not configured. Add your API key in Settings.';
-        });
-        return;
-      }
-
+      final service = AiService.instance;
       final prompt = ArtifactPrompts.readinessCheck(
         studentData: {
           'name': _nameController.text.trim(),

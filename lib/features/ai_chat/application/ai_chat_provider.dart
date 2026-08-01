@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
-import '../../../core/ai/llm_client.dart';
 
 /// Chat message model
 class ChatMessage {
@@ -42,7 +41,7 @@ class AiChatState {
   }
 }
 
-/// AI Chat notifier — manages chat session with LLM
+/// AI Chat notifier — manages chat session with LLM (uses fallback system)
 class AiChatNotifier extends StateNotifier<AiChatState> {
   AiChatNotifier(this._ref) : super(AiChatState());
 
@@ -67,15 +66,7 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
     _history.add({'role': 'user', 'content': text.trim()});
 
     try {
-      final service = await _ref.read(llmServiceProvider.future);
-      if (service == null) {
-        state = state.copyWith(
-          isLoading: false,
-          error: 'AI not configured. Add your API key in Settings.',
-        );
-        return;
-      }
-
+      final service = AiService.instance;
       final response = await service.chat(_history);
       _history.add({'role': 'assistant', 'content': response});
 
