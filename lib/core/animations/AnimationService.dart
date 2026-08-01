@@ -7,6 +7,22 @@ import 'package:flutter_animate/flutter_animate.dart';
 class AnimationService {
   const AnimationService._();
 
+  // ── Reduced motion support ──
+  static bool _reduceMotion = false;
+
+  /// Call once at app start to read user preference.
+  static void init(BuildContext context) {
+    _reduceMotion = MediaQuery.disableAnimationsOf(context);
+  }
+
+  /// Check if animations should be skipped.
+  static bool get reduceMotion => _reduceMotion;
+
+  /// Wrap any animation duration — returns zero if reduce motion is on.
+  static Duration effectiveDuration(Duration normal) {
+    return _reduceMotion ? Duration.zero : normal;
+  }
+
   // ── Haptic feedback ──
   static Future<void> lightImpact() => HapticFeedback.lightImpact();
   static Future<void> mediumImpact() => HapticFeedback.mediumImpact();
@@ -26,6 +42,23 @@ class AnimationService {
   static const bouncy = Curves.elasticOut;
   static const sharp = Curves.easeInOutCubic;
   static const linear = Curves.linear;
+
+  // ── Spring presets (from research: Duolingo, Linear, Things3) ──
+  /// Snappy button press — quick settle, minimal bounce.
+  static SpringDescription get springSnappy =>
+      const SpringDescription(mass: 1, stiffness: 500, damping: 25);
+
+  /// Smooth panel — gentle slide, no bounce.
+  static SpringDescription get springSmooth =>
+      const SpringDescription(mass: 1, stiffness: 300, damping: 30);
+
+  /// Bouncy celebration — overshoots, oscillates.
+  static SpringDescription get springBouncy =>
+      const SpringDescription(mass: 1, stiffness: 200, damping: 12);
+
+  /// Heavy drag — weighty, satisfying landing.
+  static SpringDescription get springHeavy =>
+      const SpringDescription(mass: 2, stiffness: 150, damping: 14);
 
   // ── Scale tokens ──
   static const scaleSubtle = 0.98;

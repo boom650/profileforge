@@ -147,7 +147,7 @@ class ProfileScreen extends ConsumerWidget {
                     Expanded(child: _StatCard(icon: Icons.diamond, value: '$gems', label: 'Gems', color: Palette.info)),
                   ],
                 ),
-              ).animate().fadeIn(delay: 200.ms),
+              ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.05),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
@@ -160,7 +160,7 @@ class ProfileScreen extends ConsumerWidget {
                     Expanded(child: _StatCard(icon: Icons.flag, value: '${ob?.readinessScore ?? 0}', label: 'Readiness', color: Palette.accent)),
                   ],
                 ),
-              ).animate().fadeIn(delay: 250.ms),
+              ).animate().fadeIn(delay: 250.ms).slideX(begin: 0.05),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -170,7 +170,7 @@ class ProfileScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SectionTitle('Appearance'),
-              ),
+              ).animate().fadeIn(delay: 300.ms),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -210,7 +210,7 @@ class ProfileScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SectionTitle('Your profile'),
-              ),
+              ).animate().fadeIn(delay: 400.ms),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -234,6 +234,12 @@ class ProfileScreen extends ConsumerWidget {
                         icon: Icons.share_outlined,
                         title: 'Share progress',
                         onTap: () => context.push('/share'),
+                      ),
+                      _SettingsTile(
+                        icon: Icons.auto_awesome,
+                        title: 'AI settings',
+                        subtitle: 'Configure Gemini API key',
+                        onTap: () => context.push('/ai-settings'),
                       ),
                       _SettingsTile(
                         icon: Icons.info_outline,

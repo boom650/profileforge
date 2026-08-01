@@ -1,5 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:lottie/lottie.dart';
+import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -441,6 +444,378 @@ class EmptyState extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// ShimmerSkeleton — Loading placeholder with shimmer effect.
+/// Use instead of CircularProgressIndicator for premium feel.
+/// ────────────────────────────────────────────────────────────────────────────
+class ShimmerSkeleton extends StatelessWidget {
+  const ShimmerSkeleton({
+    super.key,
+    required this.child,
+    this.baseColor,
+    this.highlightColor,
+  });
+
+  final Widget child;
+  final Color? baseColor;
+  final Color? highlightColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return Shimmer.fromColors(
+      baseColor: baseColor ??
+          (dark ? Palette.surface1 : const Color(0xFFE2E8F0)),
+      highlightColor: highlightColor ??
+          (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+      child: child,
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// ProfileSkeleton — Shimmer loading placeholder for profile page.
+/// ────────────────────────────────────────────────────────────────────────────
+class ProfileSkeleton extends StatelessWidget {
+  const ProfileSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Avatar circle
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Name bar
+            Container(
+              width: 120,
+              height: 16,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Email bar
+            Container(
+              width: 180,
+              height: 12,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Stats row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                3,
+                (_) => Container(
+                  width: 60,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Bio lines
+            ...List.generate(
+              3,
+              (i) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Container(
+                  width: double.infinity,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// MissionListSkeleton — Shimmer loading for mission list.
+/// ────────────────────────────────────────────────────────────────────────────
+class MissionListSkeleton extends StatelessWidget {
+  const MissionListSkeleton({super.key, this.itemCount = 4});
+
+  final int itemCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: Column(
+        children: List.generate(
+          itemCount,
+          (_) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Container(
+              height: 72,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// StreakSkeleton — Shimmer loading for streak card.
+/// ────────────────────────────────────────────────────────────────────────────
+class StreakSkeleton extends StatelessWidget {
+  const StreakSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// LottieAnimation — Premium Lottie animation wrapper.
+/// Plays animation once or loops. Used for onboarding, success, celebrations.
+/// ────────────────────────────────────────────────────────────────────────────
+class LottieAnimation extends StatelessWidget {
+  const LottieAnimation({
+    super.key,
+    required this.asset,
+    this.width,
+    this.height,
+    this.repeat = false,
+    this.onComplete,
+  });
+
+  final String asset;
+  final double? width;
+  final double? height;
+  final bool repeat;
+  final VoidCallback? onComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Lottie.asset(
+      asset,
+      width: width,
+      height: height,
+      repeat: repeat,
+      onLoaded: onComplete != null
+          ? (composition) {
+              Future.delayed(composition.duration, onComplete);
+            }
+          : null,
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// CelebrationLottie — Lottie confetti/trophy animation for celebrations.
+/// ────────────────────────────────────────────────────────────────────────────
+class CelebrationLottie extends StatelessWidget {
+  const CelebrationLottie({
+    super.key,
+    this.type = CelebrationType.checkmark,
+    this.size = 120,
+    this.onComplete,
+  });
+
+  final CelebrationType type;
+  final double size;
+  final VoidCallback? onComplete;
+
+  String get _asset {
+    switch (type) {
+      case CelebrationType.checkmark:
+        return 'assets/lottie/checkmark.json';
+      case CelebrationType.confetti:
+        return 'assets/lottie/confetti.json';
+      case CelebrationType.trophy:
+        return 'assets/lottie/trophy.json';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LottieAnimation(
+      asset: _asset,
+      width: size,
+      height: size,
+      onComplete: onComplete,
+    );
+  }
+}
+
+enum CelebrationType {
+  checkmark,
+  confetti,
+  trophy,
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// TiltCard — Gyroscope-driven tilt/parallax effect for cards.
+/// Uses flutter_tilt for premium depth feel on profile/streak cards.
+/// ────────────────────────────────────────────────────────────────────────────
+class TiltCard extends StatelessWidget {
+  const TiltCard({
+    super.key,
+    required this.child,
+    this.borderRadius = 20,
+    this倾斜Intensity = 10,
+  });
+
+  final Widget child;
+  final double borderRadius;
+  final double 倾斜Intensity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tilt(
+      borderRadius: BorderRadius.circular(borderRadius),
+      tiltConfig: const TiltConfig(
+        angle: 10,
+        tiltCurve: Curves.easeOutCubic,
+        disable: [],
+      ),
+      lightConfig: LightConfig(
+        color: Palette.primaryGlow,
+        opacityMax: 0.15,
+      ),
+      shadowConfig: ShadowConfig(
+        color: Colors.black,
+        opacityMax: 0.3,
+      ),
+      child: child,
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// TiltGlassCard — Tilt effect + glassmorphism combined.
+/// Premium card for profile, streak, hero sections.
+/// ────────────────────────────────────────────────────────────────────────────
+class TiltGlassCard extends StatelessWidget {
+  const TiltGlassCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+    this.margin,
+    this.borderRadius = 20,
+  });
+
+  final Widget child;
+  final EdgeInsets padding;
+  final EdgeInsets? margin;
+  final double borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return TiltCard(
+      borderRadius: borderRadius,
+      child: GlassCard(
+        padding: padding,
+        margin: margin,
+        borderRadius: borderRadius,
+        child: child,
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// AnimatedNumber — Animated counter that rolls up/down when value changes.
+/// Used for XP, level, streak displays.
+/// ────────────────────────────────────────────────────────────────────────────
+class AnimatedNumber extends StatelessWidget {
+  const AnimatedNumber({
+    super.key,
+    required this.value,
+    this.style,
+    this.duration = const Duration(milliseconds: 600),
+    this.curve = Curves.easeOutCubic,
+    this.prefix = '',
+    this.suffix = '',
+  });
+
+  final int value;
+  final TextStyle? style;
+  final Duration duration;
+  final Curve curve;
+  final String prefix;
+  final String suffix;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<int>(
+      tween: Tween(begin: value, end: value),
+      duration: duration,
+      curve: curve,
+      builder: (_, v, __) => Text(
+        '$prefix$v$suffix',
+        style: style,
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// AnimatedXp — Animated XP counter with roll effect.
+/// ────────────────────────────────────────────────────────────────────────────
+class AnimatedXp extends StatelessWidget {
+  const AnimatedXp({
+    super.key,
+    required this.xp,
+    this.style,
+  });
+
+  final int xp;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: xp.toDouble(), end: xp.toDouble()),
+      duration: 600.ms,
+      curve: Curves.easeOutCubic,
+      builder: (_, v, __) => Text(
+        '${v.toInt()} XP',
+        style: style,
       ),
     );
   }

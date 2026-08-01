@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
@@ -139,6 +140,15 @@ class AchievementsScreen extends ConsumerWidget {
                             def: def,
                             unlocked: isUnlocked,
                             index: i,
+                          ).animate(
+                            delay: Duration(milliseconds: i * 60),
+                            duration: 400.ms,
+                          ).fadeIn(
+                            curve: Curves.easeOutCubic,
+                          ).scale(
+                            begin: const Offset(0.8, 0.8),
+                            end: const Offset(1, 1),
+                            curve: Curves.easeOutCubic,
                           );
                         },
                         childCount: defs.length,
@@ -150,10 +160,14 @@ class AchievementsScreen extends ConsumerWidget {
                 ],
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(
+              child: _AchievementsSkeleton(),
+            ),
             error: (e, _) => Center(child: Text('Error: $e')),
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(
+            child: _AchievementsSkeleton(),
+          ),
           error: (e, _) => Center(child: Text('Error: $e')),
         ),
       ),
@@ -241,5 +255,52 @@ class _BadgeCard extends StatelessWidget {
           begin: const Offset(0.85, 0.85),
           end: const Offset(1, 1),
         );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// _AchievementsSkeleton — Shimmer loading for achievements grid.
+/// ────────────────────────────────────────────────────────────────────────────
+class _AchievementsSkeleton extends StatelessWidget {
+  const _AchievementsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Progress bar skeleton
+            Container(
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Grid skeleton
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.85,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+              ),
+              itemCount: 9,
+              itemBuilder: (_, __) => Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

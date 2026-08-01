@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
@@ -252,7 +253,10 @@ class LeaguesScreen extends ConsumerWidget {
                 );
               },
               loading: () => const SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator()),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: _LeaguesSkeleton(),
+                ),
               ),
               error: (e, _) => SliverToBoxAdapter(
                 child: Center(child: Text('Error: $e')),
@@ -303,6 +307,46 @@ class LeaguesScreen extends ConsumerWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 40)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// _LeaguesSkeleton — Shimmer loading for leagues screen.
+/// ────────────────────────────────────────────────────────────────────────────
+class _LeaguesSkeleton extends StatelessWidget {
+  const _LeaguesSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: Column(
+        children: [
+          // Tier ladder skeleton
+          Container(
+            height: 72,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Standings skeleton
+          ...List.generate(
+            5,
+            (_) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Container(
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

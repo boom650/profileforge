@@ -27,9 +27,19 @@ class MissionsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       bottomNavigationBar: _BottomNav(context, '/missions'),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
+      body: RefreshIndicator(
+        onRefresh: () async {
+          final ob = ref.read(onboardingProvider(profileId)).valueOrNull;
+          if (ob == null) return;
+          ref.read(generateMissionsProvider(profileId));
+          SoundService.instance.success();
+          await Future.delayed(500.ms);
+        },
+        color: Palette.primary,
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
             // ── Header ──
             SliverToBoxAdapter(
               child: Padding(
@@ -175,6 +185,15 @@ class MissionsScreen extends ConsumerWidget {
                                   )));
                                   celebrate(context, message: '+${m.xpReward} XP 🎉');
                                 },
+                              ).animate(
+                                delay: Duration(milliseconds: index * 80),
+                                duration: 400.ms,
+                              ).fadeIn(
+                                curve: Curves.easeOutCubic,
+                              ).slideY(
+                                begin: 0.15,
+                                end: 0,
+                                curve: Curves.easeOutCubic,
                               ),
                             );
                           },
@@ -183,7 +202,10 @@ class MissionsScreen extends ConsumerWidget {
                       ),
                     ),
               loading: () => const SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator()),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: MissionListSkeleton(),
+                ),
               ),
               error: (e, _) => SliverToBoxAdapter(
                 child: Center(child: Text('Error: $e')),
@@ -237,6 +259,15 @@ class MissionsScreen extends ConsumerWidget {
                                   )));
                                   celebrate(context, message: '+${m.xpReward} XP 🎉');
                                 },
+                              ).animate(
+                                delay: Duration(milliseconds: index * 80),
+                                duration: 400.ms,
+                              ).fadeIn(
+                                curve: Curves.easeOutCubic,
+                              ).slideY(
+                                begin: 0.15,
+                                end: 0,
+                                curve: Curves.easeOutCubic,
                               ),
                             );
                           },
@@ -245,7 +276,10 @@ class MissionsScreen extends ConsumerWidget {
                       ),
                     ),
               loading: () => const SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator()),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: MissionListSkeleton(),
+                ),
               ),
               error: (e, _) => SliverToBoxAdapter(
                 child: Center(child: Text('Error: $e')),

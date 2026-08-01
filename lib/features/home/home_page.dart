@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
@@ -54,8 +55,9 @@ class HomePage extends ConsumerWidget {
 
     if (isLoading && totalXp == 0) {
       return Scaffold(
+        backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
         bottomNavigationBar: _BottomNav(context, '/home'),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const _HomeSkeleton(),
       );
     }
 
@@ -116,14 +118,14 @@ class HomePage extends ConsumerWidget {
                       icon: Icons.bolt,
                       value: '$totalXp',
                       color: Palette.warning,
-                    ),
+                    ).animate().scale(delay: 200.ms, duration: 300.ms, curve: Curves.elasticOut),
                     const SizedBox(width: 8),
                     // Gems badge.
                     _StatBadge(
                       icon: Icons.diamond,
                       value: '$gems',
                       color: Palette.info,
-                    ),
+                    ).animate().scale(delay: 250.ms, duration: 300.ms, curve: Curves.elasticOut),
                   ],
                 ),
               ).animate().fadeIn(duration: 300.ms),
@@ -162,6 +164,7 @@ class HomePage extends ConsumerWidget {
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
+                                letterSpacing: 0.3,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -195,7 +198,8 @@ class HomePage extends ConsumerWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Text('🔥', style: TextStyle(fontSize: 14)),
+                                  const Text('🔥', style: TextStyle(fontSize: 14)).animate()
+                                    .scale(duration: 300.ms, curve: Curves.elasticOut, delay: 500.ms),
                                   const SizedBox(width: 4),
                                   Text(
                                     '$streak day streak',
@@ -276,7 +280,8 @@ class HomePage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                  ).animate().shake(delay: 500.ms, duration: 500.ms),
+                  ).animate().shake(delay: 500.ms, duration: 500.ms).then()
+                    .animate(delay: 1000.ms).fadeIn(duration: 300.ms),
                 ),
               ),
 
@@ -312,6 +317,15 @@ class HomePage extends ConsumerWidget {
                           title: m.title,
                           xpReward: m.xpReward,
                           pillar: m.pillar,
+                        ).animate(
+                          delay: Duration(milliseconds: index * 80),
+                          duration: 400.ms,
+                        ).fadeIn(
+                          curve: Curves.easeOutCubic,
+                        ).slideY(
+                          begin: 0.15,
+                          end: 0,
+                          curve: Curves.easeOutCubic,
                         ),
                       );
                     },
@@ -351,12 +365,69 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
+            // ── AI quick access ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GlassCard(
+                  onTap: () => context.push('/ai-chat'),
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Palette.primary, Palette.primary.withValues(alpha: 0.6)],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.auto_awesome, color: Colors.white, size: 24),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'AI Admissions Architect',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              'Chat with AI • Analyze artifacts • Get missions',
+                              style: TextStyle(
+                                color: theme.hintColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: theme.hintColor,
+                      ),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.03),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
             // ── Weekly progress heatmap ──
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SectionTitle('This week'),
-              ),
+              ).animate().fadeIn(delay: 350.ms),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -431,8 +502,8 @@ class HomePage extends ConsumerWidget {
                       ],
                     ),
                   );
-                }),
-              ).animate().fadeIn(delay: 300.ms),
+                  }),
+                  ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.03),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
@@ -442,7 +513,7 @@ class HomePage extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: const AmbientAudioPanel(),
-              ),
+              ).animate().fadeIn(delay: 400.ms),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
@@ -733,6 +804,117 @@ class _NavItem extends StatelessWidget {
                 color: isSelected
                     ? Palette.primary
                     : (dark ? Palette.textTertiary : Palette.textTertiary),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ────────────────────────────────────────────────────────────────────────────
+/// _HomeSkeleton — Shimmer loading placeholder for home page.
+/// Shows header + hero card + mission cards skeleton.
+/// ────────────────────────────────────────────────────────────────────────────
+class _HomeSkeleton extends StatelessWidget {
+  const _HomeSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerSkeleton(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 40),
+            // Header row skeleton
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        width: 60,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            // Hero card skeleton
+            Container(
+              height: 120,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Section title skeleton
+            Container(
+              width: 120,
+              height: 16,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Mission cards skeleton
+            ...List.generate(
+              3,
+              (_) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Container(
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Stats row skeleton
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                3,
+                (_) => Container(
+                  width: 80,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
               ),
             ),
           ],

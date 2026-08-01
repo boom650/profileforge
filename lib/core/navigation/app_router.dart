@@ -29,6 +29,9 @@ import 'package:profileforge/features/splash/presentation/splash_screen.dart';
 import 'package:profileforge/features/auth/presentation/welcome_screen.dart';
 import 'package:profileforge/features/auth/presentation/magic_link_screen.dart';
 import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart';
+import 'package:profileforge/features/ai_chat/presentation/ai_chat_screen.dart';
+import 'package:profileforge/features/ai_chat/presentation/artifact_analyzer_screen.dart';
+import 'package:profileforge/features/ai_chat/presentation/ai_settings_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
@@ -60,6 +63,20 @@ GoRoute _route(String path, Widget Function(BuildContext, GoRouterState) builder
   return GoRoute(
     path: path,
     pageBuilder: (c, s) => _slidePage(builder(c, s)),
+  );
+}
+
+/// Scale transition for achievements/celebration screens.
+GoRoute _scaleRoute(String path, Widget Function(BuildContext, GoRouterState) builder) {
+  return GoRoute(
+    path: path,
+    pageBuilder: (c, s) => CustomTransitionPage<Object>(
+      child: builder(c, s),
+      transitionsBuilder: (c, a, s, ch) => ScaleTransition(
+        scale: CurvedAnimation(parent: a, curve: Curves.easeOutCubic),
+        child: FadeTransition(opacity: a, child: ch),
+      ),
+    ),
   );
 }
 
@@ -102,14 +119,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/onboarding', (c, s) => OnboardingScreen(profileId: pid)),
       _route('/timer', (c, s) => TimerScreen(profileId: pid)),
       _route('/analytics', (c, s) => AnalyticsScreen(profileId: pid)),
-      _route('/achievements', (c, s) => AchievementsScreen(profileId: pid)),
+      _scaleRoute('/achievements', (c, s) => AchievementsScreen(profileId: pid)),
       _route('/quests', (c, s) => QuestsScreen(profileId: pid)),
       _route('/goal', (c, s) => GoalScreen(profileId: pid)),
       _route('/challenges', (c, s) => ChallengesScreen(profileId: pid)),
-      _route('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
+      _scaleRoute('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
       _route('/calendar', (c, s) => const CalendarScreen()),
       _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
+      // AI features
+      _route('/ai-chat', (c, s) => const AiChatScreen()),
+      _route('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
+      _route('/ai-settings', (c, s) => const AiSettingsScreen()),
     ],
   );
 });

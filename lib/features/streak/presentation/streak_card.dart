@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 
@@ -90,6 +91,7 @@ class _StreakCardBody extends ConsumerWidget {
 
   void _celebrate(BuildContext context, int day) {
     HapticFeedback.mediumImpact();
+    SoundService.instance.streak();
     showDialog(
       context: context,
       builder: (_) => Dialog(

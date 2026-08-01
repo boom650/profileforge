@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
@@ -76,7 +78,9 @@ class _UniversityList extends StatelessWidget {
         future: _loadJson('assets/content_pack.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+            child: MissionListSkeleton(),
+          );
           }
           final data = snap.data;
           if (data == null || !data.containsKey('university_guides')) {
@@ -136,7 +140,9 @@ class _StudyList extends StatelessWidget {
         future: _loadJson('assets/facts.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+            child: MissionListSkeleton(),
+          );
           }
           final data = snap.data;
           if (data == null || !data.containsKey('study_tips')) {
@@ -176,7 +182,9 @@ class _CompetitionList extends StatelessWidget {
         future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+            child: MissionListSkeleton(),
+          );
           }
           final data = snap.data;
           if (data == null || !data.containsKey('olympiads')) {
@@ -219,7 +227,9 @@ class _FundingList extends StatelessWidget {
         future: _loadJson('assets/extra_content.json'),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+            child: MissionListSkeleton(),
+          );
           }
           final data = snap.data;
           if (data == null || !data.containsKey('scholarships')) {
