@@ -140,7 +140,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Add your Gemini API key in Settings to enable AI features.',
+              'Add your API key in Settings to enable AI features.',
               style: TextStyle(color: Palette.primary, fontSize: 13),
             ),
           ),

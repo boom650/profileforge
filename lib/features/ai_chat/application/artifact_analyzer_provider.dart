@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
-import '../../../core/ai/gemini_service.dart';
+import '../../../core/ai/llm_client.dart';
 import '../../../core/ai/artifact_prompts.dart';
 
 /// Artifact types the analyzer supports
@@ -66,11 +66,11 @@ class ArtifactAnalyzerNotifier extends StateNotifier<ArtifactAnalyzerState> {
     state = state.copyWith(isLoading: true, error: null, analysis: null);
 
     try {
-      final service = await _ref.read(geminiServiceProvider.future);
+      final service = await _ref.read(llmServiceProvider.future);
       if (service == null) {
         state = state.copyWith(
           isLoading: false,
-          error: 'AI not configured. Add your Gemini API key in Settings.',
+          error: 'AI not configured. Add your API key in Settings.',
         );
         return;
       }

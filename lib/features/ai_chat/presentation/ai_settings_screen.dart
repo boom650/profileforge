@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../core/ai/ai_providers.dart';
+import '../../../core/ai/llm_client.dart';
 import '../../../core/theme/app_theme.dart';
 
-const _secureStorage = FlutterSecureStorage();
-
-/// Settings screen for AI configuration
+/// Settings screen for AI configuration — supports multiple providers
 class AiSettingsScreen extends ConsumerStatefulWidget {
   const AiSettingsScreen({super.key});
 
@@ -17,39 +15,67 @@ class AiSettingsScreen extends ConsumerStatefulWidget {
 
 class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
   final _keyController = TextEditingController();
+  final _baseUrlController = TextEditingController();
+  final _modelController = TextEditingController();
   bool _obscureKey = true;
   bool _saved = false;
+  LlmProvider _selectedProvider = LlmProvider.opencodeZen;
 
   @override
   void initState() {
     super.initState();
-    _loadKey();
+    _loadConfig();
   }
 
-  Future<void> _loadKey() async {
-    final key = await _secureStorage.read(key: 'gemini_api_key');
-    if (key != null) {
-      _keyController.text = key;
+  Future<void> _loadConfig() async {
+    final key = await ref.read(llmApiKeyProvider.future);
+    final provider = await ref.read(llmProviderTypeProvider.future);
+    final baseUrl = await ref.read(llmBaseUrlProvider.future);
+    final model = await ref.read(llmModelProvider.future);
+
+    if (mounted) {
+      setState(() {
+        if (key != null) _keyController.text = key;
+        _selectedProvider = provider;
+        if (baseUrl != null) _baseUrlController.text = baseUrl;
+        if (model != null) _modelController.text = model;
+      });
     }
   }
 
   @override
   void dispose() {
     _keyController.dispose();
+    _baseUrlController.dispose();
+    _modelController.dispose();
     super.dispose();
   }
 
-  Future<void> _saveKey() async {
+  Future<void> _saveConfig() async {
     final key = _keyController.text.trim();
     if (key.isEmpty) {
-      await deleteGeminiApiKey();
+      await deleteLlmConfig();
     } else {
-      await saveGeminiApiKey(key);
+      await saveLlmConfig(
+        apiKey: key,
+        provider: _selectedProvider,
+        baseUrl: _selectedProvider == LlmProvider.custom
+            ? _baseUrlController.text.trim()
+            : null,
+        model: _selectedProvider == LlmProvider.custom
+            ? _modelController.text.trim()
+            : null,
+      );
     }
-    // Invalidate providers so they pick up the new key
-    ref.invalidate(geminiApiKeyProvider);
-    ref.invalidate(geminiServiceProvider);
+
+    // Invalidate all AI providers
+    ref.invalidate(llmApiKeyProvider);
+    ref.invalidate(llmProviderTypeProvider);
+    ref.invalidate(llmBaseUrlProvider);
+    ref.invalidate(llmModelProvider);
+    ref.invalidate(llmServiceProvider);
     ref.invalidate(aiConfiguredProvider);
+
     setState(() => _saved = true);
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) setState(() => _saved = false);
@@ -80,13 +106,13 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: configured
-                      ? Palette.success.withOpacity(0.1)
-                      : Palette.warning.withOpacity(0.1),
+                      ? Palette.success.withValues(alpha: 0.1)
+                      : Palette.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: configured
-                        ? Palette.success.withOpacity(0.3)
-                        : Palette.warning.withOpacity(0.3),
+                        ? Palette.success.withValues(alpha: 0.3)
+                        : Palette.warning.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -112,9 +138,9 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Gemini API Key
+            // Provider selector
             Text(
-              'Gemini API Key',
+              'AI Provider',
               style: TextStyle(
                 color: Palette.textPrimary,
                 fontSize: 16,
@@ -123,7 +149,25 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Get your free API key from Google AI Studio (aistudio.google.com)',
+              'Choose which AI service to use',
+              style: TextStyle(color: Palette.textSecondary, fontSize: 13),
+            ),
+            const SizedBox(height: 12),
+            ...LlmProvider.values.map((p) => _providerTile(p)),
+            const SizedBox(height: 24),
+
+            // API Key
+            Text(
+              'API Key',
+              style: TextStyle(
+                color: Palette.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              _getKeyHint(),
               style: TextStyle(color: Palette.textSecondary, fontSize: 13),
             ),
             const SizedBox(height: 12),
@@ -132,15 +176,15 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
               obscureText: _obscureKey,
               style: TextStyle(color: Palette.textPrimary, fontSize: 14),
               decoration: InputDecoration(
-                hintText: 'Paste your Gemini API key here',
+                hintText: _getKeyPlaceholder(),
                 hintStyle: TextStyle(color: Palette.textTertiary),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Palette.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Palette.border),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -163,20 +207,75 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                         icon: Icon(Icons.clear, color: Palette.textSecondary),
                         onPressed: () {
                           _keyController.clear();
-                          _saveKey();
+                          _saveConfig();
                         },
                       ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+
+            // Custom provider fields
+            if (_selectedProvider == LlmProvider.custom) ...[
+              const SizedBox(height: 16),
+              TextField(
+                controller: _baseUrlController,
+                style: TextStyle(color: Palette.textPrimary, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'https://your-api.com/v1',
+                  hintStyle: TextStyle(color: Palette.textTertiary),
+                  labelText: 'Base URL',
+                  labelStyle: TextStyle(color: Palette.textSecondary),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.primary),
+                  ),
+                  filled: true,
+                  fillColor: Palette.surface1,
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _modelController,
+                style: TextStyle(color: Palette.textPrimary, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'e.g., gpt-4, claude-3-opus',
+                  hintStyle: TextStyle(color: Palette.textTertiary),
+                  labelText: 'Model name',
+                  labelStyle: TextStyle(color: Palette.textSecondary),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.primary),
+                  ),
+                  filled: true,
+                  fillColor: Palette.surface1,
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 20),
 
             // Save button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _saveKey,
+                onPressed: _saveConfig,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Palette.primary,
                   foregroundColor: Colors.white,
@@ -186,7 +285,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                   ),
                 ),
                 child: Text(
-                  _saved ? '✓ Saved!' : 'Save API Key',
+                  _saved ? '✓ Saved!' : 'Save Configuration',
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
@@ -203,37 +302,78 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            _featureTile(
-              icon: Icons.chat_bubble_outline,
-              title: 'AI Chat',
-              subtitle: 'Ask anything about your college application',
-            ),
-            _featureTile(
-              icon: Icons.analytics_outlined,
-              title: 'Artifact Analyzer',
-              subtitle: 'Analyze research papers, essays, and activities',
-            ),
-            _featureTile(
-              icon: Icons.flag_outlined,
-              title: 'Daily AI Missions',
-              subtitle: 'Personalized tasks based on your goals',
-            ),
-            _featureTile(
-              icon: Icons.assessment_outlined,
-              title: 'Readiness Check',
-              subtitle: 'Score your admissions readiness',
-            ),
+            _featureTile(Icons.chat_bubble_outline, 'AI Chat', 'Ask anything about your college application'),
+            _featureTile(Icons.analytics_outlined, 'Artifact Analyzer', 'Analyze research papers, essays, and activities'),
+            _featureTile(Icons.flag_outlined, 'Daily AI Missions', 'Personalized tasks based on your goals'),
+            _featureTile(Icons.assessment_outlined, 'Readiness Check', 'Score your admissions readiness'),
           ],
         ),
       ),
     );
   }
 
-  Widget _featureTile({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
+  Widget _providerTile(LlmProvider provider) {
+    final isSelected = provider == _selectedProvider;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedProvider = provider),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: isSelected ? Palette.primary.withValues(alpha: 0.1) : Palette.surface1,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Palette.primary : Palette.border,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: isSelected ? Palette.primary : Palette.textTertiary,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    provider.displayName,
+                    style: TextStyle(
+                      color: Palette.textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  if (provider.defaultBaseUrl.isNotEmpty)
+                    Text(
+                      provider.defaultBaseUrl,
+                      style: TextStyle(color: Palette.textTertiary, fontSize: 11),
+                    ),
+                ],
+              ),
+            ),
+            if (provider.defaultModel.isNotEmpty)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Palette.surface2,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  provider.defaultModel.split('/').last,
+                  style: TextStyle(color: Palette.textSecondary, fontSize: 10),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _featureTile(IconData icon, String title, String subtitle) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -242,7 +382,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Palette.primary.withOpacity(0.1),
+              color: Palette.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: Palette.primary, size: 20),
@@ -252,23 +392,47 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Palette.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: TextStyle(color: Palette.textSecondary, fontSize: 12),
-                ),
+                Text(title, style: TextStyle(color: Palette.textPrimary, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(subtitle, style: TextStyle(color: Palette.textSecondary, fontSize: 12)),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getKeyHint() {
+    switch (_selectedProvider) {
+      case LlmProvider.opencodeZen:
+        return 'Get your key from opencodezen.ai';
+      case LlmProvider.nvidiaNim:
+        return 'Get your free key from build.nvidia.com';
+      case LlmProvider.groq:
+        return 'Get your free key from console.groq.com';
+      case LlmProvider.together:
+        return 'Get your key from api.together.xyz';
+      case LlmProvider.mistral:
+        return 'Get your key from console.mistral.ai';
+      case LlmProvider.custom:
+        return 'Enter your API key';
+    }
+  }
+
+  String _getKeyPlaceholder() {
+    switch (_selectedProvider) {
+      case LlmProvider.opencodeZen:
+        return 'sk-...';
+      case LlmProvider.nvidiaNim:
+        return 'nvapi-...';
+      case LlmProvider.groq:
+        return 'gsk_...';
+      case LlmProvider.together:
+        return 'tok_...';
+      case LlmProvider.mistral:
+        return 'mist-...';
+      case LlmProvider.custom:
+        return 'Enter API key';
+    }
   }
 }

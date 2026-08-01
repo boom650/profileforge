@@ -53,8 +53,8 @@ dependencies:
   timeago: ^3.7.0
   # Advanced Animations
   confetti: ^0.8.0
-  # AI (Gemini)
-  google_generative_ai: ^0.4.6
+  # AI (HTTP LLM client — works with OpenCode Zen, Nvidia NIM, Groq, etc.)
+  # google_generative_ai removed — using generic OpenAI-compatible HTTP client
   # Utils
   uuid: ^4.5.1
   equatable: ^2.0.5

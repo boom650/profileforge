@@ -52,11 +52,11 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
     });
 
     try {
-      final service = await ref.read(geminiServiceProvider.future);
+      final service = await ref.read(llmServiceProvider.future);
       if (service == null) {
         setState(() {
           _isLoading = false;
-          _error = 'AI not configured. Add your Gemini API key in Settings.';
+          _error = 'AI not configured. Add your API key in Settings.';
         });
         return;
       }

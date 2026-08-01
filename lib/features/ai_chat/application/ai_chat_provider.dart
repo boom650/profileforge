@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
-import '../../../core/ai/gemini_service.dart';
+import '../../../core/ai/llm_client.dart';
 
 /// Chat message model
 class ChatMessage {
@@ -42,12 +42,12 @@ class AiChatState {
   }
 }
 
-/// AI Chat notifier — manages chat session with Gemini
+/// AI Chat notifier — manages chat session with LLM
 class AiChatNotifier extends StateNotifier<AiChatState> {
   AiChatNotifier(this._ref) : super(AiChatState());
 
   final Ref _ref;
-  ChatSession? _session;
+  final List<Map<String, String>> _history = [];
 
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
@@ -64,24 +64,23 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
       error: null,
     );
 
+    _history.add({'role': 'user', 'content': text.trim()});
+
     try {
-      final service = await _ref.read(geminiServiceProvider.future);
+      final service = await _ref.read(llmServiceProvider.future);
       if (service == null) {
         state = state.copyWith(
           isLoading: false,
-          error: 'AI not configured. Please add your Gemini API key in Settings.',
+          error: 'AI not configured. Add your API key in Settings.',
         );
         return;
       }
 
-      // Start new session if needed
-      _session ??= await service.startChat();
-
-      final response = await _session!.sendMessage(Content.text(text));
-      final responseText = response.text ?? 'No response.';
+      final response = await service.chat(_history);
+      _history.add({'role': 'assistant', 'content': response});
 
       final aiMessage = ChatMessage(
-        text: responseText,
+        text: response,
         isUser: false,
         timestamp: DateTime.now(),
       );
@@ -99,7 +98,7 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
   }
 
   void clearChat() {
-    _session = null;
+    _history.clear();
     state = AiChatState();
   }
 

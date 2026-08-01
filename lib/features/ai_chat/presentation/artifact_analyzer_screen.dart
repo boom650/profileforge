@@ -56,7 +56,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             aiConfigured.when(
               data: (configured) => configured
                   ? const SizedBox.shrink()
-                  : _banner('Add Gemini API key in Settings', Palette.primary),
+                  : _banner('Add API key in Settings', Palette.primary),
               loading: () => const SizedBox.shrink(),
               error: (_, __) => const SizedBox.shrink(),
             ),
