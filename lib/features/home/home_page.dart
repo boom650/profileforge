@@ -7,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/tap_scale.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
@@ -230,32 +231,40 @@ class HomePage extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    _QuickAction(
-                      icon: Icons.auto_awesome,
-                      label: 'AI Chat',
-                      color: Palette.primary,
-                      onTap: () => context.push('/ai-chat'),
+                    TapScale(
+                      child: _QuickAction(
+                        icon: Icons.auto_awesome,
+                        label: 'AI Chat',
+                        color: Palette.primary,
+                        onTap: () => context.push('/ai-chat'),
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    _QuickAction(
-                      icon: Icons.analytics_outlined,
-                      label: 'Analyze',
-                      color: Palette.accent,
-                      onTap: () => context.push('/ai-analyzer'),
+                    TapScale(
+                      child: _QuickAction(
+                        icon: Icons.analytics_outlined,
+                        label: 'Analyze',
+                        color: Palette.accent,
+                        onTap: () => context.push('/ai-analyzer'),
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    _QuickAction(
-                      icon: Icons.timer_outlined,
-                      label: 'Timer',
-                      color: Palette.success,
-                      onTap: () => context.push('/timer'),
+                    TapScale(
+                      child: _QuickAction(
+                        icon: Icons.timer_outlined,
+                        label: 'Timer',
+                        color: Palette.success,
+                        onTap: () => context.push('/timer'),
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    _QuickAction(
-                      icon: Icons.assessment_outlined,
-                      label: 'Readiness',
-                      color: Palette.warning,
-                      onTap: () => context.push('/ai-readiness'),
+                    TapScale(
+                      child: _QuickAction(
+                        icon: Icons.assessment_outlined,
+                        label: 'Readiness',
+                        color: Palette.warning,
+                        onTap: () => context.push('/ai-readiness'),
+                      ),
                     ),
                   ],
                 ),
@@ -410,7 +419,8 @@ class HomePage extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GlassCard(
+                child: TapScale(
+                  child: GlassCard(
                   onTap: () => context.push('/ai-chat'),
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -459,6 +469,7 @@ class HomePage extends ConsumerWidget {
                   ),
                 ),
               ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.03),
+            ),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
