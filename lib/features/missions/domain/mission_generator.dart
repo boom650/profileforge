@@ -1,4 +1,5 @@
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+import 'package:profileforge/core/extensions/list_extensions.dart';
 
 /// Turns a captured [OnboardingProfile] into *personalized* missions —
 /// not blind templates. This is what makes the app feel like it knows you.
@@ -118,8 +119,4 @@ class _GenMission {
   final String title;
   final String pillar;
   final int xp;
-}
-
-extension _FirstOrEmpty<T> on List<T> {
-  T get firstOrEmpty => isEmpty ? ('' as T) : first;
 }
