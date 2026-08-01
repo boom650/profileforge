@@ -9,6 +9,10 @@ import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/tap_scale.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/widgets/streak_fire.dart';
+import 'package:profileforge/core/widgets/animated_counter.dart';
+import 'package:profileforge/core/widgets/daily_reward_claim.dart';
+import 'package:profileforge/core/widgets/magnetic_button.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
@@ -194,7 +198,7 @@ class HomePage extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            // Streak badge.
+                            // Streak badge with animated fire.
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
@@ -205,8 +209,11 @@ class HomePage extends ConsumerWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Text('🔥', style: TextStyle(fontSize: 14)).animate()
-                                    .scale(duration: 300.ms, curve: Curves.elasticOut, delay: 500.ms),
+                                  SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: StreakFire(streak: streak, size: 24),
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '$streak day streak',
@@ -404,69 +411,16 @@ class HomePage extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () async {
+                  child: DailyRewardClaim(
+                    xpReward: 25 + (rewardAsync.valueOrNull?.day ?? 1) * 5,
+                    gemReward: 2 + (rewardAsync.valueOrNull?.day ?? 1),
+                    dayStreak: rewardAsync.valueOrNull?.day ?? 1,
+                    onClaimed: () async {
                       final g = await ref.read(
                           claimDailyRewardProvider(profileId).future);
-                      SoundService.instance.coin();
-                      celebrate(context, message: '+$g 💎');
                       ref.invalidate(dailyRewardProvider(profileId));
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Palette.warning,
-                            Palette.warning.withValues(alpha: 0.8),
-                            Palette.primary,
-                            Palette.primary.withValues(alpha: 0.8),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Palette.warning.withValues(alpha: 0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const Text('🎁', style: TextStyle(fontSize: 28)),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Daily reward available!',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  'Day ${rewardAsync.valueOrNull?.day ?? 1} — tap to claim',
-                                  style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.8),
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios,
-                              color: Colors.white, size: 16),
-                        ],
-                      ),
-                    ),
-                  ).animate().shake(delay: 500.ms, duration: 500.ms).then()
-                    .animate(delay: 1000.ms).fadeIn(duration: 300.ms),
+                  ).animate().fadeIn(delay: 300.ms),
                 ),
               ),
 
@@ -1384,6 +1338,7 @@ class _QuickStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final numericValue = int.tryParse(value) ?? 0;
     return Expanded(
       child: GlassCard(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -1391,8 +1346,8 @@ class _QuickStat extends StatelessWidget {
           children: [
             Text(icon, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 4),
-            Text(
-              value,
+            AnimatedCounter(
+              targetValue: numericValue,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
