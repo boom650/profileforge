@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/magnetic_button.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// GlassCard — Glassmorphism card with backdrop blur.
@@ -114,7 +115,7 @@ class GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MagneticButton(
       onTap: enabled ? onTap : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
