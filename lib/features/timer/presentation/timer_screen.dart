@@ -101,19 +101,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
               children: [
                 const SizedBox(height: 10),
 
-                // Duration selector chips
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  alignment: WrapAlignment.center,
-                  children: [5, 10, 15, 25, 30, 45, 60].map((m) {
-                    final selected = timerState.durationMinutes == m && !timerState.isRunning;
-                    return ActionChip(
-                      label: Text('${m}min', style: TextStyle(fontSize: 13, fontWeight: selected ? FontWeight.bold : FontWeight.normal)),
-                      onPressed: timerState.isRunning ? null : () => notifier.setDuration(m),
-                      color: WidgetStatePropertyAll(selected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest),
-                    );
-                  }).toList(),
+                // Duration selector chips — premium glass design
+                _DurationSelector(
+                  durations: const [5, 10, 15, 25, 30, 45, 60],
+                  selected: timerState.durationMinutes,
+                  isRunning: timerState.isRunning,
+                  onChanged: (m) => notifier.setDuration(m),
                 ),
                 const SizedBox(height: 30),
 
@@ -194,7 +187,11 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
 
                 // Tag selector
                 _TagSelector(tags: _tags, selected: _selectedTag, onChanged: (t) => setState(() => _selectedTag = t)),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+
+                // Today's stats summary
+                _TodayStats(profileId: widget.profileId),
+                const SizedBox(height: 20),
 
                 // Recent sessions header
                 Row(children: [
@@ -429,6 +426,177 @@ class _CompletionOverlay extends StatelessWidget {
     if (xp >= 30) return '💪 Great session! Keep the momentum!';
     if (xp >= 15) return '⭐ Nice work! Every minute counts!';
     return '👏 Good start! Try longer sessions for more XP!';
+  }
+}
+
+/// Today's focus stats — compact summary.
+class _TodayStats extends ConsumerWidget {
+  const _TodayStats({required this.profileId});
+  final String profileId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sessions = ref.watch(recentSessionsProvider(profileId));
+    return sessions.when(
+      data: (list) {
+        final now = DateTime.now();
+        final today = list.where((s) =>
+          s.startedAt.year == now.year &&
+          s.startedAt.month == now.month &&
+          s.startedAt.day == now.day
+        ).toList();
+        
+        final totalMin = today.fold(0, (sum, s) => sum + s.durationMinutes);
+        final totalXp = today.fold(0, (sum, s) => sum + s.xpEarned);
+        
+        if (today.isEmpty) return const SizedBox.shrink();
+        
+        return GlassCard(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              _TodayStatItem(
+                icon: Icons.timer_outlined,
+                value: '${today.length}',
+                label: 'Sessions',
+                color: Palette.accentBlue,
+              ),
+              const SizedBox(width: 16),
+              _TodayStatItem(
+                icon: Icons.schedule,
+                value: '${totalMin}m',
+                label: 'Focus',
+                color: Palette.accentPurple,
+              ),
+              const SizedBox(width: 16),
+              _TodayStatItem(
+                icon: Icons.bolt,
+                value: '$totalXp',
+                label: 'XP',
+                color: Palette.warning,
+              ),
+            ],
+          ),
+        ).animate().fadeIn(delay: 200.ms);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _TodayStatItem extends StatelessWidget {
+  const _TodayStatItem({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Icon(icon, size: 16, color: color),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.textPrimary,
+                ),
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Palette.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Premium duration selector with glass chips.
+class _DurationSelector extends StatelessWidget {
+  const _DurationSelector({
+    required this.durations,
+    required this.selected,
+    required this.isRunning,
+    required this.onChanged,
+  });
+
+  final List<int> durations;
+  final int selected;
+  final bool isRunning;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 6,
+      alignment: WrapAlignment.center,
+      children: durations.map((m) {
+        final sel = selected == m && !isRunning;
+        return GestureDetector(
+          onTap: isRunning ? null : () => onChanged(m),
+          child: AnimatedContainer(
+            duration: 200.ms,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: sel
+                  ? Palette.primary.withValues(alpha: 0.15)
+                  : Palette.surface2,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: sel ? Palette.primary : Palette.border,
+                width: sel ? 2 : 1,
+              ),
+              boxShadow: sel ? [
+                BoxShadow(
+                  color: Palette.primary.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ] : [],
+            ),
+            child: Text(
+              '${m}min',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: sel ? FontWeight.w700 : FontWeight.w500,
+                color: sel ? Palette.primary : Palette.textSecondary,
+              ),
+            ),
+          ),
+        ).animate().scale(duration: 150.ms, begin: const Offset(0.95, 0.95), curve: Curves.easeOut);
+      }).toList(),
+    );
   }
 }
 
