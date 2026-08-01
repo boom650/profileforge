@@ -61,9 +61,9 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
     final aiConfigured = ref.watch(aiConfiguredProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: Palette.black,
       appBar: AppBar(
-        backgroundColor: AppTheme.surface,
+        backgroundColor: Palette.surface1,
         title: const Text(
           'AI Settings',
           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
@@ -80,27 +80,27 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: configured
-                      ? AppTheme.successGreen.withOpacity(0.1)
-                      : AppTheme.warning.withOpacity(0.1),
+                      ? Palette.success.withOpacity(0.1)
+                      : Palette.warning.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: configured
-                        ? AppTheme.successGreen.withOpacity(0.3)
-                        : AppTheme.warning.withOpacity(0.3),
+                        ? Palette.success.withOpacity(0.3)
+                        : Palette.warning.withOpacity(0.3),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       configured ? Icons.check_circle : Icons.warning_amber,
-                      color: configured ? AppTheme.successGreen : AppTheme.warning,
+                      color: configured ? Palette.success : Palette.warning,
                       size: 20,
                     ),
                     const SizedBox(width: 10),
                     Text(
                       configured ? 'AI is configured and ready' : 'AI not configured',
                       style: TextStyle(
-                        color: configured ? AppTheme.successGreen : AppTheme.warning,
+                        color: configured ? Palette.success : Palette.warning,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -116,7 +116,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             Text(
               'Gemini API Key',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: Palette.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -124,43 +124,43 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             const SizedBox(height: 6),
             Text(
               'Get your free API key from Google AI Studio (aistudio.google.com)',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+              style: TextStyle(color: Palette.textSecondary, fontSize: 13),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _keyController,
               obscureText: _obscureKey,
-              style: TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+              style: TextStyle(color: Palette.textPrimary, fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'Paste your Gemini API key here',
-                hintStyle: TextStyle(color: AppTheme.textTertiary),
+                hintStyle: TextStyle(color: Palette.textTertiary),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: AppTheme.borderSubtle.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: AppTheme.borderSubtle.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: AppTheme.accentGold),
+                  borderSide: BorderSide(color: Palette.primary),
                 ),
                 filled: true,
-                fillColor: AppTheme.surface,
+                fillColor: Palette.surface1,
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: Icon(
                         _obscureKey ? Icons.visibility : Icons.visibility_off,
-                        color: AppTheme.textSecondary,
+                        color: Palette.textSecondary,
                       ),
                       onPressed: () => setState(() => _obscureKey = !_obscureKey),
                     ),
                     if (_keyController.text.isNotEmpty)
                       IconButton(
-                        icon: Icon(Icons.clear, color: AppTheme.textSecondary),
+                        icon: Icon(Icons.clear, color: Palette.textSecondary),
                         onPressed: () {
                           _keyController.clear();
                           _saveKey();
@@ -178,7 +178,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
               child: ElevatedButton(
                 onPressed: _saveKey,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.accentGold,
+                  backgroundColor: Palette.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -197,7 +197,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             Text(
               'AI Features',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: Palette.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -242,10 +242,10 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.accentGold.withOpacity(0.1),
+              color: Palette.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppTheme.accentGold, size: 20),
+            child: Icon(icon, color: Palette.primary, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -255,14 +255,14 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppTheme.textPrimary,
+                    color: Palette.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                  style: TextStyle(color: Palette.textSecondary, fontSize: 12),
                 ),
               ],
             ),

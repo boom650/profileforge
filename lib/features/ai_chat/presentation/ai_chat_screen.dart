@@ -54,9 +54,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     final aiConfigured = ref.watch(aiConfiguredProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: Palette.black,
       appBar: AppBar(
-        backgroundColor: AppTheme.surface,
+        backgroundColor: Palette.surface1,
         title: Row(
           children: [
             Container(
@@ -64,7 +64,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               height: 32,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppTheme.accentGold, AppTheme.accentGold.withOpacity(0.6)],
+                  colors: [Palette.primary, Palette.primary.withOpacity(0.6)],
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -133,15 +133,15 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   Widget _buildSetupBanner() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: AppTheme.accentGold.withOpacity(0.1),
+      color: Palette.primary.withOpacity(0.1),
       child: Row(
         children: [
-          Icon(Icons.key, color: AppTheme.accentGold, size: 18),
+          Icon(Icons.key, color: Palette.primary, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               'Add your Gemini API key in Settings to enable AI features.',
-              style: TextStyle(color: AppTheme.accentGold, fontSize: 13),
+              style: TextStyle(color: Palette.primary, fontSize: 13),
             ),
           ),
         ],
@@ -152,19 +152,19 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   Widget _buildErrorBanner(String error) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: AppTheme.errorRed.withOpacity(0.1),
+      color: Palette.error.withOpacity(0.1),
       child: Row(
         children: [
-          Icon(Icons.error_outline, color: AppTheme.errorRed, size: 18),
+          Icon(Icons.error_outline, color: Palette.error, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               error,
-              style: TextStyle(color: AppTheme.errorRed, fontSize: 13),
+              style: TextStyle(color: Palette.error, fontSize: 13),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.close, color: AppTheme.errorRed, size: 16),
+            icon: Icon(Icons.close, color: Palette.error, size: 16),
             onPressed: () => ref.read(aiChatProvider.notifier).dismissError(),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
@@ -186,7 +186,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               height: 64,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppTheme.accentGold, AppTheme.accentGold.withOpacity(0.4)],
+                  colors: [Palette.primary, Palette.primary.withOpacity(0.4)],
                 ),
                 shape: BoxShape.circle,
               ),
@@ -196,7 +196,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             Text(
               'Your Admissions Architect',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: Palette.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -206,7 +206,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               'Ask me anything about building your college application profile.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: AppTheme.textSecondary,
+                color: Palette.textSecondary,
                 fontSize: 14,
               ),
             ).animate().fadeIn(delay: 300.ms),
@@ -230,10 +230,10 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   Widget _quickAction(String label, IconData icon) {
     return ActionChip(
-      avatar: Icon(icon, size: 16, color: AppTheme.accentGold),
-      label: Text(label, style: TextStyle(color: AppTheme.textPrimary, fontSize: 12)),
-      backgroundColor: AppTheme.surface,
-      side: BorderSide(color: AppTheme.accentGold.withOpacity(0.3)),
+      avatar: Icon(icon, size: 16, color: Palette.primary),
+      label: Text(label, style: TextStyle(color: Palette.textPrimary, fontSize: 12)),
+      backgroundColor: Palette.surface1,
+      side: BorderSide(color: Palette.primary.withOpacity(0.3)),
       onPressed: () {
         _controller.text = label;
         _send();
@@ -252,7 +252,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isUser ? AppTheme.accentGold.withOpacity(0.15) : AppTheme.surface,
+          color: isUser ? Palette.primary.withOpacity(0.15) : Palette.surface1,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -261,8 +261,8 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           ),
           border: Border.all(
             color: isUser
-                ? AppTheme.accentGold.withOpacity(0.3)
-                : AppTheme.borderSubtle.withOpacity(0.2),
+                ? Palette.primary.withOpacity(0.3)
+                : Palette.border.withOpacity(0.2),
           ),
         ),
         child: Column(
@@ -274,7 +274,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 child: Text(
                   'ProfileForge AI',
                   style: TextStyle(
-                    color: AppTheme.accentGold,
+                    color: Palette.primary,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
@@ -283,7 +283,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             SelectableText(
               message.text,
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: Palette.textPrimary,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -301,9 +301,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.surface,
+          color: Palette.surface1,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderSubtle.withOpacity(0.2)),
+          border: Border.all(color: Palette.border.withOpacity(0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -313,13 +313,13 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               height: 16,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: AppTheme.accentGold,
+                color: Palette.primary,
               ),
             ),
             const SizedBox(width: 8),
             Text(
               'Thinking...',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+              style: TextStyle(color: Palette.textSecondary, fontSize: 13),
             ),
           ],
         ),
@@ -331,9 +331,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: Palette.surface1,
         border: Border(
-          top: BorderSide(color: AppTheme.borderSubtle.withOpacity(0.2)),
+          top: BorderSide(color: Palette.border.withOpacity(0.2)),
         ),
       ),
       child: SafeArea(
@@ -344,19 +344,19 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               child: TextField(
                 controller: _controller,
                 focusNode: _focusNode,
-                style: TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+                style: TextStyle(color: Palette.textPrimary, fontSize: 14),
                 maxLines: null,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => _send(),
                 decoration: InputDecoration(
                   hintText: 'Ask about your application...',
-                  hintStyle: TextStyle(color: AppTheme.textTertiary),
+                  hintStyle: TextStyle(color: Palette.textTertiary),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: AppTheme.background,
+                  fillColor: Palette.black,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 ),
               ),
@@ -365,7 +365,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppTheme.accentGold, AppTheme.accentGold.withOpacity(0.7)],
+                  colors: [Palette.primary, Palette.primary.withOpacity(0.7)],
                 ),
                 shape: BoxShape.circle,
               ),
