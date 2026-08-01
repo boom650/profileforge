@@ -105,7 +105,7 @@ class HomePage extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hi $userName 👋',
+                            '${_greeting()} $userName 👋',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -685,6 +685,14 @@ class HomePage extends ConsumerWidget {
       default:
         return '🎯';
     }
+  }
+
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 6) return 'Good night';
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
   }
 
   String _levelTitle(int level) {
