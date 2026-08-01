@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/ai/ai_providers.dart';
-import '../../../core/ai/gemini_service.dart';
 import '../../../core/ai/artifact_prompts.dart';
 import '../../../core/theme/app_theme.dart';
 
