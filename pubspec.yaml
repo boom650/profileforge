@@ -52,7 +52,6 @@ dependencies:
   # Time formatting
   timeago: ^3.7.0
   # Advanced Animations
-  lottie: ^3.1.2
   confetti: ^0.8.0
   # AI (Gemini)
   google_generative_ai: ^0.4.6
