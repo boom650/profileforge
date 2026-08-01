@@ -1414,8 +1414,8 @@ Widget _BottomNav(BuildContext context, String current) {
   );
 }
 
-/// Bottom nav item.
-class _NavItem extends StatelessWidget {
+/// Bottom nav item — with animated scale on tap.
+class _NavItem extends StatefulWidget {
   const _NavItem({
     required this.icon,
     required this.label,
@@ -1429,35 +1429,75 @@ class _NavItem extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NavItem> createState() => _NavItemState();
+}
+
+class _NavItemState extends State<_NavItem> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: 150.ms);
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.85).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
     return GestureDetector(
-      onTap: onTap,
+      onTap: () async {
+        await _controller.forward();
+        await _controller.reverse();
+        widget.onTap();
+      },
       behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 64,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? Palette.primary
-                  : (dark ? Palette.textTertiary : Palette.textTertiary),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected
-                    ? Palette.primary
-                    : (dark ? Palette.textTertiary : Palette.textTertiary),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: SizedBox(
+          width: 64,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: 200.ms,
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: widget.isSelected
+                      ? Palette.primary.withValues(alpha: 0.12)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  widget.icon,
+                  size: 22,
+                  color: widget.isSelected
+                      ? Palette.primary
+                      : Palette.textTertiary,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Text(
+                widget.label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: widget.isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: widget.isSelected
+                      ? Palette.primary
+                      : Palette.textTertiary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
