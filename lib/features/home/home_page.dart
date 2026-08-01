@@ -307,6 +307,39 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
+            // ── Quick stats row ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    _QuickStat(
+                      icon: '⭐',
+                      value: '$totalXp',
+                      label: 'Total XP',
+                      color: Palette.accentYellow,
+                    ),
+                    const SizedBox(width: 10),
+                    _QuickStat(
+                      icon: '💎',
+                      value: '$gems',
+                      label: 'Gems',
+                      color: Palette.accentTeal,
+                    ),
+                    const SizedBox(width: 10),
+                    _QuickStat(
+                      icon: '🔥',
+                      value: '$streak',
+                      label: 'Streak',
+                      color: Palette.warning,
+                    ),
+                  ],
+                ),
+              ).animate().fadeIn(delay: 150.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
             // ── Quick actions grid ──
             SliverToBoxAdapter(
               child: Padding(
@@ -1080,6 +1113,52 @@ class _MilestoneLine extends StatelessWidget {
                 : [Palette.surface3, Palette.surface3],
           ),
           borderRadius: BorderRadius.circular(1),
+        ),
+      ),
+    );
+  }
+}
+
+/// Quick stat tile for home page — icon + value + label.
+class _QuickStat extends StatelessWidget {
+  const _QuickStat({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+
+  final String icon;
+  final String value;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GlassCard(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Column(
+          children: [
+            Text(icon, style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: color,
+              ),
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: Palette.textTertiary,
+              ),
+            ),
+          ],
         ),
       ),
     );
