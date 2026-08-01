@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,10 +55,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     'Debate', 'Robotics', 'Volunteering', 'Research', 'Art',
   ];
 
+  // Completion state.
+  bool _showCompletion = false;
+
   void _next() {
     SoundService.instance.tap();
     if (_step < _total - 1) {
-      _page.nextPage(duration: 350.ms, curve: Curves.easeInOut);
+      _page.nextPage(duration: 400.ms, curve: Curves.easeInOutCubic);
     } else {
       _finish();
     }
@@ -65,7 +69,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _prev() {
     if (_step > 0) {
-      _page.previousPage(duration: 350.ms, curve: Curves.easeInOut);
+      _page.previousPage(duration: 400.ms, curve: Curves.easeInOutCubic);
     }
   }
 
@@ -111,12 +115,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await prefs.setString('pf_user_name', _name);
 
     SoundService.instance.success();
-    if (mounted) {
-      celebrate(context, message: 'Your forge is ready! 🚀');
-      Future.delayed(1200.ms, () {
-        if (mounted) context.go('/auth-prompt');
-      });
-    }
+    setState(() => _showCompletion = true);
+    
+    // Navigate after confetti
+    Future.delayed(2500.ms, () {
+      if (mounted) context.go('/auth-prompt');
+    });
+  }
   }
 
   @override
@@ -131,7 +136,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final progress = (_step + 1) / _total;
 
     return Scaffold(
-      body: Container(
+      body: Stack(
+        children: [
+      Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -277,8 +284,99 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
         ),
       ),
+          // Confetti overlay on completion
+          if (_showCompletion)
+            Positioned.fill(
+              child: _OnboardingConfetti(),
+            ),
+        ],
+      ),
     );
   }
+}
+
+/// Confetti overlay shown on onboarding completion.
+class _OnboardingConfetti extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Material(
+      color: Colors.black54,
+      child: Stack(
+        children: [
+          // Confetti particles
+          ...List.generate(30, (i) => Positioned(
+            left: (i * 29.0) % size.width,
+            top: -30 - (i * 17.0) % 150,
+            child: Text(
+              ['🎉', '⭐', '✨', '🌟', '💫', '🎊', '🏆', '🎯'][i % 8],
+              style: TextStyle(fontSize: 14 + (i % 5) * 4),
+            ).animate(
+              delay: (i * 40).ms,
+              onPlay: (c) => c.repeat(),
+            ).moveY(
+              begin: -30,
+              end: size.height + 60,
+              duration: Duration(milliseconds: 1800 + (i * 150)),
+              curve: Curves.linear,
+            ).rotate(
+              begin: 0,
+              end: (i % 2 == 0 ? 1 : -1) * 3 * math.pi,
+              duration: Duration(milliseconds: 2500 + (i * 100)),
+            ),
+          )),
+          // Center card
+          Center(
+            child: Container(
+              margin: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Palette.primary.withValues(alpha: 0.3),
+                    blurRadius: 40,
+                    spreadRadius: 8,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🚀', style: TextStyle(fontSize: 64))
+                      .animate().scale(duration: 500.ms, curve: Curves.elasticOut),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Your forge is ready!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Palette.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Let\'s build your admissions profile',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Palette.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ).animate().scale(
+              duration: 400.ms,
+              begin: const Offset(0.5, 0.5),
+              end: const Offset(1, 1),
+              curve: Curves.elasticOut,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
   // ──────────────────────────────────────────────────────────────────────────
   // STEP 1: Goal
