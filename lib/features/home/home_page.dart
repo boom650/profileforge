@@ -619,6 +619,56 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
+            // ── Daily admissions tip ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GlassCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: Palette.accentBlue.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Center(
+                              child: Icon(Icons.lightbulb_outline, size: 16, color: Palette.accentBlue),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Daily Tip',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Palette.accentBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _dailyTip(),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Palette.textSecondary,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(delay: 320.ms),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
             // ── Weekly progress heatmap ──
             SliverToBoxAdapter(
               child: Padding(
@@ -747,6 +797,25 @@ class HomePage extends ConsumerWidget {
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
+  }
+
+  String _dailyTip() {
+    final tips = [
+      'Start your personal statement with a specific moment, not a general statement. "The smell of solder made me realize..." beats "I\'ve always been passionate about..."',
+      'Show intellectual curiosity through what you read, watch, and explore — not just grades. Admissions officers want genuine thinkers.',
+      'Your activities should tell a story. Depth in 2-3 areas beats shallow involvement in 10 clubs.',
+      'Recommendation letters are most powerful when they include specific anecdotes. Give your teachers concrete examples of your work.',
+      'Research each school\'s specific programs and mention them. Generic "I love your school" essays are red flags.',
+      'The "Why This College" essay should be 70% about the school and 30% about you. Most students flip this ratio.',
+      'Your resume should show progression — leadership roles, increasing responsibility, lasting impact.',
+      'Don\'t underestimate community college transfer programs. They\'re a legitimate path to top universities.',
+      'Interviews are conversations, not interrogations. Prepare 3-5 stories that showcase your growth and curiosity.',
+      'Proofread everything. A single typo can undermine months of careful work.',
+      'Start early. The Common App opens August 1 — use summer to draft essays before senior year crushes your schedule.',
+      'Quality over quantity: 5 meaningful activities with clear impact beats 15 superficial memberships.',
+    ];
+    final dayOfYear = DateTime.now().difference(DateTime(DateTime.now().year)).inDays;
+    return tips[dayOfYear % tips.length];
   }
 
   String _levelTitle(int level) {
