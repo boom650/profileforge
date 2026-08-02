@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 import '../../../core/ai/ai_providers.dart';
 import '../../../core/ai/fallback_llm_client.dart';
 import '../../../core/ai/provider_config.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/premium_widgets.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────

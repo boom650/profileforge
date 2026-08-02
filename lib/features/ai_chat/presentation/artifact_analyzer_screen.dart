@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 
 import '../../../core/ai/ai_providers.dart';
 import '../../../core/theme/app_theme.dart';
@@ -58,7 +59,10 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
                   ? const SizedBox.shrink()
                   : _banner('Add API key in Settings', Palette.primary),
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (e, _) => PremiumErrorWidget(
+                title: 'Config Error',
+                message: '$e',
+              ),
             ),
 
             // Artifact type selector
