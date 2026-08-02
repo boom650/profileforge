@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:profileforge/core/audio/sound_service.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Premium Animations — Duolingo-level micro-interactions.
@@ -27,14 +26,12 @@ class Haptics {
   /// Success — mission complete.
   static void success() {
     HapticFeedback.mediumImpact();
-    SoundService.instance.success();
     Future.delayed(80.ms, () => HapticFeedback.lightImpact());
   }
 
   /// Double tap — level up.
   static void levelUp() {
     HapticFeedback.heavyImpact();
-    SoundService.instance.levelUp();
     Future.delayed(100.ms, () => HapticFeedback.mediumImpact());
     Future.delayed(200.ms, () => HapticFeedback.heavyImpact());
   }
@@ -42,7 +39,6 @@ class Haptics {
   /// Celebration burst.
   static void celebration() {
     HapticFeedback.heavyImpact();
-    SoundService.instance.streak();
     Future.delayed(60.ms, () => HapticFeedback.mediumImpact());
     Future.delayed(120.ms, () => HapticFeedback.lightImpact());
     Future.delayed(180.ms, () => HapticFeedback.mediumImpact());
@@ -176,7 +172,6 @@ class _ScaleOnTapWrapperState extends State<_ScaleOnTapWrapper>
     return GestureDetector(
       onTapDown: (_) {
         Haptics.light();
-        SoundService.instance.tap();
         _controller.forward();
       },
       onTapUp: (_) => _controller.reverse(),

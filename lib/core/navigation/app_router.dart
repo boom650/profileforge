@@ -29,28 +29,18 @@ import 'package:profileforge/features/splash/presentation/splash_screen.dart';
 import 'package:profileforge/features/auth/presentation/welcome_screen.dart';
 import 'package:profileforge/features/auth/presentation/magic_link_screen.dart';
 import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart';
-import 'package:profileforge/features/ai_chat/presentation/ai_chat_screen.dart';
-import 'package:profileforge/features/ai_chat/presentation/artifact_analyzer_screen.dart';
-import 'package:profileforge/features/ai_chat/presentation/ai_settings_screen.dart';
-import 'package:profileforge/features/ai_chat/presentation/readiness_check_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
   return CustomTransitionPage<Object>(
     child: child,
-    transitionsBuilder: (c, a, s, ch) {
-      final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0.12, 0),
-          end: Offset.zero,
-        ).animate(curved),
-        child: FadeTransition(
-          opacity: Tween<double>(begin: 0, end: 1).animate(curved),
-          child: ch,
-        ),
-      );
-    },
+    transitionsBuilder: (c, a, s, ch) => SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0.3, 0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(parent: a, curve: Curves.easeOutCubic)),
+      child: ch,
+    ),
   );
 }
 
@@ -58,16 +48,10 @@ Page<Object> _slidePage(Widget child) {
 Page<Object> _fadePage(Widget child) {
   return CustomTransitionPage<Object>(
     child: child,
-    transitionsBuilder: (c, a, s, ch) {
-      final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
-      return FadeTransition(
-        opacity: curved,
-        child: ScaleTransition(
-          scale: Tween<double>(begin: 0.95, end: 1).animate(curved),
-          child: ch,
-        ),
-      );
-    },
+    transitionsBuilder: (c, a, s, ch) => FadeTransition(
+      opacity: a,
+      child: ch,
+    ),
   );
 }
 
@@ -76,43 +60,6 @@ GoRoute _route(String path, Widget Function(BuildContext, GoRouterState) builder
   return GoRoute(
     path: path,
     pageBuilder: (c, s) => _slidePage(builder(c, s)),
-  );
-}
-
-/// Scale transition for achievements/celebration screens.
-GoRoute _scaleRoute(String path, Widget Function(BuildContext, GoRouterState) builder) {
-  return GoRoute(
-    path: path,
-    pageBuilder: (c, s) => CustomTransitionPage<Object>(
-      child: builder(c, s),
-      transitionsBuilder: (c, a, s, ch) {
-        final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
-        return ScaleTransition(
-          scale: Tween<double>(begin: 0.85, end: 1).animate(curved),
-          child: FadeTransition(opacity: curved, child: ch),
-        );
-      },
-    ),
-  );
-}
-
-/// Slide from bottom for sheets, settings, chat screens.
-GoRoute _bottomSheetRoute(String path, Widget Function(BuildContext, GoRouterState) builder) {
-  return GoRoute(
-    path: path,
-    pageBuilder: (c, s) => CustomTransitionPage<Object>(
-      child: builder(c, s),
-      transitionsBuilder: (c, a, s, ch) {
-        final curved = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, 0.06),
-            end: Offset.zero,
-          ).animate(curved),
-          child: FadeTransition(opacity: curved, child: ch),
-        );
-      },
-    ),
   );
 }
 
@@ -155,19 +102,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/onboarding', (c, s) => OnboardingScreen(profileId: pid)),
       _route('/timer', (c, s) => TimerScreen(profileId: pid)),
       _route('/analytics', (c, s) => AnalyticsScreen(profileId: pid)),
-      _scaleRoute('/achievements', (c, s) => AchievementsScreen(profileId: pid)),
+      _route('/achievements', (c, s) => AchievementsScreen(profileId: pid)),
       _route('/quests', (c, s) => QuestsScreen(profileId: pid)),
       _route('/goal', (c, s) => GoalScreen(profileId: pid)),
       _route('/challenges', (c, s) => ChallengesScreen(profileId: pid)),
-      _scaleRoute('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
+      _route('/summary', (c, s) => WeeklySummaryScreen(profileId: pid)),
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
       _route('/calendar', (c, s) => const CalendarScreen()),
-      _route('/geo', (c, s) => const GeoScreen(location: 'Singapore')),
-      // AI features (slide from bottom — feels like sheets)
-      _bottomSheetRoute('/ai-chat', (c, s) => const AiChatScreen()),
-      _bottomSheetRoute('/ai-analyzer', (c, s) => const ArtifactAnalyzerScreen()),
-      _bottomSheetRoute('/ai-settings', (c, s) => const AiSettingsScreen()),
-      _bottomSheetRoute('/ai-readiness', (c, s) => const ReadinessCheckScreen()),
+      _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
     ],
   );
 });
+
+const _defaultLat = 1.3521;
+const _defaultLng = 103.8198;

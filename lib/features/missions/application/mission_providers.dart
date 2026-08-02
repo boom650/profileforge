@@ -7,8 +7,6 @@ import 'package:profileforge/features/missions/domain/mission_generator.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
-import 'package:profileforge/features/achievements/application/achievement_trigger.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
   return MissionRepository(ref.watch(appDatabaseProvider));
@@ -51,31 +49,6 @@ final completeMissionProvider = Provider.family<
   // Award gems (1 gem per 5 XP, min 2).
   final gems = (args.xp / 5).ceil().clamp(2, 50);
   await ref.read(walletRepositoryProvider).add(args.profileId, gems);
-  
-  // Update streak
-  try {
-    await ref.read(streakProvider(args.profileId).notifier).recordToday();
-  } catch (_) {}
-  
-  // Check achievements
-  try {
-    final trigger = ref.read(achievementTriggerProvider);
-    final totalXp = await ref.read(xpRepositoryProvider).balance(args.profileId);
-    final streak = ref.read(streakProvider(args.profileId)).valueOrNull?.current ?? 0;
-    final history = await ref.read(missionHistoryProvider(args.profileId).future);
-    final unlocked = await trigger.checkAfterMission(
-      profileId: args.profileId,
-      missionPillar: args.pillar,
-      missionXp: args.xp,
-      totalXp: totalXp,
-      streak: streak,
-      missionsCompleted: history.length,
-    );
-    if (unlocked.isNotEmpty) {
-      // TODO: Show achievement unlock notification
-    }
-  } catch (_) {}
-  
   ref.invalidate(todaysMissionsProvider(args.profileId));
   ref.invalidate(totalXpProvider(args.profileId));
   ref.invalidate(gemsProvider(args.profileId));

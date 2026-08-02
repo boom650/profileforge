@@ -19,129 +19,47 @@ class RewardsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dark = isDark(context);
     final reward = ref.watch(dailyRewardProvider(profileId));
-    final gemsAsync = ref.watch(gemsProvider(profileId));
+    final gems = ref.watch(gemsProvider(profileId)).valueOrNull ?? 0;
+    final day = reward.valueOrNull?.day ?? 1;
+    final canClaim = reward.valueOrNull?.canClaim ?? false;
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Rewards'),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SafeArea(
-          child: reward.when(
-        loading: () => _RewardsSkeleton(dark: dark),
-        error: (e, _) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // Hero card
+          GlassCard(
+            padding: const EdgeInsets.all(24),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: Palette.error.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.wifi_off_rounded, size: 32, color: Palette.error),
-                ).animate().scale(delay: 100.ms, duration: 400.ms, curve: Curves.elasticOut),
-                const SizedBox(height: 20),
-                const Text(
-                  'Failed to load rewards',
-                  style: TextStyle(
-                    color: Palette.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Check your connection and try again',
-                  style: TextStyle(color: Palette.textSecondary, fontSize: 13),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () => ref.invalidate(dailyRewardProvider(profileId)),
-                  icon: const Icon(Icons.refresh, size: 18),
-                  label: const Text('Retry'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Palette.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-              ],
-            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
-          ),
-        ),
-        data: (rewardData) {
-          final gems = gemsAsync.valueOrNull ?? 0;
-          final day = rewardData.day;
-          final canClaim = rewardData.canClaim;
-
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // Hero card
-              GlassCard(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        const Text('🎁', style: TextStyle(fontSize: 32)),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Daily Reward',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w900,
-                                  color: Palette.textPrimary,
-                                ),
-                              ),
-                              const Text(
-                                'Come back every day. Day 7 is a jackpot!',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Palette.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Gem counter
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Palette.surface2,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                    Text('🎁', style: TextStyle(fontSize: 32)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('💎', style: TextStyle(fontSize: 20)),
-                          const SizedBox(width: 8),
                           Text(
-                            '$gems gems saved',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                            'Daily Reward',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
                               color: Palette.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            'Come back every day. Day 7 is a jackpot!',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Palette.textSecondary,
                             ),
                           ),
                         ],
@@ -149,195 +67,156 @@ class RewardsScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-              ).animate().fadeIn().slideY(begin: 0.1),
-
-              const SizedBox(height: 24),
-
-              // 7-day wheel
-              const Text(
-                'Streak Progress',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: Palette.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: List.generate(7, (i) {
-                  final d = i + 1;
-                  final claimed = d < day || (d == day && !canClaim);
-                  final isToday = d == day && canClaim;
-                  final rewardAmt = DailyRewardRepository.rewardFor(d);
-                  final isJackpot = d == 7;
-
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
-                      child: _DayCard(
-                        day: d,
-                        rewardAmt: rewardAmt,
-                        claimed: claimed,
-                        isToday: isToday,
-                        isJackpot: isJackpot,
-                        dark: dark,
-                        index: i,
-                      ),
-                    ),
-                  );
-                }),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Claim button or claimed message
-              if (canClaim)
-                GlassCard(
-                  padding: const EdgeInsets.all(0),
-                  border: Border.all(color: Palette.accentViolet, width: 2),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () async {
-                        HapticFeedback.mediumImpact();
-                        final g = await ref
-                            .read(claimDailyRewardProvider(profileId).future);
-                        SoundService.instance.coin();
-                        celebrate(context, message: '+$g 💎');
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Palette.accentViolet, Palette.accentBlue],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Claim Day $day reward',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                const SizedBox(height: 20),
+                // Gem counter
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
                   ),
-                ).animate().fadeIn(delay: 400.ms).then().shimmer(
-                  duration: 1200.ms,
-                  color: Colors.white.withValues(alpha: 0.2),
-                )
-              else
-                GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  opacity: 0.06,
+                  decoration: BoxDecoration(
+                    color: Palette.surface2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('✅', style: TextStyle(fontSize: 20)),
+                      Text('💎', style: TextStyle(fontSize: 20)),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Reward claimed today. Come back tomorrow!',
+                      Text(
+                        '$gems gems saved',
                         style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: Palette.textSecondary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Palette.textPrimary,
                         ),
                       ),
                     ],
                   ),
                 ),
+              ],
+            ),
+          ).animate().fadeIn().slideY(begin: 0.1),
 
-              const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
-              // Shop link
-              Center(
-                child: GestureDetector(
-                  onTap: () => context.push('/skins'),
-                  child: const Text(
-                    'Spend gems in the Shop →',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: Palette.accentViolet,
-                    ),
+          // 7-day wheel
+          Text(
+            'Streak Progress',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: Palette.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: List.generate(7, (i) {
+              final d = i + 1;
+              final claimed = d < day || (d == day && !canClaim);
+              final isToday = d == day && canClaim;
+              final rewardAmt = DailyRewardRepository.rewardFor(d);
+              final isJackpot = d == 7;
+
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: _DayCard(
+                    day: d,
+                    rewardAmt: rewardAmt,
+                    claimed: claimed,
+                    isToday: isToday,
+                    isJackpot: isJackpot,
+                    dark: dark,
+                    index: i,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
+              );
+            }),
+          ),
 
-/// Shimmer loading skeleton for rewards screen.
-class _RewardsSkeleton extends StatelessWidget {
-  const _RewardsSkeleton({required this.dark});
-  final bool dark;
+          const SizedBox(height: 32),
 
-  @override
-  Widget build(BuildContext context) {
-    return ShimmerSkeleton(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Hero card skeleton
-            Container(
-              height: 130,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Streak header skeleton
-            Container(
-              width: 140,
-              height: 18,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            const SizedBox(height: 12),
-            // Day cards skeleton
-            Row(
-              children: List.generate(
-                7,
-                (_) => Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+          // Claim button or claimed message
+          if (canClaim)
+            GlassCard(
+              padding: const EdgeInsets.all(0),
+              border: Border.all(color: Palette.accentViolet, width: 2),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () async {
+                    HapticFeedback.mediumImpact();
+                    final g = await ref
+                        .read(claimDailyRewardProvider(profileId).future);
+                    SoundService.instance.coin();
+                    celebrate(context, message: '+$g 💎');
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Palette.accentViolet, Palette.accentBlue],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Claim Day $day reward',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-            // Button skeleton
-            Container(
-              height: 56,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+            ).animate().fadeIn(delay: 400.ms).then().shimmer(
+              duration: 1200.ms,
+              color: Colors.white.withValues(alpha: 0.2),
+            )
+          else
+            GlassCard(
+              padding: const EdgeInsets.all(20),
+              opacity: 0.06,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('✅', style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Reward claimed today. Come back tomorrow!',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: Palette.textSecondary,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+
+          const SizedBox(height: 20),
+
+          // Shop link
+          Center(
+            child: GestureDetector(
+              onTap: () => context.push('/skins'),
+              child: Text(
+                'Spend gems in the Shop →',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: Palette.accentViolet,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }
@@ -401,7 +280,7 @@ class _DayCard extends StatelessWidget {
       child: Column(
         children: [
           if (isJackpot)
-            const Text('🎉', style: TextStyle(fontSize: 18))
+            Text('🎉', style: TextStyle(fontSize: 18))
           else
             Text(
               '$day',
@@ -432,7 +311,6 @@ class _DayCard extends StatelessWidget {
       begin: const Offset(0.8, 0.8),
       duration: 400.ms,
       curve: Curves.easeOutCubic,
-      ),
     );
   }
 }

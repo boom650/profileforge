@@ -26,8 +26,7 @@ class WelcomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SafeArea(
-          child: Container(
+      body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -429,7 +428,6 @@ class _AuthButton extends StatelessWidget {
             ),
           ),
         ),
-      ),
       ),
     );
   }

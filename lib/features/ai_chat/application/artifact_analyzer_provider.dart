@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
+import '../../../core/ai/gemini_service.dart';
 import '../../../core/ai/artifact_prompts.dart';
 
 /// Artifact types the analyzer supports
@@ -65,31 +67,25 @@ class ArtifactAnalyzerNotifier extends StateNotifier<ArtifactAnalyzerState> {
     state = state.copyWith(isLoading: true, error: null, analysis: null);
 
     try {
-      final service = AiService.instance;
-      final response = await service.generate(_buildPrompt(
+      final service = await _ref.read(geminiServiceProvider.future);
+      if (service == null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'AI not configured. Add your Gemini API key in Settings.',
+        );
+        return;
+      }
+
+      final prompt = _buildPrompt(
         type: state.selectedType,
         title: title,
         content: content,
         targetUniversity: targetUniversity,
         studentProfile: studentProfile,
-      ));
-
-      // Parse analysis from response
-      int? score;
-      final scoreMatch = RegExp(
-        r'(?:Overall Score|Score)[:\s]*(\d+)/10',
-        caseSensitive: false,
-      ).firstMatch(response);
-      if (scoreMatch != null) {
-        score = int.tryParse(scoreMatch.group(1) ?? '');
-      }
-
-      final analysis = ArtifactAnalysis(
-        artifactType: state.selectedType.label,
-        rawResponse: response,
-        score: score,
-        analyzedAt: DateTime.now(),
       );
+
+      final response = await service.generate(prompt);
+      final analysis = service.parseAnalysis(response, state.selectedType.label);
 
       state = state.copyWith(isLoading: false, analysis: analysis);
     } catch (e) {

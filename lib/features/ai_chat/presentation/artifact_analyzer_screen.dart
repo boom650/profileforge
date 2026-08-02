@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:profileforge/core/effects/error_widgets.dart';
 
 import '../../../core/ai/ai_providers.dart';
 import '../../../core/theme/app_theme.dart';
@@ -33,9 +31,9 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
     final aiConfigured = ref.watch(aiConfiguredProvider);
 
     return Scaffold(
-      backgroundColor: Palette.black,
+      backgroundColor: AppTheme.background,
       appBar: AppBar(
-        backgroundColor: Palette.surface1,
+        backgroundColor: AppTheme.surface,
         title: const Text(
           'Artifact Analyzer',
           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
@@ -49,8 +47,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             ),
         ],
       ),
-      body: SafeArea(
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,18 +56,15 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             aiConfigured.when(
               data: (configured) => configured
                   ? const SizedBox.shrink()
-                  : _banner('Add API key in Settings', Palette.primary),
+                  : _banner('Add Gemini API key in Settings', AppTheme.accentGold),
               loading: () => const SizedBox.shrink(),
-              error: (e, _) => PremiumErrorWidget(
-                title: 'Config Error',
-                message: '$e',
-              ),
+              error: (_, __) => const SizedBox.shrink(),
             ),
 
             // Artifact type selector
             Text(
               'What are you analyzing?',
-              style: TextStyle(color: Palette.textSecondary, fontSize: 13),
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
             ),
             const SizedBox(height: 8),
             _buildTypeSelector(state.selectedType),
@@ -104,7 +98,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
               child: ElevatedButton(
                 onPressed: state.isLoading ? null : _analyze,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.primary,
+                  backgroundColor: AppTheme.accentGold,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -130,7 +124,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             const SizedBox(height: 20),
 
             // Error
-            if (state.error != null) _banner(state.error!, Palette.error),
+            if (state.error != null) _banner(state.error!, AppTheme.errorRed),
 
             // Results
             if (state.analysis != null) _buildResults(state.analysis!),
@@ -155,12 +149,12 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             avatar: Icon(type.icon, size: 14),
             selected: isSelected,
             onSelected: (_) => ref.read(artifactAnalyzerProvider.notifier).setType(type),
-            selectedColor: Palette.primary.withOpacity(0.2),
-            backgroundColor: Palette.surface1,
+            selectedColor: AppTheme.accentGold.withOpacity(0.2),
+            backgroundColor: AppTheme.surface,
             side: BorderSide(
               color: isSelected
-                  ? Palette.primary
-                  : Palette.border.withOpacity(0.3),
+                  ? AppTheme.accentGold
+                  : AppTheme.borderSubtle.withOpacity(0.3),
             ),
           );
         },
@@ -177,29 +171,29 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(color: Palette.textSecondary, fontSize: 13)),
+        Text(label, style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
           maxLines: maxLines,
-          style: TextStyle(color: Palette.textPrimary, fontSize: 14),
+          style: TextStyle(color: AppTheme.textPrimary, fontSize: 14),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: Palette.textTertiary, fontSize: 13),
+            hintStyle: TextStyle(color: AppTheme.textTertiary, fontSize: 13),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
+              borderSide: BorderSide(color: AppTheme.borderSubtle.withOpacity(0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Palette.border.withOpacity(0.3)),
+              borderSide: BorderSide(color: AppTheme.borderSubtle.withOpacity(0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Palette.primary),
+              borderSide: BorderSide(color: AppTheme.accentGold),
             ),
             filled: true,
-            fillColor: Palette.surface1,
+            fillColor: AppTheme.surface,
             contentPadding: const EdgeInsets.all(12),
           ),
         ),
@@ -223,7 +217,6 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
           Expanded(child: Text(text, style: TextStyle(color: color, fontSize: 13))),
         ],
       ),
-      ),
     );
   }
 
@@ -232,21 +225,21 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Palette.surface1,
+        color: AppTheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Palette.border.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.borderSubtle.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.analytics, color: Palette.primary, size: 18),
+              Icon(Icons.analytics, color: AppTheme.accentGold, size: 18),
               const SizedBox(width: 8),
               Text(
                 analysis.summary,
                 style: TextStyle(
-                  color: Palette.textPrimary,
+                  color: AppTheme.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -256,13 +249,13 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
           const SizedBox(height: 12),
           Text(
             'Analyzed: ${_formatDate(analysis.analyzedAt)}',
-            style: TextStyle(color: Palette.textTertiary, fontSize: 11),
+            style: TextStyle(color: AppTheme.textTertiary, fontSize: 11),
           ),
           const SizedBox(height: 12),
           SelectableText(
             analysis.rawResponse,
             style: TextStyle(
-              color: Palette.textPrimary,
+              color: AppTheme.textPrimary,
               fontSize: 14,
               height: 1.6,
             ),
@@ -283,7 +276,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please fill in both title and content'),
-          backgroundColor: Palette.error,
+          backgroundColor: AppTheme.errorRed,
         ),
       );
       return;

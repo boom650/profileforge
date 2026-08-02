@@ -1,3 +1,5 @@
+import 'gemini_service.dart';
+
 /// Pre-built prompts for different artifact types
 class ArtifactPrompts {
   ArtifactPrompts._();

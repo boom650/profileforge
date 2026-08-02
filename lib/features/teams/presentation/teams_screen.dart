@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/teams/application/team_providers.dart';
-import 'package:profileforge/core/widgets/empty_state.dart';
 
 class TeamsScreen extends ConsumerWidget {
   const TeamsScreen({super.key, required this.profileId});
@@ -21,15 +18,13 @@ class TeamsScreen extends ConsumerWidget {
     final teams = ref.watch(myTeamsProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Teams'),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SafeArea(
-          child: ListView(
+      body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Hero
@@ -128,7 +123,7 @@ class TeamsScreen extends ConsumerWidget {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
-                  child: ShimmerLoader.leaderboard(),
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
             ],
@@ -316,7 +311,6 @@ class _TeamCard extends StatelessWidget {
       begin: 0.05,
       duration: 400.ms,
       curve: Curves.easeOutCubic,
-      ),
     );
   }
 }

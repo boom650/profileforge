@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
-import 'package:profileforge/core/widgets/empty_state.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
-import 'package:flutter/services.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// LeaguesScreen v2 — Premium dark league with glassmorphism.
@@ -162,16 +159,7 @@ class LeaguesScreen extends ConsumerWidget {
             // ── Standings list ──
             standings.when(
               data: (rows) {
-                if (rows.isEmpty) {
-                  return SliverToBoxAdapter(
-                    child: EmptyState(
-                      icon: Icons.leaderboard_outlined,
-                      title: 'No standings yet',
-                      subtitle: 'Complete missions to climb the league leaderboard.',
-                    ),
-                  );
-                }
-                final sorted = [...rows]..sort((a, b) => b.weeklyXp.compareTo(a.weekxP));
+                final sorted = [...rows]..sort((a, b) => b.weeklyXp.compareTo(a.weeklyXp));
                 return SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverList(
@@ -264,10 +252,7 @@ class LeaguesScreen extends ConsumerWidget {
                 );
               },
               loading: () => const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: _LeaguesSkeleton(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
               error: (e, _) => SliverToBoxAdapter(
                 child: Center(child: Text('Error: $e')),
@@ -318,46 +303,6 @@ class LeaguesScreen extends ConsumerWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 40)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// ────────────────────────────────────────────────────────────────────────────
-/// _LeaguesSkeleton — Shimmer loading for leagues screen.
-/// ────────────────────────────────────────────────────────────────────────────
-class _LeaguesSkeleton extends StatelessWidget {
-  const _LeaguesSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return ShimmerSkeleton(
-      child: Column(
-        children: [
-          // Tier ladder skeleton
-          Container(
-            height: 72,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Standings skeleton
-          ...List.generate(
-            5,
-            (_) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

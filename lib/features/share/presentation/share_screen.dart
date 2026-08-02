@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
@@ -21,14 +20,12 @@ class ShareProgressScreen extends ConsumerWidget {
     final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
 
     return Scaffold(
-      backgroundColor: Palette.black,
-      appBar: AppBar(title: const Text('Share Progress'), centerTitle: true, backgroundColor: Palette.surface1, actions: [
+      appBar: AppBar(title: const Text('Share Progress'), centerTitle: true, actions: [
         IconButton(icon: const Icon(Icons.share_rounded), onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Share feature coming — share_plus needs platform setup')));
         }),
       ]),
-      body: SafeArea(
-        child: Center(
+      body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -95,7 +92,6 @@ class ShareProgressScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
       ),
     );
   }

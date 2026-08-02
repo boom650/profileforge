@@ -28,9 +28,6 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   # Animations
   flutter_animate: ^4.5.0
-  shimmer: ^3.0.0
-  lottie: ^3.1.2
-  flutter_tilt: ^4.1.0
   # Typography
   google_fonts: ^6.2.1
   # Sound effects (game-feel)
@@ -52,9 +49,8 @@ dependencies:
   # Time formatting
   timeago: ^3.7.0
   # Advanced Animations
+  lottie: ^3.1.2
   confetti: ^0.8.0
-  # AI (HTTP LLM client — works with OpenCode Zen, Nvidia NIM, Groq, etc.)
-  # google_generative_ai removed — using generic OpenAI-compatible HTTP client
   # Utils
   uuid: ^4.5.1
   equatable: ^2.0.5
@@ -76,7 +72,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
     - assets/audio/ambient/
     - assets/images/buddy/
     - assets/images/skins/
@@ -89,4 +84,3 @@ flutter:
     - assets/
     - assets/audio/
     - assets/images/
-    - assets/lottie/

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -10,7 +9,6 @@ import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/buddy/application/buddy_providers.dart';
-import 'package:profileforge/core/widgets/empty_state.dart';
 
 class BuddiesScreen extends ConsumerWidget {
   const BuddiesScreen({super.key, required this.profileId});
@@ -23,16 +21,14 @@ class BuddiesScreen extends ConsumerWidget {
     final nudge = ref.watch(buddyMotivationProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Buddies'),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       bottomNavigationBar: appBottomNav(context, '/buddies'),
-      body: SafeArea(
-          child: ListView(
+      body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Hero
@@ -174,7 +170,7 @@ class BuddiesScreen extends ConsumerWidget {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
-                  child: ShimmerLoader.card(),
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
             ],
@@ -364,7 +360,6 @@ class _BuddyCard extends StatelessWidget {
       begin: 0.05,
       duration: 400.ms,
       curve: Curves.easeOutCubic,
-      ),
     );
   }
 }

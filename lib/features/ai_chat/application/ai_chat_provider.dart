@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/ai/ai_providers.dart';
-import '../../../core/ai/ai_chat_context.dart';
+import '../../../core/ai/gemini_service.dart';
 
 /// Chat message model
 class ChatMessage {
@@ -42,12 +42,12 @@ class AiChatState {
   }
 }
 
-/// AI Chat notifier — manages chat session with LLM (uses fallback system)
+/// AI Chat notifier — manages chat session with Gemini
 class AiChatNotifier extends StateNotifier<AiChatState> {
   AiChatNotifier(this._ref) : super(AiChatState());
 
   final Ref _ref;
-  final List<Map<String, String>> _history = [];
+  ChatSession? _session;
 
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
@@ -64,31 +64,24 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
       error: null,
     );
 
-    _history.add({'role': 'user', 'content': text.trim()});
-
     try {
-      final service = AiService.instance;
-      
-      // Inject user context on first message
-      if (_history.length == 1) {
-        try {
-          final context = _ref.read(aiChatContextProvider);
-          // TODO: Get actual profileId from session
-          final userContext = await context.buildContext('local-profile');
-          _history.insert(0, {
-            'role': 'system',
-            'content': 'USER CONTEXT:\n$userContext',
-          });
-        } catch (e) {
-          // Context injection failed — continue without it
-        }
+      final service = await _ref.read(geminiServiceProvider.future);
+      if (service == null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'AI not configured. Please add your Gemini API key in Settings.',
+        );
+        return;
       }
-      
-      final response = await service.chat(_history);
-      _history.add({'role': 'assistant', 'content': response});
+
+      // Start new session if needed
+      _session ??= await service.startChat();
+
+      final response = await _session!.sendMessage(Content.text(text));
+      final responseText = response.text ?? 'No response.';
 
       final aiMessage = ChatMessage(
-        text: response,
+        text: responseText,
         isUser: false,
         timestamp: DateTime.now(),
       );
@@ -106,7 +99,7 @@ class AiChatNotifier extends StateNotifier<AiChatState> {
   }
 
   void clearChat() {
-    _history.clear();
+    _session = null;
     state = AiChatState();
   }
 

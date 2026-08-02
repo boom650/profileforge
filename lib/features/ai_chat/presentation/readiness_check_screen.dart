@@ -98,8 +98,7 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
             ),
         ],
       ),
-      body: SafeArea(
-          child: _result != null
+      body: _result != null
           ? _buildResult()
           : _buildForm(),
     );
@@ -376,7 +375,6 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
           ),
         ),
       ],
-      ),
     );
   }
 }

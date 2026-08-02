@@ -1,339 +1,168 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/timer/application/timer_providers.dart';
+import 'package:profileforge/features/quests/application/quest_providers.dart';
+import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/animated_counter.dart';
-import '../../../core/widgets/premium_widgets.dart';
-
-/// ────────────────────────────────────────────────────────────────────────────
-/// Weekly summary screen — Premium stats dashboard with animated numbers.
-/// ────────────────────────────────────────────────────────────────────────────
 class WeeklySummaryScreen extends ConsumerWidget {
   final String profileId;
   const WeeklySummaryScreen({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dark = isDark(context);
-
-    // Mock weekly data — in production, fetch from provider
-    final stats = {
-      'sessions': 12,
-      'hours': 18.5,
-      'xp': 2450,
-      'streak': 7,
-      'missions': 8,
-      'challenges': 3,
-    };
+    final theme = Theme.of(context);
+    final weeklyXpAsync = ref.watch(weeklyXpProvider(profileId));
+    final totalXpAsync = ref.watch(totalXpProvider(profileId));
+    final streakAsync = ref.watch(streakProvider(profileId));
+    final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
+    final sessionsAsync = ref.watch(focusSessionCountProvider(profileId));
+    final achCountAsync = ref.watch(achievementCountProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: dark ? Palette.surface1 : Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Weekly Summary',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Week Header ──
-            GlassCard(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Palette.primary, Palette.accent],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Palette.primary.withValues(alpha: 0.3),
-                          blurRadius: 12,
-                          spreadRadius: -4,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(Icons.assessment, color: Colors.white, size: 28),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'This Week',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        Text(
-                          'Great progress! Keep it up.',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.6),
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ).animate().fadeIn(duration: 400.ms),
-            const SizedBox(height: 24),
-
-            // ── Stats Grid ──
-            Text(
-              'Performance',
-              style: TextStyle(
-                color: Palette.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                _StatTile(
-                  label: 'Sessions',
-                  value: stats['sessions'] as int,
-                  icon: Icons.timer,
-                  color: Palette.primary,
+      appBar: AppBar(title: const Text('Weekly Summary'), centerTitle: true),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(weeklyXpProvider(profileId));
+          ref.invalidate(totalXpProvider(profileId));
+          ref.invalidate(totalFocusMinutesProvider(profileId));
+          ref.invalidate(focusSessionCountProvider(profileId));
+          ref.invalidate(achievementCountProvider(profileId));
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // Hero section
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [theme.colorScheme.primary, theme.colorScheme.tertiary]),
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                const SizedBox(width: 10),
-                _StatTile(
-                  label: 'Hours',
-                  value: (stats['hours'] as double).toInt(),
-                  icon: Icons.schedule,
-                  color: Palette.accent,
+                child: Column(
+                  children: [
+                    const Text('📊', style: TextStyle(fontSize: 48)),
+                    const SizedBox(height: 8),
+                    Text('Your Week in Review', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: Colors.white)),
+                    const SizedBox(height: 4),
+                    Text('Keep up the great momentum!', style: TextStyle(color: Colors.white70)),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _StatTile(
-                  label: 'XP Earned',
-                  value: stats['xp'] as int,
-                  icon: Icons.star,
-                  color: Palette.warning,
-                ),
-                const SizedBox(width: 10),
-                _StatTile(
-                  label: 'Day Streak',
-                  value: stats['streak'] as int,
-                  icon: Icons.local_fire_department,
-                  color: Palette.error,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
+              ).animate().fadeIn(duration: 400.ms),
 
-            // ── Activity Breakdown ──
-            Text(
-              'Activity',
-              style: TextStyle(
-                color: Palette.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            GlassCard(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  _ActivityRow(
-                    label: 'Missions Completed',
-                    value: '${stats['missions']}',
-                    pct: 0.8,
-                    color: Palette.primary,
-                  ),
-                  const SizedBox(height: 12),
-                  _ActivityRow(
-                    label: 'Challenges Won',
-                    value: '${stats['challenges']}',
-                    pct: 0.6,
-                    color: Palette.accent,
-                  ),
-                  const SizedBox(height: 12),
-                  _ActivityRow(
-                    label: 'Study Time',
-                    value: '${stats['hours']}h',
-                    pct: 0.75,
-                    color: Palette.success,
-                  ),
-                ],
-              ),
-            ).animate().fadeIn(delay: 200.ms, duration: 300.ms),
-            const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-            // ── Weekly Chart Placeholder ──
-            Text(
-              'Daily Breakdown',
-              style: TextStyle(
-                color: Palette.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 12),
-            GlassCard(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: List.generate(7, (i) {
-                  final heights = [0.4, 0.7, 0.5, 0.9, 0.6, 0.8, 0.3];
-                  final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                  final h = heights[i];
-
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
+              // This week's achievements
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                     children: [
-                      Container(
-                        width: 28,
-                        height: 100 * h,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Palette.primary.withValues(alpha: 0.6),
-                              Palette.primary.withValues(alpha: 0.2),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ).animate().fadeIn(delay: Duration(milliseconds: 300 + i * 50), duration: 300.ms)
-                       .slideY(begin: 0.3),
-                      const SizedBox(height: 6),
-                      Text(
-                        dayNames[i],
-                        style: TextStyle(
-                          color: Palette.textTertiary,
-                          fontSize: 10,
-                        ),
+                      Row(
+                        children: [
+                          _StatItem(icon: '⭐', value: weeklyXpAsync.valueOrNull?.toString() ?? '0', label: 'XP This Week', color: Colors.amber),
+                          const SizedBox(width: 16),
+                          _StatItem(icon: '🔥', value: '${streakAsync.valueOrNull?.current ?? 0}', label: 'Day Streak', color: Colors.orange),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          _StatItem(icon: '⌛', value: '${focusMinAsync.valueOrNull ?? 0}m', label: 'Focus Time', color: Colors.purple),
+                          const SizedBox(width: 16),
+                          _StatItem(icon: '🎯', value: '${sessionsAsync.valueOrNull ?? 0}', label: 'Sessions Done', color: Colors.blue),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          _StatItem(icon: '🏆', value: '${achCountAsync.valueOrNull ?? 0}', label: 'Badges Earned', color: Colors.green),
+                          const SizedBox(width: 16),
+                          _StatItem(icon: '📈', value: '${totalXpAsync.valueOrNull ?? 0}', label: 'Total XP', color: Colors.teal),
+                        ],
                       ),
                     ],
-                  );
-                }),
-              ),
-            ).animate().fadeIn(delay: 300.ms, duration: 400.ms),
-            const SizedBox(height: 32),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatTile extends StatelessWidget {
-  final String label;
-  final int value;
-  final IconData icon;
-  final Color color;
-
-  const _StatTile({
-    required this.label,
-    required this.value,
-    required this.icon,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GlassCard(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: color, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(color: Palette.textSecondary, fontSize: 12),
+                  ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            AnimatedCounter(
-              value: value,
-              style: TextStyle(
-                color: color,
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+              ).animate().fadeIn(duration: 300.ms, delay: 200.ms),
 
-class _ActivityRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final double pct;
-  final Color color;
+              const SizedBox(height: 16),
 
-  const _ActivityRow({
-    required this.label,
-    required this.value,
-    required this.pct,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: TextStyle(color: Palette.textPrimary, fontSize: 13)),
-              const SizedBox(height: 6),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: pct,
-                  minHeight: 6,
-                  backgroundColor: Palette.surface2,
-                  valueColor: AlwaysStoppedAnimation(color),
+              // Motivational message
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
+                child: Row(
+                  children: [
+                    const Text('💪', style: TextStyle(fontSize: 32)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Remember:', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 4),
+                          Text('Every minute of focus adds up. Consistency beats intensity — keep showing up every day!',
+                              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ).animate().fadeIn(duration: 300.ms, delay: 400.ms),
+
+              const SizedBox(height: 32),
+
+              // Share button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Share card feature coming soon!')));
+                  },
+                  icon: const Icon(Icons.share_rounded),
+                  label: const Text('Share Your Progress'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ).animate().fadeIn(duration: 300.ms, delay: 600.ms),
             ],
           ),
         ),
-        const SizedBox(width: 12),
-        Text(
-          value,
-          style: TextStyle(
-            color: color,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String icon;
+  final String value;
+  final String label;
+  final Color color;
+  const _StatItem({required this.icon, required this.value, required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Expanded(
+      child: Column(
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 24)),
+          const SizedBox(height: 4),
+          Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: color)),
+          Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+        ],
+      ),
     );
   }
 }
