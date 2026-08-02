@@ -1,4 +1,5 @@
 import 'package:shimmer/shimmer.dart';
+import package:profileforge/core/effects/shimmer_skeleton.dart;
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:profileforge/core/theme/app_theme.dart';

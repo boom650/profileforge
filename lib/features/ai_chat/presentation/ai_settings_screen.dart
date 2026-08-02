@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import ../../../core/effects/shimmer_skeleton.dart;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
