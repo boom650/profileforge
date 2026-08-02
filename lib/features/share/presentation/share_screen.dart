@@ -84,7 +84,7 @@ class ShareProgressScreen extends ConsumerWidget {
                     Text('ProfileForge — Build your future', style: TextStyle(color: Colors.white54, fontSize: 10)),
                   ],
                 ),
-              ),
+              ).animate().fadeIn().slideY(begin: 0.1),
 
               const SizedBox(height: 24),
               Text('Share this card with friends!', style: theme.textTheme.bodyMedium),
