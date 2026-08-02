@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/teams/application/team_providers.dart';
@@ -124,7 +125,7 @@ class TeamsScreen extends ConsumerWidget {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: ShimmerLoader.leaderboard(),
                 ),
               ),
             ],
