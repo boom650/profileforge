@@ -23,6 +23,7 @@ class MissionsScreen extends ConsumerWidget {
     final dark = isDark(context);
     final daily = ref.watch(todaysMissionsProvider(profileId));
     final weekly = ref.watch(weeklyMissionsProvider(profileId));
+    final monthly = ref.watch(monthlyMissionsProvider(profileId));
 
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
@@ -86,7 +87,7 @@ class MissionsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        '🎯 Daily missions',
+                        '🎯 Missions Hub',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -95,7 +96,7 @@ class MissionsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Complete missions to earn XP and gems.\nThey\'re generated from your profile.',
+                        'Daily, weekly & monthly challenges.\nEarn XP, gems, and level up your profile.',
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 14,
@@ -208,6 +209,68 @@ class MissionsScreen extends ConsumerWidget {
                         child: GlassCard(
                           child: Text(
                             'No weekly missions yet',
+                            style: TextStyle(
+                              color: dark ? Palette.textSecondary : Palette.textTertiary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final m = rows[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _MissionCard(
+                                title: m.title,
+                                pillar: m.pillar,
+                                xp: m.xpReward,
+                                onDone: () async {
+                                  SoundService.instance.success();
+                                  await ref.read(completeMissionProvider((
+                                    profileId: profileId,
+                                    missionId: m.id,
+                                    xp: m.xpReward,
+                                    pillar: m.pillar,
+                                  )));
+                                  celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                },
+                              ),
+                            );
+                          },
+                          childCount: rows.length,
+                        ),
+                      ),
+                    ),
+              loading: () => const SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (e, _) => SliverToBoxAdapter(
+                child: Center(child: Text('Error: $e')),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // ── Monthly missions ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SectionTitle("This month"),
+              ),
+            ),
+
+            monthly.when(
+              data: (rows) => rows.isEmpty
+                  ? SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: GlassCard(
+                          child: Text(
+                            'No monthly missions yet',
                             style: TextStyle(
                               color: dark ? Palette.textSecondary : Palette.textTertiary,
                             ),

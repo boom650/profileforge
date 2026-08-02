@@ -76,11 +76,10 @@ flutter:
     - assets/images/buddy/
     - assets/images/skins/
     - assets/images/stories/
-    - assets/audio/ambient/lofi_10.mb.mp3
-    - assets/audio/ambient/rain_10.mb.mp3
-    - assets/audio/ambient/library_10.mb.mp3
-    - assets/audio/ambient/coffee_10.mb.mp3
-    - assets/audio/ambient/lofi_10.mb.mp3
+    - assets/audio/ambient/lofi.wav
+    - assets/audio/ambient/rain.wav
+    - assets/audio/ambient/library.wav
+    - assets/audio/ambient/coffee_shop.wav
     - assets/
     - assets/audio/
     - assets/images/

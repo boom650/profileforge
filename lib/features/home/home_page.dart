@@ -15,6 +15,8 @@ import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dar
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
+import 'package:profileforge/core/ai/task_recommender.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// HomePage v2 — Premium Lusion-inspired layout.
@@ -348,6 +350,22 @@ class HomePage extends ConsumerWidget {
                   ),
                 ),
               ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+            // ── AI Recommendations ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: SectionTitle('🤖 AI Recommendations'),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _AIRecommendations(profileId: profileId),
+              ),
+            ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
@@ -739,5 +757,180 @@ class _NavItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// AI-powered task recommendations widget.
+class _AIRecommendations extends ConsumerWidget {
+  const _AIRecommendations({required this.profileId});
+  final String profileId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dark = isDark(context);
+
+    // Get onboarding data for personalization.
+    final obAsync = ref.watch(onboardingProvider(profileId));
+    final ob = obAsync.valueOrNull;
+
+    final interests = ob?.subjects ?? [];
+    final schools = ob?.targetUniversities ?? [];
+    final hours = ob?.availabilityHoursPerWeek ?? 15;
+
+    final tasks = TaskRecommender.generate(
+      interests: interests,
+      targetSchools: schools,
+      grade: 11,
+      hoursPerWeek: hours,
+      energyPeak: 'morning',
+    );
+
+    return GlassCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: Palette.gradientPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.auto_awesome, size: 18, color: Colors.white),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Personalized for you',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: dark ? Palette.textPrimary : Palette.textInverse,
+                      ),
+                    ),
+                    Text(
+                      'Based on your profile & goals',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: dark ? Palette.textSecondary : Palette.textTertiary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ...tasks.take(4).map((task) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: dark
+                    ? Palette.surface2
+                    : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: _categoryColor(task.category).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      task.priorityLabel,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: _categoryColor(task.category),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          task.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: dark ? Palette.textPrimary : Palette.textInverse,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          task.reason,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: dark ? Palette.textSecondary : Palette.textTertiary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Palette.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '${task.xp} XP',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Palette.primary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        task.duration,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: dark ? Palette.textSecondary : Palette.textTertiary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Color _categoryColor(String cat) {
+    switch (cat) {
+      case 'academics':
+        return Palette.blue;
+      case 'research':
+        return Palette.purple;
+      case 'creativity':
+        return Palette.accentPink;
+      case 'leadership':
+        return Palette.warning;
+      case 'service':
+        return Palette.success;
+      default:
+        return Palette.primary;
+    }
   }
 }

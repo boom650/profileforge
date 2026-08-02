@@ -24,13 +24,16 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _page = PageController();
   int _step = 0;
-  static const int _total = 5;
+  static const int _total = 6;
 
   // Step 1: Goal.
   String _goal = 'both';
 
   // Step 2: Target schools.
   final Set<String> _targets = {};
+
+  // Step 2.5: City.
+  String _city = '';
 
   // Step 3: Quick profile.
   String _name = '';
@@ -80,7 +83,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         budget: 0,
         travelRadiusKm: 10,
         availabilityHoursPerWeek: _availableHours,
-        location: '',
+        location: _city,
       );
 
   ScheduleProfile _buildSchedule() => ScheduleProfile(
@@ -215,6 +218,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   children: [
                     _stepGoal(dark),
                     _stepSchools(dark),
+                    _stepCity(dark),
                     _stepProfile(dark),
                     _stepSchedule(dark),
                     _stepLaunch(dark),
@@ -372,6 +376,119 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 2.5: City / Location
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepCity(bool dark) {
+    final cities = [
+      'Singapore', 'New York', 'London', 'Mumbai', 'Sydney',
+      'Tokyo', 'Toronto', 'Berlin', 'Dubai', 'San Francisco',
+    ];
+    return _stepShell(
+      icon: Icons.location_on_rounded,
+      title: 'Where are you based?',
+      subtitle: 'We\'ll recommend the best study spots and local resources',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Search-style input
+          TextField(
+            onChanged: (v) => _city = v,
+            textCapitalization: TextCapitalization.words,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              hintText: 'Type your city...',
+              prefixIcon: const Icon(Icons.search, size: 20),
+              suffixIcon: _city.isNotEmpty
+                  ? GestureDetector(
+                      onTap: () => setState(() => _city = ''),
+                      child: const Icon(Icons.clear, size: 18),
+                    )
+                  : null,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Popular cities',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: cities.map((city) {
+              final selected = _city == city;
+              return GestureDetector(
+                onTap: () => setState(() => _city = city),
+                child: AnimatedContainer(
+                  duration: 200.ms,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? Palette.primary
+                        : dark
+                            ? Palette.surface2
+                            : const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selected
+                          ? Palette.primary
+                          : dark
+                              ? Palette.border
+                              : const Color(0xFFE2E8F0),
+                    ),
+                  ),
+                  child: Text(
+                    city,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      color: selected
+                          ? Colors.white
+                          : dark
+                              ? Palette.textPrimary
+                              : Palette.textInverse,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          // City-specific tip
+          if (_city.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Palette.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Palette.primary.withValues(alpha: 0.2)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.lightbulb_rounded, size: 18, color: Palette.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Great choice! We\'ll find the best study spots in $_city.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: dark ? Palette.textPrimary : Palette.textInverse,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

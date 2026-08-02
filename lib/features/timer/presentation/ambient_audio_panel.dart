@@ -10,10 +10,10 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// ────────────────────────────────────────────────────────────────────────────
 
 enum AmbientSound {
-  lofi('Lo-fi Beats', '🎧', 'assets/audio/ambient/lofi_10.mb.mp3'),
-  rain('Rainy Day', '🌧️', 'assets/audio/ambient/rain_10.mb.mp3'),
-  library('Library', '📚', 'assets/audio/ambient/library_10.mb.mp3'),
-  coffee('Coffee Shop', '☕', 'assets/audio/ambient/coffee_10.mb.mp3');
+  lofi('Lo-fi Beats', '🎧', 'assets/audio/ambient/lofi.wav'),
+  rain('Rainy Day', '🌧️', 'assets/audio/ambient/rain.wav'),
+  library('Library', '📚', 'assets/audio/ambient/library.wav'),
+  coffee('Coffee Shop', '☕', 'assets/audio/ambient/coffee_shop.wav');
 
   final String label;
   final String emoji;

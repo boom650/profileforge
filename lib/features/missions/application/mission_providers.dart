@@ -30,6 +30,15 @@ final weeklyMissionsProvider =
       .toList();
 });
 
+final monthlyMissionsProvider =
+    FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
+  final rows =
+      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
+  return rows
+      .where((r) => r.cadence == MissionCadence.monthly.name)
+      .toList();
+});
+
 final missionHistoryProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
   return ref.watch(missionRepositoryProvider).history(profileId);
@@ -50,32 +59,52 @@ final completeMissionProvider = Provider.family<
   final gems = (args.xp / 5).ceil().clamp(2, 50);
   await ref.read(walletRepositoryProvider).add(args.profileId, gems);
   ref.invalidate(todaysMissionsProvider(args.profileId));
+  ref.invalidate(weeklyMissionsProvider(args.profileId));
+  ref.invalidate(monthlyMissionsProvider(args.profileId));
   ref.invalidate(totalXpProvider(args.profileId));
   ref.invalidate(gemsProvider(args.profileId));
 });
 
-/// Regenerates today's missions, *personalized* from the onboarding profile.
+/// Regenerates all missions (daily + weekly + monthly).
 final generateMissionsProvider = FutureProvider.family<void, String>((ref, profileId) async {
   final onboarding =
       ref.read(onboardingProvider(profileId)).valueOrNull;
-  final gen = MissionGenerator();
-  final generated = onboarding == null
-      ? MissionEngine().generateDaily(profileId)
-      : gen
-          .generateDaily(onboarding, profileId)
-          .map((m) => Mission(
-                id: m.id,
-                profileId: profileId,
-                title: m.title,
-                cadence: MissionCadence.daily,
-                pillar: _pillar(m.pillar),
-                xpReward: m.xp,
-                dueAt: DateTime.now().add(const Duration(days: 1)),
-                completed: false,
-              ))
-          .toList();
-  await ref.read(missionRepositoryProvider).upsertGenerated(generated);
+
+  final engine = MissionEngine();
+
+  // Generate all mission types.
+  final allMissions = <Mission>[];
+
+  // Daily missions — personalized if possible.
+  if (onboarding != null) {
+    final gen = MissionGenerator();
+    final personalized = gen.generateDaily(onboarding, profileId);
+    allMissions.addAll(personalized.map((m) => Mission(
+          id: m.id,
+          profileId: profileId,
+          title: m.title,
+          description: 'Complete this mission to earn XP and gems.',
+          cadence: MissionCadence.daily,
+          pillar: _pillar(m.pillar),
+          xpReward: m.xp,
+          gemReward: (m.xp / 5).ceil().clamp(2, 10),
+          dueAt: DateTime.now().add(const Duration(days: 1)),
+          completed: false,
+        )));
+  } else {
+    allMissions.addAll(engine.generateDaily(profileId));
+  }
+
+  // Weekly missions.
+  allMissions.addAll(engine.generateWeekly(profileId));
+
+  // Monthly missions.
+  allMissions.addAll(engine.generateMonthly(profileId));
+
+  await ref.read(missionRepositoryProvider).upsertGenerated(allMissions);
   ref.invalidate(todaysMissionsProvider(profileId));
+  ref.invalidate(weeklyMissionsProvider(profileId));
+  ref.invalidate(monthlyMissionsProvider(profileId));
 });
 
 MissionPillar _pillar(String s) {
