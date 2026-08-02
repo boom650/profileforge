@@ -359,7 +359,36 @@ class HomePage extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: SectionTitle('🤖 AI Recommendations'),
+                child: Row(
+                  children: [
+                    Expanded(child: SectionTitle('🤖 AI Recommendations')),
+                    GestureDetector(
+                      onTap: () => context.push('/ai-chat'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          gradient: Palette.gradientPrimary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.chat_bubble_outline, size: 14, color: Colors.white),
+                            SizedBox(width: 4),
+                            Text(
+                              'Chat with AI',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SliverToBoxAdapter(
