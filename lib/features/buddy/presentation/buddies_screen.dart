@@ -171,7 +171,7 @@ class BuddiesScreen extends ConsumerWidget {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: ShimmerLoader.card(),
                 ),
               ),
             ],
