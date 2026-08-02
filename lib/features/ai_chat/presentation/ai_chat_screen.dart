@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/ai/ai_providers.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 import '../../../core/ai/fallback_llm_client.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/haptic_utils.dart';
@@ -150,7 +151,10 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 ? const SizedBox.shrink()
                 : _buildSetupBanner(),
             loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
+            error: (e, _) => PremiumErrorWidget(
+              title: 'Config Error',
+              message: '$e',
+            ),
           ),
 
           // Error banner
