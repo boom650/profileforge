@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
@@ -316,7 +317,7 @@ class AnalyticsScreen extends ConsumerWidget {
                           loading: () => const Center(
                             child: Padding(
                               padding: EdgeInsets.all(32),
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: ShimmerLoader.card(),
                             ),
                           ),
                           error: (e, _) => GlassCard(
