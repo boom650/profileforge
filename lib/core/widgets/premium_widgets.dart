@@ -698,12 +698,12 @@ class TiltCard extends StatelessWidget {
     super.key,
     required this.child,
     this.borderRadius = 20,
-    this倾斜Intensity = 10,
+    this.tiltIntensity = 10,
   });
 
   final Widget child;
   final double borderRadius;
-  final double 倾斜Intensity;
+  final double tiltIntensity;
 
   @override
   Widget build(BuildContext context) {

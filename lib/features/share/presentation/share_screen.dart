@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/core/widgets/premium_widgets.dart';
-import 'package:profileforge/core/effects/error_widgets.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
@@ -17,7 +13,6 @@ class ShareProgressScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dark = isDark(context);
     final theme = Theme.of(context);
     final totalXpAsync = ref.watch(totalXpProvider(profileId));
     final streakAsync = ref.watch(streakProvider(profileId));
@@ -25,26 +20,14 @@ class ShareProgressScreen extends ConsumerWidget {
     final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: dark ? Palette.surface1 : Colors.white,
-        elevation: 0,
-        title: Text(
-          'Share Progress',
-          style: TextStyle(
-            color: dark ? Palette.textPrimary : Palette.textInverse,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(icon: const Icon(Icons.share_rounded), onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Share feature coming — share_plus needs platform setup')));
+      appBar: AppBar(title: const Text('Share Progress'), centerTitle: true, actions: [
+        IconButton(icon: const Icon(Icons.share_rounded), onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Share feature coming — share_plus needs platform setup')));
         }),
       ]),
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +67,7 @@ class ShareProgressScreen extends ConsumerWidget {
                     Text('ProfileForge — Build your future', style: TextStyle(color: Colors.white54, fontSize: 10)),
                   ],
                 ),
-              ).animate().fadeIn().slideY(begin: 0.1),
+              ),
 
               const SizedBox(height: 24),
               Text('Share this card with friends!', style: theme.textTheme.bodyMedium),
@@ -111,6 +94,7 @@ class ShareProgressScreen extends ConsumerWidget {
           ),
         ),
       ),
+      ),
     );
   }
 }
@@ -135,7 +119,6 @@ class _ProgressRow extends StatelessWidget {
         ),
         Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
       ],
-      ),
     );
   }
 }
