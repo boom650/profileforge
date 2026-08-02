@@ -105,7 +105,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(backgroundColor: dark ? Palette.surface1 : Colors.white, title: const Text('Focus Timer'), centerTitle: true),
-      body: Stack(
+      body: SafeArea(
+        child: Stack(
         children: [
           SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -552,6 +553,7 @@ class _TodayStatItem extends StatelessWidget {
             ],
           ),
         ],
+        ),
       ),
     );
   }
