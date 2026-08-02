@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:shimmer/shimmer.dart';
 import '../../../core/ai/ai_location_recommender.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/premium_widgets.dart';
@@ -304,7 +305,7 @@ class GeoScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CircularProgressIndicator(color: Palette.primary),
+              const ShimmerLoader.card(),
               const SizedBox(height: 16),
               Text(
                 'Finding opportunities near $location...',
