@@ -31,7 +31,7 @@ class BadgesPage extends ConsumerWidget {
       ),
       body: SafeArea(
         child: profile.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: ShimmerLoader.card()),
           error: (e, _) => PremiumErrorWidget(
             title: 'Failed to load badges',
             message: '$e',

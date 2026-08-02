@@ -57,7 +57,7 @@ class ProfilePage extends ConsumerWidget {
         ],
       ),
       body: profile.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: Palette.primary)),
+        loading: () => const Center(child: ShimmerLoader.profile()),
         error: (e, _) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
