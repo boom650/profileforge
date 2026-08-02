@@ -41,7 +41,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         ),
         centerTitle: true,
       ),
-      body: calendarAsync.when(
+      body: SafeArea(
+          child: calendarAsync.when(
         data: (sessions) {
           final monthSessions = sessions.where((s) =>
               s.startedAt.year == _currentMonth.year &&
@@ -359,6 +360,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -57,7 +57,8 @@ class ProfilePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: profile.when(
+      body: SafeArea(
+          child: profile.when(
         loading: () => const Center(child: ShimmerLoader.profile()),
         error: (e, _) => Center(
           child: Column(
@@ -367,6 +368,7 @@ class ProfilePage extends ConsumerWidget {
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
+      ),
       ),
     );
   }

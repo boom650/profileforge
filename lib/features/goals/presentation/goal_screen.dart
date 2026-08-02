@@ -45,7 +45,8 @@ class GoalScreen extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
-      body: currentAsync.when(
+      body: SafeArea(
+          child: currentAsync.when(
         data: (current) => SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -200,6 +201,7 @@ class GoalScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

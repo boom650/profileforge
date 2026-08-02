@@ -46,7 +46,8 @@ class AnalyticsScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: isLoading
+      body: SafeArea(
+          child: isLoading
           ? const _AnalyticsSkeleton()
           : hasError
               ? _AnalyticsError(
@@ -717,6 +718,7 @@ class _XpHistorySection extends ConsumerWidget {
           ],
         );
       },
+      ),
     );
   }
 }

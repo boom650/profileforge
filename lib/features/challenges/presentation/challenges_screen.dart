@@ -41,7 +41,8 @@ class ChallengesScreen extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
-      body: challengesAsync.when(
+      body: SafeArea(
+          child: challengesAsync.when(
         data: (challenges) {
           if (challenges.isEmpty) {
             return Center(
@@ -230,6 +231,7 @@ class ChallengesScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

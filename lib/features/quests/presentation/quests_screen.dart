@@ -47,7 +47,8 @@ class QuestsScreen extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
-      body: questsAsync.when(
+      body: SafeArea(
+          child: questsAsync.when(
         data: (quests) {
           if (quests.isEmpty) {
             return Center(
@@ -247,6 +248,7 @@ class QuestsScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

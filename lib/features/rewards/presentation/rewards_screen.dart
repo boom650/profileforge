@@ -29,7 +29,8 @@ class RewardsScreen extends ConsumerWidget {
         centerTitle: true,
         elevation: 0,
       ),
-      body: reward.when(
+      body: SafeArea(
+          child: reward.when(
         loading: () => _RewardsSkeleton(dark: dark),
         error: (e, _) => Center(
           child: Padding(
@@ -431,6 +432,7 @@ class _DayCard extends StatelessWidget {
       begin: const Offset(0.8, 0.8),
       duration: 400.ms,
       curve: Curves.easeOutCubic,
+      ),
     );
   }
 }
