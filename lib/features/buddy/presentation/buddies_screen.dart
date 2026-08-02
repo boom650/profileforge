@@ -22,10 +22,11 @@ class BuddiesScreen extends ConsumerWidget {
     final nudge = ref.watch(buddyMotivationProvider(profileId));
 
     return Scaffold(
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Buddies'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       bottomNavigationBar: appBottomNav(context, '/buddies'),
