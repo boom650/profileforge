@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/effects/error_widgets.dart';
@@ -48,7 +49,8 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
             ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
+          child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,6 +222,7 @@ class _ArtifactAnalyzerScreenState extends ConsumerState<ArtifactAnalyzerScreen>
           const SizedBox(width: 8),
           Expanded(child: Text(text, style: TextStyle(color: color, fontSize: 13))),
         ],
+      ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -97,7 +98,8 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
             ),
         ],
       ),
-      body: _result != null
+      body: SafeArea(
+          child: _result != null
           ? _buildResult()
           : _buildForm(),
     );
@@ -374,6 +376,7 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
           ),
         ),
       ],
+      ),
     );
   }
 }
