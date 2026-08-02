@@ -90,6 +90,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     ref.watch(timerDebtListener(widget.profileId));
 
     final theme = Theme.of(context);
+    final dark = isDark(context);
     final notifier = ref.read(timerStateProvider.notifier);
     final timerState = ref.watch(timerStateProvider);
 
@@ -101,7 +102,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Focus Timer'), centerTitle: true),
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      appBar: AppBar(backgroundColor: dark ? Palette.surface1 : Colors.white, title: const Text('Focus Timer'), centerTitle: true),
       body: Stack(
         children: [
           SingleChildScrollView(
