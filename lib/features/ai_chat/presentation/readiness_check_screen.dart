@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:profileforge/core/effects/error_widgets.dart';
 
 import '../../../core/ai/ai_providers.dart';
 import '../../../core/ai/artifact_prompts.dart';
@@ -236,19 +237,10 @@ class _ReadinessCheckScreenState extends ConsumerState<ReadinessCheckScreen> {
           // Error
           if (_error != null) ...[
             const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Palette.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.error_outline, color: Palette.error, size: 16),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(_error!, style: TextStyle(color: Palette.error, fontSize: 13))),
-                ],
-              ),
+            PremiumErrorWidget(
+              title: 'Error',
+              message: _error!,
+              onRetry: _runCheck,
             ),
           ],
         ],
