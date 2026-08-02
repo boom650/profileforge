@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
@@ -347,7 +348,7 @@ class _RecentSessionsList extends ConsumerWidget {
           );
         }).toList());
       },
-      loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      loading: () => const Center(child: ShimmerLoader.card()),
       error: (_, __) => PremiumErrorWidget(
         title: 'Failed to load sessions',
         message: 'Could not load your focus history',
