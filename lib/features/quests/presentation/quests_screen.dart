@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/premium_widgets.dart';
 import '../../../core/widgets/tap_scale.dart';
@@ -234,7 +235,7 @@ class QuestsScreen extends ConsumerWidget {
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator(color: Palette.primary)),
+        loading: () => const Center(child: ShimmerLoader.missions()),
         error: (e, _) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
