@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/effects/error_widgets.dart';
 import '../../../core/widgets/premium_widgets.dart';
@@ -83,7 +84,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator(color: Palette.primary)),
+        loading: () => const Center(child: ShimmerLoader.calendar()),
         error: (e, _) => PremiumErrorWidget(
           title: 'Failed to load calendar',
           message: '$e',
