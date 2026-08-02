@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import package:profileforge/core/effects/shimmer_skeleton.dart;
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
