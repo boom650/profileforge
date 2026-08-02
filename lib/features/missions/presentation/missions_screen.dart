@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,8 @@ class MissionsScreen extends ConsumerWidget {
     final weekly = ref.watch(weeklyMissionsProvider(profileId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Missions')),
+      backgroundColor: Palette.black,
+      appBar: AppBar(title: const Text('Missions'), backgroundColor: Palette.surface1),
       bottomNavigationBar: appBottomNav(context, '/missions'),
       body: SafeArea(
         child: ListView(
@@ -87,7 +89,7 @@ class MissionsScreen extends ConsumerWidget {
                           },
                         ))
                     .toList(),
-            loading: () => const [CircularProgressIndicator()],
+            loading: () => const [ShimmerLoader.card()],
             error: (e, _) => [Text('Error: $e')],
           ),
           const SizedBox(height: 18),
@@ -113,7 +115,7 @@ class MissionsScreen extends ConsumerWidget {
                           },
                         ))
                     .toList(),
-            loading: () => const [CircularProgressIndicator()],
+            loading: () => const [ShimmerLoader.card()],
             error: (e, _) => [Text('Error: $e')],
           ),
         ],

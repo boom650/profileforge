@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
@@ -16,9 +17,11 @@ class AchievementsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: Palette.black,
       appBar: AppBar(
         title: const Text('Achievements'),
         centerTitle: true,
+        backgroundColor: Palette.surface1,
       ),
       body: SafeArea(
         child: defsAsync.when(
@@ -78,10 +81,10 @@ class AchievementsScreen extends ConsumerWidget {
               ],
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: ShimmerLoader.card()),
           error: (e, _) => Center(child: Text('Error: $e')),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: ShimmerLoader.card()),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
       ),

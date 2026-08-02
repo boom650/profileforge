@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/effects/shimmer_skeleton.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/profile/application/profile_providers.dart';
 
@@ -11,10 +12,11 @@ class BadgesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider(profileId));
     return Scaffold(
-      appBar: AppBar(title: const Text('Badges')),
+      backgroundColor: Palette.black,
+      appBar: AppBar(title: const Text('Badges'), backgroundColor: Palette.surface1),
       body: SafeArea(
         child: profile.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: ShimmerLoader.card()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (p) => GridView.count(
           crossAxisCount: 3,
