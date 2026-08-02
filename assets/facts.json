@@ -1,15 +1,23 @@
 {
-  "study_tips": {
-    "pomodoro": "Work 25 min, break 5 min. After 4 cycles, take 15-30 min break.",
-    "spaced_repetition": "Review at increasing intervals: 1d, 3d, 1w, 2w, 1m.",
-    "active_recall": "Test yourself \u2014 don't just re-read. Close the book and recall.",
-    "interleaving": "Mix subjects in one session. Harder but better retention.",
-    "sleep": "7-9 hours. Sleep consolidates memories. Pulling all-nighters hurts performance."
-  },
-  "competition_tips": {
-    "start_early": "Begin preparation 3-6 months before the competition date.",
-    "past_papers": "Solve past papers under timed conditions. This is the #1 predictor of success.",
-    "weak_areas": "Focus 70% on weak areas, 30% on maintaining strengths.",
-    "mock_exams": "Take full-length practice exams to build stamina and time management."
-  }
+  "study_tips": [
+    "Use active recall: test yourself instead of re-reading notes.",
+    "Space repetition over days beats one long cram session.",
+    "Teach a topic to a friend to find the gaps in your understanding.",
+    "Do the hardest subject first when willpower is highest.",
+    "Mock exams under timed conditions predict real performance best."
+  ],
+  "essay_tips": [
+    "Show, don't tell: use a specific story that reveals character.",
+    "Open with a vivid moment, not a generic statement.",
+    "Connect your activities to a genuine, evolving interest.",
+    "Keep the 'why this university' concrete and specific.",
+    "Edit for one idea per paragraph and a strong closing."
+  ],
+  "competition_tips": [
+    "Pick 1-2 Olympiads aligned with your strongest subject.",
+    "Past papers are the best predictor \u2014 solve 5+ years.",
+    "Form a study group; explaining sharpens your own grasp.",
+    "Track deadlines in a single calendar to avoid clashes.",
+    "A medal helps, but sustained effort matters more than one win."
+  ]
 }
