@@ -20,10 +20,11 @@ class TeamsScreen extends ConsumerWidget {
     final teams = ref.watch(myTeamsProvider(profileId));
 
     return Scaffold(
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Teams'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: ListView(
