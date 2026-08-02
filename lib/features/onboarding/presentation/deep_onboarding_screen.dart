@@ -294,7 +294,7 @@ class _ChipStep extends StatelessWidget {
           runSpacing: 8,
           children: options.map((option) {
             final isSelected = selected.contains(option);
-            final isDisabled = maxSelect != null && selected.length >= maxSelect && !isSelected;
+            final isDisabled = maxSelect != null && selected.length >= maxSelect! && !isSelected;
 
             return GestureDetector(
               onTap: isDisabled ? null : () {
