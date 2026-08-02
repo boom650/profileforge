@@ -135,6 +135,7 @@ class _ProgressRow extends StatelessWidget {
         ),
         Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
       ],
+      ),
     );
   }
 }

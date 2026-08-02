@@ -475,6 +475,7 @@ class _AchievementsSkeleton extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 }

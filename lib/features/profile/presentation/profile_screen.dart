@@ -531,6 +531,7 @@ class _SettingsTile extends StatelessWidget {
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+      ),
     );
   }
 }
