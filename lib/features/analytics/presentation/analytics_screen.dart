@@ -37,7 +37,9 @@ class AnalyticsScreen extends ConsumerWidget {
         focusMinAsync is AsyncError;
 
     return Scaffold(
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Analytics'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
