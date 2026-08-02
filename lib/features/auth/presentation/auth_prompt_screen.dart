@@ -25,7 +25,8 @@ class AuthPromptScreen extends StatelessWidget {
     final dark = isDark(context);
 
     return Scaffold(
-      body: Container(
+      body: SafeArea(
+          child: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -308,6 +309,7 @@ class _AuthButton extends StatelessWidget {
             fontSize: 15,
           ),
         ),
+      ),
       ),
     );
   }

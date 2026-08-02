@@ -143,7 +143,8 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             ),
         ],
       ),
-      body: Column(
+      body: SafeArea(
+          child: Column(
         children: [
           // AI not configured banner
           aiConfigured.when(
@@ -649,6 +650,7 @@ class _BouncingDotState extends State<_BouncingDot>
           color: Palette.primary,
           shape: BoxShape.circle,
         ),
+      ),
       ),
     );
   }

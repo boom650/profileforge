@@ -100,7 +100,8 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
           onPressed: () => context.pop(),
         ),
       ),
-      body: Container(
+      body: SafeArea(
+          child: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -329,6 +330,7 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
 
         const SizedBox(height: 32),
       ],
+      ),
     );
   }
 }

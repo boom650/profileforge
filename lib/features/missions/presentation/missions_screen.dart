@@ -29,7 +29,8 @@ class MissionsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       bottomNavigationBar: _BottomNav(context, '/missions'),
-      body: RefreshIndicator(
+      body: SafeArea(
+          child: RefreshIndicator(
         onRefresh: () async {
           final ob = ref.read(onboardingProvider(profileId)).valueOrNull;
           if (ob == null) return;
@@ -517,6 +518,7 @@ class _NavItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

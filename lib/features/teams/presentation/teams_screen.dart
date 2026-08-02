@@ -28,7 +28,8 @@ class TeamsScreen extends ConsumerWidget {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView(
+      body: SafeArea(
+          child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Hero
@@ -315,6 +316,7 @@ class _TeamCard extends StatelessWidget {
       begin: 0.05,
       duration: 400.ms,
       curve: Curves.easeOutCubic,
+      ),
     );
   }
 }

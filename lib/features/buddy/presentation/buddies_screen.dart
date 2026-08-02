@@ -31,7 +31,8 @@ class BuddiesScreen extends ConsumerWidget {
         elevation: 0,
       ),
       bottomNavigationBar: appBottomNav(context, '/buddies'),
-      body: ListView(
+      body: SafeArea(
+          child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Hero
@@ -363,6 +364,7 @@ class _BuddyCard extends StatelessWidget {
       begin: 0.05,
       duration: 400.ms,
       curve: Curves.easeOutCubic,
+      ),
     );
   }
 }

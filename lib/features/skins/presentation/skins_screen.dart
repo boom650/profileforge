@@ -36,7 +36,8 @@ class SkinsScreen extends ConsumerWidget {
         elevation: 0,
       ),
       bottomNavigationBar: appBottomNav(context, '/skins'),
-      body: isLoading
+      body: SafeArea(
+          child: isLoading
           ? const _SkinsSkeleton()
           : hasError
               ? _SkinsError(
@@ -612,6 +613,7 @@ class _GemBtn extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

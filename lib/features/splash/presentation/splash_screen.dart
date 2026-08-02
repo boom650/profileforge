@@ -140,7 +140,8 @@ class _SplashScreenState extends State<SplashScreen>
     final size = MediaQuery.sizeOf(context);
 
     return Scaffold(
-      body: AnimatedBuilder(
+      body: SafeArea(
+          child: AnimatedBuilder(
         animation: Listenable.merge([
           _gradientController,
           _glowController,
@@ -190,6 +191,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           );
         },
+      ),
       ),
     );
   }
