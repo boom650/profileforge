@@ -24,6 +24,7 @@ import 'package:profileforge/features/summary/presentation/weekly_summary_screen
 import 'package:profileforge/features/share/presentation/share_screen.dart';
 import 'package:profileforge/features/calendar/presentation/calendar_screen.dart';
 import 'package:profileforge/features/geo/presentation/geo_screen.dart';
+import 'package:profileforge/core/ai/ai_settings_screen.dart';
 // New v2 screens.
 import 'package:profileforge/features/splash/presentation/splash_screen.dart';
 import 'package:profileforge/features/auth/presentation/welcome_screen.dart';
@@ -110,6 +111,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/share', (c, s) => ShareProgressScreen(profileId: pid)),
       _route('/calendar', (c, s) => const CalendarScreen()),
       _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
+      _route('/ai-settings', (c, s) => const AISettingsScreen()),
     ],
   );
 });

@@ -16,6 +16,8 @@ import 'package:profileforge/features/rewards/application/daily_reward_providers
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/core/ai/task_recommender.dart';
+import 'package:profileforge/core/ai/ai_service.dart';
+import 'package:profileforge/core/ai/ai_recommendation_service.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -760,30 +762,178 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-/// AI-powered task recommendations widget.
-class _AIRecommendations extends ConsumerWidget {
+/// AI-powered task recommendations widget — calls real LLM.
+class _AIRecommendations extends ConsumerStatefulWidget {
   const _AIRecommendations({required this.profileId});
   final String profileId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final dark = isDark(context);
+  ConsumerState<_AIRecommendations> createState() => _AIRecommendationsState();
+}
 
-    // Get onboarding data for personalization.
-    final obAsync = ref.watch(onboardingProvider(profileId));
+class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
+  List<AIRecommendation> _recommendations = [];
+  bool _loading = false;
+  String? _error;
+  bool _hasProvider = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkProvider();
+  }
+
+  Future<void> _checkProvider() async {
+    final ai = AIService();
+    final name = await ai.getActiveProviderName();
+    if (mounted) {
+      setState(() => _hasProvider = name != 'None');
+      if (_hasProvider) _loadRecommendations();
+    }
+  }
+
+  Future<void> _loadRecommendations() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
+    final obAsync = ref.read(onboardingProvider(widget.profileId));
     final ob = obAsync.valueOrNull;
 
-    final interests = ob?.subjects ?? [];
-    final schools = ob?.targetUniversities ?? [];
-    final hours = ob?.availabilityHoursPerWeek ?? 15;
+    final ai = AIService();
+    final service = AIRecommendationService(ai);
 
-    final tasks = TaskRecommender.generate(
-      interests: interests,
-      targetSchools: schools,
-      grade: 11,
-      hoursPerWeek: hours,
-      energyPeak: 'morning',
-    );
+    try {
+      final recs = await service.getTaskRecommendations(
+        city: ob?.location ?? 'Singapore',
+        interests: ob?.subjects ?? [],
+        targetSchools: ob?.targetUniversities ?? [],
+        grade: 11,
+        hoursPerWeek: ob?.availabilityHoursPerWeek ?? 15,
+        currentActivities: ob?.activities ?? [],
+        grades: ob?.grades ?? {},
+      );
+
+      if (mounted) {
+        setState(() {
+          _recommendations = recs;
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _loading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+
+    if (!_hasProvider) {
+      return GlassCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(
+              Icons.auto_awesome,
+              size: 32,
+              color: Palette.primary.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'AI Recommendations',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: dark ? Palette.textPrimary : Palette.textInverse,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Add an AI API key in Settings for personalized recommendations',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: dark ? Palette.textSecondary : Palette.textTertiary,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/ai-settings'),
+              icon: const Icon(Icons.settings, size: 16),
+              label: const Text('Configure AI'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Palette.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_loading) {
+      return GlassCard(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: Column(
+            children: [
+              const CircularProgressIndicator(color: Palette.primary),
+              const SizedBox(height: 12),
+              Text(
+                'AI is analyzing your profile...',
+                style: TextStyle(
+                  color: dark ? Palette.textSecondary : Palette.textTertiary,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return GlassCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, color: Palette.error, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              'AI unavailable',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: dark ? Palette.textPrimary : Palette.textInverse,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Check your API key in Settings',
+              style: TextStyle(
+                fontSize: 12,
+                color: dark ? Palette.textSecondary : Palette.textTertiary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: _loadRecommendations,
+              icon: const Icon(Icons.refresh, size: 16),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
 
     return GlassCard(
       padding: const EdgeInsets.all(16),
@@ -806,7 +956,7 @@ class _AIRecommendations extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Personalized for you',
+                      'AI-Powered Tasks',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
@@ -814,7 +964,7 @@ class _AIRecommendations extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      'Based on your profile & goals',
+                      'Personalized by AI based on your profile',
                       style: TextStyle(
                         fontSize: 12,
                         color: dark ? Palette.textSecondary : Palette.textTertiary,
@@ -823,95 +973,110 @@ class _AIRecommendations extends ConsumerWidget {
                   ],
                 ),
               ),
+              IconButton(
+                onPressed: _loadRecommendations,
+                icon: Icon(
+                  Icons.refresh,
+                  size: 20,
+                  color: dark ? Palette.textSecondary : Palette.textTertiary,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 14),
-          ...tasks.take(4).map((task) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: dark
-                    ? Palette.surface2
-                    : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: dark ? Palette.border : const Color(0xFFE2E8F0),
-                ),
+          if (_recommendations.isEmpty)
+            Text(
+              'No recommendations yet. Complete your profile for better suggestions.',
+              style: TextStyle(
+                fontSize: 13,
+                color: dark ? Palette.textSecondary : Palette.textTertiary,
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: _categoryColor(task.category).withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      task.priorityLabel,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: _categoryColor(task.category),
+            )
+          else
+            ..._recommendations.take(4).map((task) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: _categoryColor(task.category).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        task.priorityLabel,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: _categoryColor(task.category),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            task.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: dark ? Palette.textPrimary : Palette.textInverse,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            task.reason,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: dark ? Palette.textSecondary : Palette.textTertiary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
                       children: [
-                        Text(
-                          task.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: dark ? Palette.textPrimary : Palette.textInverse,
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Palette.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '${task.xp} XP',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Palette.primary,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          task.reason,
+                          task.duration,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 10,
                             color: dark ? Palette.textSecondary : Palette.textTertiary,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Palette.primary.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '${task.xp} XP',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: Palette.primary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        task.duration,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: dark ? Palette.textSecondary : Palette.textTertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          )),
+            )),
         ],
       ),
     );
@@ -919,18 +1084,12 @@ class _AIRecommendations extends ConsumerWidget {
 
   Color _categoryColor(String cat) {
     switch (cat) {
-      case 'academics':
-        return Palette.blue;
-      case 'research':
-        return Palette.purple;
-      case 'creativity':
-        return Palette.accentPink;
-      case 'leadership':
-        return Palette.warning;
-      case 'service':
-        return Palette.success;
-      default:
-        return Palette.primary;
+      case 'academics': return Palette.blue;
+      case 'research': return Palette.purple;
+      case 'creativity': return Palette.accentPink;
+      case 'leadership': return Palette.warning;
+      case 'service': return Palette.success;
+      default: return Palette.primary;
     }
   }
 }

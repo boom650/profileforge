@@ -226,6 +226,12 @@ class ProfileScreen extends ConsumerWidget {
                         onTap: () => context.push('/onboarding'),
                       ),
                       _SettingsTile(
+                        icon: Icons.auto_awesome,
+                        title: 'AI Settings',
+                        subtitle: 'Configure AI providers for recommendations',
+                        onTap: () => context.push('/ai-settings'),
+                      ),
+                      _SettingsTile(
                         icon: Icons.emoji_events_outlined,
                         title: 'Achievements & badges',
                         onTap: () => context.push('/badges'),
