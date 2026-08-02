@@ -22,10 +22,11 @@ class RewardsScreen extends ConsumerWidget {
     final gemsAsync = ref.watch(gemsProvider(profileId));
 
     return Scaffold(
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Rewards'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: reward.when(
