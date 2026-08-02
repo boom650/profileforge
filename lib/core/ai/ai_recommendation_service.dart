@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'ai_service.dart';
 
 /// AI-powered recommendation — calls real LLM, not hardcoded strings.
