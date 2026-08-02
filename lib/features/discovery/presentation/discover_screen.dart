@@ -20,7 +20,9 @@ class DiscoverScreen extends ConsumerWidget {
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
+        backgroundColor: Palette.black,
         appBar: AppBar(
+          backgroundColor: Palette.surface1,
           title: const Text('Discover'),
           bottom: TabBar(
             isScrollable: true,
@@ -28,13 +30,15 @@ class DiscoverScreen extends ConsumerWidget {
           ),
         ),
         bottomNavigationBar: appBottomNav(context, '/discover'),
-        body: TabBarView(
-          children: [
-            _UniversityList(),
-            _StudyList(),
-            _CompetitionList(),
-            _FundingList(),
-          ],
+        body: SafeArea(
+          child: TabBarView(
+            children: [
+              _UniversityList(),
+              _StudyList(),
+              _CompetitionList(),
+              _FundingList(),
+            ],
+          ),
         ),
       ),
     );
