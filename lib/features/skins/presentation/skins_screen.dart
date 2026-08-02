@@ -28,10 +28,11 @@ class SkinsScreen extends ConsumerWidget {
     final hasError = unlockedAsync is AsyncError || equippedAsync is AsyncError || gemsAsync is AsyncError;
 
     return Scaffold(
+      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
       appBar: AppBar(
+        backgroundColor: dark ? Palette.surface1 : Colors.white,
         title: const Text('Skins & Shop'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       bottomNavigationBar: appBottomNav(context, '/skins'),
