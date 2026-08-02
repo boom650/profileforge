@@ -52,7 +52,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Palette.primary))
+          ? const Center(child: ShimmerLoader.card())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
