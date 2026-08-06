@@ -26,12 +26,14 @@ You write like a sharp college counselor: encouraging, honest, concrete.
     OnboardingProfile p, {
     String? personaHint,
     EssayContext? essay,
+    String? psychHint,
   }) {
     final buf = StringBuffer();
 
     buf.writeln('Here is the student\'s current profile:');
     if (p.grades.isNotEmpty) {
-      buf.writeln('Grades: ${p.grades.entries.map((e) => '${e.key} ${e.value}').join(", ")}');
+      buf.writeln(
+          'Grades: ${p.grades.entries.map((e) => '${e.key} ${e.value}').join(", ")}');
     }
     if (p.subjects.isNotEmpty) {
       buf.writeln('Strong subjects: ${p.subjects.join(", ")}');
@@ -43,7 +45,8 @@ You write like a sharp college counselor: encouraging, honest, concrete.
       buf.writeln('Current activities: ${p.activities.join(", ")}');
     }
     if (p.competitions.isNotEmpty) {
-      buf.writeln('Competitions: ${p.competitions.map((c) => c.label).join("; ")}');
+      buf.writeln(
+          'Competitions: ${p.competitions.map((c) => c.label).join("; ")}');
     }
     if (p.careerInterests.isNotEmpty) {
       buf.writeln('Career interests: ${p.careerInterests.join(", ")}');
@@ -66,6 +69,10 @@ You write like a sharp college counselor: encouraging, honest, concrete.
     }
     if (personaHint != null && personaHint.isNotEmpty) {
       buf.writeln('Student style: $personaHint');
+    }
+    if (psychHint != null && psychHint.isNotEmpty) {
+      buf.writeln(
+          'Communication/motivation profile (adapt your tone and framing to this): $psychHint');
     }
 
     buf.writeln('''
@@ -108,7 +115,8 @@ Return ONLY valid JSON. No prose. No markdown fences. Example:
     required MissionCadence cadence,
     required String source,
   }) {
-    if (source != 'ai') throw ArgumentError('source must be "ai" for AI missions');
+    if (source != 'ai')
+      throw ArgumentError('source must be "ai" for AI missions');
 
     final maps = AiJson.extractJsonArray(raw);
     final out = <Mission>[];
@@ -124,7 +132,8 @@ Return ONLY valid JSON. No prose. No markdown fences. Example:
       if (pillar == null) continue;
 
       final xp = AiJson.toInt(m['xp'], fallback: 12, min: 5, max: 200);
-      final priority = _validPriorities.contains(AiJson.toString_(m['priority']).toLowerCase())
+      final priority = _validPriorities
+              .contains(AiJson.toString_(m['priority']).toLowerCase())
           ? AiJson.toString_(m['priority']).toLowerCase()
           : 'medium';
       final reason = AiJson.clean(AiJson.toString_(m['reason']));

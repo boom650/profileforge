@@ -35,6 +35,7 @@ import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart'
 
 // Premium v3 screens.
 import 'package:profileforge/features/onboarding/presentation/psychology_onboarding_screen.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/core/ai/enhanced_ai_chat_screen.dart';
 import 'package:profileforge/features/profile/presentation/profile_score_screen.dart';
 import 'package:profileforge/features/settings/presentation/settings_screen.dart';
@@ -66,7 +67,8 @@ Page<Object> _fadePage(Widget child) {
 }
 
 /// Shorthand: create a GoRoute with a slide transition.
-GoRoute _route(String path, Widget Function(BuildContext, GoRouterState) builder) {
+GoRoute _route(
+    String path, Widget Function(BuildContext, GoRouterState) builder) {
   return GoRoute(
     path: path,
     pageBuilder: (c, s) => _slidePage(builder(c, s)),
@@ -124,14 +126,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/ai-chat', (c, s) => const AIChatScreen()),
 
       // Premium v3 routes.
-      _route('/psychology-onboarding', (c, s) => PsychologyOnboardingScreen(
-        onComplete: (profile) {
-          // Navigate to completion screen after psychology onboarding.
-          c.go('/onboarding-complete');
-        },
-      )),
-      _route('/onboarding-complete', (c, s) => const OnboardingCompletionScreen()),
-      _route('/enhanced-ai-chat', (c, s) => EnhancedAIChatScreen(profileId: pid)),
+      _route(
+          '/psychology-onboarding',
+          (c, s) => PsychologyOnboardingScreen(
+                onComplete: (profile) async {
+                  // Persist the psych profile so the AI stays consistent (v7).
+                  final ps = ProviderScope.containerOf(c).read(
+                    psychologicalProfileProvider(pid).notifier,
+                  );
+                  await ps.save(profile);
+                  // Navigate to completion screen after psychology onboarding.
+                  c.go('/onboarding-complete');
+                },
+              )),
+      _route(
+          '/onboarding-complete', (c, s) => const OnboardingCompletionScreen()),
+      _route(
+          '/enhanced-ai-chat', (c, s) => EnhancedAIChatScreen(profileId: pid)),
       _route('/profile-score', (c, s) => ProfileScoreScreen(profileId: pid)),
       _route('/settings', (c, s) => const SettingsScreen()),
       _route('/api-key-setup', (c, s) => const ApiKeySetupScreen()),

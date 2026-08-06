@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,7 @@ import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/widgets/motion_kit.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
@@ -47,7 +49,8 @@ class MissionsScreen extends ConsumerWidget {
                     // Refresh button.
                     GestureDetector(
                       onTap: () async {
-                        final ob = ref.read(onboardingProvider(profileId)).valueOrNull;
+                        final ob =
+                            ref.read(onboardingProvider(profileId)).valueOrNull;
                         if (ob == null) {
                           context.push('/onboarding');
                           return;
@@ -67,13 +70,16 @@ class MissionsScreen extends ConsumerWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color:
+                              dark ? Palette.surface2 : const Color(0xFFF1F5F9),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
                           Icons.refresh,
                           size: 20,
-                          color: dark ? Palette.textSecondary : Palette.textTertiary,
+                          color: dark
+                              ? Palette.textSecondary
+                              : Palette.textTertiary,
                         ),
                       ),
                     ),
@@ -145,7 +151,9 @@ class MissionsScreen extends ConsumerWidget {
                                 'No missions yet',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: dark ? Palette.textPrimary : Palette.textInverse,
+                                  color: dark
+                                      ? Palette.textPrimary
+                                      : Palette.textInverse,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -153,7 +161,9 @@ class MissionsScreen extends ConsumerWidget {
                                 'Complete onboarding to generate missions',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: dark ? Palette.textSecondary : Palette.textTertiary,
+                                  color: dark
+                                      ? Palette.textSecondary
+                                      : Palette.textTertiary,
                                 ),
                               ),
                             ],
@@ -185,7 +195,8 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                  celebrate(context,
+                                      message: '+${m.xpReward} XP 🎉');
                                 },
                               ),
                             );
@@ -221,7 +232,9 @@ class MissionsScreen extends ConsumerWidget {
                           child: Text(
                             'No weekly missions yet',
                             style: TextStyle(
-                              color: dark ? Palette.textSecondary : Palette.textTertiary,
+                              color: dark
+                                  ? Palette.textSecondary
+                                  : Palette.textTertiary,
                             ),
                           ),
                         ),
@@ -251,7 +264,8 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                  celebrate(context,
+                                      message: '+${m.xpReward} XP 🎉');
                                 },
                               ),
                             );
@@ -287,7 +301,9 @@ class MissionsScreen extends ConsumerWidget {
                           child: Text(
                             'No monthly missions yet',
                             style: TextStyle(
-                              color: dark ? Palette.textSecondary : Palette.textTertiary,
+                              color: dark
+                                  ? Palette.textSecondary
+                                  : Palette.textTertiary,
                             ),
                           ),
                         ),
@@ -317,7 +333,8 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context, message: '+${m.xpReward} XP 🎉');
+                                  celebrate(context,
+                                      message: '+${m.xpReward} XP 🎉');
                                 },
                               ),
                             );
@@ -388,7 +405,8 @@ class _MissionCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Text(_pillarEmoji(pillar), style: const TextStyle(fontSize: 20)),
+              child: Text(_pillarEmoji(pillar),
+                  style: const TextStyle(fontSize: 20)),
             ),
           ),
           const SizedBox(width: 12),
@@ -413,7 +431,8 @@ class _MissionCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,
-                      color: dark ? Palette.textSecondary : Palette.textTertiary,
+                      color:
+                          dark ? Palette.textSecondary : Palette.textTertiary,
                     ),
                   ),
                 ],
@@ -421,7 +440,8 @@ class _MissionCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),
@@ -437,7 +457,8 @@ class _MissionCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: prioColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),
@@ -455,7 +476,8 @@ class _MissionCard extends StatelessWidget {
                     if (isAi) ...[
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: Palette.primary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
@@ -463,7 +485,8 @@ class _MissionCard extends StatelessWidget {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.auto_awesome, size: 11, color: Palette.primary),
+                            Icon(Icons.auto_awesome,
+                                size: 11, color: Palette.primary),
                             SizedBox(width: 3),
                             Text(
                               'AI',
@@ -486,7 +509,10 @@ class _MissionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(Icons.tips_and_updates_outlined,
-                            size: 13, color: dark ? Palette.textTertiary : Palette.textTertiary),
+                            size: 13,
+                            color: dark
+                                ? Palette.textTertiary
+                                : Palette.textTertiary),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
@@ -496,7 +522,9 @@ class _MissionCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11,
                               fontStyle: FontStyle.italic,
-                              color: dark ? Palette.textTertiary : Palette.textTertiary,
+                              color: dark
+                                  ? Palette.textTertiary
+                                  : Palette.textTertiary,
                             ),
                           ),
                         ),
@@ -526,44 +554,110 @@ class _MissionCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              GestureDetector(
-                onTap: onDone,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Palette.success.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.check, size: 18, color: Palette.success),
-                ),
-              ),
+              _CompleteButton(xp: xp, onDone: onDone),
             ],
           ),
         ],
       ),
     ).animate().fadeIn().slideX(begin: 0.04);
   }
+}
 
-  String _pillarEmoji(String pillar) {
-    switch (pillar.toLowerCase()) {
-      case 'academics':
-        return '📚';
-      case 'leadership':
-        return '👥';
-      case 'research':
-        return '🔬';
-      case 'creativity':
-        return '🎨';
-      case 'community':
-        return '🤝';
-      case 'service':
-        return '❤️';
-      case 'sports':
-        return '⚽';
-      default:
-        return '🎯';
-    }
+class _CompleteButton extends StatefulWidget {
+  const _CompleteButton({required this.xp, required this.onDone});
+
+  final int xp;
+  final VoidCallback onDone;
+
+  @override
+  State<_CompleteButton> createState() => _CompleteButtonState();
+}
+
+class _CompleteButtonState extends State<_CompleteButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: 420.ms,
+    reverseDuration: 180.ms,
+  );
+
+  Future<void> _complete() async {
+    if (_c.isAnimating) return;
+    HapticFeedback.heavyImpact();
+    await _c.forward();
+    widget.onDone();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _complete,
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (_, __) {
+          final v = _c.value;
+          final done = v >= 1;
+          return Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: done
+                  ? Palette.success
+                  : Palette.success.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: done
+                  ? [
+                      BoxShadow(
+                        color: Palette.success.withValues(alpha: 0.4),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: done
+                ? const Icon(Icons.check_rounded, size: 18, color: Colors.white)
+                : CustomPaint(
+                    painter: CheckStrokePainter(
+                      progress: v,
+                      color: Palette.success,
+                      strokeWidth: 2.6,
+                    ),
+                    size: const Size(24, 24),
+                  ),
+          ).animate(
+            target: done ? 1 : 0,
+          );
+        },
+      ),
+    );
+  }
+}
+
+String _pillarEmoji(String pillar) {
+  switch (pillar.toLowerCase()) {
+    case 'academics':
+      return '📚';
+    case 'leadership':
+      return '👥';
+    case 'research':
+      return '🔬';
+    case 'creativity':
+      return '🎨';
+    case 'community':
+      return '🤝';
+    case 'service':
+      return '❤️';
+    case 'sports':
+      return '⚽';
+    default:
+      return '🎯';
   }
 }
 
@@ -586,10 +680,26 @@ Widget _BottomNav(BuildContext context, String current) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _NavItem(icon: Icons.home_rounded, label: 'Home', isSelected: current == '/home', onTap: () => context.go('/home')),
-            _NavItem(icon: Icons.flag_rounded, label: 'Missions', isSelected: current == '/missions', onTap: () => context.push('/missions')),
-            _NavItem(icon: Icons.person_rounded, label: 'Profile', isSelected: current == '/profile', onTap: () => context.push('/profile')),
-            _NavItem(icon: Icons.diamond_rounded, label: 'Shop', isSelected: current == '/skins', onTap: () => context.push('/skins')),
+            _NavItem(
+                icon: Icons.home_rounded,
+                label: 'Home',
+                isSelected: current == '/home',
+                onTap: () => context.go('/home')),
+            _NavItem(
+                icon: Icons.flag_rounded,
+                label: 'Missions',
+                isSelected: current == '/missions',
+                onTap: () => context.push('/missions')),
+            _NavItem(
+                icon: Icons.person_rounded,
+                label: 'Profile',
+                isSelected: current == '/profile',
+                onTap: () => context.push('/profile')),
+            _NavItem(
+                icon: Icons.diamond_rounded,
+                label: 'Shop',
+                isSelected: current == '/skins',
+                onTap: () => context.push('/skins')),
           ],
         ),
       ),
@@ -622,10 +732,21 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: 2),
             Icon(
               icon,
               size: 24,
-              color: isSelected ? Palette.primary : (dark ? Palette.textTertiary : Palette.textTertiary),
+              color: isSelected
+                  ? Palette.primary
+                  : (dark ? Palette.textTertiary : Palette.textTertiary),
+            ),
+            const SizedBox(height: 2),
+            NavPill(
+              selected: isSelected ? 1 : 0,
+              index: 0,
+              itemCount: 1,
+              height: 3,
+              width: 28,
             ),
             const SizedBox(height: 2),
             Text(
@@ -633,7 +754,9 @@ class _NavItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? Palette.primary : (dark ? Palette.textTertiary : Palette.textTertiary),
+                color: isSelected
+                    ? Palette.primary
+                    : (dark ? Palette.textTertiary : Palette.textTertiary),
               ),
             ),
           ],

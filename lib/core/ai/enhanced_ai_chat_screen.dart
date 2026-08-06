@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/ai/ai_service.dart';
 import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/ai/psychology_adapter.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Enhanced AI Chat — Psychology-adapted conversation with premium UI.
@@ -24,7 +26,7 @@ import 'package:profileforge/core/ai/psychology_adapter.dart';
 /// - 03ab-conversational-ai-ux-patterns.md
 /// - 03ac-onboarding-flow-optimization.md
 /// ────────────────────────────────────────────────────────────────────────────
-class EnhancedAIChatScreen extends StatefulWidget {
+class EnhancedAIChatScreen extends ConsumerStatefulWidget {
   const EnhancedAIChatScreen({
     super.key,
     this.profileId,
@@ -35,10 +37,11 @@ class EnhancedAIChatScreen extends StatefulWidget {
   final PsychologicalProfile? initialProfile;
 
   @override
-  State<EnhancedAIChatScreen> createState() => _EnhancedAIChatScreenState();
+  ConsumerState<EnhancedAIChatScreen> createState() =>
+      _EnhancedAIChatScreenState();
 }
 
-class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
+class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
     with TickerProviderStateMixin {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
@@ -74,6 +77,15 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
   Future<void> _checkProvider() async {
     final name = await _ai.getActiveProviderName();
     if (mounted) {
+      // Load the persisted psych profile (v7) so the AI stays consistent
+      // even when the user opens chat fresh from the nav bar.
+      final pid = widget.profileId ?? 'local-profile';
+      final persisted = await ref.read(
+        psychologicalProfileProvider(pid).future,
+      );
+      if (mounted && persisted != null) {
+        setState(() => _profile = persisted);
+      }
       setState(() => _hasProvider = name != 'None');
       if (_hasProvider) {
         _addWelcomeMessage();
@@ -213,7 +225,11 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
             end: Alignment.bottomCenter,
             colors: dark
                 ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                : [
+                    const Color(0xFFEEF2FF),
+                    const Color(0xFFF8FAFC),
+                    Colors.white
+                  ],
           ),
         ),
         child: Column(
@@ -227,7 +243,8 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
                   ? _buildNoProviderView(dark)
                   : ListView.builder(
                       controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       itemCount: _messages.length + (_isGenerating ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == _messages.length) {
@@ -259,14 +276,17 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
   /// ── Header ───────────────────────────────────────────────────────────────
   Widget _buildHeader(bool dark) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, MediaQuery.of(context).padding.top + 8, 16, 12),
+      padding: EdgeInsets.fromLTRB(
+          16, MediaQuery.of(context).padding.top + 8, 16, 12),
       decoration: BoxDecoration(
         color: dark
             ? Palette.surface0.withValues(alpha: 0.9)
             : Colors.white.withValues(alpha: 0.9),
         border: Border(
           bottom: BorderSide(
-            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+            color: dark
+                ? Palette.border.withValues(alpha: 0.3)
+                : const Color(0xFFE2E8F0),
           ),
         ),
       ),
@@ -317,12 +337,11 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
                   ),
                 ),
                 Text(
-                  _hasProvider
-                      ? 'Psychology-adapted'
-                      : 'Not configured',
+                  _hasProvider ? 'Psychology-adapted' : 'Not configured',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: _hasProvider ? Palette.success : Palette.textTertiary,
+                    color:
+                        _hasProvider ? Palette.success : Palette.textTertiary,
                   ),
                 ),
               ],
@@ -403,7 +422,8 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
               child: const Center(
                 child: Icon(Icons.auto_awesome, size: 36, color: Colors.white),
               ),
-            ).animate().scale(delay: 100.ms, duration: 400.ms, curve: Curves.easeOutBack),
+            ).animate().scale(
+                delay: 100.ms, duration: 400.ms, curve: Curves.easeOutBack),
             const SizedBox(height: 24),
             Text(
               'AI Not Configured',
@@ -427,7 +447,8 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/ai-settings'),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
                   gradient: Palette.gradientPrimary,
                   borderRadius: BorderRadius.circular(14),
@@ -516,7 +537,9 @@ class _EnhancedAIChatScreenState extends State<EnhancedAIChatScreen>
             : Colors.white.withValues(alpha: 0.95),
         border: Border(
           top: BorderSide(
-            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+            color: dark
+                ? Palette.border.withValues(alpha: 0.3)
+                : const Color(0xFFE2E8F0),
           ),
         ),
       ),
@@ -659,7 +682,8 @@ class _MessageBubbleState extends State<_MessageBubble> {
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment:
+                isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (!isUser) ...[
                 Container(
@@ -667,7 +691,10 @@ class _MessageBubbleState extends State<_MessageBubble> {
                   height: 32,
                   decoration: BoxDecoration(
                     gradient: isError
-                        ? LinearGradient(colors: [Palette.error, Palette.error.withValues(alpha: 0.7)])
+                        ? LinearGradient(colors: [
+                            Palette.error,
+                            Palette.error.withValues(alpha: 0.7)
+                          ])
                         : Palette.gradientPrimary,
                   ),
                   child: Center(
@@ -724,7 +751,9 @@ class _MessageBubbleState extends State<_MessageBubble> {
                               ? Colors.white
                               : isError
                                   ? Palette.error
-                                  : (widget.dark ? Palette.textPrimary : Palette.textInverse),
+                                  : (widget.dark
+                                      ? Palette.textPrimary
+                                      : Palette.textInverse),
                         ),
                       ),
                       if (widget.message.provider != null) ...[
@@ -744,7 +773,9 @@ class _MessageBubbleState extends State<_MessageBubble> {
                               'via ${widget.message.provider}',
                               style: GoogleFonts.inter(
                                 fontSize: 10,
-                                color: widget.dark ? Palette.textTertiary : Palette.textSecondary,
+                                color: widget.dark
+                                    ? Palette.textTertiary
+                                    : Palette.textSecondary,
                               ),
                             ),
                           ],
@@ -792,7 +823,8 @@ class _MessageBubbleState extends State<_MessageBubble> {
                     isActive: false,
                     onTap: () {
                       HapticFeedback.selectionClick();
-                      Clipboard.setData(ClipboardData(text: widget.message.content));
+                      Clipboard.setData(
+                          ClipboardData(text: widget.message.content));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Copied to clipboard'),
@@ -944,7 +976,9 @@ class _AnimatedDotState extends State<_AnimatedDot>
       animation: _controller,
       builder: (context, child) {
         final value = (_controller.value + widget.delay / 1000) % 1.0;
-        final scale = value < 0.5 ? 1.0 + (value * 2 * 0.4) : 1.0 - ((value - 0.5) * 2 * 0.4);
+        final scale = value < 0.5
+            ? 1.0 + (value * 2 * 0.4)
+            : 1.0 - ((value - 0.5) * 2 * 0.4);
 
         return Transform.scale(
           scale: scale,
@@ -1009,7 +1043,8 @@ class _ProfileInfoSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: const Center(
-                    child: Icon(Icons.psychology, size: 24, color: Colors.white),
+                    child:
+                        Icon(Icons.psychology, size: 24, color: Colors.white),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -1022,7 +1057,8 @@ class _ProfileInfoSheet extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: dark ? Palette.textPrimary : Palette.textInverse,
+                          color:
+                              dark ? Palette.textPrimary : Palette.textInverse,
                         ),
                       ),
                       Text(
@@ -1047,7 +1083,8 @@ class _ProfileInfoSheet extends StatelessWidget {
                     child: Icon(
                       Icons.close,
                       size: 16,
-                      color: dark ? Palette.textSecondary : Palette.textTertiary,
+                      color:
+                          dark ? Palette.textSecondary : Palette.textTertiary,
                     ),
                   ),
                 ),
@@ -1073,7 +1110,9 @@ class _ProfileInfoSheet extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: dark ? Palette.textPrimary : Palette.textInverse,
+                            color: dark
+                                ? Palette.textPrimary
+                                : Palette.textInverse,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -1094,8 +1133,12 @@ class _ProfileInfoSheet extends StatelessWidget {
                       _TraitSection(
                         title: 'Big Five Personality',
                         traits: [
-                          ('Openness', p!.openness, Palette.info),
-                          ('Conscientiousness', p.conscientiousness, Palette.success),
+                          ('Openness', p.openness, Palette.info),
+                          (
+                            'Conscientiousness',
+                            p.conscientiousness,
+                            Palette.success
+                          ),
                           ('Extraversion', p.extraversion, Palette.warning),
                           ('Agreeableness', p.agreeableness, Palette.primary),
                           ('Neuroticism', p.neuroticism, Palette.error),

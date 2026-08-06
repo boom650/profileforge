@@ -1,7 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/onboarding/data/onboarding_repository.dart';
+import 'package:profileforge/features/onboarding/data/psychology_repository.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+
+final psychologyRepositoryProvider = Provider<PsychologyRepository>((ref) {
+  return PsychologyRepository(ref.watch(appDatabaseProvider));
+});
+
+/// Persisted psychological profile (Big Five + SDT). Null until assessed.
+final psychologicalProfileProvider = AsyncNotifierProviderFamily<
+    PsychologyNotifier, PsychologicalProfile?, String>(PsychologyNotifier.new);
+
+class PsychologyNotifier
+    extends FamilyAsyncNotifier<PsychologicalProfile?, String> {
+  @override
+  Future<PsychologicalProfile?> build(String profileId) async {
+    return ref.watch(psychologyRepositoryProvider).load(profileId);
+  }
+
+  Future<void> save(PsychologicalProfile p) async {
+    state = const AsyncLoading();
+    await ref.read(psychologyRepositoryProvider).save(p, arg);
+    state = AsyncData(p);
+  }
+
+  Future<void> clear() async {
+    await ref.read(psychologyRepositoryProvider).delete(arg);
+    state = const AsyncData(null);
+  }
+}
 
 final onboardingRepositoryProvider = Provider<OnboardingRepository>((ref) {
   return OnboardingRepository(ref.watch(appDatabaseProvider));

@@ -7,6 +7,7 @@ import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/core/widgets/motion_kit.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
@@ -15,7 +16,6 @@ import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dar
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
-import 'package:profileforge/core/ai/task_recommender.dart';
 import 'package:profileforge/core/ai/ai_service.dart';
 import 'package:profileforge/core/ai/ai_recommendation_service.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
@@ -147,13 +147,17 @@ class HomePage extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-                      XpRing(
-                        progress: xpInLevel / 100,
-                        size: 72,
-                        strokeWidth: 6,
-                        color: Colors.white,
-                        centerTop: '$level',
-                        centerBottom: 'LVL',
+                      _LevelUpDetector(
+                        level: level,
+                        xpInLevel: xpInLevel,
+                        child: XpRing(
+                          progress: xpInLevel / 100,
+                          size: 72,
+                          strokeWidth: 6,
+                          color: Colors.white,
+                          centerTop: '$level',
+                          centerBottom: 'LVL',
+                        ),
                       ),
                       const SizedBox(width: 20),
                       Expanded(
@@ -183,8 +187,10 @@ class HomePage extends ConsumerWidget {
                               child: LinearProgressIndicator(
                                 value: xpInLevel / 100,
                                 minHeight: 6,
-                                backgroundColor: Colors.white.withValues(alpha: 0.2),
-                                valueColor: const AlwaysStoppedAnimation(Colors.white),
+                                backgroundColor:
+                                    Colors.white.withValues(alpha: 0.2),
+                                valueColor:
+                                    const AlwaysStoppedAnimation(Colors.white),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -199,7 +205,7 @@ class HomePage extends ConsumerWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Text('🔥', style: TextStyle(fontSize: 14)),
+                                  const StreakFlame(size: 18),
                                   const SizedBox(width: 4),
                                   Text(
                                     '$streak day streak',
@@ -228,10 +234,10 @@ class HomePage extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
+                  child: PressableScale(
                     onTap: () async {
-                      final g = await ref.read(
-                          claimDailyRewardProvider(profileId).future);
+                      final g = await ref
+                          .read(claimDailyRewardProvider(profileId).future);
                       SoundService.instance.coin();
                       celebrate(context, message: '+$g 💎');
                       ref.invalidate(dailyRewardProvider(profileId));
@@ -365,7 +371,8 @@ class HomePage extends ConsumerWidget {
                     GestureDetector(
                       onTap: () => context.push('/ai-chat'),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           gradient: Palette.gradientPrimary,
                           borderRadius: BorderRadius.circular(8),
@@ -373,7 +380,8 @@ class HomePage extends ConsumerWidget {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.chat_bubble_outline, size: 14, color: Colors.white),
+                            Icon(Icons.chat_bubble_outline,
+                                size: 14, color: Colors.white),
                             SizedBox(width: 4),
                             Text(
                               'Chat with AI',
@@ -437,7 +445,8 @@ class HomePage extends ConsumerWidget {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Row(
                   children: [
                     Expanded(
@@ -492,9 +501,8 @@ class HomePage extends ConsumerWidget {
                   final tier = LeagueTier.values.firstWhere(
                       (t) => t.name == tierStr,
                       orElse: () => LeagueTier.bronze);
-                  final rank = standings
-                          .indexWhere((m) => m.profileId == profileId) +
-                      1;
+                  final rank =
+                      standings.indexWhere((m) => m.profileId == profileId) + 1;
                   return GlassCard(
                     onTap: () => context.push('/leagues'),
                     padding: const EdgeInsets.all(16),
@@ -600,6 +608,43 @@ class HomePage extends ConsumerWidget {
 }
 
 /// Stat badge in header.
+class _LevelUpDetector extends StatefulWidget {
+  const _LevelUpDetector({
+    required this.level,
+    required this.xpInLevel,
+    required this.child,
+  });
+
+  final int level;
+  final int xpInLevel;
+  final Widget child;
+
+  @override
+  State<_LevelUpDetector> createState() => _LevelUpDetectorState();
+}
+
+class _LevelUpDetectorState extends State<_LevelUpDetector> {
+  int _lastLevel = 0;
+  bool _initialized = false;
+
+  @override
+  void didUpdateWidget(_LevelUpDetector old) {
+    super.didUpdateWidget(old);
+    if (!_initialized) {
+      _lastLevel = widget.level;
+      _initialized = true;
+    } else if (widget.level > _lastLevel) {
+      _lastLevel = widget.level;
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) showLevelUp(context, widget.level);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
+
 class _StatBadge extends StatelessWidget {
   const _StatBadge({
     required this.icon,
@@ -1043,7 +1088,8 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                   gradient: Palette.gradientPrimary,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.auto_awesome, size: 18, color: Colors.white),
+                child: const Icon(Icons.auto_awesome,
+                    size: 18, color: Colors.white),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -1062,7 +1108,8 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                       'Personalized by AI based on your profile',
                       style: TextStyle(
                         fontSize: 12,
-                        color: dark ? Palette.textSecondary : Palette.textTertiary,
+                        color:
+                            dark ? Palette.textSecondary : Palette.textTertiary,
                       ),
                     ),
                   ],
@@ -1089,89 +1136,98 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
             )
           else
             ..._recommendations.take(4).map((task) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: dark ? Palette.border : const Color(0xFFE2E8F0),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: _categoryColor(task.category).withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        task.priorityLabel,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: _categoryColor(task.category),
-                        ),
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: dark ? Palette.border : const Color(0xFFE2E8F0),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            task.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                              color: dark ? Palette.textPrimary : Palette.textInverse,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            task.reason,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: dark ? Palette.textSecondary : Palette.textTertiary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Palette.primary.withValues(alpha: 0.12),
+                            color: _categoryColor(task.category)
+                                .withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            '${task.xp} XP',
-                            style: const TextStyle(
-                              fontSize: 11,
+                            task.priorityLabel,
+                            style: TextStyle(
+                              fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: Palette.primary,
+                              color: _categoryColor(task.category),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          task.duration,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: dark ? Palette.textSecondary : Palette.textTertiary,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                task.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  color: dark
+                                      ? Palette.textPrimary
+                                      : Palette.textInverse,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                task.reason,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: dark
+                                      ? Palette.textSecondary
+                                      : Palette.textTertiary,
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Palette.primary.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${task.xp} XP',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: Palette.primary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              task.duration,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: dark
+                                    ? Palette.textSecondary
+                                    : Palette.textTertiary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            )),
+                  ),
+                )),
         ],
       ),
     );
@@ -1179,12 +1235,18 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
 
   Color _categoryColor(String cat) {
     switch (cat) {
-      case 'academics': return Palette.blue;
-      case 'research': return Palette.purple;
-      case 'creativity': return Palette.accentPink;
-      case 'leadership': return Palette.warning;
-      case 'service': return Palette.success;
-      default: return Palette.primary;
+      case 'academics':
+        return Palette.blue;
+      case 'research':
+        return Palette.purple;
+      case 'creativity':
+        return Palette.accentPink;
+      case 'leadership':
+        return Palette.warning;
+      case 'service':
+        return Palette.success;
+      default:
+        return Palette.primary;
     }
   }
 }
@@ -1209,7 +1271,7 @@ class _QuickAccessCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = isDark(context);
 
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(14),
@@ -1217,7 +1279,9 @@ class _QuickAccessCard extends StatelessWidget {
           color: dark ? Palette.surface1.withValues(alpha: 0.6) : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: dark ? Palette.border.withValues(alpha: 0.4) : const Color(0xFFE2E8F0),
+            color: dark
+                ? Palette.border.withValues(alpha: 0.4)
+                : const Color(0xFFE2E8F0),
           ),
           boxShadow: [
             BoxShadow(

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/ai/ai_mission.dart';
 import 'package:profileforge/core/ai/ai_provider.dart';
 import 'package:profileforge/core/ai/ai_service.dart';
+import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/missions/data/mission_repository.dart';
@@ -26,31 +27,28 @@ final todaysMissionsProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
   // Ensure missions exist before reading (auto-generates on first open).
   await ref.watch(generateMissionsProvider(profileId).future);
-  final rows =
-      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
-  return rows
-      .where((r) => r.cadence == MissionCadence.daily.name)
-      .toList();
+  final rows = await ref
+      .watch(missionRepositoryProvider)
+      .listDue(profileId, DateTime.now());
+  return rows.where((r) => r.cadence == MissionCadence.daily.name).toList();
 });
 
 final weeklyMissionsProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
   await ref.watch(generateMissionsProvider(profileId).future);
-  final rows =
-      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
-  return rows
-      .where((r) => r.cadence == MissionCadence.weekly.name)
-      .toList();
+  final rows = await ref
+      .watch(missionRepositoryProvider)
+      .listDue(profileId, DateTime.now());
+  return rows.where((r) => r.cadence == MissionCadence.weekly.name).toList();
 });
 
 final monthlyMissionsProvider =
     FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
   await ref.watch(generateMissionsProvider(profileId).future);
-  final rows =
-      await ref.watch(missionRepositoryProvider).listDue(profileId, DateTime.now());
-  return rows
-      .where((r) => r.cadence == MissionCadence.monthly.name)
-      .toList();
+  final rows = await ref
+      .watch(missionRepositoryProvider)
+      .listDue(profileId, DateTime.now());
+  return rows.where((r) => r.cadence == MissionCadence.monthly.name).toList();
 });
 
 final missionHistoryProvider =
@@ -61,7 +59,12 @@ final missionHistoryProvider =
 /// Complete a mission: marks done, awards XP (×skin multiplier) + gems.
 final completeMissionProvider = Provider.family<
     Future<void>,
-    ({String profileId, String missionId, int xp, String pillar})>((ref, args) async {
+    ({
+      String profileId,
+      String missionId,
+      int xp,
+      String pillar
+    })>((ref, args) async {
   await ref.watch(missionRepositoryProvider).complete(args.missionId);
   // Award XP via the XP ledger (handles skin multiplier through provided xp).
   await ref.read(xpRepositoryProvider).add(
@@ -118,7 +121,8 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
 
     // ── Daily: AI (primary) → Rule (fallback) → Engine.
     final essay = ref.read(essayContextProvider(arg)).valueOrNull;
-    final daily = await _generateDaily(onboarding, essay);
+    final psych = ref.read(psychologicalProfileProvider(arg)).valueOrNull;
+    final daily = await _generateDaily(onboarding, essay, psych);
     missions.addAll(daily);
 
     // ── Weekly + monthly: engine templates (always available offline).
@@ -129,10 +133,10 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
     await repo.upsertGenerated(missions);
   }
 
-  Future<List<Mission>> _generateDaily(
-      OnboardingProfile? onboarding, EssayContext? essay) async {
+  Future<List<Mission>> _generateDaily(OnboardingProfile? onboarding,
+      EssayContext? essay, PsychologicalProfile? psych) async {
     // Tier 1: AI-authored.
-    final aiMissions = await _tryAi(onboarding, essay);
+    final aiMissions = await _tryAi(onboarding, essay, psych);
     if (aiMissions != null && aiMissions.isNotEmpty) return aiMissions;
 
     // Tier 2: rules from onboarding.
@@ -163,8 +167,8 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
   }
 
   /// AI tier. Returns [] on any failure so callers fall back cleanly.
-  Future<List<Mission>> _tryAi(
-      OnboardingProfile? onboarding, EssayContext? essay) async {
+  Future<List<Mission>> _tryAi(OnboardingProfile? onboarding,
+      EssayContext? essay, PsychologicalProfile? psych) async {
     if (onboarding == null) return const [];
 
     // Only attempt if the user actually has a key.
@@ -176,6 +180,7 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
         onboarding,
         essay: essay,
         personaHint: _personaFrom(essay),
+        psychHint: _psychFrom(psych),
       );
       final raw = await AIService().generateJson(
         prompt: prompt,
@@ -226,7 +231,24 @@ String _personaFrom(EssayContext? essay) {
   if (essay == null) return '';
   final parts = <String>[];
   if (essay.values.isNotEmpty) parts.add('values: ${essay.values.join(", ")}');
-  if (essay.curiosity.isNotEmpty) parts.add('curious about: ${essay.curiosity}');
+  if (essay.curiosity.isNotEmpty)
+    parts.add('curious about: ${essay.curiosity}');
+  return parts.join(' · ');
+}
+
+/// Convert the persisted psychological profile into a compact style hint so
+/// AI-authored missions adapt their tone and motivation framing to the student.
+String _psychFrom(PsychologicalProfile? psych) {
+  if (psych == null) return '';
+  final parts = <String>[
+    'communication: ${psych.communicationStyle.name}',
+    'motivation: ${psych.motivationFrame.name}',
+    'support: ${psych.supportLevel.name}',
+    'structure: ${psych.structurePreference.name}',
+  ];
+  if (psych.growthMindset < 0.4)
+    parts.add('needs growth-mindset reinforcement');
+  if (psych.selfEfficacy < 0.4) parts.add('build confidence in small wins');
   return parts.join(' · ');
 }
 

@@ -62,10 +62,13 @@ class Missions extends Table {
   BoolColumn get done => boolean().withDefault(const Constant(false))();
   IntColumn get xpReward => integer().withDefault(const Constant(10))();
   IntColumn get gemReward => integer().withDefault(const Constant(0))();
+
   /// 'ai' | 'rule' | 'engine' — how this mission was authored.
   TextColumn get source => text().withDefault(const Constant('rule'))();
+
   /// Priority band: critical | high | medium | low.
   TextColumn get priority => text().withDefault(const Constant('medium'))();
+
   /// "Why this mission" — psychology/admissions reasoning (filled by AI).
   TextColumn get rationale => text().withDefault(const Constant(''))();
   @override
@@ -81,7 +84,8 @@ class LeagueMemberships extends Table {
   TextColumn get cohortId => text()();
   IntColumn get weeklyXp => integer().withDefault(const Constant(0))();
   BoolColumn get shielded => boolean().withDefault(const Constant(false))();
-  DateTimeColumn get seasonStart => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get seasonStart =>
+      dateTime().withDefault(currentDateAndTime)();
 }
 
 /// Accountability buddies (H4).
@@ -90,7 +94,8 @@ class Buddies extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get profileId => text()();
   TextColumn get buddyProfileId => text()();
-  BoolColumn get sharedStreakGoal => boolean().withDefault(const Constant(false))();
+  BoolColumn get sharedStreakGoal =>
+      boolean().withDefault(const Constant(false))();
   TextColumn get note => text().withDefault(const Constant(''))();
 }
 
@@ -141,19 +146,22 @@ class BuddyCheckIns extends Table {
 @DataClassName('OnboardingRow')
 class Onboarding extends Table {
   TextColumn get profileId => text()();
-  TextColumn get targetUniversities => text().withDefault(const Constant('[]'))();
+  TextColumn get targetUniversities =>
+      text().withDefault(const Constant('[]'))();
   TextColumn get subjects => text().withDefault(const Constant('[]'))();
   TextColumn get grades => text().withDefault(const Constant('{}'))();
   TextColumn get clubs => text().withDefault(const Constant('[]'))();
   IntColumn get budget => integer().withDefault(const Constant(0))();
   IntColumn get travelRadiusKm => integer().withDefault(const Constant(0))();
-  IntColumn get availabilityHoursPerWeek => integer().withDefault(const Constant(0))();
+  IntColumn get availabilityHoursPerWeek =>
+      integer().withDefault(const Constant(0))();
   TextColumn get careerInterests => text().withDefault(const Constant('[]'))();
   TextColumn get location => text().withDefault(const Constant(''))();
 
   // ── Schedule & timetable (v4) ──
   /// JSON array of weekday codes: [1,2,3,4,5] (1=Mon..7=Sun).
-  TextColumn get schoolDays => text().withDefault(const Constant('[1,2,3,4,5]'))();
+  TextColumn get schoolDays =>
+      text().withDefault(const Constant('[1,2,3,4,5]'))();
   IntColumn get schoolStartHour => integer().withDefault(const Constant(8))();
   IntColumn get schoolStartMinute => integer().withDefault(const Constant(0))();
   IntColumn get schoolEndHour => integer().withDefault(const Constant(15))();
@@ -162,30 +170,40 @@ class Onboarding extends Table {
   // ── Energy & sleep ──
   /// "morning", "afternoon", or "night".
   TextColumn get energyPeak => text().withDefault(const Constant('morning'))();
+
   /// "22:00"
   TextColumn get sleepStart => text().withDefault(const Constant('22:00'))();
+
   /// "07:00"
   TextColumn get sleepEnd => text().withDefault(const Constant('07:00'))();
 
   // ── Essay context (v6) ──
   /// Defining moment / story seed for the personal statement.
   TextColumn get essayStory => text().withDefault(const Constant(''))();
+
   /// JSON array of VIA-style values, e.g. ["Curiosity","Grit"].
   TextColumn get essayValues => text().withDefault(const Constant('[]'))();
+
   /// "What question keeps you up at night?" — intellectual curiosity hook.
   TextColumn get essayCuriosity => text().withDefault(const Constant(''))();
+
   /// Which Common App prompt resonates most ('1'..'7').
   TextColumn get essayPromptPref => text().withDefault(const Constant(''))();
 
   // ── Goals & environment ──
   /// "6months", "1year", "2years", "custom".
   TextColumn get timelineGoal => text().withDefault(const Constant('1year'))();
+
   /// Daily screen time (hours).
   IntColumn get screenTimeHours => integer().withDefault(const Constant(3))();
+
   /// "library", "home", "cafe", "school", "mixed".
-  TextColumn get studyEnvironment => text().withDefault(const Constant('mixed'))();
+  TextColumn get studyEnvironment =>
+      text().withDefault(const Constant('mixed'))();
+
   /// "light", "moderate", "heavy".
-  TextColumn get socialMediaUsage => text().withDefault(const Constant('moderate'))();
+  TextColumn get socialMediaUsage =>
+      text().withDefault(const Constant('moderate'))();
 
   @override
   Set<Column<Object>> get primaryKey => {profileId};
@@ -227,6 +245,45 @@ class DailyRewards extends Table {
 // NEW TABLES
 // ============================================================
 
+/// Big Five + SDT psychological profile (v7).
+/// Persisted so the AI adapter can stay consistent across sessions.
+@DataClassName('PsychologicalProfileRow')
+class PsychologicalProfiles extends Table {
+  TextColumn get profileId => text()();
+
+  /// Big Five (0.0–1.0)
+  RealColumn get openness => real().withDefault(const Constant(0.5))();
+  RealColumn get conscientiousness => real().withDefault(const Constant(0.5))();
+  RealColumn get extraversion => real().withDefault(const Constant(0.5))();
+  RealColumn get agreeableness => real().withDefault(const Constant(0.5))();
+  RealColumn get neuroticism => real().withDefault(const Constant(0.5))();
+
+  /// SDT needs
+  RealColumn get autonomy => real().withDefault(const Constant(0.5))();
+  RealColumn get competence => real().withDefault(const Constant(0.5))();
+  RealColumn get relatedness => real().withDefault(const Constant(0.5))();
+
+  /// Mindset
+  RealColumn get growthMindset => real().withDefault(const Constant(0.5))();
+  RealColumn get selfEfficacy => real().withDefault(const Constant(0.5))();
+  RealColumn get emotionalIntelligence =>
+      real().withDefault(const Constant(0.5))();
+
+  /// Derived communication preferences (enums as strings).
+  TextColumn get communicationStyle =>
+      text().withDefault(const Constant('balanced'))();
+  TextColumn get motivationFrame =>
+      text().withDefault(const Constant('balanced'))();
+  TextColumn get supportLevel =>
+      text().withDefault(const Constant('moderate'))();
+  TextColumn get structurePreference =>
+      text().withDefault(const Constant('moderate'))();
+  DateTimeColumn get assessedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {profileId};
+}
+
 /// XP Debt incurred by broken streaks or missed missions.
 @DataClassName('XpDebtRow')
 class XpDebt extends Table {
@@ -257,7 +314,8 @@ class AchievementDefinitions extends Table {
   TextColumn get name => text()();
   TextColumn get description => text()();
   TextColumn get icon => text().withDefault(const Constant('🏆'))();
-  TextColumn get criteriaType => text()(); // 'streak', 'xp_total', 'missions_total', 'focus_total', 'quests_total', 'daily_login', 'skins_unlocked', 'challenges_won'
+  TextColumn get criteriaType =>
+      text()(); // 'streak', 'xp_total', 'missions_total', 'focus_total', 'quests_total', 'daily_login', 'skins_unlocked', 'challenges_won'
   IntColumn get criteriaValue => integer()(); // threshold
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -290,7 +348,8 @@ class DailyQuests extends Table {
 @DataClassName('UserGoalRow')
 class UserGoals extends Table {
   TextColumn get profileId => text()();
-  TextColumn get primaryGoal => text().withDefault(const Constant('general'))(); // 'exam_prep', 'competition', 'general', 'skill_building', 'college_apps'
+  TextColumn get primaryGoal => text().withDefault(const Constant(
+      'general'))(); // 'exam_prep', 'competition', 'general', 'skill_building', 'college_apps'
   TextColumn get secondaryGoals => text().withDefault(const Constant('[]'))();
   @override
   Set<Column<Object>> get primaryKey => {profileId};
@@ -301,9 +360,11 @@ class UserGoals extends Table {
 class FriendChallenges extends Table {
   TextColumn get id => text()();
   TextColumn get profileId => text()(); // creator
-  TextColumn get opponentId => text()(); // other profile (or 'ghost' for AI opponent)
+  TextColumn get opponentId =>
+      text()(); // other profile (or 'ghost' for AI opponent)
   IntColumn get wagerXp => integer().withDefault(const Constant(50))();
-  TextColumn get status => text().withDefault(const Constant('pending'))(); // 'pending', 'active', 'completed', 'expired'
+  TextColumn get status => text().withDefault(const Constant(
+      'pending'))(); // 'pending', 'active', 'completed', 'expired'
   IntColumn get challengerScore => integer().withDefault(const Constant(0))();
   IntColumn get opponentScore => integer().withDefault(const Constant(0))();
   DateTimeColumn get expiresAt => dateTime()();

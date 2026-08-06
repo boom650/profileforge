@@ -2,12 +2,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/scoring/profile_scoring.dart';
 import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/widgets/score_widgets.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
+import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Profile Score Screen — Animated score display with breakdown.
@@ -25,7 +28,7 @@ import 'package:profileforge/core/widgets/premium_widgets.dart';
 /// - 01-test-score-optimization.md
 /// - 01-essay-writing-framework.md
 /// ────────────────────────────────────────────────────────────────────────────
-class ProfileScoreScreen extends StatefulWidget {
+class ProfileScoreScreen extends ConsumerStatefulWidget {
   const ProfileScoreScreen({
     super.key,
     required this.profileId,
@@ -40,15 +43,19 @@ class ProfileScoreScreen extends StatefulWidget {
   final AIInsights? aiInsights;
 
   @override
-  State<ProfileScoreScreen> createState() => _ProfileScoreScreenState();
+  ConsumerState<ProfileScoreScreen> createState() =>
+      _ProfileScoreScreenState();
 }
 
-class _ProfileScoreScreenState extends State<ProfileScoreScreen>
+class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     with TickerProviderStateMixin {
   late AnimationController _scoreController;
   late AnimationController _radarController;
   late Animation<double> _scoreAnimation;
   ProfileScore? _score;
+  PsychologicalProfile? _loadedPsych;
+  bool _loaded = false;
+  bool _isDemo = false;
 
   @override
   void initState() {
@@ -67,13 +74,13 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
       curve: Curves.easeOutCubic,
     );
 
-    // Calculate score
-    _calculateScore();
+    // Load real data, then calculate score.
+    _loadAndCalculate();
 
-    // Start animations
+    // Start animations.
     _scoreController.forward();
     Future.delayed(const Duration(milliseconds: 500), () {
-      _radarController.forward();
+      if (mounted) _radarController.forward();
     });
   }
 
@@ -84,19 +91,152 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
     super.dispose();
   }
 
-  void _calculateScore() {
-    // Use provided data or demo data
-    final student = widget.student ?? _demoStudentData();
-    final psychology = widget.psychology;
+  /// Load the real onboarding + psych profile from the DB and compute a real
+  /// score. Falls back to demo ONLY if there is genuinely no user data yet —
+  /// never silently pretend demo data is the student's.
+  Future<void> _loadAndCalculate() async {
+    final onboarding =
+        ref.read(onboardingProvider(widget.profileId)).valueOrNull;
+    final psych =
+        ref.read(psychologicalProfileProvider(widget.profileId)).valueOrNull;
+
+    final hasRealGrades = onboarding != null && onboarding.grades.isNotEmpty;
+    final student = hasRealGrades
+        ? _studentFrom(onboarding)
+        : widget.student ?? _demoStudentData();
+    final psychology = psych ?? widget.psychology;
     final aiInsights = widget.aiInsights;
 
-    setState(() {
-      _score = ProfileScoring.calculate(
-        student: student,
-        psychology: psychology,
-        aiInsights: aiInsights,
-      );
-    });
+    if (mounted) {
+      setState(() {
+        _score = ProfileScoring.calculate(
+          student: student,
+          psychology: psychology,
+          aiInsights: aiInsights,
+        );
+        _loadedPsych = psychology;
+        _loaded = true;
+        _isDemo = !hasRealGrades && widget.student == null;
+      });
+    }
+  }
+
+  /// Map a real onboarding profile into the scorer's StudentData model.
+  StudentData _studentFrom(OnboardingProfile o) {
+    final gpa = _gpaFromGrades(o.grades);
+
+    final activities = [
+      ...o.activities.map((a) => Activity(
+            name: a,
+            category: _categoryFor(a),
+            isLeadership: a.toLowerCase().contains('president') ||
+                a.toLowerCase().contains('captain') ||
+                a.toLowerCase().contains('lead'),
+            hasImpact: true,
+          )),
+      ...o.competitions.map((c) => Activity(
+            name: c.name,
+            category: _categoryFor(c.name),
+            hasImpact: true,
+            isNationallyRecognized: _national(c.result),
+          )),
+    ];
+
+    return StudentData(
+      gpa: gpa,
+      isWeighted: false,
+      gpaTrend: GPATrend.stable,
+      satScore: null,
+      actScore: null,
+      activities: activities,
+      essays: const [],
+    );
+  }
+
+  /// Best-effort 0–4 grade point average from per-subject grades.
+  /// Handles letter grades (A, A-, B+) and supports an actual GPA override.
+  double? _gpaFromGrades(Map<String, String> grades) {
+    if (grades.isEmpty) return null;
+    final numeric = <double>[];
+    for (final raw in grades.values) {
+      final v = raw.trim().toUpperCase();
+      final parsed = double.tryParse(v);
+      if (parsed != null && parsed >= 0 && parsed <= 100) {
+        numeric.add(parsed / 25); // percent → 4.0 scale
+      } else if (_letterPoints.containsKey(v)) {
+        numeric.add(_letterPoints[v]!);
+      }
+    }
+    if (numeric.isEmpty) return null;
+    return numeric.reduce((a, b) => a + b) / numeric.length;
+  }
+
+  static const Map<String, double> _letterPoints = {
+    'A+': 4.3,
+    'A': 4.0,
+    'A-': 3.7,
+    'B+': 3.3,
+    'B': 3.0,
+    'B-': 2.7,
+    'C+': 2.3,
+    'C': 2.0,
+    'C-': 1.7,
+    'D+': 1.3,
+    'D': 1.0,
+    'F': 0.0,
+  };
+
+  /// Best-effort scorer category classification from a free-form name.
+  String _categoryFor(String name) {
+    final n = name.toLowerCase();
+    if (n.contains('math') ||
+        n.contains('science') ||
+        n.contains('research') ||
+        n.contains('coding') ||
+        n.contains('robotic') ||
+        n.contains('olympiad')) {
+      return 'STEM';
+    }
+    if (n.contains('debate') ||
+        n.contains('speech') ||
+        n.contains('writing') ||
+        n.contains('english') ||
+        n.contains('journal')) {
+      return 'Communication';
+    }
+    if (n.contains('volunteer') ||
+        n.contains('service') ||
+        n.contains('outreach') ||
+        n.contains('ngo') ||
+        n.contains('clean')) {
+      return 'Community';
+    }
+    if (n.contains('art') ||
+        n.contains('music') ||
+        n.contains('theatre') ||
+        n.contains('dance') ||
+        n.contains('photograph')) {
+      return 'Creative';
+    }
+    if (n.contains('sport') ||
+        n.contains('football') ||
+        n.contains('cricket') ||
+        n.contains('basketball') ||
+        n.contains('swim')) {
+      return 'Athletics';
+    }
+    return 'Academic';
+  }
+
+  bool _national(String? result) {
+    final r = (result ?? '').toLowerCase();
+    return r.contains('national') ||
+        r.contains('international') ||
+        r.contains('state') ||
+        r.contains('regional') ||
+        r.contains('gold') ||
+        r.contains('1st') ||
+        r.contains('winner');
   }
 
   StudentData _demoStudentData() {
@@ -174,7 +314,11 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
             end: Alignment.bottomCenter,
             colors: dark
                 ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                : [
+                    const Color(0xFFEEF2FF),
+                    const Color(0xFFF8FAFC),
+                    Colors.white
+                  ],
           ),
         ),
         child: SafeArea(
@@ -211,9 +355,9 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
 
                       const SizedBox(height: 32),
 
-                      // ── Personality Radar ──
-                      if (widget.psychology != null)
-                        _buildPersonalityRadar(widget.psychology!, dark),
+                      // ── Personality Radar (loaded psych or passed-in) ──
+                      if (_loadedPsych != null)
+                        _buildPersonalityRadar(_loadedPsych!, dark),
 
                       const SizedBox(height: 100),
                     ],
@@ -230,14 +374,17 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
   /// ── Header ───────────────────────────────────────────────────────────────
   Widget _buildHeader(bool dark) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, MediaQuery.of(context).padding.top + 8, 16, 12),
+      padding: EdgeInsets.fromLTRB(
+          16, MediaQuery.of(context).padding.top + 8, 16, 12),
       decoration: BoxDecoration(
         color: dark
             ? Palette.surface0.withValues(alpha: 0.9)
             : Colors.white.withValues(alpha: 0.9),
         border: Border(
           bottom: BorderSide(
-            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+            color: dark
+                ? Palette.border.withValues(alpha: 0.3)
+                : const Color(0xFFE2E8F0),
           ),
         ),
       ),
@@ -261,17 +408,44 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              'Profile Score',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: dark ? Palette.textPrimary : Palette.textInverse,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  'Profile Score',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: dark ? Palette.textPrimary : Palette.textInverse,
+                  ),
+                ),
+                if (_isDemo) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Palette.accent.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Palette.accent.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Text(
+                      'PREVIEW',
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                        color: Palette.accent,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
           GestureDetector(
-            onTap: _calculateScore,
+            onTap: _loadAndCalculate,
             child: Container(
               width: 36,
               height: 36,
@@ -354,10 +528,10 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
         );
       },
     ).animate().scale(
-      delay: 200.ms,
-      duration: 600.ms,
-      curve: Curves.easeOutBack,
-    );
+          delay: 200.ms,
+          duration: 600.ms,
+          curve: Curves.easeOutBack,
+        );
   }
 
   /// ── Tier Badge ───────────────────────────────────────────────────────────
@@ -523,27 +697,29 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
                   )
                 else
                   ...score.strengths.map((s) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          size: 14,
-                          color: Palette.success.withValues(alpha: 0.7),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            s,
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: dark ? Palette.textPrimary : Palette.textInverse,
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 14,
+                              color: Palette.success.withValues(alpha: 0.7),
                             ),
-                          ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                s,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: dark
+                                      ? Palette.textPrimary
+                                      : Palette.textInverse,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      )),
               ],
             ),
           ),
@@ -595,27 +771,29 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
                   )
                 else
                   ...score.improvements.map((s) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.arrow_upward,
-                          size: 14,
-                          color: Palette.warning.withValues(alpha: 0.7),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            s,
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: dark ? Palette.textPrimary : Palette.textInverse,
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_upward,
+                              size: 14,
+                              color: Palette.warning.withValues(alpha: 0.7),
                             ),
-                          ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                s,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: dark
+                                      ? Palette.textPrimary
+                                      : Palette.textInverse,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      )),
               ],
             ),
           ),
@@ -657,7 +835,13 @@ class _ProfileScoreScreenState extends State<ProfileScoreScreen>
                 profile.agreeableness,
                 1 - profile.neuroticism, // Invert so higher = better
               ],
-              labels: ['Openness', 'Conscientious', 'Extraversion', 'Agreeableness', 'Stability'],
+              labels: [
+                'Openness',
+                'Conscientious',
+                'Extraversion',
+                'Agreeableness',
+                'Stability'
+              ],
               size: 220,
             ),
           ),
@@ -733,7 +917,8 @@ class _ScoreBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),

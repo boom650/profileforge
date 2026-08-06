@@ -31,13 +31,14 @@ part 'app_database.g.dart';
   UserGoals,
   FriendChallenges,
   XpDebt,
+  PsychologicalProfiles,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? driftDatabase(name: 'profileforge'));
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -85,6 +86,10 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(onboarding, onboarding.essayValues);
             await m.addColumn(onboarding, onboarding.essayCuriosity);
             await m.addColumn(onboarding, onboarding.essayPromptPref);
+          }
+          if (from < 7) {
+            // v7 — Persistable psychological profile.
+            await m.createTable(psychologicalProfiles);
           }
         },
       );
