@@ -82,6 +82,31 @@ class OnboardingRepository {
     );
   }
 
+  /// Persist essay material (story seed, values, curiosity, prompt pref).
+  Future<void> saveEssay(EssayContext e, String profileId) async {
+    await _db.into(_db.onboarding).insertOnConflictUpdate(OnboardingCompanion(
+      profileId: Value(profileId),
+      essayStory: Value(e.story),
+      essayValues: Value(e.valuesPersistJson),
+      essayCuriosity: Value(e.curiosity),
+      essayPromptPref: Value(e.promptPref),
+    ));
+  }
+
+  /// Load essay material (falls back to empty context).
+  Future<EssayContext> loadEssay(String profileId) async {
+    final row = await (_db.select(_db.onboarding)
+          ..where((t) => t.profileId.equals(profileId)))
+        .getSingleOrNull();
+    if (row == null) return const EssayContext();
+    return EssayContext.fromRow(
+      story: row.essayStory,
+      valuesJson: row.essayValues,
+      curiosity: row.essayCuriosity,
+      promptPref: row.essayPromptPref,
+    );
+  }
+
   Future<ScheduleProfile?> loadSchedule(String profileId) async {
     final row = await (_db.select(_db.onboarding)
           ..where((t) => t.profileId.equals(profileId)))

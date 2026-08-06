@@ -37,7 +37,7 @@ class AppDatabase extends _$AppDatabase {
       : super(executor ?? driftDatabase(name: 'profileforge'));
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -70,6 +70,21 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(onboarding, onboarding.screenTimeHours);
             await m.addColumn(onboarding, onboarding.studyEnvironment);
             await m.addColumn(onboarding, onboarding.socialMediaUsage);
+          }
+          if (from < 5) {
+            // v5 — Mission enrichment (AI-authored fields).
+            await m.addColumn(missions, missions.description);
+            await m.addColumn(missions, missions.gemReward);
+            await m.addColumn(missions, missions.source);
+            await m.addColumn(missions, missions.priority);
+            await m.addColumn(missions, missions.rationale);
+          }
+          if (from < 6) {
+            // v6 — Essay context (story seed, values, curiosity, prompt pref).
+            await m.addColumn(onboarding, onboarding.essayStory);
+            await m.addColumn(onboarding, onboarding.essayValues);
+            await m.addColumn(onboarding, onboarding.essayCuriosity);
+            await m.addColumn(onboarding, onboarding.essayPromptPref);
           }
         },
       );

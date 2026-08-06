@@ -55,11 +55,19 @@ class Missions extends Table {
   TextColumn get id => text().withDefault(const Constant(''))();
   TextColumn get profileId => text().withDefault(const Constant(''))();
   TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get description => text().withDefault(const Constant(''))();
   TextColumn get pillar => text().withDefault(const Constant(''))();
   TextColumn get cadence => text().withDefault(const Constant('daily'))();
   DateTimeColumn get due => dateTime().nullable()();
   BoolColumn get done => boolean().withDefault(const Constant(false))();
   IntColumn get xpReward => integer().withDefault(const Constant(10))();
+  IntColumn get gemReward => integer().withDefault(const Constant(0))();
+  /// 'ai' | 'rule' | 'engine' — how this mission was authored.
+  TextColumn get source => text().withDefault(const Constant('rule'))();
+  /// Priority band: critical | high | medium | low.
+  TextColumn get priority => text().withDefault(const Constant('medium'))();
+  /// "Why this mission" — psychology/admissions reasoning (filled by AI).
+  TextColumn get rationale => text().withDefault(const Constant(''))();
   @override
   Set<Column<Object>> get primaryKey => {id};
 }
@@ -158,6 +166,16 @@ class Onboarding extends Table {
   TextColumn get sleepStart => text().withDefault(const Constant('22:00'))();
   /// "07:00"
   TextColumn get sleepEnd => text().withDefault(const Constant('07:00'))();
+
+  // ── Essay context (v6) ──
+  /// Defining moment / story seed for the personal statement.
+  TextColumn get essayStory => text().withDefault(const Constant(''))();
+  /// JSON array of VIA-style values, e.g. ["Curiosity","Grit"].
+  TextColumn get essayValues => text().withDefault(const Constant('[]'))();
+  /// "What question keeps you up at night?" — intellectual curiosity hook.
+  TextColumn get essayCuriosity => text().withDefault(const Constant(''))();
+  /// Which Common App prompt resonates most ('1'..'7').
+  TextColumn get essayPromptPref => text().withDefault(const Constant(''))();
 
   // ── Goals & environment ──
   /// "6months", "1year", "2years", "custom".

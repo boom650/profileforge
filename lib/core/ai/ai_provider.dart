@@ -29,7 +29,7 @@ class AIProviders {
   static const openCodeZen = AIProviderConfig(
     type: AIProviderType.openCodeZen,
     name: 'OpenCode Zen',
-    baseUrl: 'https://api.openai.com/v1',
+    baseUrl: 'https://api.opencode.ai/v1',
     model: 'mimo-v2.5-free',
     apiKeyStorageKey: 'ai_key_opencode_zen',
   );

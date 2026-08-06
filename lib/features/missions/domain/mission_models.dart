@@ -74,6 +74,12 @@ class Mission with _$Mission {
     required bool completed,
     @Default(0) int progress,
     @Default(100) int target,
+    /// How this mission was authored: 'ai' | 'rule' | 'engine'.
+    @Default('rule') String source,
+    /// Priority band: critical | high | medium | low.
+    @Default('medium') String priority,
+    /// "Why this mission" — admissions/psychology reasoning (AI fills this).
+    @Default('') String rationale,
   }) = _Mission;
 }
 

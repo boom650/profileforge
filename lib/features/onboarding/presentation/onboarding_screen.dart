@@ -24,7 +24,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _page = PageController();
   int _step = 0;
-  static const int _total = 6;
+  static const int _total = 11;
 
   // Step 1: Goal.
   String _goal = 'both';
@@ -39,6 +39,31 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   String _name = '';
   int _grade = 11;
   final Set<String> _interests = {};
+
+  // Step 3.5: Grades (subject → grade).
+  final Map<String, String> _grades = {};
+  final Map<String, String> _gradeInput = {};
+
+  // Step 3.6: Activities (extracurriculars).
+  final List<String> _activities = [];
+  final Set<String> _activityChips = {};
+
+  // Step 3.7: Competitions / awards.
+  final List<Achievement> _competitions = [];
+
+  // Step 3.8: Careers.
+  final Set<String> _careers = {};
+
+  // Step 3.9: Essay — story seed, values, curiosity, prompt pref.
+  final TextEditingController _storyCtrl = TextEditingController();
+  final TextEditingController _curiosityCtrl = TextEditingController();
+  final Set<String> _values = {};
+  String _promptPref = '';
+
+  // Capture a new activity / competition.
+  final _activityCtrl = TextEditingController();
+  final _compNameCtrl = TextEditingController();
+  final _compResultCtrl = TextEditingController();
 
   // Step 4: Schedule.
   int _availableHours = 15;
@@ -55,6 +80,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     'Math', 'Physics', 'CS', 'Chemistry', 'Biology',
     'Economics', 'Design', 'Writing', 'Music', 'Sports',
     'Debate', 'Robotics', 'Volunteering', 'Research', 'Art',
+  ];
+
+  final _activityItems = [
+    'School Club', 'Student Council', 'Debate Team', 'Robotics',
+    'Volunteering', 'Research', 'Coding', 'Sports Team', 'Music / Band',
+    'Art / Design', 'Writing / Journalism', 'Math Olympiad', 'Startup',
+  ];
+
+  final _careerItems = [
+    'Engineering', 'Medicine', 'Computer Science', 'Law', 'Finance',
+    'Research / Science', 'Design / Architecture', 'Entrepreneurship',
+    'Public Policy', 'AI / Data Science',
+  ];
+
+  final _valueItems = [
+    'Curiosity', 'Grit', 'Honesty', 'Leadership', 'Kindness',
+    'Creativity', 'Justice', 'Courage', 'Perseverance', 'Ambition',
+  ];
+
+  // Common App prompt labels (2024-25) for essay self-identification.
+  static const _promptLabels = [
+    'Identity / background', 'Obstacle & growth', 'Challenged a belief',
+    'Problem to solve', 'Personal growth', 'Flow / what fascinates me',
+    'Topic of my choice',
   ];
 
   void _next() {
@@ -74,12 +123,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   OnboardingProfile _buildProfile() => OnboardingProfile(
         profileId: widget.profileId,
-        grades: {},
-        activities: [],
-        competitions: [],
+        grades: Map<String, String>.from(_grades),
+        activities: List<String>.from(_activities),
+        competitions: List<Achievement>.from(_competitions),
         subjects: _interests.toList(),
         targetUniversities: _targets.toList(),
-        careerInterests: [],
+        careerInterests: _careers.toList(),
         budget: 0,
         travelRadiusKm: 10,
         availabilityHoursPerWeek: _availableHours,
@@ -108,6 +157,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ref.read(saveOnboardingProvider(p));
     ref.read(onboardingRepositoryProvider).saveSchedule(s, widget.profileId);
 
+    // Persist essay material so AI missions speak to the real narrative.
+    final essay = EssayContext(
+      story: _storyCtrl.text.trim(),
+      values: _values.toList(),
+      curiosity: _curiosityCtrl.text.trim(),
+      promptPref: _promptPref,
+    );
+    ref.read(onboardingRepositoryProvider).saveEssay(essay, widget.profileId);
+
     // Mark onboarded.
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('pf_onboarded', true);
@@ -117,7 +175,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     if (mounted) {
       celebrate(context, message: 'Your forge is ready! 🚀');
       Future.delayed(1200.ms, () {
-        if (mounted) context.go('/auth-prompt');
+        if (mounted) {
+          // Navigate to psychology onboarding after basic onboarding.
+          context.go('/psychology-onboarding');
+        }
       });
     }
   }
@@ -125,6 +186,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   void dispose() {
     _page.dispose();
+    _storyCtrl.dispose();
+    _curiosityCtrl.dispose();
+    _activityCtrl.dispose();
+    _compNameCtrl.dispose();
+    _compResultCtrl.dispose();
     super.dispose();
   }
 
@@ -220,6 +286,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     _stepSchools(dark),
                     _stepCity(dark),
                     _stepProfile(dark),
+                    _stepGrades(dark),
+                    _stepActivities(dark),
+                    _stepCompetitions(dark),
+                    _stepCareers(dark),
+                    _stepEssay(dark),
                     _stepSchedule(dark),
                     _stepLaunch(dark),
                   ],
@@ -624,6 +695,363 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   // ──────────────────────────────────────────────────────────────────────────
+  // STEP 3.5: Grades
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepGrades(bool dark) {
+    final subjects = _interests.isEmpty
+        ? const ['Math', 'Physics', 'Chemistry', 'Biology', 'CS', 'English']
+        : _interests.toList();
+    return _stepShell(
+      icon: Icons.grade_rounded,
+      title: 'Your grades',
+      subtitle: 'Rough is fine — this helps us spot your strengths & weak spots',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...subjects.map((s) {
+            final grade = _grades[s] ?? '';
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      s,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: dark ? Palette.textPrimary : Palette.textInverse,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: SizedBox(
+                      height: 40,
+                      child: TextField(
+                        onChanged: (v) => setState(() {
+                          if (v.trim().isEmpty) {
+                            _grades.remove(s);
+                          } else {
+                            _grades[s] = v.trim();
+                          }
+                        }),
+                        textCapitalization: TextCapitalization.none,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: 'e.g. 92 / A*',
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                            color: dark ? Palette.textTertiary : Palette.textTertiary,
+                          ),
+                          isDense: true,
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          const SizedBox(height: 4),
+          Text(
+            'Tip: add your board percentage (CBSE/ICSE/IB) or letter grade.',
+            style: TextStyle(
+              fontSize: 12,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 3.6: Activities
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepActivities(bool dark) {
+    return _stepShell(
+      icon: Icons.rocket_rounded,
+      title: 'What do you do outside class?',
+      subtitle: 'Clubs, teams, projects — anything you spend time on',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _activityItems.map((item) {
+              final selected = _activityChips.contains(item);
+              return GestureDetector(
+                onTap: () => setState(() {
+                  if (selected) {
+                    _activityChips.remove(item);
+                    _activities.remove(item);
+                  } else {
+                    _activityChips.add(item);
+                    _activities.add(item);
+                  }
+                }),
+                child: _Chip(label: item, selected: selected),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: TextField(
+                    controller: _activityCtrl,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      hintText: 'Add your own activity...',
+                      isDense: true,
+                      prefixIcon: Icon(Icons.add_rounded, size: 20),
+                    ),
+                    onSubmitted: (_) => _addActivity(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              _IconButton(
+                icon: Icons.add_rounded,
+                onTap: _addActivity,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _addActivity() {
+    final v = _activityCtrl.text.trim();
+    if (v.isEmpty || _activities.contains(v)) return;
+    setState(() {
+      _activities.add(v);
+      _activityCtrl.clear();
+    });
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 3.7: Competitions
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepCompetitions(bool dark) {
+    return _stepShell(
+      icon: Icons.emoji_events_rounded,
+      title: 'Competitions & awards',
+      subtitle: 'Olympiads, hackathons, medals — every win counts',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: SizedBox(
+                  height: 44,
+                  child: TextField(
+                    controller: _compNameCtrl,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      hintText: 'Competition name',
+                      isDense: true,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 4,
+                child: SizedBox(
+                  height: 44,
+                  child: TextField(
+                    controller: _compResultCtrl,
+                    decoration: const InputDecoration(
+                      hintText: 'Result (Gold...)',
+                      isDense: true,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              _IconButton(
+                icon: Icons.add_rounded,
+                onTap: _addCompetition,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (_competitions.isEmpty)
+            Text(
+              "No awards yet — that's fine, add them as you go.",
+              style: TextStyle(
+                fontSize: 13,
+                color: dark ? Palette.textSecondary : Palette.textTertiary,
+              ),
+            )
+          else
+            ..._competitions.map((a) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _AchievementTile(
+                    achievement: a,
+                    onRemove: () => setState(
+                        () => _competitions.removeWhere((x) => x == a)),
+                  ),
+                )),
+        ],
+      ),
+    );
+  }
+
+  void _addCompetition() {
+    final name = _compNameCtrl.text.trim();
+    final result = _compResultCtrl.text.trim();
+    if (name.isEmpty || result.isEmpty) return;
+    setState(() {
+      _competitions.add(Achievement(name: name, result: result, year: ''));
+      _compNameCtrl.clear();
+      _compResultCtrl.clear();
+    });
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 3.8: Careers
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepCareers(bool dark) {
+    return _stepShell(
+      icon: Icons.work_rounded,
+      title: 'What could you see yourself doing?',
+      subtitle: 'Career directions you find interesting right now',
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: _careerItems.map((item) {
+          final selected = _careers.contains(item);
+          return GestureDetector(
+            onTap: () => setState(() {
+              if (selected) {
+                _careers.remove(item);
+              } else {
+                _careers.add(item);
+              }
+            }),
+            child: _Chip(label: item, selected: selected),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 3.9: Essay — story seed, values, curiosity, prompt pref.
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepEssay(bool dark) {
+    return _stepShell(
+      icon: Icons.auto_stories_rounded,
+      title: 'Your story — the raw material',
+      subtitle: 'A few honest details will power your personal statement & missions',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'A moment that changed how you see things',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _storyCtrl,
+            maxLines: 3,
+            maxLength: 240,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: const InputDecoration(
+              hintText: 'It can be small — a failure, a question, a person...',
+              alignLabelWithHint: true,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'What keeps you up at night?',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _curiosityCtrl,
+            maxLines: 2,
+            maxLength: 200,
+            decoration: const InputDecoration(
+              hintText: 'A question you can\'t stop thinking about',
+              alignLabelWithHint: true,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Values that define you',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _valueItems.map((item) {
+              final selected = _values.contains(item);
+              return GestureDetector(
+                onTap: () => setState(() {
+                  if (selected) {
+                    _values.remove(item);
+                  } else {
+                    _values.add(item);
+                  }
+                }),
+                child: _Chip(label: item, selected: selected),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Which essay prompt resonates most?',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(_promptLabels.length, (i) {
+              final pref = '${i + 1}';
+              final selected = _promptPref == pref;
+              return GestureDetector(
+                onTap: () => setState(() => _promptPref = selected ? '' : pref),
+                child: _Chip(label: '${i + 1}. ${_promptLabels[i]}', selected: selected),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
   // STEP 4: Schedule
   // ──────────────────────────────────────────────────────────────────────────
   Widget _stepSchedule(bool dark) {
@@ -812,6 +1240,40 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     label: 'Time',
                     value: '$_availableHours h/week • $_peakTime',
                   ),
+                  const SizedBox(height: 8),
+                  _SummaryRow(
+                    icon: Icons.grade_rounded,
+                    label: 'Grades',
+                    value: _grades.isEmpty
+                        ? 'Not set'
+                        : '${_grades.length} subjects',
+                  ),
+                  const SizedBox(height: 8),
+                  _SummaryRow(
+                    icon: Icons.rocket_rounded,
+                    label: 'Activities',
+                    value: _activities.isEmpty
+                        ? 'None yet'
+                        : '${_activities.length} listed',
+                  ),
+                  const SizedBox(height: 8),
+                  _SummaryRow(
+                    icon: Icons.emoji_events_rounded,
+                    label: 'Awards',
+                    value: _competitions.isEmpty
+                        ? 'None yet'
+                        : '${_competitions.length} listed',
+                  ),
+                  if (_storyCtrl.text.trim().isNotEmpty ||
+                      _curiosityCtrl.text.trim().isNotEmpty ||
+                      _values.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    _SummaryRow(
+                      icon: Icons.auto_stories_rounded,
+                      label: 'Story',
+                      value: 'Captured ✨',
+                    ),
+                  ],
                 ],
               ),
             ).animate().fadeIn(delay: 400.ms, duration: 400.ms).slideY(begin: 0.05),
@@ -1060,6 +1522,112 @@ class _SummaryRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Pill selectable chip used across onboarding steps.
+class _Chip extends StatelessWidget {
+  const _Chip({required this.label, required this.selected});
+
+  final String label;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return AnimatedContainer(
+      duration: 180.ms,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+      decoration: BoxDecoration(
+        color: selected
+            ? Palette.primary
+            : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: selected ? Palette.primary : Colors.transparent,
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          fontSize: 13,
+          color: selected
+              ? Colors.white
+              : (dark ? Palette.textPrimary : Palette.textInverse),
+        ),
+      ),
+    );
+  }
+}
+
+/// Small round icon button.
+class _IconButton extends StatelessWidget {
+  const _IconButton({required this.icon, required this.onTap});
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return Material(
+      color: Palette.primary.withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Icon(icon, color: Palette.primary, size: 22),
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact read-only list tile for a captured competition/award.
+class _AchievementTile extends StatelessWidget {
+  const _AchievementTile({required this.achievement, required this.onRemove});
+
+  final Achievement achievement;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.workspace_premium_rounded,
+              color: Palette.primary, size: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              achievement.label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: dark ? Palette.textPrimary : Palette.textInverse,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onRemove,
+            child: Icon(Icons.close_rounded,
+                size: 18,
+                color: dark ? Palette.textTertiary : Palette.textTertiary),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ import 'package:profileforge/features/profile/presentation/profile_screen.dart';
 import 'package:profileforge/features/profile/presentation/profile_page.dart';
 import 'package:profileforge/features/profile/presentation/badges_page.dart';
 import 'package:profileforge/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:profileforge/features/onboarding/presentation/onboarding_completion_screen.dart';
 import 'package:profileforge/features/timer/presentation/timer_screen.dart';
 import 'package:profileforge/features/analytics/presentation/analytics_screen.dart';
 import 'package:profileforge/features/achievements/presentation/achievements_screen.dart';
@@ -31,6 +32,13 @@ import 'package:profileforge/features/splash/presentation/splash_screen.dart';
 import 'package:profileforge/features/auth/presentation/welcome_screen.dart';
 import 'package:profileforge/features/auth/presentation/magic_link_screen.dart';
 import 'package:profileforge/features/auth/presentation/auth_prompt_screen.dart';
+
+// Premium v3 screens.
+import 'package:profileforge/features/onboarding/presentation/psychology_onboarding_screen.dart';
+import 'package:profileforge/core/ai/enhanced_ai_chat_screen.dart';
+import 'package:profileforge/features/profile/presentation/profile_score_screen.dart';
+import 'package:profileforge/features/settings/presentation/settings_screen.dart';
+import 'package:profileforge/features/settings/presentation/api_key_setup_screen.dart';
 
 /// A slide-from-right page transition for GoRouter routes.
 Page<Object> _slidePage(Widget child) {
@@ -114,6 +122,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route('/geo', (c, s) => GeoScreen(lat: _defaultLat, lng: _defaultLng)),
       _route('/ai-settings', (c, s) => const AISettingsScreen()),
       _route('/ai-chat', (c, s) => const AIChatScreen()),
+
+      // Premium v3 routes.
+      _route('/psychology-onboarding', (c, s) => PsychologyOnboardingScreen(
+        onComplete: (profile) {
+          // Navigate to completion screen after psychology onboarding.
+          c.go('/onboarding-complete');
+        },
+      )),
+      _route('/onboarding-complete', (c, s) => const OnboardingCompletionScreen()),
+      _route('/enhanced-ai-chat', (c, s) => EnhancedAIChatScreen(profileId: pid)),
+      _route('/profile-score', (c, s) => ProfileScoreScreen(profileId: pid)),
+      _route('/settings', (c, s) => const SettingsScreen()),
+      _route('/api-key-setup', (c, s) => const ApiKeySetupScreen()),
     ],
   );
 });

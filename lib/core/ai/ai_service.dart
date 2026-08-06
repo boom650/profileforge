@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'ai_json.dart';
 import 'ai_provider.dart';
 
 /// Core AI service — OpenAI-compatible with 3-provider fallback.
@@ -16,7 +17,7 @@ class AIService {
   ));
 
   /// System prompt for admissions AI.
-  static const _systemPrompt = '''
+  static const systemPrompt = '''
 You are ProfileForge AI — an elite admissions architect for top universities.
 You help students with:
 - Personalized task recommendations based on their profile, interests, and goals
@@ -36,7 +37,7 @@ Rules:
   /// Generate a completion with automatic provider fallback.
   Future<String> generate({
     required String prompt,
-    String? systemPrompt,
+    String? systemPromptOverride,
     double temperature = 0.7,
     int maxTokens = 1024,
   }) async {
@@ -51,7 +52,7 @@ Rules:
           provider: provider,
           apiKey: apiKey,
           prompt: prompt,
-          systemPrompt: systemPrompt ?? _systemPrompt,
+          systemPrompt: systemPromptOverride ?? systemPrompt,
           temperature: temperature,
           maxTokens: maxTokens,
         );
@@ -69,6 +70,7 @@ Rules:
     required List<ChatMessage> messages,
     double temperature = 0.7,
     int maxTokens = 2048,
+    String? systemPromptOverride,
   }) async {
     final providers = AIProviders.fallbackChain;
 
@@ -78,7 +80,7 @@ Rules:
 
       try {
         final msgList = [
-          {'role': 'system', 'content': _systemPrompt},
+          {'role': 'system', 'content': systemPromptOverride ?? systemPrompt},
           ...messages.map((m) => {'role': m.role, 'content': m.content}),
         ];
 
@@ -132,11 +134,40 @@ Rules:
     }
   }
 
+  /// Generate a JSON-array completion (low temperature, strict output).
+  /// Returns parsed JSON list, or null if no provider worked / parse failed.
+  Future<List<Map<String, dynamic>>?> generateJson({
+    required String prompt,
+    String? systemPromptOverride,
+    double temperature = 0.3,
+    int maxTokens = 2048,
+  }) async {
+    final raw = await generate(
+      prompt: prompt,
+      systemPromptOverride: systemPromptOverride,
+      temperature: temperature,
+      maxTokens: maxTokens,
+    );
+    if (raw.isEmpty || raw.startsWith('No AI provider') || raw.startsWith('No response')) {
+      return null;
+    }
+    final list = AiJson.extractJsonArray(raw);
+    return list.isEmpty ? null : list;
+  }
+
   /// Get the name of the currently active provider.
   Future<String> getActiveProviderName() async {
     final provider = await _keyStore.getActiveProvider();
-    return provider?.name ?? 'None';
+    _cachedProviderName = provider?.name ?? 'None';
+    return _cachedProviderName!;
   }
+
+  /// Get cached provider name (set after last async call).
+  String getActiveProviderNameSync() {
+    return _cachedProviderName ?? 'None';
+  }
+
+  String? _cachedProviderName;
 
   Future<String> _callProvider({
     required AIProviderConfig provider,

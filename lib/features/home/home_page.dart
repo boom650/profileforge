@@ -400,6 +400,72 @@ class HomePage extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
+            // ── Quick Access to New Screens ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: SectionTitle('⚡ Quick Access'),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _QuickAccessCard(
+                        icon: Icons.psychology,
+                        label: 'Personality',
+                        subtitle: '5-min assessment',
+                        color: const Color(0xFF8B5CF6),
+                        onTap: () => context.push('/psychology-onboarding'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickAccessCard(
+                        icon: Icons.auto_awesome,
+                        label: 'AI Chat',
+                        subtitle: 'Psychology-adapted',
+                        color: Palette.primary,
+                        onTap: () => context.push('/enhanced-ai-chat'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _QuickAccessCard(
+                        icon: Icons.score,
+                        label: 'Score',
+                        subtitle: 'Your readiness',
+                        color: Palette.success,
+                        onTap: () => context.push('/profile-score'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickAccessCard(
+                        icon: Icons.settings,
+                        label: 'Settings',
+                        subtitle: 'App & AI config',
+                        color: Palette.warning,
+                        onTap: () => context.push('/settings'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
             // ── Weekly progress heatmap ──
             SliverToBoxAdapter(
               child: Padding(
@@ -1120,5 +1186,79 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
       case 'service': return Palette.success;
       default: return Palette.primary;
     }
+  }
+}
+
+/// ── Quick Access Card ──────────────────────────────────────────────────────
+class _QuickAccessCard extends StatelessWidget {
+  const _QuickAccessCard({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = isDark(context);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: dark ? Palette.surface1.withValues(alpha: 0.6) : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: dark ? Palette.border.withValues(alpha: 0.4) : const Color(0xFFE2E8F0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, size: 20, color: color),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: dark ? Palette.textPrimary : Palette.textInverse,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 11,
+                color: dark ? Palette.textTertiary : Palette.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

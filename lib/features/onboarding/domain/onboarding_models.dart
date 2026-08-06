@@ -198,3 +198,68 @@ class ScheduleProfile {
   /// JSON columns stored in the Onboarding table.
   String get schoolDaysJson => jsonEncode(schoolDays);
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Essay context (v6) — the raw material admissions officers read for.
+// Research basis: 03ba-essay-narrative-craft (authenticity, self-awareness,
+// intellectual curiosity, resilience, specificity) and the Common App prompts.
+// This becomes the seed for the personal-statement and AI mission framing.
+// ────────────────────────────────────────────────────────────────────────────
+
+class EssayContext {
+  /// A defining moment / story seed for the personal statement.
+  final String story;
+  /// VIA-style values, e.g. ["Curiosity", "Grit", "Curiosity"].
+  final List<String> values;
+  /// "What question keeps you up at night?" — intellectual curiosity hook.
+  final String curiosity;
+  /// Which Common App prompt resonates most: '1'..'7' ('' = any).
+  final String promptPref;
+
+  const EssayContext({
+    this.story = '',
+    this.values = const [],
+    this.curiosity = '',
+    this.promptPref = '',
+  });
+
+  EssayContext copyWith({
+    String? story,
+    List<String>? values,
+    String? curiosity,
+    String? promptPref,
+  }) {
+    return EssayContext(
+      story: story ?? this.story,
+      values: values ?? this.values,
+      curiosity: curiosity ?? this.curiosity,
+      promptPref: promptPref ?? this.promptPref,
+    );
+  }
+
+  String get valuesPersistJson => jsonEncode(values);
+
+  /// True if any essay material has been captured.
+  bool get isMeaningful =>
+      story.isNotEmpty || values.isNotEmpty || curiosity.isNotEmpty;
+
+  static EssayContext fromRow({
+    required String story,
+    required String valuesJson,
+    required String curiosity,
+    required String promptPref,
+  }) {
+    List<String> values = const [];
+    try {
+      values = List<String>.from(jsonDecode(valuesJson));
+    } catch (_) {
+      values = const [];
+    }
+    return EssayContext(
+      story: story,
+      values: values,
+      curiosity: curiosity,
+      promptPref: values.isEmpty ? '' : promptPref,
+    );
+  }
+}

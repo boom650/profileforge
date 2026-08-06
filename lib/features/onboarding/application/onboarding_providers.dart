@@ -29,3 +29,22 @@ final saveOnboardingProvider =
     Provider.family<void, OnboardingProfile>((ref, p) {
   ref.read(onboardingProvider(p.profileId).notifier).save(p);
 });
+
+/// Essay material (story seed, values, curiosity) — used to enrich the
+/// AI mission prompt so missions speak to the student's actual narrative.
+final essayContextProvider =
+    AsyncNotifierProviderFamily<EssayNotifier, EssayContext, String>(
+        EssayNotifier.new);
+
+class EssayNotifier extends FamilyAsyncNotifier<EssayContext, String> {
+  @override
+  Future<EssayContext> build(String profileId) async {
+    return ref.watch(onboardingRepositoryProvider).loadEssay(profileId);
+  }
+
+  Future<void> save(EssayContext e) async {
+    state = const AsyncLoading();
+    await ref.read(onboardingRepositoryProvider).saveEssay(e, arg);
+    state = AsyncData(e);
+  }
+}

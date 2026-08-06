@@ -46,15 +46,22 @@ class MissionsScreen extends ConsumerWidget {
                     const Spacer(),
                     // Refresh button.
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         final ob = ref.read(onboardingProvider(profileId)).valueOrNull;
                         if (ob == null) {
                           context.push('/onboarding');
                           return;
                         }
-                        ref.read(generateMissionsProvider(profileId));
                         SoundService.instance.success();
-                        celebrate(context, message: 'Refreshed! 🚀');
+                        await ref
+                            .read(generateMissionsProvider(profileId).notifier)
+                            .forceRegenerate();
+                        ref.invalidate(todaysMissionsProvider(profileId));
+                        ref.invalidate(weeklyMissionsProvider(profileId));
+                        ref.invalidate(monthlyMissionsProvider(profileId));
+                        if (context.mounted) {
+                          celebrate(context, message: 'Refreshed! 🚀');
+                        }
                       },
                       child: Container(
                         width: 36,
@@ -164,8 +171,12 @@ class MissionsScreen extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: _MissionCard(
                                 title: m.title,
+                                description: m.description,
                                 pillar: m.pillar,
                                 xp: m.xpReward,
+                                source: m.source,
+                                priority: m.priority,
+                                rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
                                   await ref.read(completeMissionProvider((
@@ -226,8 +237,12 @@ class MissionsScreen extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: _MissionCard(
                                 title: m.title,
+                                description: m.description,
                                 pillar: m.pillar,
                                 xp: m.xpReward,
+                                source: m.source,
+                                priority: m.priority,
+                                rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
                                   await ref.read(completeMissionProvider((
@@ -288,8 +303,12 @@ class MissionsScreen extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: _MissionCard(
                                 title: m.title,
+                                description: m.description,
                                 pillar: m.pillar,
                                 xp: m.xpReward,
+                                source: m.source,
+                                priority: m.priority,
+                                rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
                                   await ref.read(completeMissionProvider((
@@ -327,20 +346,35 @@ class MissionsScreen extends ConsumerWidget {
 class _MissionCard extends StatelessWidget {
   const _MissionCard({
     required this.title,
+    required this.description,
     required this.pillar,
     required this.xp,
+    required this.source,
+    required this.priority,
+    required this.rationale,
     required this.onDone,
   });
 
   final String title;
+  final String description;
   final String pillar;
   final int xp;
+  final String source;
+  final String priority;
+  final String rationale;
   final Future<void> Function() onDone;
 
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
     final color = pillarColor(pillar);
+    final isAi = source == 'ai';
+    final prioColor = switch (priority) {
+      'critical' => Palette.error,
+      'high' => Palette.warning,
+      'low' => Palette.textTertiary,
+      _ => Palette.primary,
+    };
     return GlassCard(
       padding: const EdgeInsets.all(14),
       child: Row(
@@ -358,7 +392,7 @@ class _MissionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Title + pillar chip.
+          // Title + description + meta row.
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,22 +405,104 @@ class _MissionCard extends StatelessWidget {
                     color: dark ? Palette.textPrimary : Palette.textInverse,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    pillar,
+                if (description.isNotEmpty) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: color,
+                      fontSize: 12,
+                      color: dark ? Palette.textSecondary : Palette.textTertiary,
                     ),
                   ),
+                ],
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        pillar,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: prioColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        priority.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: prioColor,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                    if (isAi) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Palette.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.auto_awesome, size: 11, color: Palette.primary),
+                            SizedBox(width: 3),
+                            Text(
+                              'AI',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                color: Palette.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
+                if (rationale.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.tips_and_updates_outlined,
+                            size: 13, color: dark ? Palette.textTertiary : Palette.textTertiary),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            rationale,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontStyle: FontStyle.italic,
+                              color: dark ? Palette.textTertiary : Palette.textTertiary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
