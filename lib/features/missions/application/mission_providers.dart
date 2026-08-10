@@ -10,6 +10,8 @@ import 'package:profileforge/features/missions/domain/mission_models.dart';
 import 'package:profileforge/features/missions/domain/mission_generator.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/streak/domain/streak_state.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
@@ -56,9 +58,11 @@ final missionHistoryProvider =
   return ref.watch(missionRepositoryProvider).history(profileId);
 });
 
-/// Complete a mission: marks done, awards XP (×skin multiplier) + gems.
+/// Complete a mission: marks done, awards XP (×skin multiplier) + gems,
+/// and records today's streak. Returns the streak event (milestone days
+/// drive celebrations at call sites).
 final completeMissionProvider = Provider.family<
-    Future<void>,
+    Future<StreakEvent?>,
     ({
       String profileId,
       String missionId,
@@ -75,11 +79,23 @@ final completeMissionProvider = Provider.family<
   // Award gems (1 gem per 5 XP, min 2).
   final gems = (args.xp / 5).ceil().clamp(2, 50);
   await ref.read(walletRepositoryProvider).add(args.profileId, gems);
+  // Completing a mission = today's streak activity. The habit loop must
+  // actually run — not just a manual button (gauntlet R1: "a Habitica
+  // shell without the habit"). Milestone events bubble up so the UI can
+  // celebrate the win (variable-reward layering, 02c-key-insights).
+  StreakEvent? streakEvent;
+  try {
+    streakEvent =
+        await ref.read(streakProvider(args.profileId).notifier).recordToday();
+  } catch (_) {
+    // Streak is additive; a failure here must never block the reward.
+  }
   ref.invalidate(todaysMissionsProvider(args.profileId));
   ref.invalidate(weeklyMissionsProvider(args.profileId));
   ref.invalidate(monthlyMissionsProvider(args.profileId));
   ref.invalidate(totalXpProvider(args.profileId));
   ref.invalidate(gemsProvider(args.profileId));
+  return streakEvent;
 });
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -137,19 +153,20 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
       EssayContext? essay, PsychologicalProfile? psych) async {
     // Tier 1: AI-authored.
     final aiMissions = await _tryAi(onboarding, essay, psych);
-    if (aiMissions != null && aiMissions.isNotEmpty) return aiMissions;
+    if (aiMissions.isNotEmpty) return aiMissions;
 
-    // Tier 2: rules from onboarding.
+    // Tier 2: rules from onboarding (psych-adapted — the no-key path must
+    // still feel personal: XP sizing, framing, mission mix all adapt).
     if (onboarding != null) {
       final gen = MissionGenerator();
-      final daily = gen.generateDaily(onboarding, arg);
+      final daily = gen.generateDaily(onboarding, arg, psych);
       final rules = daily.map((m) {
         final xp = m.xp;
         return Mission(
           id: m.id,
           profileId: arg,
           title: m.title,
-          description: 'Complete this mission to earn XP and gems.',
+          description: _ruleDescription(psych),
           cadence: MissionCadence.daily,
           pillar: _pillar(m.pillar),
           xpReward: xp,
@@ -250,6 +267,23 @@ String _psychFrom(PsychologicalProfile? psych) {
     parts.add('needs growth-mindset reinforcement');
   if (psych.selfEfficacy < 0.4) parts.add('build confidence in small wins');
   return parts.join(' · ');
+}
+
+/// Psych-aware description for rule-tier missions. Feedback language must
+/// serve competence (SDT): low self-efficacy → progress framing; growth
+/// mindset → effort framing (Dweck, 03-as).
+String _ruleDescription(PsychologicalProfile? psych) {
+  if (psych == null) return 'Complete this mission to earn XP and gems.';
+  final se = psych.selfEfficacy;
+  if (se < 0.4) {
+    return 'Small steps count. Finish this and you are one step closer — '
+        'you\'ve handled harder things than this.';
+  }
+  if (!psych.growthMindset.isNaN && psych.growthMindset < 0.4) {
+    return 'This is practice, not a test of who you are. Effort grows ability '
+        '— complete it and watch the XP rise.';
+  }
+  return 'Complete this mission to earn XP and gems.';
 }
 
 MissionPillar _pillar(String s) {

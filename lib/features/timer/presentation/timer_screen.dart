@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
-import 'package:profileforge/core/data/tables.dart';
-import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/xp/application/variable_rewards.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/streak/presentation/streak_celebration.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
@@ -60,6 +61,19 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     ref.read(saveFocusSessionProvider(
       (profileId: widget.profileId, durationMinutes: minutes, xpEarned: xp, tag: _selectedTag),
     ));
+    // A completed focus session is today's streak activity — the habit loop
+    // must run from real behavior, not a manual button (gauntlet R1).
+    // Milestone days get the layered celebration.
+    unawaited(() async {
+      try {
+        final event = await ref
+            .read(streakProvider(widget.profileId).notifier)
+            .recordToday();
+        celebrateStreakEvent(context, event);
+      } catch (_) {
+        // Streak is additive; never block the session completion.
+      }
+    }());
     // Check achievements
     ref.read(achievementCheckerProvider.notifier).checkAll(widget.profileId);
     // Sound

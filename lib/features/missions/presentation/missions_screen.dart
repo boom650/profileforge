@@ -9,6 +9,7 @@ import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/core/widgets/motion_kit.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
+import 'package:profileforge/features/streak/presentation/streak_celebration.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -189,7 +190,8 @@ class MissionsScreen extends ConsumerWidget {
                                 rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
-                                  await ref.read(completeMissionProvider((
+                                  final streakEvent =
+                                      await ref.read(completeMissionProvider((
                                     profileId: profileId,
                                     missionId: m.id,
                                     xp: m.xpReward,
@@ -197,6 +199,7 @@ class MissionsScreen extends ConsumerWidget {
                                   )));
                                   celebrate(context,
                                       message: '+${m.xpReward} XP 🎉');
+                                  celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
                             );
@@ -258,7 +261,8 @@ class MissionsScreen extends ConsumerWidget {
                                 rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
-                                  await ref.read(completeMissionProvider((
+                                  final streakEvent =
+                                      await ref.read(completeMissionProvider((
                                     profileId: profileId,
                                     missionId: m.id,
                                     xp: m.xpReward,
@@ -266,6 +270,7 @@ class MissionsScreen extends ConsumerWidget {
                                   )));
                                   celebrate(context,
                                       message: '+${m.xpReward} XP 🎉');
+                                  celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
                             );
@@ -327,7 +332,8 @@ class MissionsScreen extends ConsumerWidget {
                                 rationale: m.rationale,
                                 onDone: () async {
                                   SoundService.instance.success();
-                                  await ref.read(completeMissionProvider((
+                                  final streakEvent =
+                                      await ref.read(completeMissionProvider((
                                     profileId: profileId,
                                     missionId: m.id,
                                     xp: m.xpReward,
@@ -335,6 +341,7 @@ class MissionsScreen extends ConsumerWidget {
                                   )));
                                   celebrate(context,
                                       message: '+${m.xpReward} XP 🎉');
+                                  celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
                             );

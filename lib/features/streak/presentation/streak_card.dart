@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/services.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
+import 'package:profileforge/features/streak/presentation/streak_celebration.dart';
 
 /// Animated streak card with humane-recovery indicators.
 /// Accessible: Semantic labels + tooltips on every interactive element.
@@ -77,37 +77,13 @@ class _StreakCardBody extends ConsumerWidget {
                       milestone: (d) => d,
                       orElse: () => null,
                     );
-                    if (day != null && context.mounted) _celebrate(context, day);
+                    if (day != null && context.mounted) {
+                      showStreakMilestoneDialog(context, day);
+                    }
                   },
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _celebrate(BuildContext context, int day) {
-    HapticFeedback.mediumImpact();
-    showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.celebration, size: 64, color: Colors.amber)
-                  .animate()
-                  .scale(duration: 500.ms, curve: Curves.elasticOut),
-              const SizedBox(height: 12),
-              Text('$day-day streak!',
-                  style: Theme.of(context).textTheme.headlineSmall),
-              const SizedBox(height: 8),
-              const Text('Consistency compounds. Keep going.',
-                  textAlign: TextAlign.center),
-            ],
           ),
         ),
       ),
