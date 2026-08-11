@@ -58,7 +58,7 @@ class AddXpNotifier extends Notifier<void> {
     await repo.add(profileId, amount, source);
     ref.invalidate(totalXpProvider(profileId));
     ref.invalidate(weeklyXpProvider(profileId));
-    ref.invalidate(
-        xpByDayProvider((profileId: profileId, days: 7)));
+    ref.invalidate(xpByDayProvider((profileId: profileId, days: 7)));
+    ref.invalidate(xpHistoryProvider(profileId));
   }
 }

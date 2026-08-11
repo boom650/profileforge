@@ -15,6 +15,7 @@ import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/timer/presentation/ambient_audio_panel.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/skins/application/skin_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/core/ai/ai_service.dart';
 import 'package:profileforge/core/ai/ai_recommendation_service.dart';
@@ -35,6 +36,7 @@ class HomePage extends ConsumerWidget {
     final xpAsync = ref.watch(totalXpProvider(profileId));
     final xpByDayAsync =
         ref.watch(xpByDayProvider((profileId: profileId, days: 7)));
+    final equippedSkinAsync = ref.watch(equippedSkinProvider(profileId));
     final gemsAsync = ref.watch(gemsProvider(profileId));
     final streakAsync = ref.watch(streakProvider(profileId));
     final missionsAsync = ref.watch(todaysMissionsProvider(profileId));
@@ -161,7 +163,60 @@ class HomePage extends ConsumerWidget {
                           centerBottom: 'LVL',
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      const SizedBox(width: 14),
+                      // Equipped skin avatar — the reward the user bought with
+                      // gems is VISIBLE here (Habitica shows your avatar
+                      // everywhere; the skin previously vanished after buying).
+                      Builder(
+                        builder: (context) {
+                          final skin = equippedSkinAsync.valueOrNull;
+                          if (skin == null) return const SizedBox.shrink();
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(skin.seedColor),
+                                      Color(skin.accentColor),
+                                    ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(skin.seedColor)
+                                          .withValues(alpha: 0.5),
+                                      blurRadius: 14,
+                                      spreadRadius: -2,
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.35),
+                                    width: 1.5,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                skin.name,
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white.withValues(alpha: 0.85),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

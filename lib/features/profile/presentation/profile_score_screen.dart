@@ -932,8 +932,11 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.05);
   }
 
-  /// Weakest score component → human label + color + icon + mission pillar.
-  _GapInfo _weakestGap(ProfileScore score) {
+  /// All scored components ranked weakest-first → mission pillar mapping.
+  /// Used both for display (weakest) and for one-shot gap missions (the next
+  /// pillar with no completed gap mission — a pillar is addressed ONCE, never
+  /// re-minted, closing the sequential farm).
+  List<_GapInfo> _gapCandidates(ProfileScore score) {
     final candidates = <_GapInfo>[
       _GapInfo(
         'GPA',
@@ -1007,36 +1010,59 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
         'Executing an AI recommendation scores higher than reading one.',
       ),
     ];
-    _GapInfo best = candidates.first;
-    for (final c in candidates) {
-      if (c.value < best.value) best = c;
-    }
-    return best;
+    candidates.sort((a, b) => a.value.compareTo(b.value));
+    return candidates;
   }
 
+  /// Weakest scored component (display).
+  _GapInfo _weakestGap(ProfileScore score) => _gapCandidates(score).first;
+
   /// Create the gap mission in the real ledger, then open /missions so the
-  /// student can start it immediately (never a fake toast). One open gap
-  /// mission per profile: re-taps navigate to the existing mission instead
-  /// of minting another reward (Habitica: a reward is never self-replicating).
+  /// student can start it immediately (never a fake toast).
+  ///
+  /// ONE-SHOT PER PILLAR: a pillar is addressed once, ever. The mission id is
+  /// deterministic (`gap-{profileId}-{pillar}`), and before minting we check
+  /// mission history for any DONE rule-mission on that pillar — if one exists
+  /// we advance to the next weakest pillar with no completed gap mission.
+  /// When every pillar has been addressed, nothing mints (the CTA reflects
+  /// it). This closes the sequential farm (R3: complete → back → tap re-minted
+  /// the identical reward-bearing mission with zero cooldown).
   Future<void> _createGapMission() async {
     final score = _score;
     if (score == null) return;
     if (_mintingGapMission) return; // double-tap guard
     _mintingGapMission = true;
-    final gap = _weakestGap(score);
     try {
+      // Pillars already addressed (any DONE rule mission) — never re-mint.
+      final history = await ref
+          .read(missionRepositoryProvider)
+          .history(widget.profileId);
+      final addressedPillars = history
+          .where((m) => m.source == 'rule' && m.done)
+          .map((m) => m.pillar)
+          .toSet();
+
+      // Next weakest pillar with no completed gap mission.
+      final gap = _gapCandidates(score).firstWhere(
+            (g) => !addressedPillars.contains(g.pillar),
+            orElse: () => _gapCandidates(score).first,
+          );
+      final allAddressed = addressedPillars.isNotEmpty &&
+          _gapCandidates(score).every((g) => addressedPillars.contains(g.pillar));
+
+      // If an OPEN gap mission still exists, just navigate to it.
       final existing = await ref
           .read(specialMissionsProvider(widget.profileId).future)
           .then((rows) => rows.where((m) => m.source == 'rule' && !m.done))
           .then((rows) => rows.isNotEmpty);
-      if (existing) {
+      if (existing || allAddressed) {
         SoundService.instance.tap();
         if (mounted) context.push('/missions');
         return;
       }
 
-      final missionId =
-          'gap-${widget.profileId}-${DateTime.now().millisecondsSinceEpoch}';
+      // Deterministic id per pillar — same pillar can never mint twice.
+      final missionId = 'gap-${widget.profileId}-${gap.pillar.name}';
     final mission = Mission(
       id: missionId,
       profileId: widget.profileId,

@@ -158,8 +158,13 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context,
-                                      message: '+${m.xpReward} XP 🎉');
+                                  // null = already done (double-tap / stale
+                                  // pinned card): nothing was awarded, so no
+                                  // fake reward toast.
+                                  if (streakEvent != null) {
+                                    celebrate(context,
+                                        message: '+${m.xpReward} XP 🎉');
+                                  }
                                   celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
@@ -249,8 +254,10 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context,
-                                      message: '+${m.xpReward} XP 🎉');
+                                  if (streakEvent != null) {
+                                    celebrate(context,
+                                        message: '+${m.xpReward} XP 🎉');
+                                  }
                                   celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
@@ -320,8 +327,10 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context,
-                                      message: '+${m.xpReward} XP 🎉');
+                                  if (streakEvent != null) {
+                                    celebrate(context,
+                                        message: '+${m.xpReward} XP 🎉');
+                                  }
                                   celebrateStreakEvent(context, streakEvent);
                                 },
                               ),
@@ -391,8 +400,10 @@ class MissionsScreen extends ConsumerWidget {
                                     xp: m.xpReward,
                                     pillar: m.pillar,
                                   )));
-                                  celebrate(context,
-                                      message: '+${m.xpReward} XP 🎉');
+                                  if (streakEvent != null) {
+                                    celebrate(context,
+                                        message: '+${m.xpReward} XP 🎉');
+                                  }
                                   celebrateStreakEvent(context, streakEvent);
                                 },
                               ),

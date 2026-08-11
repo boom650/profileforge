@@ -41,6 +41,12 @@ class RateAppService {
     await prefs.setInt(_chatCountKey, count + 1);
   }
 
+  /// Total AI chat interactions recorded (real counter, not fabricated).
+  Future<int> chatCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_chatCountKey) ?? 0;
+  }
+
   /// Check if should show rate prompt.
   Future<bool> shouldShowPrompt() async {
     final prefs = await SharedPreferences.getInstance();

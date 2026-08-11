@@ -157,6 +157,48 @@ class SkinsScreen extends ConsumerWidget {
                   celebrate(context, message: 'Unlocked!');
                 },
                 onBuy: () async {
+                  // Paid skin → confirm the gem spend first. Habitica's shop
+                  // never lets you burn currency on an accidental tap.
+                  if (cost > 0 && canAfford) {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: dark ? Palette.surface1 : Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        title: Text(
+                          'Buy ${skin.name}?',
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                        content: Text(
+                          'This costs $cost 💎. You have $gems 💎. '
+                          'Your equipped skin will also be visible on your '
+                          'home screen.',
+                          style: TextStyle(
+                            height: 1.4,
+                            color: dark
+                                ? Palette.textSecondary
+                                : Palette.textTertiary,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(false),
+                            child: const Text('Cancel'),
+                          ),
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Palette.primary,
+                            ),
+                            onPressed: () => Navigator.of(ctx).pop(true),
+                            child: Text('Buy — $cost 💎'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirmed != true) return;
+                  }
                   final ok = await ref.read(
                     purchaseSkinProvider((
                       profileId: profileId,
@@ -167,6 +209,14 @@ class SkinsScreen extends ConsumerWidget {
                     SoundService.instance.unlock();
                     HapticFeedback.mediumImpact();
                     celebrate(context, message: 'Bought! 💎');
+                  } else {
+                    SoundService.instance.error();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Not enough gems — $cost 💎 needed.'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
                   }
                 },
               );

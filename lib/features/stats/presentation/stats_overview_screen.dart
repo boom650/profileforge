@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/core/rate_app/rate_app_service.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// StatsOverviewScreen — Weekly/monthly analytics and insights.
@@ -22,6 +24,7 @@ class StatsOverviewScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dark = isDark(context);
+    final profileId = ref.watch(activeProfileIdProvider).valueOrNull;
 
     return Scaffold(
       body: Container(
@@ -84,7 +87,7 @@ class StatsOverviewScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
 
                       // ── Quick Stats ──
-                      _buildQuickStats(dark),
+                      _buildQuickStats(dark, ref, profileId),
                       const SizedBox(height: 24),
 
                       // ── Activity Heatmap ──
@@ -121,12 +124,19 @@ class StatsOverviewScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickStats(bool dark) {
+  Widget _buildQuickStats(bool dark, WidgetRef ref, String? profileId) {
+    final streak = profileId == null
+        ? 0
+        : (ref.watch(streakProvider(profileId)).valueOrNull ?? 0);
+    final totalXp = profileId == null
+        ? 0
+        : (ref.watch(totalXpProvider(profileId)).valueOrNull ?? 0);
+    final chatCountAsync = RateAppService.instance.chatCount();
     return Row(
       children: [
         _buildStatCard(
           icon: Icons.local_fire_department,
-          value: '7',
+          value: Text('$streak'),
           label: 'Day Streak',
           color: Palette.error,
           dark: dark,
@@ -134,7 +144,7 @@ class StatsOverviewScreen extends ConsumerWidget {
         const SizedBox(width: 12),
         _buildStatCard(
           icon: Icons.star,
-          value: '850',
+          value: Text('$totalXp'),
           label: 'Total XP',
           color: Palette.warning,
           dark: dark,
@@ -142,7 +152,11 @@ class StatsOverviewScreen extends ConsumerWidget {
         const SizedBox(width: 12),
         _buildStatCard(
           icon: Icons.auto_awesome,
-          value: '23',
+          value: FutureBuilder<int>(
+            future: chatCountAsync,
+            builder: (context, snap) =>
+                Text('${snap.data ?? 0}'),
+          ),
           label: 'AI Chats',
           color: Palette.primary,
           dark: dark,
@@ -153,7 +167,7 @@ class StatsOverviewScreen extends ConsumerWidget {
 
   Widget _buildStatCard({
     required IconData icon,
-    required String value,
+    required Widget value,
     required String label,
     required Color color,
     required bool dark,
@@ -174,13 +188,13 @@ class StatsOverviewScreen extends ConsumerWidget {
           children: [
             Icon(icon, color: color, size: 24),
             const SizedBox(height: 8),
-            Text(
-              value,
+            DefaultTextStyle(
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
               ),
+              child: value,
             ),
             Text(
               label,
@@ -518,13 +532,40 @@ class StatsOverviewScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          _buildAIStatRow('Conversations', '23', Icons.chat_bubble_outline, dark),
+          // Real counter from the rate-app service (pf_ai_chat_count).
+          FutureBuilder<int>(
+            future: RateAppService.instance.chatCount(),
+            builder: (context, snap) => _buildAIStatRow(
+              'Conversations',
+              '${snap.data ?? 0}',
+              Icons.chat_bubble_outline,
+              dark,
+            ),
+          ),
           const Divider(height: 24),
-          _buildAIStatRow('Messages Sent', '156', Icons.send, dark),
+          // Honest: these were hardcoded ('156' messages, '4.8' quality,
+          // 'Essay Review'). No telemetry measures them — show truth, not
+          // fabricated numbers (same rule as the XP breakdown).
+          _buildAIStatRow(
+            'Messages Sent',
+            'Not tracked yet',
+            Icons.send,
+            dark,
+          ),
           const Divider(height: 24),
-          _buildAIStatRow('Avg Response Quality', '4.8', Icons.star_outline, dark),
+          _buildAIStatRow(
+            'Avg Response Quality',
+            'Not rated',
+            Icons.star_outline,
+            dark,
+          ),
           const Divider(height: 24),
-          _buildAIStatRow('Most Used Feature', 'Essay Review', Icons.article_outlined, dark),
+          _buildAIStatRow(
+            'Most Used Feature',
+            'Not tracked',
+            Icons.article_outlined,
+            dark,
+          ),
         ],
       ),
     );
