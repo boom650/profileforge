@@ -58,6 +58,21 @@ final missionHistoryProvider =
   return ref.watch(missionRepositoryProvider).history(profileId);
 });
 
+/// Special-cadence missions (e.g. the score screen's "Turn insight into
+/// action" gap mission). Read DIRECTLY from the repo — deliberately NOT
+/// chained through generateMissionsProvider, because regeneration deletes
+/// open daily/weekly/monthly rows and would erase the gap mission before
+/// the user ever saw it. Special rows survive regeneration.
+final specialMissionsProvider =
+    FutureProvider.family<List<MissionRow>, String>((ref, profileId) async {
+  final rows = await ref
+      .watch(missionRepositoryProvider)
+      .listDue(profileId, DateTime.now());
+  return rows
+      .where((r) => r.cadence == MissionCadence.special.name)
+      .toList();
+});
+
 /// Complete a mission: marks done, awards XP (×skin multiplier) + gems,
 /// and records today's streak. Returns the streak event (milestone days
 /// drive celebrations at call sites).

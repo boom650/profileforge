@@ -27,6 +27,7 @@ class MissionsScreen extends ConsumerWidget {
     final daily = ref.watch(todaysMissionsProvider(profileId));
     final weekly = ref.watch(weeklyMissionsProvider(profileId));
     final monthly = ref.watch(monthlyMissionsProvider(profileId));
+    final priority = ref.watch(specialMissionsProvider(profileId));
 
     return Scaffold(
       backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
@@ -121,6 +122,57 @@ class MissionsScreen extends ConsumerWidget {
                   ),
                 ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.05),
               ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // ── Priority missions (special cadence: score-screen gap mission) ──
+            priority.when(
+              data: (rows) => rows.isEmpty
+                  ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                  : SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final m = rows[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _MissionCard(
+                                title: m.title,
+                                description: m.description,
+                                pillar: m.pillar,
+                                xp: m.xpReward,
+                                source: m.source,
+                                priority: m.priority,
+                                rationale: m.rationale,
+                                // Pinned (special-cadence) missions are
+                                // highlighted — they came from a score gap.
+                                pinned: true,
+                                onDone: () async {
+                                  SoundService.instance.success();
+                                  final streakEvent = await ref.read(
+                                      completeMissionProvider((
+                                    profileId: profileId,
+                                    missionId: m.id,
+                                    xp: m.xpReward,
+                                    pillar: m.pillar,
+                                  )));
+                                  celebrate(context,
+                                      message: '+${m.xpReward} XP 🎉');
+                                  celebrateStreakEvent(context, streakEvent);
+                                },
+                              ),
+                            );
+                          },
+                          childCount: rows.length,
+                        ),
+                      ),
+                    ),
+              loading: () =>
+                  const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (e, _) =>
+                  const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -377,6 +429,7 @@ class _MissionCard extends StatelessWidget {
     required this.priority,
     required this.rationale,
     required this.onDone,
+    this.pinned = false,
   });
 
   final String title;
@@ -387,6 +440,11 @@ class _MissionCard extends StatelessWidget {
   final String priority;
   final String rationale;
   final Future<void> Function() onDone;
+
+  /// Pinned (special-cadence) missions — surfaced from a score gap, shown
+  /// with an accent border + "Priority" tag so the student knows this one
+  /// is the direct result of their profile feedback.
+  final bool pinned;
 
   @override
   Widget build(BuildContext context) {
@@ -401,8 +459,29 @@ class _MissionCard extends StatelessWidget {
     };
     return GlassCard(
       padding: const EdgeInsets.all(14),
+      // Pinned (priority) missions get an accent border so the score-gap
+      // mission reads as special — feedback converted into action.
+      border: pinned
+          ? Border.all(color: Palette.warning.withValues(alpha: 0.5))
+          : null,
       child: Row(
         children: [
+          // Pinned tag + pillar icon.
+          if (pinned) ...[
+            Container(
+              width: 28,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Palette.warning.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Center(
+                child: Icon(Icons.push_pin,
+                    size: 16, color: Palette.warning),
+              ),
+            ),
+            const SizedBox(width: 10),
+          ],
           // Pillar icon.
           Container(
             width: 44,

@@ -11,6 +11,11 @@ import 'package:profileforge/core/widgets/score_widgets.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+import 'package:profileforge/features/missions/application/mission_providers.dart';
+import 'package:profileforge/features/missions/domain/mission_models.dart';
+import 'package:profileforge/features/missions/data/mission_repository.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
+import 'package:profileforge/core/navigation/app_router.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Profile Score Screen — Animated score display with breakdown.
@@ -358,6 +363,15 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                       // ── Personality Radar (loaded psych or passed-in) ──
                       if (_loadedPsych != null)
                         _buildPersonalityRadar(_loadedPsych!, dark),
+
+                      const SizedBox(height: 32),
+
+                      // ── Turn insight into action ──
+                      // Habitica bar: every result converts into the next task.
+                      // The reveal must not dead-end — weakest component
+                      // becomes a real, doable mission the student can start
+                      // immediately (SDT: competence feedback → next action).
+                      _buildActionBridge(score, dark),
 
                       const SizedBox(height: 100),
                     ],
@@ -802,6 +816,211 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.05);
   }
 
+  /// ── Turn Insight Into Action ─────────────────────────────────────────────
+  /// The score reveal must convert into the next task (Habitica bar: feedback
+  /// always yields a follow-up action; SDT: competence feedback → next step).
+  /// Finds the weakest component and offers a real, immediately-doable mission
+  /// targeting exactly that gap — written to the mission ledger and opened in
+  /// the missions screen.
+  Widget _buildActionBridge(ProfileScore score, bool dark) {
+    final gap = _weakestGap(score);
+    return GlassCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: gap.color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(gap.icon, size: 18, color: gap.color),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Turn this insight into action',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: dark ? Palette.textPrimary : Palette.textInverse,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${gap.label} is your biggest lever right now. A small, focused '
+            'mission today compounds into a stronger application.',
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              color: Palette.textSecondary,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [gap.color, gap.color.withValues(alpha: 0.6)],
+              ),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: gap.color.withValues(alpha: 0.25),
+                  blurRadius: 20,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.bolt, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  'Create a ${gap.label.toLowerCase()} mission',
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ).animate().onTap(
+                _createGapMission,
+              ),
+        ],
+      ),
+    ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.05);
+  }
+
+  /// Weakest score component → human label + color + icon + mission pillar.
+  _GapInfo _weakestGap(ProfileScore score) {
+    final candidates = <_GapInfo>[
+      _GapInfo(
+        'GPA',
+        score.gpaScore,
+        Palette.primary,
+        Icons.school,
+        MissionPillar.academics,
+        'Raise your GPA with one focused study session — weakest subject '
+            'first. A 15-minute active-recall block beats an hour of passive '
+            're-reading.',
+        'Score your GPA above 70 to unlock the next admission tier.',
+      ),
+      _GapInfo(
+        'Test Scores',
+        score.testScore,
+        Palette.info,
+        Icons.assessment,
+        MissionPillar.academics,
+        'Build test stamina: one timed practice set now. Pacing is a skill '
+            'you train, not a talent you have.',
+        'Timed practice directly moves your test-score band.',
+      ),
+      _GapInfo(
+        'Activities',
+        score.activitiesScore,
+        Palette.warning,
+        Icons.groups,
+        MissionPillar.leadership,
+        'Deepen one activity into leadership or impact. Depth beats breadth '
+            'in every admission rubric.',
+        'One leadership action converts an activity into a differentiator.',
+      ),
+      _GapInfo(
+        'Essays',
+        score.essayScore,
+        Palette.success,
+        Icons.edit_note,
+        MissionPillar.creativity,
+        'Draft one authentic scene — a moment you acted, not a list of '
+            'achievements. Voice grows from memory, not template.',
+        'One genuine scene is the seed of a standout essay.',
+      ),
+      _GapInfo(
+        'Psychology',
+        score.psychologyScore,
+        const Color(0xFF8B5CF6),
+        Icons.psychology,
+        MissionPillar.personal,
+        'Strengthen your growth mindset: one 10-minute reflection on a past '
+            'setback and what you learned. Fit and mindset move with practice.',
+        'A stronger psychology profile lifts your fit score.',
+      ),
+      _GapInfo(
+        'Growth',
+        score.growthScore,
+        const Color(0xFF06B6D4),
+        Icons.trending_up,
+        MissionPillar.personal,
+        'Record one improvement you made this week. Evidence of upward '
+            'trajectory is a scored component in the rubric.',
+        'Documented progress compounds your growth score.',
+      ),
+      _GapInfo(
+        'AI Insights',
+        score.aiScore,
+        const Color(0xFFF59E0B),
+        Icons.auto_awesome,
+        MissionPillar.research,
+        'Act on one AI insight from your profile review. Insight without '
+            'action is trivia — this turns it into progress.',
+        'Executing an AI recommendation scores higher than reading one.',
+      ),
+    ];
+    _GapInfo best = candidates.first;
+    for (final c in candidates) {
+      if (c.value < best.value) best = c;
+    }
+    return best;
+  }
+
+  /// Create the gap mission in the real ledger, then open /missions so the
+  /// student can start it immediately (never a fake toast).
+  Future<void> _createGapMission() async {
+    final score = _score;
+    if (score == null) return;
+    final gap = _weakestGap(score);
+
+    final missionId =
+        'gap-${widget.profileId}-${DateTime.now().millisecondsSinceEpoch}';
+    final mission = Mission(
+      id: missionId,
+      profileId: widget.profileId,
+      title: 'Build your ${gap.label.toLowerCase()}',
+      description: gap.action,
+      // Special cadence: survives mission regeneration (which deletes open
+      // daily/weekly/monthly rows). Rendered via specialMissionsProvider in a
+      // pinned "Priority" section — visible, completable, never silently wiped.
+      cadence: MissionCadence.special,
+      pillar: gap.pillar,
+      xpReward: 20,
+      gemReward: 3,
+      dueAt: DateTime.now().add(const Duration(days: 3)),
+      completed: false,
+      source: 'rule',
+      priority: 'high',
+      rationale: gap.rationale,
+    );
+
+    SoundService.instance.tap();
+    await ref.read(missionRepositoryProvider).upsertGenerated([mission]);
+    ref.invalidate(specialMissionsProvider(widget.profileId));
+    if (mounted) {
+      context.go('/missions?focus=$missionId');
+    }
+  }
+
   /// ── Personality Radar ────────────────────────────────────────────────────
   Widget _buildPersonalityRadar(PsychologicalProfile profile, bool dark) {
     return GlassCard(
@@ -1022,4 +1241,29 @@ class _TraitBar extends StatelessWidget {
       ],
     );
   }
+}
+
+/// ── Weakest-gap descriptor (score → actionable mission mapping) ───────────
+class _GapInfo {
+  const _GapInfo(
+    this.label,
+    this.value,
+    this.color,
+    this.icon,
+    this.pillar,
+    this.action,
+    this.rationale,
+  );
+
+  final String label;
+  final double value;
+  final Color color;
+  final IconData icon;
+  final MissionPillar pillar;
+
+  /// The mission body the student actually reads and does.
+  final String action;
+
+  /// Why this mission moves the score (admissions rationale).
+  final String rationale;
 }
