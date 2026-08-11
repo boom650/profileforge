@@ -369,7 +369,7 @@ class HomePage extends ConsumerWidget {
                   children: [
                     Expanded(child: SectionTitle('🤖 AI Recommendations')),
                     GestureDetector(
-                      onTap: () => context.push('/ai-chat'),
+                      onTap: () => context.push('/enhanced-ai-chat'),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),

@@ -77,9 +77,14 @@ class MissionRepository {
         .go();
   }
 
-  Future<void> complete(String missionId) async {
+  /// Marks a mission done. Returns the number of rows actually flipped
+  /// (0 = already done) so callers can award XP/gems idempotently —
+  /// completing an already-done mission must never re-award (gauntlet B:
+  /// "the completion reward is farmable").
+  Future<int> complete(String missionId) async {
     try {
-      await (_db.update(_db.missions)..where((t) => t.id.equals(missionId)))
+      return await (_db.update(_db.missions)
+            ..where((t) => t.id.equals(missionId) & t.done.equals(false)))
           .write(const MissionsCompanion(done: Value(true)));
     } catch (e) {
       rethrow;

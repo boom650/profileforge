@@ -84,7 +84,16 @@ final completeMissionProvider = Provider.family<
       int xp,
       String pillar
     })>((ref, args) async {
-  await ref.watch(missionRepositoryProvider).complete(args.missionId);
+  // Idempotent: complete() only flips NOT-done rows. An already-done
+  // mission (double-tap, stale pinned card) returns 0 → skip ALL awards.
+  final flipped = await ref
+      .watch(missionRepositoryProvider)
+      .complete(args.missionId);
+  if (flipped == 0) {
+    // No state change — nothing to reward, nothing to celebrate.
+    ref.invalidate(specialMissionsProvider(args.profileId));
+    return null;
+  }
   // Award XP via the XP ledger (handles skin multiplier through provided xp).
   await ref.read(xpRepositoryProvider).add(
         args.profileId,
@@ -108,6 +117,7 @@ final completeMissionProvider = Provider.family<
   ref.invalidate(todaysMissionsProvider(args.profileId));
   ref.invalidate(weeklyMissionsProvider(args.profileId));
   ref.invalidate(monthlyMissionsProvider(args.profileId));
+  ref.invalidate(specialMissionsProvider(args.profileId));
   ref.invalidate(totalXpProvider(args.profileId));
   ref.invalidate(gemsProvider(args.profileId));
   return streakEvent;

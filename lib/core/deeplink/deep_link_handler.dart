@@ -53,7 +53,7 @@ class DeepLinkHandler {
         break;
 
       case 'chat':
-        context.push('/ai-chat');
+        context.push('/enhanced-ai-chat');
         break;
 
       case 'settings':
@@ -115,7 +115,7 @@ class DeepLinkHandler {
         break;
 
       case 'chat':
-        context.push('/ai-chat');
+        context.push('/enhanced-ai-chat');
         break;
 
       case 'settings':

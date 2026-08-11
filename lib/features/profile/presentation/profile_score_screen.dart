@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/scoring/profile_scoring.dart';
 import 'package:profileforge/core/ai/psychological_profile.dart';
@@ -826,6 +827,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     final gap = _weakestGap(score);
     return GlassCard(
       padding: const EdgeInsets.all(20),
+      onTap: _createGapMission,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -895,9 +897,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                 ),
               ],
             ),
-          ).animate().onTap(
-                _createGapMission,
-              ),
+          ),
         ],
       ),
     ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.05);
@@ -908,7 +908,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     final candidates = <_GapInfo>[
       _GapInfo(
         'GPA',
-        score.gpaScore,
+        score.gpaScore.toDouble(),
         Palette.primary,
         Icons.school,
         MissionPillar.academics,
@@ -919,7 +919,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'Test Scores',
-        score.testScore,
+        score.testScore.toDouble(),
         Palette.info,
         Icons.assessment,
         MissionPillar.academics,
@@ -929,7 +929,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'Activities',
-        score.activitiesScore,
+        score.activitiesScore.toDouble(),
         Palette.warning,
         Icons.groups,
         MissionPillar.leadership,
@@ -939,7 +939,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'Essays',
-        score.essayScore,
+        score.essayScore.toDouble(),
         Palette.success,
         Icons.edit_note,
         MissionPillar.creativity,
@@ -949,7 +949,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'Psychology',
-        score.psychologyScore,
+        score.psychologyScore.toDouble(),
         const Color(0xFF8B5CF6),
         Icons.psychology,
         MissionPillar.personal,
@@ -959,7 +959,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'Growth',
-        score.growthScore,
+        score.growthScore.toDouble(),
         const Color(0xFF06B6D4),
         Icons.trending_up,
         MissionPillar.personal,
@@ -969,7 +969,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       ),
       _GapInfo(
         'AI Insights',
-        score.aiScore,
+        score.aiScore.toDouble(),
         const Color(0xFFF59E0B),
         Icons.auto_awesome,
         MissionPillar.research,
@@ -1017,7 +1017,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     await ref.read(missionRepositoryProvider).upsertGenerated([mission]);
     ref.invalidate(specialMissionsProvider(widget.profileId));
     if (mounted) {
-      context.go('/missions?focus=$missionId');
+      context.push('/missions');
     }
   }
 

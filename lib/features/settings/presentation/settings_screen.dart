@@ -148,7 +148,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           icon: Icons.chat_bubble_outline,
                           title: 'AI Chat',
                           subtitle: 'Psychology-adapted conversation',
-                          onTap: () => context.push('/ai-chat'),
+                          onTap: () => context.push('/enhanced-ai-chat'),
                           dark: dark,
                         ),
                       ],
