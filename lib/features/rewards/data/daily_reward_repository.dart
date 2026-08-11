@@ -41,10 +41,14 @@ class DailyRewardRepository {
     final s = await status(profileId);
     if (!s.canClaim) return 0;
     final reward = rewardFor(s.day);
+    final existing = await (db.select(db.dailyRewards)
+          ..where((t) => t.profileId.equals(profileId)))
+        .getSingleOrNull();
     await db.into(db.dailyRewards).insertOnConflictUpdate(
           DailyRewardRow(
             profileId: profileId,
             day: s.day,
+            totalClaims: (existing?.totalClaims ?? 0) + 1,
             lastClaimed: DateTime.now(),
           ),
         );

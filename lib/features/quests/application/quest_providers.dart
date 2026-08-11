@@ -31,6 +31,9 @@ final completeQuestProvider = FutureProvider.family<void, ({String profileId, St
   await xpRepo.add(args.profileId, args.xp, 'daily_quest');
   // Invalidate
   ref.invalidate(todayQuestsProvider(args.profileId));
-  // Check achievements
-  await ref.read(achievementCheckerProvider.notifier).checkAll(args.profileId);
+  // Check achievements — evaluation reads FRESH totals (checkAll
+  // invalidates cached XP/focus providers itself); never blocks the flow.
+  try {
+    await ref.read(achievementCheckerProvider.notifier).checkAll(args.profileId);
+  } catch (_) {/* reward flow must never be blocked by achievement eval */}
 });

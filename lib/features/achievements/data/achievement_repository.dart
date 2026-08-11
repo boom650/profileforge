@@ -33,27 +33,31 @@ class AchievementRepository {
   }
 
   Future<int> totalMissionsCompleted(String profileId) async {
-    // Count missions completed today for this profile
-    final rows = await (_db.select(_db.missions)
-          ..where((t) => t.profileId.equals(profileId) & t.done.equals(true)))
-        .get();
-    return rows.length;
+    // COUNT, not a full row scan — checkAll runs on every mission completion.
+    final count = await _db.customSelect(
+      'SELECT COUNT(*) as c FROM missions WHERE profile_id = ? AND done = 1',
+      variables: [Variable.withString(profileId)],
+    ).getSingle();
+    return count.data['c'] as int;
   }
 
   Future<int> totalQuestsCompleted(String profileId) async {
-    final rows = await (_db.select(_db.dailyQuests)
-          ..where((t) => t.profileId.equals(profileId) & t.done.equals(true)))
-        .get();
-    return rows.length;
+    final count = await _db.customSelect(
+      'SELECT COUNT(*) as c FROM daily_quests WHERE profile_id = ? AND done = 1',
+      variables: [Variable.withString(profileId)],
+    ).getSingle();
+    return count.data['c'] as int;
   }
 
   Future<int> totalLoginClaims(String profileId) async {
-    final todayStr = DateTime.now().toIso8601String().substring(0, 10);
-    final count = await _db.customSelect(
-      'SELECT COUNT(*) as c FROM daily_rewards WHERE profile_id = ? AND day = ?',
-      variables: [Variable.withString(profileId), Variable.withString(todayStr)],
-    ).getSingle();
-    return count.data['c'] as int;
+    // Lifetime claim counter — a REAL count of wheel claims. (The old
+    // version compared an Int day-slot against a date string AND the table
+    // holds one row per profile → count was always 0, so the daily-login
+    // badges could never unlock.)
+    final row = await (_db.select(_db.dailyRewards)
+          ..where((t) => t.profileId.equals(profileId)))
+        .getSingleOrNull();
+    return row?.totalClaims ?? 0;
   }
 
   Future<int> totalSkinsUnlocked(String profileId) async {

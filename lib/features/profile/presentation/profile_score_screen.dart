@@ -13,6 +13,7 @@ import 'package:profileforge/core/widgets/score_widgets.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+import 'package:profileforge/features/profile/application/profile_score_loader.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
 import 'package:profileforge/features/missions/domain/mission_models.dart';
 import 'package:profileforge/features/missions/data/mission_repository.dart';
@@ -133,112 +134,16 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   }
 
   /// Map a real onboarding profile into the scorer's StudentData model.
-  StudentData _studentFrom(OnboardingProfile o) {
-    final gpa = _gpaFromGrades(o.grades);
-
-    final activities = [
-      ...o.activities.map((a) => Activity(
-            name: a,
-            category: _categoryFor(a),
-            isLeadership: a.toLowerCase().contains('president') ||
-                a.toLowerCase().contains('captain') ||
-                a.toLowerCase().contains('lead'),
-            hasImpact: true,
-          )),
-      ...o.competitions.map((c) => Activity(
-            name: c.name,
-            category: _categoryFor(c.name),
-            hasImpact: true,
-            isNationallyRecognized: _national(c.result),
-          )),
-    ];
-
-    return StudentData(
-      gpa: gpa,
-      isWeighted: false,
-      gpaTrend: GPATrend.stable,
-      satScore: null,
-      actScore: null,
-      activities: activities,
-      essays: const [],
-    );
-  }
+  /// (Delegates to the SHARED loader — every screen computes the SAME
+  /// numbers; no per-screen divergent demo/preview data.)
+  StudentData _studentFrom(OnboardingProfile o) => studentFromOnboarding(o);
 
   /// Best-effort 0–4 grade point average from per-subject grades.
   /// Handles letter grades (A, A-, B+) and supports an actual GPA override.
-  double? _gpaFromGrades(Map<String, String> grades) {
-    if (grades.isEmpty) return null;
-    final numeric = <double>[];
-    for (final raw in grades.values) {
-      final v = raw.trim().toUpperCase();
-      final parsed = double.tryParse(v);
-      if (parsed != null && parsed >= 0 && parsed <= 100) {
-        numeric.add(parsed / 25); // percent → 4.0 scale
-      } else if (_letterPoints.containsKey(v)) {
-        numeric.add(_letterPoints[v]!);
-      }
-    }
-    if (numeric.isEmpty) return null;
-    return numeric.reduce((a, b) => a + b) / numeric.length;
-  }
-
-  static const Map<String, double> _letterPoints = {
-    'A+': 4.3,
-    'A': 4.0,
-    'A-': 3.7,
-    'B+': 3.3,
-    'B': 3.0,
-    'B-': 2.7,
-    'C+': 2.3,
-    'C': 2.0,
-    'C-': 1.7,
-    'D+': 1.3,
-    'D': 1.0,
-    'F': 0.0,
-  };
+  double? _gpaFromGrades(Map<String, String> grades) => gpaFromGrades(grades);
 
   /// Best-effort scorer category classification from a free-form name.
-  String _categoryFor(String name) {
-    final n = name.toLowerCase();
-    if (n.contains('math') ||
-        n.contains('science') ||
-        n.contains('research') ||
-        n.contains('coding') ||
-        n.contains('robotic') ||
-        n.contains('olympiad')) {
-      return 'STEM';
-    }
-    if (n.contains('debate') ||
-        n.contains('speech') ||
-        n.contains('writing') ||
-        n.contains('english') ||
-        n.contains('journal')) {
-      return 'Communication';
-    }
-    if (n.contains('volunteer') ||
-        n.contains('service') ||
-        n.contains('outreach') ||
-        n.contains('ngo') ||
-        n.contains('clean')) {
-      return 'Community';
-    }
-    if (n.contains('art') ||
-        n.contains('music') ||
-        n.contains('theatre') ||
-        n.contains('dance') ||
-        n.contains('photograph')) {
-      return 'Creative';
-    }
-    if (n.contains('sport') ||
-        n.contains('football') ||
-        n.contains('cricket') ||
-        n.contains('basketball') ||
-        n.contains('swim')) {
-      return 'Athletics';
-    }
-    return 'Academic';
-  }
-
+  /// (Not used directly anymore — scoring maps via the shared loader.)
   bool _national(String? result) {
     final r = (result ?? '').toLowerCase();
     return r.contains('national') ||
@@ -250,57 +155,10 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
         r.contains('winner');
   }
 
-  StudentData _demoStudentData() {
-    return const StudentData(
-      gpa: 3.8,
-      isWeighted: false,
-      gpaTrend: GPATrend.upward,
-      satScore: 1450,
-      activities: [
-        Activity(
-          name: 'Robotics Club President',
-          category: 'STEM',
-          yearsInvolved: 3,
-          isLeadership: true,
-          hasImpact: true,
-          isNationallyRecognized: false,
-        ),
-        Activity(
-          name: 'Volunteer Tutor',
-          category: 'Community',
-          yearsInvolved: 2,
-          isLeadership: false,
-          hasImpact: true,
-          isNationallyRecognized: false,
-        ),
-        Activity(
-          name: 'Math Olympiad',
-          category: 'Academic',
-          yearsInvolved: 2,
-          isLeadership: false,
-          hasImpact: false,
-          isNationallyRecognized: true,
-        ),
-        Activity(
-          name: 'Debate Team',
-          category: 'Communication',
-          yearsInvolved: 1,
-          isLeadership: false,
-          hasImpact: false,
-          isNationallyRecognized: false,
-        ),
-      ],
-      essays: [
-        Essay(
-          title: 'Common App Essay',
-          wordCount: 650,
-          hasPersonalVoice: true,
-          showsGrowth: true,
-          hasUniqueAngle: true,
-        ),
-      ],
-    );
-  }
+  /// Demo fallback — ONLY used when there is genuinely no user data yet.
+  /// (Delegates to the SHARED loader so every screen shows the SAME
+  /// preview — the old private copy had divergent SAT/ACT demo values.)
+  StudentData _demoStudentData() => demoStudentData();
 
   @override
   Widget build(BuildContext context) {

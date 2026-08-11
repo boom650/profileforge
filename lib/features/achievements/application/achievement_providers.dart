@@ -56,6 +56,15 @@ class AchievementCheckerNotifier extends Notifier<void> {
 
   Future<void> checkAll(String profileId) async {
     final repo = ref.read(achievementRepoProvider);
+
+    // Invalidate cached providers FIRST so evaluation reads FRESH data —
+    // otherwise a just-completed mission/focus session never counts until
+    // the NEXT event (off-by-one badge pops). Missions award XP before
+    // calling checkAll; the invalidations here re-read the new totals.
+    ref.invalidate(totalXpProvider(profileId));
+    ref.invalidate(focusSessionCountProvider(profileId));
+    ref.invalidate(totalFocusMinutesProvider(profileId));
+
     final unlocked = await repo.unlockedIds(profileId);
     final xp = await ref.read(totalXpProvider(profileId).future);
     final streak = await ref.read(streakRepositoryProvider).get(profileId);

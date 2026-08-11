@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
+import 'package:profileforge/features/profile/application/profile_score_loader.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// SchoolComparisonScreen — Compare your profile against target schools.
@@ -12,15 +16,28 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// - Admission requirements display
 /// - Fit analysis
 /// ────────────────────────────────────────────────────────────────────────────
-class SchoolComparisonScreen extends StatefulWidget {
+class SchoolComparisonScreen extends ConsumerStatefulWidget {
   const SchoolComparisonScreen({super.key});
 
   @override
-  State<SchoolComparisonScreen> createState() => _SchoolComparisonScreenState();
+  ConsumerState<SchoolComparisonScreen> createState() =>
+      _SchoolComparisonScreenState();
 }
 
-class _SchoolComparisonScreenState extends State<SchoolComparisonScreen> {
+class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen> {
   final List<_School> _selectedSchools = [];
+
+  /// The user's REAL GPA from their onboarding grades — the "You" column
+  /// is data, not a hardcoded 3.95. SAT/ACT are not collected by the app,
+  /// so they render '—' instead of invented scores.
+  double? get _userGpa {
+    final profileId = ref.read(activeProfileIdProvider).valueOrNull;
+    if (profileId == null) return null;
+    final onboarding =
+        ref.read(onboardingProvider(profileId)).valueOrNull;
+    if (onboarding == null) return null;
+    return gpaFromGrades(onboarding.grades);
+  }
 
   final List<_School> _allSchools = const [
     _School(
@@ -368,9 +385,9 @@ class _SchoolComparisonScreenState extends State<SchoolComparisonScreen> {
   }
 
   Widget _buildComparisonTable(bool dark) {
-    // Mock user stats
-    const userGPA = 3.95;
-    const userSAT = 1520;
+    // The "You" column uses the user's REAL onboarding GPA.
+    // SAT/ACT are not collected → honest '—' (never fabricated).
+    final userGpa = _userGpa;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -396,7 +413,7 @@ class _SchoolComparisonScreenState extends State<SchoolComparisonScreen> {
           _buildTableRow(
             'GPA',
             [
-              userGPA.toStringAsFixed(2),
+              userGpa?.toStringAsFixed(2) ?? '—',
               ..._selectedSchools.map((s) => s.avgGPA.toStringAsFixed(2)),
             ],
             dark: dark,
@@ -404,14 +421,14 @@ class _SchoolComparisonScreenState extends State<SchoolComparisonScreen> {
           _buildTableRow(
             'SAT',
             [
-              userSAT.toString(),
+              '—',
               ..._selectedSchools.map((s) => s.avgSAT.toString()),
             ],
             dark: dark,
           ),
           _buildTableRow(
             'ACT',
-            ['34', ..._selectedSchools.map((s) => s.avgACT.toString())],
+            ['—', ..._selectedSchools.map((s) => s.avgACT.toString())],
             dark: dark,
           ),
           _buildTableRow(

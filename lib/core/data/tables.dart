@@ -236,6 +236,7 @@ class Wallets extends Table {
 class DailyRewards extends Table {
   TextColumn get profileId => text()();
   IntColumn get day => integer().withDefault(const Constant(0))();
+  IntColumn get totalClaims => integer().withDefault(const Constant(0))();
   DateTimeColumn get lastClaimed => dateTime().nullable()();
   @override
   Set<Column<Object>> get primaryKey => {profileId};

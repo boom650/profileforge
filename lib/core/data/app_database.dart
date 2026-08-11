@@ -38,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
       : super(executor ?? driftDatabase(name: 'profileforge'));
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -90,6 +90,14 @@ class AppDatabase extends _$AppDatabase {
           if (from < 7) {
             // v7 — Persistable psychological profile.
             await m.createTable(psychologicalProfiles);
+          }
+          if (from < 8) {
+            // v8 — DailyRewards.totalClaims (lifetime login count) + SkinStates
+            // composite PK {id, skinId} (one row PER SKIN, not one per profile).
+            // Drift's Migrator has no dropTable — raw SQLite drop + recreate.
+            await m.addColumn(dailyRewards, dailyRewards.totalClaims);
+            await customStatement('DROP TABLE IF EXISTS skin_states');
+            await m.createTable(skinStates);
           }
         },
       );

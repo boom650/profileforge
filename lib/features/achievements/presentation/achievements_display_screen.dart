@@ -1,24 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/rate_app/rate_app_service.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/achievements/application/achievement_providers.dart';
+import 'package:profileforge/features/achievements/domain/achievement_defs.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// AchievementsScreen — Display earned badges and milestones.
 ///
 /// Features:
-/// - Badge grid with locked/unlocked states
-/// - Milestone progress bars
+/// - Badge grid with locked/unlocked states (REAL defs × unlocks)
+/// - Milestone progress bars (REAL streak / XP / chat / badge totals)
 /// - Achievement categories
 /// - Detailed achievement info on tap
+///
+/// ALL numbers come from the real ledger — no hardcoded '12'/'3'/'850'.
 /// ────────────────────────────────────────────────────────────────────────────
-class AchievementsScreen extends StatelessWidget {
+class AchievementsScreen extends ConsumerWidget {
   const AchievementsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dark = isDark(context);
+    final profileId = ref.watch(activeProfileIdProvider).valueOrNull ?? '';
+    final defsAsync = ref.watch(achievementDefsProvider);
+    final unlockedAsync = ref.watch(unlockedAchievementIdsProvider(profileId));
+    final streakAsync = ref.watch(streakProvider(profileId));
+    final xpAsync = ref.watch(totalXpProvider(profileId));
 
+    return defsAsync.when(
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, s) => Scaffold(body: Center(child: Text('Failed to load achievements'))),
+      data: (defs) => unlockedAsync.when(
+        loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+        error: (e, s) => Scaffold(body: Center(child: Text('Failed to load achievements'))),
+        data: (unlocked) {
+          final badgeCount = unlocked.length;
+          final streak = streakAsync.valueOrNull?.current ?? 0;
+          final xp = xpAsync.valueOrNull ?? 0;
+          final chatCountAsync = RateAppService.instance.chatCount();
+
+          return _buildScaffold(
+            context,
+            dark,
+            defs: defs,
+            unlocked: unlocked,
+            badgeCount: badgeCount,
+            streak: streak,
+            xp: xp,
+            chatCountAsync: chatCountAsync,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildScaffold(
+    BuildContext context,
+    bool dark, {
+    required List<AchievementDef> defs,
+    required Set<String> unlocked,
+    required int badgeCount,
+    required int streak,
+    required int xp,
+    required Future<int> chatCountAsync,
+  }) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -80,25 +131,25 @@ class AchievementsScreen extends StatelessWidget {
                       const SizedBox(height: 8),
 
                       // ── Stats Summary ──
-                      _buildStatsSummary(dark),
+                      _buildStatsSummary(dark, badgeCount, streak, xp),
                       const SizedBox(height: 24),
 
                       // ── Recent Achievements ──
                       _buildSectionTitle('Recent Achievements', dark),
                       const SizedBox(height: 12),
-                      _buildRecentAchievements(dark),
+                      _buildRecentAchievements(dark, defs, unlocked),
                       const SizedBox(height: 24),
 
                       // ── All Badges ──
                       _buildSectionTitle('All Badges', dark),
                       const SizedBox(height: 12),
-                      _buildBadgeGrid(dark),
+                      _buildBadgeGrid(dark, defs, unlocked),
                       const SizedBox(height: 24),
 
                       // ── Milestones ──
                       _buildSectionTitle('Milestones', dark),
                       const SizedBox(height: 12),
-                      _buildMilestones(dark),
+                      _buildMilestones(dark, streak, xp, chatCountAsync, badgeCount),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -111,7 +162,7 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsSummary(bool dark) {
+  Widget _buildStatsSummary(bool dark, int badges, int streak, int xp) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -128,9 +179,9 @@ class AchievementsScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem('12', 'Badges', Icons.emoji_events),
-          _buildStatItem('3', 'Streak', Icons.local_fire_department),
-          _buildStatItem('850', 'XP', Icons.star),
+          _buildStatItem('$badges', 'Badges', Icons.emoji_events),
+          _buildStatItem('$streak', 'Streak', Icons.local_fire_department),
+          _buildStatItem('$xp', 'XP', Icons.star),
         ],
       ),
     );
@@ -171,30 +222,28 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentAchievements(bool dark) {
-    final recent = [
-      _Achievement(
-        icon: Icons.psychology,
-        title: 'Mind Mapper',
-        description: 'Completed psychology assessment',
-        color: Palette.primary,
-        earnedAt: 'Today',
-      ),
-      _Achievement(
-        icon: Icons.school,
-        title: 'First Step',
-        description: 'Completed onboarding',
-        color: Palette.success,
-        earnedAt: 'Yesterday',
-      ),
-      _Achievement(
-        icon: Icons.star,
-        title: 'Profile Builder',
-        description: 'Filled in 80% of profile',
-        color: Palette.warning,
-        earnedAt: '2 days ago',
-      ),
-    ];
+  Widget _buildRecentAchievements(
+      bool dark, List<AchievementDef> defs, Set<String> unlocked) {
+    // REAL unlocked badges (newest unlock = first in grid order preserved).
+    final recentDefs = defs.where((d) => unlocked.contains(d.id)).take(3).toList();
+    if (recentDefs.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Text(
+          'No badges unlocked yet — complete missions, keep streaks and chat with the AI to earn your first one.',
+          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+        ),
+      );
+    }
+    final recent = recentDefs
+        .map((d) => _Achievement(
+              icon: d.icon,
+              title: d.name,
+              description: d.description,
+              color: Palette.primary,
+              earnedAt: 'Unlocked',
+            ))
+        .toList();
 
     return Column(
       children: recent.map((achievement) {
@@ -219,7 +268,10 @@ class AchievementsScreen extends StatelessWidget {
                   color: achievement.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(achievement.icon, color: achievement.color, size: 24),
+                child: Center(
+                  child: Text(achievement.icon,
+                      style: const TextStyle(fontSize: 24)),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -258,18 +310,16 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBadgeGrid(bool dark) {
-    final badges = [
-      _Badge(icon: Icons.psychology, label: 'Mind Mapper', unlocked: true, color: Palette.primary),
-      _Badge(icon: Icons.school, label: 'First Step', unlocked: true, color: Palette.success),
-      _Badge(icon: Icons.star, label: 'Profile Builder', unlocked: true, color: Palette.warning),
-      _Badge(icon: Icons.local_fire_department, label: 'On Fire', unlocked: true, color: Palette.error),
-      _Badge(icon: Icons.emoji_events, label: 'Champion', unlocked: true, color: Palette.accentPink),
-      _Badge(icon: Icons.auto_awesome, label: 'AI Whisperer', unlocked: false, color: Palette.info),
-      _Badge(icon: Icons.trending_up, label: 'Rising Star', unlocked: false, color: Palette.primary),
-      _Badge(icon: Icons.diamond, label: 'Diamond', unlocked: false, color: Palette.info),
-      _Badge(icon: Icons.bolt, label: 'Speed Demon', unlocked: false, color: Palette.warning),
-    ];
+  Widget _buildBadgeGrid(
+      bool dark, List<AchievementDef> defs, Set<String> unlocked) {
+    final badges = defs
+        .map((d) => _Badge(
+              icon: d.icon,
+              label: d.name,
+              unlocked: unlocked.contains(d.id),
+              color: Palette.primary,
+            ))
+        .toList();
 
     return GridView.builder(
       shrinkWrap: true,
@@ -313,14 +363,16 @@ class AchievementsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            Text(
               badge.icon,
-              size: 32,
-              color: badge.unlocked
-                  ? badge.color
-                  : dark
-                      ? Palette.textTertiary.withValues(alpha: 0.5)
-                      : Palette.textSecondary.withValues(alpha: 0.3),
+              style: TextStyle(
+                fontSize: 32,
+                color: badge.unlocked
+                    ? badge.color
+                    : dark
+                        ? Palette.textTertiary.withValues(alpha: 0.5)
+                        : Palette.textSecondary.withValues(alpha: 0.3),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -346,13 +398,17 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMilestones(bool dark) {
-    final milestones = [
-      _Milestone(title: 'Complete Profile', current: 80, total: 100, color: Palette.primary),
-      _Milestone(title: 'First AI Chat', current: 0, total: 1, color: Palette.success),
-      _Milestone(title: '7-Day Streak', current: 3, total: 7, color: Palette.warning),
-      _Milestone(title: '10 Achievements', current: 3, total: 10, color: Palette.accentPink),
-    ];
+  Widget _buildMilestones(bool dark, int streak, int xp, Future<int> chatCountAsync, int badges) {
+    return FutureBuilder<int>(
+      future: chatCountAsync,
+      builder: (context, snap) {
+        final chatCount = snap.data ?? 0;
+        final milestones = [
+          _Milestone(title: 'Achievements Earned', current: badges, total: AchievementDef.all.length, color: Palette.primary),
+          _Milestone(title: 'Day Streak', current: streak, total: 7, color: Palette.warning),
+          _Milestone(title: 'Total XP', current: xp, total: 1000, color: Palette.success),
+          _Milestone(title: 'AI Chats', current: chatCount, total: 10, color: Palette.accentPink),
+        ];
 
     return Column(
       children: milestones.map((milestone) {
@@ -409,6 +465,8 @@ class AchievementsScreen extends StatelessWidget {
         );
       }).toList(),
     );
+      },
+    );
   }
 
   void _showBadgeDetail(BuildContext context, _Badge badge, bool dark) {
@@ -432,7 +490,10 @@ class AchievementsScreen extends StatelessWidget {
                   color: badge.color.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(badge.icon, size: 30, color: badge.color),
+                child: Text(
+                  badge.icon,
+                  style: TextStyle(fontSize: 30, color: badge.color),
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -461,7 +522,7 @@ class AchievementsScreen extends StatelessWidget {
 }
 
 class _Achievement {
-  final IconData icon;
+  final String icon;
   final String title;
   final String description;
   final Color color;
@@ -477,7 +538,7 @@ class _Achievement {
 }
 
 class _Badge {
-  final IconData icon;
+  final String icon;
   final String label;
   final bool unlocked;
   final Color color;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 import 'package:profileforge/features/streak/presentation/streak_celebration.dart';
@@ -77,6 +78,13 @@ class _StreakCardBody extends ConsumerWidget {
                       milestone: (d) => d,
                       orElse: () => null,
                     );
+                    // A real streak activity → re-check streak achievements
+                    // in the moment (badges used to lag a full event behind).
+                    try {
+                      await ref
+                          .read(achievementCheckerProvider.notifier)
+                          .checkAll(profileId);
+                    } catch (_) {/* never block the streak flow */}
                     if (day != null && context.mounted) {
                       showStreakMilestoneDialog(context, day);
                     }
