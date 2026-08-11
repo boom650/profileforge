@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/input_widgets.dart';
@@ -11,7 +12,7 @@ import 'package:profileforge/core/widgets/input_widgets.dart';
 /// - Real-time search with debouncing
 /// - Category filters
 /// - Recent searches
-/// - Search results with highlighting
+/// - Search results with highlighting (REAL feature index, no mock data)
 /// - Empty state
 /// ────────────────────────────────────────────────────────────────────────────
 class SearchScreen extends StatefulWidget {
@@ -27,9 +28,9 @@ class _SearchScreenState extends State<SearchScreen> {
   String _query = '';
   SearchCategory? _selectedCategory;
   final List<String> _recentSearches = [
-    'MIT application tips',
-    'Essay review',
-    'Extracurricular activities',
+    'Missions',
+    'Profile Score',
+    'Achievements',
   ];
 
   @override
@@ -285,27 +286,17 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildSearchResults(bool dark) {
-    // Mock results
-    final results = [
-      _SearchResult(
-        title: 'MIT Application Tips',
-        subtitle: 'Guide to applying to MIT',
-        category: SearchCategory.articles,
-        icon: Icons.article_outlined,
-      ),
-      _SearchResult(
-        title: 'Essay Review',
-        subtitle: 'Get AI feedback on your essays',
-        category: SearchCategory.features,
-        icon: Icons.edit_note,
-      ),
-      _SearchResult(
-        title: 'Profile Score',
-        subtitle: 'View your current profile score',
-        category: SearchCategory.features,
-        icon: Icons.speed,
-      ),
-    ];
+    // REAL feature index — every entry maps to an actual app route.
+    // Filtered by query + category; tapping navigates for real.
+    final index = _featureIndex;
+    final results = index.where((r) {
+      final q = _query.trim().toLowerCase();
+      final matchesQuery =
+          q.isEmpty || r.title.toLowerCase().contains(q) || r.subtitle.toLowerCase().contains(q);
+      final matchesCategory =
+          _selectedCategory == null || _selectedCategory == SearchCategory.all || r.category == _selectedCategory;
+      return matchesQuery && matchesCategory;
+    }).toList();
 
     if (results.isEmpty) {
       return _buildEmptyState(
@@ -347,7 +338,8 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       onTap: () {
         HapticFeedback.selectionClick();
-        // TODO: Navigate to result
+        // Real navigation — every result maps to a real app route.
+        if (result.route != null) context.push(result.route!);
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -453,6 +445,88 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
+  /// REAL searchable feature index — every entry maps to an actual route
+  /// in the app router. No fabricated articles; the index IS the app.
+  static final List<_SearchResult> _featureIndex = [
+    _SearchResult(
+      title: 'Missions',
+      subtitle: 'Your daily action missions',
+      category: SearchCategory.features,
+      icon: Icons.task_alt,
+      route: '/missions',
+    ),
+    _SearchResult(
+      title: 'Quests',
+      subtitle: 'Special daily quests',
+      category: SearchCategory.features,
+      icon: Icons.flag,
+      route: '/quests',
+    ),
+    _SearchResult(
+      title: 'Achievements',
+      subtitle: 'Badges and milestones',
+      category: SearchCategory.features,
+      icon: Icons.emoji_events,
+      route: '/achievements',
+    ),
+    _SearchResult(
+      title: 'AI Chat',
+      subtitle: 'Get AI feedback on your profile',
+      category: SearchCategory.features,
+      icon: Icons.auto_awesome,
+      route: '/enhanced-ai-chat',
+    ),
+    _SearchResult(
+      title: 'Profile Score',
+      subtitle: 'View your current profile score',
+      category: SearchCategory.features,
+      icon: Icons.speed,
+      route: '/profile-score',
+    ),
+    _SearchResult(
+      title: 'Focus Timer',
+      subtitle: 'Deep work sessions',
+      category: SearchCategory.features,
+      icon: Icons.timer,
+      route: '/timer',
+    ),
+    _SearchResult(
+      title: 'Skins',
+      subtitle: 'Equip cosmetic skins',
+      category: SearchCategory.features,
+      icon: Icons.palette,
+      route: '/skins',
+    ),
+    _SearchResult(
+      title: 'Rewards',
+      subtitle: 'Claim your rewards',
+      category: SearchCategory.features,
+      icon: Icons.card_giftcard,
+      route: '/rewards',
+    ),
+    _SearchResult(
+      title: 'Calendar',
+      subtitle: 'Your application timeline',
+      category: SearchCategory.features,
+      icon: Icons.calendar_month,
+      route: '/calendar',
+    ),
+    _SearchResult(
+      title: 'Analytics',
+      subtitle: 'Usage and progress insights',
+      category: SearchCategory.features,
+      icon: Icons.insights,
+      route: '/analytics',
+    ),
+    _SearchResult(
+      title: 'Settings',
+      subtitle: 'App preferences and API keys',
+      category: SearchCategory.features,
+      icon: Icons.settings,
+      route: '/settings',
+    ),
+  ];
 }
 
 enum SearchCategory {
@@ -471,11 +545,13 @@ class _SearchResult {
   final String subtitle;
   final SearchCategory category;
   final IconData icon;
+  final String? route;
 
   const _SearchResult({
     required this.title,
     required this.subtitle,
     required this.category,
     required this.icon,
+    this.route,
   });
 }

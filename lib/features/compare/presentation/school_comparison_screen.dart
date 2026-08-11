@@ -561,15 +561,14 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
     );
   }
 
+  /// Match % from REAL data only. SAT/ACT are not collected → GPA-only
+  /// match (never fabricate scores the app doesn't have).
   int _calculateMatch(_School school) {
-    // Simplified match calculation
-    const userGPA = 3.95;
-    const userSAT = 1520;
+    final userGpa = _userGpa;
+    if (userGpa == null) return 0;
 
-    final gpaMatch = (userGPA / school.avgGPA * 100).clamp(0, 100);
-    final satMatch = (userSAT / school.avgSAT * 100).clamp(0, 100);
-
-    return ((gpaMatch + satMatch) / 2).round();
+    final gpaMatch = (userGpa / school.avgGPA * 100).clamp(0, 100);
+    return gpaMatch.round();
   }
 }
 

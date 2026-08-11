@@ -1,105 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ActivityLogScreen — Timeline view of all user activities.
 ///
 /// Features:
-/// - Timeline with chronological entries
+/// - Timeline with chronological entries (REAL XP ledger, no fabrications)
 /// - Activity type filters
 /// - Date grouping
 /// - Detail expansion on tap
 /// ────────────────────────────────────────────────────────────────────────────
-class ActivityLogScreen extends StatefulWidget {
+class ActivityLogScreen extends ConsumerStatefulWidget {
   const ActivityLogScreen({super.key});
 
   @override
-  State<ActivityLogScreen> createState() => _ActivityLogScreenState();
+  ConsumerState<ActivityLogScreen> createState() => _ActivityLogScreenState();
 }
 
-class _ActivityLogScreenState extends State<ActivityLogScreen> {
+class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
   ActivityType? _filter;
 
-  final List<_Activity> _activities = [
-    _Activity(
-      type: ActivityType.scoreUpdate,
-      title: 'Profile Score Updated',
-      description: 'Your score increased from 77 to 82 (+5 pts)',
-      timestamp: DateTime(2026, 8, 5, 7, 0),
-      icon: Icons.speed,
-      color: Palette.primary,
-    ),
-    _Activity(
-      type: ActivityType.aiChat,
-      title: 'AI Essay Review',
-      description: 'Received feedback on your main essay draft',
-      timestamp: DateTime(2026, 8, 5, 5, 30),
-      icon: Icons.auto_awesome,
-      color: Palette.info,
-    ),
-    _Activity(
-      type: ActivityType.achievement,
-      title: 'Badge Earned: Mind Mapper',
-      description: 'Completed the psychology-based personality assessment',
-      timestamp: DateTime(2026, 8, 5, 4, 0),
-      icon: Icons.emoji_events,
-      color: Palette.warning,
-    ),
-    _Activity(
-      type: ActivityType.profileEdit,
-      title: 'Profile Updated',
-      description: 'Added extracurricular activity: Debate Team Captain',
-      timestamp: DateTime(2026, 8, 4, 18, 0),
-      icon: Icons.person,
-      color: Palette.success,
-    ),
-    _Activity(
-      type: ActivityType.onboarding,
-      title: 'Psychology Assessment Completed',
-      description: 'Finished all 12 assessment questions',
-      timestamp: DateTime(2026, 8, 4, 16, 0),
-      icon: Icons.psychology,
-      color: Palette.accentPink,
-    ),
-    _Activity(
-      type: ActivityType.aiChat,
-      title: 'School Research Chat',
-      description: 'Discussed MIT application strategy',
-      timestamp: DateTime(2026, 8, 4, 14, 0),
-      icon: Icons.chat_bubble_outline,
-      color: Palette.info,
-    ),
-    _Activity(
-      type: ActivityType.achievement,
-      title: 'Badge Earned: First Step',
-      description: 'Completed the onboarding process',
-      timestamp: DateTime(2026, 8, 4, 12, 0),
-      icon: Icons.school,
-      color: Palette.success,
-    ),
-    _Activity(
-      type: ActivityType.profileEdit,
-      title: 'Test Scores Added',
-      description: 'SAT: 1520, ACT: 34',
-      timestamp: DateTime(2026, 8, 4, 10, 0),
-      icon: Icons.speed,
-      color: Palette.primary,
-    ),
-    _Activity(
-      type: ActivityType.system,
-      title: 'Account Created',
-      description: 'Welcome to ProfileForge!',
-      timestamp: DateTime(2026, 8, 4, 9, 0),
-      icon: Icons.rocket_launch,
-      color: Palette.textTertiary,
-    ),
-  ];
+  /// REAL activity stream — the XP ledger is the single source of truth.
+  /// Every XP event (mission, quest, focus session, login) becomes an
+  /// activity entry. Nothing is fabricated.
+  List<_Activity> _activitiesFromEvents(List<XpEventRow> events) {
+    return events.map((e) {
+      final (type, icon, color) = switch (e.source) {
+        'mission' => (ActivityType.scoreUpdate, Icons.task_alt, Palette.primary),
+        'quest' => (ActivityType.scoreUpdate, Icons.flag, Palette.success),
+        'focus' => (ActivityType.aiChat, Icons.timer, Palette.info),
+        'login' => (ActivityType.system, Icons.login, Palette.textTertiary),
+        _ => (ActivityType.system, Icons.bolt, Palette.textTertiary),
+      };
+      return _Activity(
+        type: type,
+        title: _titleFor(e.source),
+        description: '+${e.amount} XP · balance ${e.balanceAfter}',
+        timestamp: e.at,
+        icon: icon,
+        color: color,
+      );
+    }).toList();
+  }
+
+  String _titleFor(String source) {
+    return switch (source) {
+      'mission' => 'Mission Completed',
+      'quest' => 'Quest Completed',
+      'focus' => 'Focus Session Ended',
+      'login' => 'Daily Login',
+      _ => 'XP Earned',
+    };
+  }
 
   List<_Activity> get _filteredActivities {
-    if (_filter == null) return _activities;
-    return _activities.where((a) => a.type == _filter).toList();
+    // Read the REAL ledger; empty history = honest empty state.
+    final profileId = ref.watch(activeProfileIdProvider).valueOrNull ?? '';
+    final eventsAsync = ref.watch(xpHistoryProvider(profileId));
+    final all = eventsAsync.valueOrNull ?? const <XpEventRow>[];
+    final activities = _activitiesFromEvents(all)
+      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    if (_filter == null) return activities;
+    return activities.where((a) => a.type == _filter).toList();
   }
 
   @override
