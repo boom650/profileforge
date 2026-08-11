@@ -2,11 +2,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/score_widgets.dart';
 import 'package:profileforge/core/widgets/feedback_widgets.dart';
+import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// OnboardingCompletionScreen — Celebration screen after psychology onboarding.
@@ -22,15 +25,18 @@ import 'package:profileforge/core/widgets/feedback_widgets.dart';
 /// - 12-uiux-gamification-engagement.md (celebration rewards)
 /// - 12-uiux-animation-motion-design.md (Disney principles)
 /// ────────────────────────────────────────────────────────────────────────────
-class OnboardingCompletionScreen extends StatefulWidget {
-  const OnboardingCompletionScreen({super.key});
+class OnboardingCompletionScreen extends ConsumerStatefulWidget {
+  const OnboardingCompletionScreen({super.key, required this.profileId});
+
+  final String profileId;
 
   @override
-  State<OnboardingCompletionScreen> createState() =>
+  ConsumerState<OnboardingCompletionScreen> createState() =>
       _OnboardingCompletionScreenState();
 }
 
-class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
+class _OnboardingCompletionScreenState
+    extends ConsumerState<OnboardingCompletionScreen>
     with TickerProviderStateMixin {
   late AnimationController _confettiController;
   late AnimationController _mascotController;
@@ -264,6 +270,10 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
   }
 
   Widget _buildProfileSummary(bool dark) {
+    // Real measured psych data (v7) — never hardcoded labels.
+    final profile =
+        ref.watch(psychologicalProfileProvider(widget.profileId).value);
+    final p = profile;
     return AnimatedBuilder(
       animation: _summaryController,
       builder: (context, child) {
@@ -293,11 +303,22 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
               ),
               child: Column(
                 children: [
+                  // Personality radar — real Big Five/SDT data (research 02c).
+                  if (p != null) ...[
+                    PersonalityRadar(
+                      values: p.radarData,
+                      labels: p.radarLabels,
+                      size: 180,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   // Personality Traits
                   _buildTraitRow(
                     icon: Icons.psychology,
                     label: 'Personality',
-                    value: 'Open & Conscientious',
+                    value: p == null
+                        ? 'Assessment in progress'
+                        : _personalityLabel(p),
                     color: Palette.primary,
                     dark: dark,
                   ),
@@ -305,7 +326,9 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
                   _buildTraitRow(
                     icon: Icons.self_improvement,
                     label: 'Stress Response',
-                    value: 'Analytical & Calm',
+                    value: p == null
+                        ? 'Assessment in progress'
+                        : _supportLabel(p.supportLevel),
                     color: Palette.success,
                     dark: dark,
                   ),
@@ -313,7 +336,9 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
                   _buildTraitRow(
                     icon: Icons.school,
                     label: 'Learning Style',
-                    value: 'Visual & Hands-on',
+                    value: p == null
+                        ? 'Assessment in progress'
+                        : _structureLabel(p.structurePreference),
                     color: Palette.info,
                     dark: dark,
                   ),
@@ -321,7 +346,9 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
                   _buildTraitRow(
                     icon: Icons.chat_bubble_outline,
                     label: 'Communication',
-                    value: 'Methodical',
+                    value: p == null
+                        ? 'Assessment in progress'
+                        : _communicationLabel(p.communicationStyle),
                     color: Palette.warning,
                     dark: dark,
                   ),
@@ -333,6 +360,40 @@ class _OnboardingCompletionScreenState extends State<OnboardingCompletionScreen>
       },
     );
   }
+
+  /// Dominant Big Five pair → human label (research 02c-key-insights).
+  String _personalityLabel(PsychologicalProfile p) {
+    final dims = <String, double>{
+      'Open': p.openness,
+      'Conscientious': p.conscientiousness,
+      'Energetic': p.extraversion,
+      'Warm': p.agreeableness,
+      'Steady': 1.0 - p.neuroticism,
+    };
+    final sorted = dims.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return '${sorted[0].key} & ${sorted[1].key}';
+  }
+
+  String _supportLabel(SupportLevel s) => switch (s) {
+        SupportLevel.high => 'Needs reassurance & structure',
+        SupportLevel.moderate => 'Balanced support',
+        SupportLevel.low => 'Direct, practical advice',
+      };
+
+  String _structureLabel(StructurePreference s) => switch (s) {
+        StructurePreference.detailed => 'Step-by-step with deadlines',
+        StructurePreference.moderate => 'Balanced structure',
+        StructurePreference.flexible => 'Flexible, small chunks',
+      };
+
+  String _communicationLabel(CommunicationStyle c) => switch (c) {
+        CommunicationStyle.enthusiastic => 'Expressive & warm',
+        CommunicationStyle.gentle => 'Thoughtful & supportive',
+        CommunicationStyle.direct => 'Direct & candid',
+        CommunicationStyle.analytical => 'Analytical & precise',
+        CommunicationStyle.balanced => 'Methodical & clear',
+      };
 
   Widget _buildTraitRow({
     required IconData icon,

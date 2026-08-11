@@ -140,7 +140,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               )),
       _route(
-          '/onboarding-complete', (c, s) => const OnboardingCompletionScreen()),
+          '/onboarding-complete',
+          (c, s) => OnboardingCompletionScreen(profileId: pid)),
       _route(
           '/enhanced-ai-chat', (c, s) => EnhancedAIChatScreen(profileId: pid)),
       _route('/profile-score', (c, s) => ProfileScoreScreen(profileId: pid)),
