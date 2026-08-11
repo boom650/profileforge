@@ -8,6 +8,8 @@ import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Onboarding v5 — 5-step illustrated wizard.
@@ -24,13 +26,20 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _page = PageController();
   int _step = 0;
-  static const int _total = 11;
+  static const int _total = 12;
 
   // Step 1: Goal.
   String _goal = 'both';
 
   // Step 2: Target schools.
   final Set<String> _targets = {};
+
+  // Step 2.5: First Win — a real 60-second task with a real reward inside
+  // the funnel (gauntlet A: "no first motivating moment"). The student picks
+  // their #1 school and writes one sentence why — a genuine admissions
+  // artifact that also seeds the essay context at finish.
+  String _firstWinSchool = '';
+  final _firstWinWhyCtrl = TextEditingController();
 
   // Step 2.5: City.
   String _city = '';
@@ -108,10 +117,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _next() {
     SoundService.instance.tap();
+    if (_step == 2) {
+      // First Win: claim requires a school + a reason; don't advance on no-op.
+      if (_firstWinSchool.isEmpty || _firstWinWhyCtrl.text.trim().length < 15) {
+        SoundService.instance.error();
+        return;
+      }
+      _claimFirstWin();
+      return;
+    }
     if (_step < _total - 1) {
       _page.nextPage(duration: 350.ms, curve: Curves.easeInOut);
     } else {
       _finish();
+    }
+  }
+
+  /// Real reward for a real 60-second task, inside the funnel (Habitica bar:
+  /// first gold within ~60s; 03ba §4 competence feedback follows a task).
+  Future<void> _claimFirstWin() async {
+    // Award XP + gems through the real ledgers.
+    await ref
+        .read(xpRepositoryProvider)
+        .add(widget.profileId, 30, 'onboarding:first-win');
+    await ref.read(walletRepositoryProvider).add(widget.profileId, 5);
+    ref.invalidate(totalXpProvider(widget.profileId));
+    ref.invalidate(gemsProvider(widget.profileId));
+    SoundService.instance.coin();
+    celebrate(context, message: 'First win! +30 XP · +5 💎');
+    if (_step < _total - 1) {
+      _page.nextPage(duration: 350.ms, curve: Curves.easeInOut);
     }
   }
 
@@ -158,8 +193,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ref.read(onboardingRepositoryProvider).saveSchedule(s, widget.profileId);
 
     // Persist essay material so AI missions speak to the real narrative.
+    // The First Win "why this school" sentence seeds the story when the
+    // student skipped the later essay step (gauntlet A: task → real artifact).
+    final firstWinWhy = _firstWinWhyCtrl.text.trim();
     final essay = EssayContext(
-      story: _storyCtrl.text.trim(),
+      story: _storyCtrl.text.trim().isEmpty ? firstWinWhy : _storyCtrl.text.trim(),
       values: _values.toList(),
       curiosity: _curiosityCtrl.text.trim(),
       promptPref: _promptPref,
@@ -191,6 +229,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     _activityCtrl.dispose();
     _compNameCtrl.dispose();
     _compResultCtrl.dispose();
+    _firstWinWhyCtrl.dispose();
     super.dispose();
   }
 
@@ -284,6 +323,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   children: [
                     _stepGoal(dark),
                     _stepSchools(dark),
+                    _stepFirstWin(dark),
                     _stepCity(dark),
                     _stepProfile(dark),
                     _stepGrades(dark),
@@ -325,7 +365,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                _step < _total - 1 ? 'Continue' : "Let's Go!",
+                                _step == 2
+                                    ? 'Claim reward'
+                                    : _step < _total - 1
+                                        ? 'Continue'
+                                        : "Let's Go!",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -334,9 +378,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               ),
                               const SizedBox(width: 8),
                               Icon(
-                                _step < _total - 1
-                                    ? Icons.arrow_forward
-                                    : Icons.rocket_launch,
+                                _step == 2
+                                    ? Icons.emoji_events
+                                    : _step < _total - 1
+                                        ? Icons.arrow_forward
+                                        : Icons.rocket_launch,
                                 color: Colors.white,
                                 size: 20,
                               ),
@@ -447,6 +493,112 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // STEP 2.5: First Win — real task + real reward inside the funnel.
+  // A 60-second admissions action (pick #1 school + one sentence why) that
+  // pays XP + gems through the real ledgers BEFORE the census continues.
+  // Habitica bar: first gold within ~60s. 03ba §4: competence feedback must
+  // follow a task, not a form.
+  // ──────────────────────────────────────────────────────────────────────────
+  Widget _stepFirstWin(bool dark) {
+    return _stepShell(
+      icon: Icons.emoji_events_rounded,
+      title: 'Your first win',
+      subtitle: 'Pick your #1 school & tell us why — you earn real XP for it',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // School picker (from the schools already selected on step 2).
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _targets.map((school) {
+              final selected = _firstWinSchool == school;
+              return GestureDetector(
+                onTap: () => setState(() => _firstWinSchool = school),
+                child: AnimatedContainer(
+                  duration: 200.ms,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? Palette.primary
+                        : dark
+                            ? Palette.surface2
+                            : const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selected
+                          ? Palette.primary
+                          : dark
+                              ? Palette.border
+                              : const Color(0xFFE2E8F0),
+                    ),
+                  ),
+                  child: Text(
+                    school,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: selected
+                          ? Colors.white
+                          : dark
+                              ? Palette.textPrimary
+                              : Palette.textInverse,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          // One sentence why — a genuine essay seed (Common App prompt 1).
+          TextField(
+            controller: _firstWinWhyCtrl,
+            maxLines: 3,
+            maxLength: 240,
+            decoration: InputDecoration(
+              hintText: 'Why this school? One sentence…',
+              filled: true,
+              fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
+              ),
+            ),
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: 8),
+          // Reward preview — visible-but-earned (variable-reward framing).
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: Palette.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Palette.primary.withValues(alpha: 0.25),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.emoji_events, color: Palette.primary, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  'Claim: +30 XP · +5 💎',
+                  style: TextStyle(
+                    color: dark ? Palette.textPrimary : Palette.textInverse,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
