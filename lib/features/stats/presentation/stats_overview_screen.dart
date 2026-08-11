@@ -1,7 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// StatsOverviewScreen — Weekly/monthly analytics and insights.
@@ -12,11 +16,11 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// - Time spent breakdown
 /// - AI interaction stats
 /// ────────────────────────────────────────────────────────────────────────────
-class StatsOverviewScreen extends StatelessWidget {
+class StatsOverviewScreen extends ConsumerWidget {
   const StatsOverviewScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dark = isDark(context);
 
     return Scaffold(
@@ -86,19 +90,19 @@ class StatsOverviewScreen extends StatelessWidget {
                       // ── Activity Heatmap ──
                       _buildSectionTitle('Activity This Week', dark),
                       const SizedBox(height: 12),
-                      _buildActivityHeatmap(dark),
+                      _buildActivityHeatmap(dark, ref),
                       const SizedBox(height: 24),
 
                       // ── Score Trend ──
-                      _buildSectionTitle('Score Trend', dark),
+                      _buildSectionTitle('Weekly XP Trend', dark),
                       const SizedBox(height: 12),
-                      _buildScoreTrend(dark),
+                      _buildScoreTrend(dark, ref),
                       const SizedBox(height: 24),
 
-                      // ── Time Breakdown ──
-                      _buildSectionTitle('Time Breakdown', dark),
+                      // ── XP Source Breakdown ──
+                      _buildSectionTitle('Where your XP comes from', dark),
                       const SizedBox(height: 12),
-                      _buildTimeBreakdown(dark),
+                      _buildTimeBreakdown(dark, ref),
                       const SizedBox(height: 24),
 
                       // ── AI Stats ──
@@ -202,9 +206,17 @@ class StatsOverviewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityHeatmap(bool dark) {
+  Widget _buildActivityHeatmap(bool dark, WidgetRef ref) {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    final activities = [8, 12, 5, 15, 10, 3, 0]; // hours or activities
+    final profileIdAsync = ref.watch(activeProfileIdProvider);
+    final profileId = profileIdAsync.valueOrNull;
+    // Real per-day XP from the ledger — never hardcoded.
+    final xpByDay = profileId == null
+        ? const <DateTime, int>{}
+        : (ref
+                    .watch(xpByDayProvider((profileId: profileId, days: 7)))
+                    .valueOrNull ??
+                const {});
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -222,8 +234,12 @@ class StatsOverviewScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(7, (i) {
-              final activity = activities[i];
-              final intensity = activity / 15.0;
+              final today = DateTime.now();
+              final date = DateTime(today.year, today.month, today.day)
+                  .subtract(Duration(days: 6 - i));
+              final activity = xpByDay[date] ?? 0;
+              final intensity =
+                  activity == 0 ? 0.0 : (activity / 100.0).clamp(0.15, 1.0);
 
               return Column(
                 children: [
@@ -231,7 +247,10 @@ class StatsOverviewScreen extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: Palette.primary.withValues(alpha: 0.1 + intensity * 0.6),
+                      color: activity > 0
+                          ? Palette.primary
+                              .withValues(alpha: 0.15 + intensity * 0.65)
+                          : (dark ? Palette.surface3 : const Color(0xFFE2E8F0)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
@@ -264,9 +283,25 @@ class StatsOverviewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreTrend(bool dark) {
-    // Mock score data
-    final scores = [65, 68, 72, 70, 75, 78, 82];
+  Widget _buildScoreTrend(bool dark, WidgetRef ref) {
+    final profileIdAsync = ref.watch(activeProfileIdProvider);
+    final profileId = profileIdAsync.valueOrNull;
+    // Real per-day XP — the honest analog for a "score trend": there is no
+    // historical score table yet, so we chart real earned XP instead of
+    // fabricating a fake 7-point score series (old code: `scores = [65, 68, ...]`).
+    final xpByDay = profileId == null
+        ? const <DateTime, int>{}
+        : (ref
+                    .watch(xpByDayProvider((profileId: profileId, days: 7)))
+                    .valueOrNull ??
+                const {});
+    final today = DateTime.now();
+    final scores = List<int>.generate(7, (i) {
+      final date = DateTime(today.year, today.month, today.day)
+          .subtract(Duration(days: 6 - i));
+      return xpByDay[date] ?? 0;
+    });
+    final weekTotal = scores.fold<int>(0, (a, b) => a + b);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -286,7 +321,7 @@ class StatsOverviewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Current Score',
+                'Weekly XP',
                 style: TextStyle(
                   fontSize: 12,
                   color: dark ? Palette.textSecondary : Palette.textTertiary,
@@ -303,7 +338,7 @@ class StatsOverviewScreen extends StatelessWidget {
                     Icon(Icons.trending_up, size: 14, color: Palette.success),
                     const SizedBox(width: 4),
                     Text(
-                      '+17 pts',
+                      '$weekTotal XP',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -317,7 +352,7 @@ class StatsOverviewScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '82',
+            '$weekTotal',
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
@@ -325,7 +360,7 @@ class StatsOverviewScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Mini chart
+          // Mini chart — real XP per day.
           SizedBox(
             height: 60,
             child: CustomPaint(
@@ -355,13 +390,54 @@ class StatsOverviewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeBreakdown(bool dark) {
-    final breakdown = [
-      _TimeEntry(label: 'AI Chat', hours: 4.5, color: Palette.primary),
-      _TimeEntry(label: 'Profile Review', hours: 2.0, color: Palette.success),
-      _TimeEntry(label: 'Activities', hours: 1.5, color: Palette.warning),
-      _TimeEntry(label: 'Onboarding', hours: 0.5, color: Palette.accentPink),
-    ];
+  Widget _buildTimeBreakdown(bool dark, WidgetRef ref) {
+    final profileIdAsync = ref.watch(activeProfileIdProvider);
+    final profileId = profileIdAsync.valueOrNull;
+    // Honest analog: XP earned by source (real ledger). No time-tracking data
+    // exists, so hours were hardcoded before — that fabricated "4.5h AI Chat"
+    // numbers. Replace with real per-source XP share.
+    final history = profileId == null
+        ? const <XpEventRow>[]
+        : (ref.watch(xpHistoryProvider(profileId)).valueOrNull ?? const []);
+    final bySource = <String, int>{};
+    for (final e in history) {
+      bySource[e.source] = (bySource[e.source] ?? 0) + e.amount;
+    }
+    final sourceColors = <String, Color>{
+      'mission': Palette.primary,
+      'streak': Palette.success,
+      'first_win': Palette.warning,
+      'daily': Palette.accentPink,
+      'ai': Palette.info,
+    };
+    final breakdown = bySource.entries.map((e) {
+      return _TimeEntry(
+        label: e.key.replaceAll('_', ' ').toUpperCase(),
+        hours: e.value.toDouble(),
+        color: sourceColors[e.key] ?? Palette.textSecondary,
+      );
+    }).toList();
+    if (breakdown.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: dark
+              ? Palette.surface1.withValues(alpha: 0.7)
+              : Colors.white.withValues(alpha: 0.8),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          ),
+        ),
+        child: Text(
+          'No activity yet — complete a mission to see your XP breakdown.',
+          style: TextStyle(
+            fontSize: 13,
+            color: dark ? Palette.textSecondary : Palette.textTertiary,
+          ),
+        ),
+      );
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -413,7 +489,7 @@ class StatsOverviewScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '${entry.label} (${entry.hours}h)',
+                    '${entry.label} (${entry.hours.toInt()} XP)',
                     style: TextStyle(
                       fontSize: 11,
                       color: dark ? Palette.textSecondary : Palette.textTertiary,

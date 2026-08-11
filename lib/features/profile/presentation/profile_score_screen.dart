@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/scoring/profile_scoring.dart';
 import 'package:profileforge/core/ai/psychological_profile.dart';
@@ -59,6 +60,10 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   late AnimationController _radarController;
   late Animation<double> _scoreAnimation;
   ProfileScore? _score;
+
+  /// In-flight guard: prevents two rapid taps from minting two gap missions
+  /// (millisecond ids would otherwise race past the open-mission check).
+  bool _mintingGapMission = false;
   PsychologicalProfile? _loadedPsych;
   bool _loaded = false;
   bool _isDemo = false;
@@ -372,7 +377,16 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                       // The reveal must not dead-end — weakest component
                       // becomes a real, doable mission the student can start
                       // immediately (SDT: competence feedback → next action).
-                      _buildActionBridge(score, dark),
+                      _buildActionBridge(
+                        score,
+                        dark,
+                        activeGapMission: ref
+                            .watch(specialMissionsProvider(widget.profileId))
+                            .valueOrNull
+                            ?.where(
+                                (m) => m.source == 'rule' && !m.done)
+                            .firstOrNull,
+                      ),
 
                       const SizedBox(height: 100),
                     ],
@@ -823,7 +837,11 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   /// Finds the weakest component and offers a real, immediately-doable mission
   /// targeting exactly that gap — written to the mission ledger and opened in
   /// the missions screen.
-  Widget _buildActionBridge(ProfileScore score, bool dark) {
+  Widget _buildActionBridge(
+    ProfileScore score,
+    bool dark, {
+    MissionRow? activeGapMission,
+  }) {
     final gap = _weakestGap(score);
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -845,11 +863,14 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Turn this insight into action',
+                  activeGapMission != null
+                      ? 'Mission in progress'
+                      : '${gap.label} is your biggest lever right now',
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: dark ? Palette.textPrimary : Palette.textInverse,
+                    color:
+                        dark ? Palette.textPrimary : Palette.textInverse,
                   ),
                 ),
               ),
@@ -857,8 +878,9 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            '${gap.label} is your biggest lever right now. A small, focused '
-            'mission today compounds into a stronger application.',
+            activeGapMission != null
+                ? 'You already have an open mission for this gap. Complete it, then return here for your next lever.'
+                : 'A small, focused mission today compounds into a stronger application.',
             style: GoogleFonts.inter(
               fontSize: 13,
               color: Palette.textSecondary,
@@ -868,7 +890,8 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [gap.color, gap.color.withValues(alpha: 0.6)],
@@ -885,10 +908,16 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.bolt, color: Colors.white, size: 18),
+                Icon(
+                  activeGapMission != null ? Icons.flag : Icons.bolt,
+                  color: Colors.white,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Text(
-                  'Create a ${gap.label.toLowerCase()} mission',
+                  activeGapMission != null
+                      ? 'Continue mission'
+                      : 'Create a ${gap.label.toLowerCase()} mission',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -986,14 +1015,28 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   }
 
   /// Create the gap mission in the real ledger, then open /missions so the
-  /// student can start it immediately (never a fake toast).
+  /// student can start it immediately (never a fake toast). One open gap
+  /// mission per profile: re-taps navigate to the existing mission instead
+  /// of minting another reward (Habitica: a reward is never self-replicating).
   Future<void> _createGapMission() async {
     final score = _score;
     if (score == null) return;
+    if (_mintingGapMission) return; // double-tap guard
+    _mintingGapMission = true;
     final gap = _weakestGap(score);
+    try {
+      final existing = await ref
+          .read(specialMissionsProvider(widget.profileId).future)
+          .then((rows) => rows.where((m) => m.source == 'rule' && !m.done))
+          .then((rows) => rows.isNotEmpty);
+      if (existing) {
+        SoundService.instance.tap();
+        if (mounted) context.push('/missions');
+        return;
+      }
 
-    final missionId =
-        'gap-${widget.profileId}-${DateTime.now().millisecondsSinceEpoch}';
+      final missionId =
+          'gap-${widget.profileId}-${DateTime.now().millisecondsSinceEpoch}';
     final mission = Mission(
       id: missionId,
       profileId: widget.profileId,
@@ -1018,6 +1061,9 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
     ref.invalidate(specialMissionsProvider(widget.profileId));
     if (mounted) {
       context.push('/missions');
+    }
+    } finally {
+      _mintingGapMission = false;
     }
   }
 

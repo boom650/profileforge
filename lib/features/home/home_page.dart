@@ -33,6 +33,8 @@ class HomePage extends ConsumerWidget {
     final theme = Theme.of(context);
     final dark = isDark(context);
     final xpAsync = ref.watch(totalXpProvider(profileId));
+    final xpByDayAsync =
+        ref.watch(xpByDayProvider((profileId: profileId, days: 7)));
     final gemsAsync = ref.watch(gemsProvider(profileId));
     final streakAsync = ref.watch(streakProvider(profileId));
     final missionsAsync = ref.watch(todaysMissionsProvider(profileId));
@@ -485,7 +487,9 @@ class HomePage extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: _WeeklyHeatmap(streak: streak),
+                child: _WeeklyHeatmap(
+                  xpByDay: xpByDayAsync.valueOrNull ?? const {},
+                ),
               ),
             ),
 
@@ -750,24 +754,38 @@ class _MissionCard extends StatelessWidget {
   }
 }
 
-/// Weekly heatmap — GitHub-style dots.
+/// Weekly heatmap — GitHub-style dots driven by REAL per-day XP from the
+/// XpEvents ledger. Intensity scales with XP earned that day (0 XP = dim
+/// empty dot; more XP = brighter, glowing). Previously this was fake:
+/// `streak.clamp(0, 7)` filled dots even when the user did nothing this week.
 class _WeeklyHeatmap extends StatelessWidget {
-  const _WeeklyHeatmap({required this.streak});
-  final int streak;
+  const _WeeklyHeatmap({required this.xpByDay});
+  final Map<DateTime, int> xpByDay;
 
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
     final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    // Simple: fill dots based on streak (up to 7 days).
-    final filled = streak.clamp(0, 7);
+    final today = DateTime.now();
+    final dayOnly = (DateTime d) => DateTime(d.year, d.month, d.day);
 
     return GlassCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(7, (i) {
-          final isFilled = i < filled;
+          final date = dayOnly(today.subtract(Duration(days: 6 - i)));
+          final xp = xpByDay[date] ?? 0;
+          final active = xp > 0;
+          // Intensity: 0 XP → dim empty; 1-24 → 30%; 25-49 → 55%;
+          // 50-99 → 80%; 100+ → 100% (glowing accent).
+          final intensity = active
+              ? (xp >= 100 ? 1.0 : (xp >= 50 ? 0.8 : (xp >= 25 ? 0.55 : 0.3)))
+              : 0.0;
+          final base = intensity == 0.0
+              ? (dark ? Palette.surface3 : const Color(0xFFE2E8F0))
+              : Palette.primary.withValues(alpha: 0.25 + intensity * 0.75);
+
           return Column(
             children: [
               Text(
@@ -783,16 +801,31 @@ class _WeeklyHeatmap extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: isFilled
-                      ? Palette.primary
-                      : dark
-                          ? Palette.surface3
-                          : const Color(0xFFE2E8F0),
+                  color: base,
                   borderRadius: BorderRadius.circular(8),
+                  boxShadow: active
+                      ? [
+                          BoxShadow(
+                            color:
+                                Palette.primary.withValues(alpha: 0.25 * intensity),
+                            blurRadius: 10 * intensity,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
                 ),
-                child: isFilled
-                    ? const Icon(Icons.check, color: Colors.white, size: 16)
+                child: active
+                    ? Icon(Icons.check, color: Colors.white, size: 16)
                     : null,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                xp > 0 ? '$xp' : '',
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w600,
+                  color: active ? Palette.primary : Colors.transparent,
+                ),
               ),
             ],
           );
