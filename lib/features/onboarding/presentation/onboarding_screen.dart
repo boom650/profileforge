@@ -41,6 +41,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   String _firstWinSchool = '';
   final _firstWinWhyCtrl = TextEditingController();
 
+  /// Once earned, the First Win reward is claimed forever — a task is
+  /// rewarded once (03ba §4 competence feedback; counterfeiting breaks it).
+  bool _firstWinClaimed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      if (mounted) {
+        setState(() {
+          _firstWinClaimed =
+              prefs.getBool('pf_first_win_claimed_${widget.profileId}') ??
+                  false;
+        });
+      }
+    });
+  }
+
   // Step 2.5: City.
   String _city = '';
 
@@ -118,7 +136,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void _next() {
     SoundService.instance.tap();
     if (_step == 2) {
-      // First Win: claim requires a school + a reason; don't advance on no-op.
+      // First Win: claim once, forever. Already claimed → just advance.
+      if (_firstWinClaimed) {
+        if (_step < _total - 1) {
+          _page.nextPage(duration: 350.ms, curve: Curves.easeInOut);
+        }
+        return;
+      }
+      // Claim requires a school + a reason; don't advance on no-op.
       if (_firstWinSchool.isEmpty || _firstWinWhyCtrl.text.trim().length < 15) {
         SoundService.instance.error();
         return;
@@ -135,7 +160,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   /// Real reward for a real 60-second task, inside the funnel (Habitica bar:
   /// first gold within ~60s; 03ba §4 competence feedback follows a task).
+  /// The claimed flag is set + persisted BEFORE the awaits so a double-tap
+  /// or back-navigation can never double-award (gauntlet A re-judge).
   Future<void> _claimFirstWin() async {
+    if (_firstWinClaimed) return;
+    _firstWinClaimed = true;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('pf_first_win_claimed_${widget.profileId}', true);
     // Award XP + gems through the real ledgers.
     await ref
         .read(xpRepositoryProvider)
@@ -144,7 +175,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ref.invalidate(totalXpProvider(widget.profileId));
     ref.invalidate(gemsProvider(widget.profileId));
     SoundService.instance.coin();
-    celebrate(context, message: 'First win! +30 XP · +5 💎');
+    if (mounted) {
+      celebrate(context, message: 'First win! +30 XP · +5 💎');
+    }
     if (_step < _total - 1) {
       _page.nextPage(duration: 350.ms, curve: Curves.easeInOut);
     }
@@ -365,7 +398,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                _step == 2
+                                _step == 2 && !_firstWinClaimed
                                     ? 'Claim reward'
                                     : _step < _total - 1
                                         ? 'Continue'
@@ -378,7 +411,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               ),
                               const SizedBox(width: 8),
                               Icon(
-                                _step == 2
+                                _step == 2 && !_firstWinClaimed
                                     ? Icons.emoji_events
                                     : _step < _total - 1
                                         ? Icons.arrow_forward
@@ -574,21 +607,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           const SizedBox(height: 8),
           // Reward preview — visible-but-earned (variable-reward framing).
+          // Once claimed, it reads as earned (no counterfeit re-claim).
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: Palette.primary.withValues(alpha: 0.08),
+              color: _firstWinClaimed
+                  ? Palette.success.withValues(alpha: 0.1)
+                  : Palette.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Palette.primary.withValues(alpha: 0.25),
+                color: _firstWinClaimed
+                    ? Palette.success.withValues(alpha: 0.3)
+                    : Palette.primary.withValues(alpha: 0.25),
               ),
             ),
             child: Row(
               children: [
-                const Icon(Icons.emoji_events, color: Palette.primary, size: 18),
+                Icon(
+                  _firstWinClaimed ? Icons.check_circle : Icons.emoji_events,
+                  color: _firstWinClaimed ? Palette.success : Palette.primary,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Text(
-                  'Claim: +30 XP · +5 💎',
+                  _firstWinClaimed ? 'Claimed — +30 XP · +5 💎 earned!' : 'Claim: +30 XP · +5 💎',
                   style: TextStyle(
                     color: dark ? Palette.textPrimary : Palette.textInverse,
                     fontWeight: FontWeight.w600,
