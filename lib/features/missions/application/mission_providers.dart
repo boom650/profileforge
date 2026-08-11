@@ -14,6 +14,7 @@ import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
+import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
   return MissionRepository(ref.watch(appDatabaseProvider));
@@ -113,6 +114,16 @@ final completeMissionProvider = Provider.family<
         await ref.read(streakProvider(args.profileId).notifier).recordToday();
   } catch (_) {
     // Streak is additive; a failure here must never block the reward.
+  }
+  // Achievements: the core loop is the most important unlock trigger.
+  // (Timer screen + quests already call checkAll; missions must too, or
+  // mission-based badges stay locked no matter how many you complete.)
+  try {
+    await ref
+        .read(achievementCheckerProvider.notifier)
+        .checkAll(args.profileId);
+  } catch (_) {
+    // Achievement evaluation is additive; never block the reward.
   }
   ref.invalidate(todaysMissionsProvider(args.profileId));
   ref.invalidate(weeklyMissionsProvider(args.profileId));

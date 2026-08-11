@@ -40,6 +40,13 @@ class AchievementRepository {
     return rows.length;
   }
 
+  Future<int> totalQuestsCompleted(String profileId) async {
+    final rows = await (_db.select(_db.dailyQuests)
+          ..where((t) => t.profileId.equals(profileId) & t.done.equals(true)))
+        .get();
+    return rows.length;
+  }
+
   Future<int> totalLoginClaims(String profileId) async {
     final todayStr = DateTime.now().toIso8601String().substring(0, 10);
     final count = await _db.customSelect(

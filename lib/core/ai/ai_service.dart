@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'ai_json.dart';
 import 'ai_provider.dart';
+import 'package:profileforge/core/rate_app/rate_app_service.dart';
 
 /// Core AI service — OpenAI-compatible with 3-provider fallback.
 /// No external SDK dependencies, just Dio + JSON.
@@ -98,6 +99,13 @@ Rules:
         final data = response.data as Map<String, dynamic>;
         final choices = data['choices'] as List?;
         if (choices != null && choices.isNotEmpty) {
+          // Real chat interaction — feed the AI-chats counter so the stats
+          // screen shows truth (previously recordAIChat had zero call sites).
+          try {
+            await RateAppService.instance.recordAIChat();
+          } catch (_) {
+            // Counter is additive; never block the AI response.
+          }
           return choices[0]['message']['content'] as String? ?? 'No response';
         }
       } catch (e) {

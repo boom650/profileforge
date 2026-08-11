@@ -2,32 +2,42 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/score_widgets.dart';
+import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/scoring/profile_scoring.dart';
+import 'package:profileforge/features/profile/application/profile_score_loader.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ScoreBreakdownScreen — Detailed animated score breakdown.
 ///
 /// Features:
-/// - Animated overall score circle
-/// - Category breakdown with animated bars
-/// - Score trend sparkline
-/// - Improvement suggestions
-/// - Detailed tooltips for each category
+/// - Animated overall score circle (REAL score from ProfileScoring)
+/// - Category breakdown with animated bars (REAL component scores)
+/// - Weekly XP trend (honest — no score history table exists, so the
+///   "history" charts the real XP ledger instead of fabricated scores)
+/// - Improvement suggestions (REAL, from ProfileScoring)
 /// ────────────────────────────────────────────────────────────────────────────
-class ScoreBreakdownScreen extends StatefulWidget {
+class ScoreBreakdownScreen extends ConsumerStatefulWidget {
   const ScoreBreakdownScreen({super.key});
 
   @override
-  State<ScoreBreakdownScreen> createState() => _ScoreBreakdownScreenState();
+  ConsumerState<ScoreBreakdownScreen> createState() =>
+      _ScoreBreakdownScreenState();
 }
 
-class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
+class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
     with TickerProviderStateMixin {
   late AnimationController _scoreController;
   late AnimationController _barsController;
   late Animation<double> _scoreAnimation;
+  ProfileScore? _score;
+  bool _isDemo = false;
+  bool _loaded = false;
+  String? _profileId;
 
   @override
   void initState() {
@@ -38,7 +48,8 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _scoreAnimation = Tween<double>(begin: 0, end: 82).animate(
+    // Real score, animated from 0 → actual total (never a hardcoded 82).
+    _scoreAnimation = Tween<double>(begin: 0, end: 0).animate(
       CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic),
     );
 
@@ -47,12 +58,29 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
       duration: const Duration(milliseconds: 1200),
     );
 
-    // Stagger the animations
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _scoreController.forward();
-    });
-    Future.delayed(const Duration(milliseconds: 800), () {
-      _barsController.forward();
+    _loadAndCalculate();
+  }
+
+  Future<void> _loadAndCalculate() async {
+    final profileId = ref.read(activeProfileIdProvider).valueOrNull;
+    final loaded = await loadProfileScore(ref, profileId);
+    if (!mounted) return;
+    setState(() {
+      _score = loaded.score;
+      _isDemo = loaded.isDemo;
+      _loaded = true;
+      _profileId = profileId;
+      _scoreAnimation = Tween<double>(begin: 0, end: loaded.score.total.toDouble())
+          .animate(
+        CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic),
+      );
+      // Stagger the animations
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) _scoreController.forward();
+      });
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) _barsController.forward();
+      });
     });
   }
 
@@ -137,8 +165,8 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
                       _buildCategoryBreakdown(dark),
                       const SizedBox(height: 24),
 
-                      // ── Score Trend ──
-                      _buildSectionTitle('Score History', dark),
+                      // ── Weekly Activity Trend ──
+                      _buildSectionTitle('Weekly Activity', dark),
                       const SizedBox(height: 12),
                       _buildScoreHistory(dark),
                       const SizedBox(height: 24),
@@ -179,7 +207,7 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
                   Icon(Icons.trending_up, size: 18, color: Palette.success),
                   const SizedBox(width: 4),
                   Text(
-                    '+5 from last week',
+                    _isDemo ? 'PREVIEW score' : 'Current score',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -210,43 +238,62 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
   }
 
   Widget _buildCategoryBreakdown(bool dark) {
+    final s = _score;
     final categories = [
       _ScoreCategory(
         label: 'Academic Profile',
-        score: 85,
+        score: s?.gpaScore ?? 0,
         icon: Icons.school,
         color: Palette.primary,
-        tips: ['Add AP courses', 'Highlight research'],
+        tips: const ['Add AP courses', 'Highlight research'],
       ),
       _ScoreCategory(
         label: 'Extracurriculars',
-        score: 78,
+        score: s?.activitiesScore ?? 0,
         icon: Icons.star,
         color: Palette.success,
-        tips: ['Start a club', 'Get leadership role'],
+        tips: const ['Start a club', 'Get leadership role'],
       ),
       _ScoreCategory(
         label: 'Essays',
-        score: 72,
+        score: s?.essayScore ?? 0,
         icon: Icons.edit_note,
         color: Palette.warning,
-        tips: ['Add personal stories', 'Show vulnerability'],
+        tips: const ['Add personal stories', 'Show vulnerability'],
       ),
       _ScoreCategory(
-        label: 'Recommendations',
-        score: 80,
-        icon: Icons.person,
+        label: 'Psychology & Mindset',
+        score: s?.psychologyScore ?? 0,
+        icon: Icons.psychology,
         color: Palette.info,
-        tips: ['Choose diverse recommenders', 'Provide context'],
+        tips: const ['Growth mindset practices', 'Self-efficacy builders'],
       ),
       _ScoreCategory(
         label: 'Test Scores',
-        score: 88,
+        score: s?.testScore ?? 0,
         icon: Icons.speed,
         color: Palette.accentPink,
-        tips: ['Retake if below target', 'Superscore'],
+        tips: const ['Retake if below target', 'Superscore'],
       ),
     ];
+
+    if (!_loaded) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    if (_isDemo) {
+      return const Padding(
+        padding: EdgeInsets.all(12),
+        child: Text(
+          'PREVIEW — complete your profile to see your real scores.',
+          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+        ),
+      );
+    }
 
     return Column(
       children: categories.map((category) {
@@ -345,9 +392,24 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
   }
 
   Widget _buildScoreHistory(bool dark) {
-    // Mock data: last 7 days
-    final scores = [75, 77, 74, 78, 80, 79, 82];
-    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    // Honest: no score-history table exists. Chart the REAL XP ledger
+    // instead of fabricating a fake score series (user rule: never fake).
+    final xpByDay = ref
+        .watch(xpByDayProvider(
+            (profileId: _profileId ?? '', days: 7)))
+        .valueOrNull;
+    final today = DateTime.now();
+    final scores = List<int>.generate(7, (i) {
+      final d = DateTime(today.year, today.month, today.day)
+          .subtract(Duration(days: 6 - i));
+      return xpByDay?[d] ?? 0;
+    });
+    final labels = List<String>.generate(7, (i) {
+      final d = today.subtract(Duration(days: 6 - i));
+      const names = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      return names[d.weekday - 1];
+    });
+    final hasActivity = scores.any((s) => s > 0);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -362,69 +424,88 @@ class _ScoreBreakdownScreenState extends State<ScoreBreakdownScreen>
       ),
       child: Column(
         children: [
-          // Chart
-          SizedBox(
-            height: 120,
-            child: AnimatedBuilder(
-              animation: _barsController,
-              builder: (context, child) {
-                return CustomPaint(
-                  size: const Size(double.infinity, 120),
-                  painter: _SparklineChartPainter(
-                    data: scores,
-                    progress: _barsController.value,
-                    color: Palette.primary,
-                    dark: dark,
+          if (!hasActivity)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                'No activity recorded this week yet — complete a mission to see your trend.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+              ),
+            )
+          else ...[
+            // Chart
+            SizedBox(
+              height: 120,
+              child: AnimatedBuilder(
+                animation: _barsController,
+                builder: (context, child) {
+                  return CustomPaint(
+                    size: const Size(double.infinity, 120),
+                    painter: _SparklineChartPainter(
+                      data: scores,
+                      progress: _barsController.value,
+                      color: Palette.primary,
+                      dark: dark,
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: labels.map((d) {
+                return Text(
+                  d,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Palette.textTertiary,
                   ),
                 );
-              },
+              }).toList(),
             ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: days.map((d) {
-              return Text(
-                d,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Palette.textTertiary,
-                ),
-              );
-            }).toList(),
-          ),
+          ],
         ],
       ),
     );
   }
 
   Widget _buildImprovementTips(bool dark) {
-    final tips = [
-      _ImprovementTip(
-        icon: Icons.edit_note,
-        title: 'Revise Your Main Essay',
-        description:
-            'Your essay score can improve by adding a specific personal anecdote.',
-        impact: '+8 pts',
-        color: Palette.warning,
-      ),
-      _ImprovementTip(
-        icon: Icons.star,
-        title: 'Add Leadership Activity',
-        description:
-            'Starting or leading a club would boost your extracurricular score.',
-        impact: '+5 pts',
-        color: Palette.success,
-      ),
-      _ImprovementTip(
-        icon: Icons.person,
-        title: 'Request Recommendation',
-        description:
-            'A recommendation from a teacher who knows you well can make a big difference.',
-        impact: '+3 pts',
-        color: Palette.info,
-      ),
+    final s = _score;
+    if (_isDemo || s == null || s.improvements.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(12),
+        child: Text(
+          'Complete your profile to get personalized improvement tips.',
+          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+        ),
+      );
+    }
+
+    // REAL suggestions from the scorer — no fabricated point impacts.
+    final icons = [
+      Icons.edit_note,
+      Icons.star,
+      Icons.school,
+      Icons.psychology,
     ];
+    final colors = [
+      Palette.warning,
+      Palette.success,
+      Palette.primary,
+      Palette.info,
+    ];
+    final tips = s.improvements
+        .take(4)
+        .map((imp) => _ImprovementTip(
+              icon: icons[s.improvements.indexOf(imp) % icons.length],
+              title: imp.split('.').first,
+              description: imp,
+              impact: 'Focus area',
+              color: colors[s.improvements.indexOf(imp) % colors.length],
+            ))
+        .toList();
 
     return Column(
       children: tips.map((tip) {

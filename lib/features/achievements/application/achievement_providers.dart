@@ -63,7 +63,7 @@ class AchievementCheckerNotifier extends Notifier<void> {
     final missionsDone = await repo.totalMissionsCompleted(profileId);
     final focusSessions = await ref.read(focusSessionCountProvider(profileId).future);
     final focusMinutes = await ref.read(totalFocusMinutesProvider(profileId).future);
-    final questsDone = await repo.totalMissionsCompleted(profileId); // reuse missions
+    final questsDone = await repo.totalQuestsCompleted(profileId);
     final loginClaims = await repo.totalLoginClaims(profileId);
     final skinsUnlocked = await repo.totalSkinsUnlocked(profileId);
 
