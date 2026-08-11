@@ -271,9 +271,8 @@ class _OnboardingCompletionScreenState
 
   Widget _buildProfileSummary(bool dark) {
     // Real measured psych data (v7) — never hardcoded labels.
-    final profile =
-        ref.watch(psychologicalProfileProvider(widget.profileId).value);
-    final p = profile;
+    final p =
+        ref.watch(psychologicalProfileProvider(widget.profileId)).valueOrNull;
     return AnimatedBuilder(
       animation: _summaryController,
       builder: (context, child) {
