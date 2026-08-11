@@ -24,8 +24,11 @@ class SkinRepository {
   }
 
   Future<void> equip(String profileId, String skinId) async {
-    // Only one equipped at a time.
-    await _db.update(_db.skinStates).write(const SkinStatesCompanion(equipped: Value(false)));
+    // Only one equipped at a time — scoped to THIS profile so other
+    // profiles' equips are never clobbered.
+    await (_db.update(_db.skinStates)
+          ..where((t) => t.id.equals(profileId)))
+        .write(const SkinStatesCompanion(equipped: Value(false)));
     await _db.into(_db.skinStates).insertOnConflictUpdate(SkinStatesCompanion(
       id: Value(profileId),
       skinId: Value(skinId),

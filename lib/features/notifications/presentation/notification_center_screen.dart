@@ -1,111 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/achievements/application/achievement_providers.dart';
+import 'package:profileforge/features/achievements/domain/achievement_defs.dart';
+import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// NotificationCenterScreen — View and manage notifications.
 ///
 /// Features:
-/// - Notification list with categories
-/// - Mark as read/unread
-/// - Delete notifications
+/// - Notification list built from REAL app state (streak, XP ledger,
+///   achievements) — nothing fabricated
+/// - Mark as read/unread (session view; no persistence layer exists yet)
 /// - Filter by type
 /// - Empty state
 /// ────────────────────────────────────────────────────────────────────────────
-class NotificationCenterScreen extends StatefulWidget {
+class NotificationCenterScreen extends ConsumerStatefulWidget {
   const NotificationCenterScreen({super.key});
 
   @override
-  State<NotificationCenterScreen> createState() =>
+  ConsumerState<NotificationCenterScreen> createState() =>
       _NotificationCenterScreenState();
 }
 
-class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
+class _NotificationCenterScreenState
+    extends ConsumerState<NotificationCenterScreen> {
   NotificationFilter _filter = NotificationFilter.all;
-  final List<_Notification> _notifications = [
-    _Notification(
-      id: '1',
-      title: 'Profile Score Updated',
-      message: 'Your profile score increased by 5 points!',
-      type: NotificationType.score,
-      timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
-      isRead: false,
-    ),
-    _Notification(
-      id: '2',
-      title: 'AI Recommendation',
-      message: 'New essay review tips available for your target school.',
-      type: NotificationType.ai,
-      timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-      isRead: false,
-    ),
-    _Notification(
-      id: '3',
-      title: 'Achievement Unlocked!',
-      message: 'You earned the "Mind Mapper" badge.',
-      type: NotificationType.achievement,
-      timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-      isRead: true,
-    ),
-    _Notification(
-      id: '4',
-      title: 'Daily Streak',
-      message: 'Keep it up! You\'re on a 7-day streak.',
-      type: NotificationType.streak,
-      timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    _Notification(
-      id: '5',
-      title: 'New Feature',
-      message: 'Check out the new psychology assessment feature!',
-      type: NotificationType.system,
-      timestamp: DateTime.now().subtract(const Duration(days: 3)),
-      isRead: true,
-    ),
-  ];
+  final Set<String> _readIds = {};
+  final Set<String> _deletedIds = {};
+
+  /// REAL notifications, derived live from app state.
+  List<_Notification> _buildNotifications() {
+    final profileId = ref.watch(activeProfileIdProvider).valueOrNull ?? '';
+    final list = <_Notification>[];
+
+    // 1 — streak status (real).
+    final streak = ref.watch(streakProvider(profileId)).valueOrNull;
+    if (streak != null && streak.current > 0) {
+      list.add(_Notification(
+        id: 'streak',
+        title: 'Streak: ${streak.current} day${streak.current == 1 ? '' : 's'}',
+        message: streak.current >= 7
+            ? 'Outstanding — you are on a ${streak.current}-day streak. Keep it going!'
+            : streak.current == 1
+                ? 'Day 1 done — come back tomorrow to keep it alive.'
+                : 'You are ${streak.current} days strong. One more day!',
+        type: NotificationType.streak,
+        timestamp: streak.lastActiveDate ?? DateTime.now(),
+        isRead: _readIds.contains('streak'),
+      ));
+    }
+
+    // 2 — latest XP event (real ledger).
+    final events = ref.watch(xpHistoryProvider(profileId)).valueOrNull;
+    if (events != null && events.isNotEmpty) {
+      final e = events.first;
+      list.add(_Notification(
+        id: 'xp-${e.id}',
+        title: '+${e.amount} XP · ${e.source}',
+        message: 'Balance: ${e.balanceAfter} XP',
+        type: NotificationType.score,
+        timestamp: e.at,
+        isRead: _readIds.contains('xp-${e.id}'),
+      ));
+    }
+
+    // 3 — latest achievement (real unlocks × defs).
+    final unlocked =
+        ref.watch(unlockedAchievementIdsProvider(profileId)).valueOrNull;
+    if (unlocked != null && unlocked.isNotEmpty) {
+      final defs = ref.watch(achievementDefsProvider).valueOrNull ?? const <AchievementDef>[];
+      final last = defs.where((d) => unlocked.contains(d.id)).toList().reversed.firstOrNull;
+      if (last != null) {
+        list.add(_Notification(
+          id: 'achievement-${last.id}',
+          title: 'Achievement Unlocked',
+          message: '${last.name} — ${last.description}',
+          type: NotificationType.achievement,
+          timestamp: DateTime.now(),
+          isRead: _readIds.contains('achievement-${last.id}'),
+        ));
+      }
+    }
+
+    list.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return list;
+  }
+
+  List<_Notification> get _notifications => _buildNotifications();
 
   void _markAsRead(String id) {
     HapticFeedback.selectionClick();
-    setState(() {
-      final index = _notifications.indexWhere((n) => n.id == id);
-      if (index != -1) {
-        _notifications[index] = _notifications[index].copyWith(isRead: true);
-      }
-    });
+    setState(() => _readIds.add(id));
   }
 
   void _deleteNotification(String id) {
     HapticFeedback.mediumImpact();
-    setState(() {
-      _notifications.removeWhere((n) => n.id == id);
-    });
+    setState(() => _deletedIds.add(id));
   }
 
   void _markAllAsRead() {
     HapticFeedback.mediumImpact();
     setState(() {
-      for (int i = 0; i < _notifications.length; i++) {
-        _notifications[i] = _notifications[i].copyWith(isRead: true);
+      for (final n in _notifications) {
+        _readIds.add(n.id);
       }
     });
   }
 
   List<_Notification> get _filteredNotifications {
+    final visible = _notifications.where((n) => !_deletedIds.contains(n.id));
     switch (_filter) {
       case NotificationFilter.all:
-        return _notifications;
+        return visible.toList();
       case NotificationFilter.unread:
-        return _notifications.where((n) => !n.isRead).toList();
+        return visible.where((n) => !n.isRead).toList();
       case NotificationFilter.achievements:
-        return _notifications
+        return visible
             .where((n) => n.type == NotificationType.achievement)
             .toList();
       case NotificationFilter.ai:
-        return _notifications
-            .where((n) => n.type == NotificationType.ai)
-            .toList();
+        return visible.where((n) => n.type == NotificationType.ai).toList();
     }
   }
 
