@@ -53,7 +53,7 @@ class _ShimmerContainerState extends State<ShimmerContainer>
 
     final dark = isDark(context);
     final baseColor = widget.baseColor ??
-        (dark ? Palette.surface2 : const Color(0xFFF1F5F9));
+        (dark ? Palette.surface2 : const Color(0xFFF4ECE1));
     final highlightColor = widget.highlightColor ??
         (dark ? Palette.surface1 : Colors.white);
 
@@ -149,7 +149,7 @@ class ShimmerCard extends StatelessWidget {
       child: Container(
         height: height,
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         padding: const EdgeInsets.all(16),
@@ -221,8 +221,8 @@ class ShimmerScoreCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(20),
+          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+          borderRadius: BorderRadius.circular(24),
         ),
         child: Column(
           children: [

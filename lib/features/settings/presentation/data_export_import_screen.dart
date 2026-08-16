@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -119,8 +118,8 @@ class _DataExportImportScreenState extends State<DataExportImportScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -140,7 +139,7 @@ class _DataExportImportScreenState extends State<DataExportImportScreen> {
                         height: 36,
                         decoration: BoxDecoration(
                           color:
-                              dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                              dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(

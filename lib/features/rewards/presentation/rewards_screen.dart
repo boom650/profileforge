@@ -8,7 +8,7 @@ import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/rewards/application/daily_reward_providers.dart';
-import 'package:profileforge/features/rewards/data/daily_reward_repository.dart';
+import 'package:profileforge/features/rewards/domain/daily_reward_models.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
 class RewardsScreen extends ConsumerWidget {
@@ -41,7 +41,8 @@ class RewardsScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    Text('🎁', style: TextStyle(fontSize: 32)),
+                    Icon(Icons.card_giftcard_rounded,
+                        size: 32, color: Palette.textPrimary),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -51,7 +52,7 @@ class RewardsScreen extends ConsumerWidget {
                             'Daily Reward',
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                               color: Palette.textPrimary,
                             ),
                           ),
@@ -81,13 +82,14 @@ class RewardsScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('💎', style: TextStyle(fontSize: 20)),
+                      Icon(Icons.diamond_rounded,
+                          size: 20, color: Palette.info),
                       const SizedBox(width: 8),
                       Text(
                         '$gems gems saved',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: Palette.textPrimary,
                         ),
                       ),
@@ -105,7 +107,7 @@ class RewardsScreen extends ConsumerWidget {
             'Streak Progress',
             style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: Palette.textPrimary,
             ),
           ),
@@ -115,7 +117,7 @@ class RewardsScreen extends ConsumerWidget {
               final d = i + 1;
               final claimed = d < day || (d == day && !canClaim);
               final isToday = d == day && canClaim;
-              final rewardAmt = DailyRewardRepository.rewardFor(d);
+              final rewardAmt = DailyRewardTier.gemsFor(d);
               final isJackpot = d == 7;
 
               return Expanded(
@@ -167,7 +169,7 @@ class RewardsScreen extends ConsumerWidget {
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -185,7 +187,8 @@ class RewardsScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('✅', style: TextStyle(fontSize: 20)),
+                  Icon(Icons.check_circle_rounded,
+                      size: 20, color: Palette.success),
                   const SizedBox(width: 8),
                   Text(
                     'Reward claimed today. Come back tomorrow!',
@@ -280,12 +283,13 @@ class _DayCard extends StatelessWidget {
       child: Column(
         children: [
           if (isJackpot)
-            Text('🎉', style: TextStyle(fontSize: 18))
+            const Icon(Icons.celebration_rounded,
+                size: 18, color: Palette.warning)
           else
             Text(
               '$day',
               style: TextStyle(
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: textColor,
               ),
@@ -295,7 +299,7 @@ class _DayCard extends StatelessWidget {
             '$rewardAmt',
             style: TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: textColor,
             ),
           ),

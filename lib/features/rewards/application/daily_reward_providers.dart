@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/rewards/data/daily_reward_repository.dart';
+import 'package:profileforge/features/rewards/domain/daily_reward_models.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 
 final dailyRewardRepositoryProvider =
@@ -10,7 +11,7 @@ final dailyRewardRepositoryProvider =
 
 /// Current wheel status for a profile.
 final dailyRewardProvider =
-    FutureProvider.family<({int day, bool canClaim, int lastDay}), String>(
+    FutureProvider.family<DailyRewardStatus, String>(
         (ref, profileId) async {
   return ref.watch(dailyRewardRepositoryProvider).status(profileId);
 });

@@ -8,8 +8,6 @@
 /// which covers the common offline->online case. A proper backend-scheduled
 /// periodic sync is tracked under Phase Two (H9) in ROADMAP.md.
 class BackgroundSync {
-  static const _syncTask = 'profileforge_periodic_sync';
-
   /// No-op on the current build. Real periodic registration is a Phase Two item.
   static Future<void> initialize() async {
     // TODO(phase-two): re-add a Kotlin-2-compatible periodic sync plugin and

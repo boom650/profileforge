@@ -317,11 +317,11 @@ class ProfileScore {
       case ScoreTier.gold:
         return const Color(0xFFF59E0B); // Gold
       case ScoreTier.silver:
-        return const Color(0xFF94A3B8); // Silver
+        return const Color(0xFF7A6A5F); // Silver
       case ScoreTier.bronze:
         return const Color(0xFFCD7F32); // Bronze
       case ScoreTier.developing:
-        return const Color(0xFF64748B); // Slate
+        return const Color(0xFF7A6A5F); // Slate
     }
   }
 

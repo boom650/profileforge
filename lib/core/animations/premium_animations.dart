@@ -235,11 +235,11 @@ class ConfettiCelebration extends StatefulWidget {
   const ConfettiCelebration({
     super.key,
     this.colors = const [
-      Color(0xFF3B82F6),
-      Color(0xFF8B5CF6),
-      Color(0xFFEC4899),
-      Color(0xFFFACC15),
-      Color(0xFF22C55E),
+      Color(0xFF4C9BD6),
+      Color(0xFF8B7CD8),
+      Color(0xFFE8719E),
+      Color(0xFFF2A03D),
+      Color(0xFF4FA36B),
     ],
     this.particleCount = 40,
     this.duration = const Duration(milliseconds: 1500),

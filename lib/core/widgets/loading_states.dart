@@ -36,7 +36,7 @@ class SkeletonBox extends StatelessWidget {
         height: height,
         margin: margin,
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+          color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
@@ -65,7 +65,7 @@ class SkeletonCircle extends StatelessWidget {
         height: size,
         margin: margin,
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+          color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
           shape: BoxShape.circle,
         ),
       ),
@@ -98,7 +98,7 @@ class SkeletonCard extends StatelessWidget {
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -334,7 +334,7 @@ class LoadingOverlay extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 message!,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 14,
                   color: dark ? Palette.textPrimary : Palette.textInverse,
                 ),
@@ -473,7 +473,7 @@ class ProgressStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = isDark(context);
     final active = activeColor ?? Palette.primary;
-    final inactive = inactiveColor ?? (dark ? Palette.surface2 : const Color(0xFFE2E8F0));
+    final inactive = inactiveColor ?? (dark ? Palette.surface2 : const Color(0xFFEDE3D6));
 
     return Row(
       children: List.generate(totalSteps, (i) {

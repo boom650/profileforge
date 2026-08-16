@@ -25,7 +25,7 @@ class LeaguesScreen extends ConsumerWidget {
     final standings = ref.watch(leagueStandingsProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -38,7 +38,7 @@ class LeaguesScreen extends ConsumerWidget {
                     Text(
                       'Leagues',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const Spacer(),
@@ -49,8 +49,8 @@ class LeaguesScreen extends ConsumerWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(10),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                          borderRadius: BorderRadius.circular(9999),
                         ),
                         child: Icon(
                           Icons.arrow_back_ios_new,
@@ -89,9 +89,9 @@ class LeaguesScreen extends ConsumerWidget {
                       decoration: BoxDecoration(
                         gradient: isMe ? Palette.gradientPrimary : null,
                         color: isMe ? null : dark ? Palette.surface1 : Colors.white,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isMe ? Palette.primary : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+                          color: isMe ? Palette.primary : (dark ? Palette.border : const Color(0xFFEDE3D6)),
                           width: isMe ? 2 : 1,
                         ),
                       ),
@@ -126,17 +126,17 @@ class LeaguesScreen extends ConsumerWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF8B5CF6), Color(0xFFEF4444)],
+                    colors: [Palette.accent, Palette.primary],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        '🏆 This week\'s standings',
+                        'This week\'s standings',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -167,13 +167,6 @@ class LeaguesScreen extends ConsumerWidget {
                       (context, index) {
                         final m = sorted[index];
                         final isMe = m.profileId == profileId;
-                        final medal = index == 0
-                            ? '🥇'
-                            : index == 1
-                                ? '🥈'
-                                : index == 2
-                                    ? '🥉'
-                                    : '${index + 1}.';
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: GlassCard(
@@ -184,13 +177,23 @@ class LeaguesScreen extends ConsumerWidget {
                                 // Rank.
                                 SizedBox(
                                   width: 30,
-                                  child: Text(
-                                    medal,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 16,
-                                    ),
-                                  ),
+                                  child: index < 3
+                                      ? Icon(
+                                          Icons.emoji_events_rounded,
+                                          size: 20,
+                                          color: index == 0
+                                              ? Palette.warning
+                                              : index == 1
+                                                  ? Colors.blueGrey
+                                                  : Colors.brown,
+                                        )
+                                      : Text(
+                                          '${index + 1}.',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                 ),
                                 const SizedBox(width: 10),
                                 // Avatar + name.
@@ -202,13 +205,18 @@ class LeaguesScreen extends ConsumerWidget {
                                         ? Palette.primary.withValues(alpha: 0.15)
                                         : dark
                                             ? Palette.surface3
-                                            : const Color(0xFFE2E8F0),
-                                    borderRadius: BorderRadius.circular(10),
+                                            : const Color(0xFFEDE3D6),
+                                    borderRadius: BorderRadius.circular(9999),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      isMe ? '🦉' : '👤',
-                                      style: const TextStyle(fontSize: 16),
+                                    child: Icon(
+                                      Icons.person_rounded,
+                                      size: 16,
+                                      color: isMe
+                                          ? Palette.primary
+                                          : dark
+                                              ? Palette.textSecondary
+                                              : Palette.textTertiary,
                                     ),
                                   ),
                                 ),
@@ -217,7 +225,7 @@ class LeaguesScreen extends ConsumerWidget {
                                   child: Text(
                                     isMe ? 'You' : m.profileId,
                                     style: TextStyle(
-                                      fontWeight: isMe ? FontWeight.w800 : FontWeight.w600,
+                                      fontWeight: isMe ? FontWeight.w700 : FontWeight.w600,
                                       fontSize: 15,
                                       color: isMe
                                           ? Palette.primary
@@ -230,7 +238,7 @@ class LeaguesScreen extends ConsumerWidget {
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: Palette.warning.withValues(alpha: 0.12),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(9999),
                                   ),
                                   child: Text(
                                     '${m.weeklyXp} XP',
@@ -274,11 +282,11 @@ class LeaguesScreen extends ConsumerWidget {
                     SoundService.instance.levelUp();
                     if (res != null) {
                       final msg = res.promoted
-                          ? 'Promoted! ⬆️'
+                          ? 'Promoted!'
                           : res.demoted
-                              ? 'Demoted ⬇️'
+                              ? 'Demoted'
                               : res.shielded
-                                  ? 'Saved by shield 🛡️'
+                                  ? 'Saved by shield'
                                   : 'Stayed put';
                       celebrate(context, message: msg);
                     }

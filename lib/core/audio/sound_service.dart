@@ -17,13 +17,13 @@ class SoundService {
     if (v) await _player.stop();
   }
 
-  /// Play a named effect from assets/audio/<name>.wav.
+  /// Play a named effect from assets/audio/<name>.ogg.
   Future<void> play(String name) async {
     if (_muted) return;
     try {
       await _player.stop();
       await _player.play(
-        AssetSource('audio/$name.wav'),
+        AssetSource('audio/$name.ogg'),
         mode: PlayerMode.lowLatency,
       );
     } catch (_) {

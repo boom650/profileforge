@@ -139,7 +139,7 @@ Return ONLY valid JSON. No prose. No markdown fences. Example:
       final reason = AiJson.clean(AiJson.toString_(m['reason']));
 
       out.add(Mission(
-        id: '$source-${profileId.substring(0, profileId.length > 6 ? 6 : profileId.length)}-${cadence.name}-$now-$i',
+        id: '$source-${_shortId(profileId)}-${cadence.name}-${_periodStamp(cadence, now)}-$i',
         profileId: profileId,
         title: title,
         description: description,
@@ -156,7 +156,30 @@ Return ONLY valid JSON. No prose. No markdown fences. Example:
     return out;
   }
 
-  static MissionPillar? _pillarFrom(String s) => _validPillars[s.toLowerCase()];
+  /// Short stable profile slug for mission ids.
+  static String _shortId(String profileId) =>
+      profileId.length > 6 ? profileId.substring(0, 6) : profileId;
+
+  /// Stable per-period stamp so AI never mints a second set within the same
+  /// period (a duplicate refresh set would reopen the reward farm). Daily →
+  /// date, weekly → year-week, monthly → year-month.
+  static String _periodStamp(MissionCadence cadence, DateTime now) {
+    final ymd = '${now.year}'
+        '${now.month.toString().padLeft(2, '0')}'
+        '${now.day.toString().padLeft(2, '0')}';
+    switch (cadence) {
+      case MissionCadence.weekly:
+        final week = now.difference(DateTime(now.year)).inDays ~/ 7;
+        return '${now.year}-w$week';
+      case MissionCadence.monthly:
+        return '${now.year}-${now.month.toString().padLeft(2, '0')}';
+      case MissionCadence.daily:
+      case MissionCadence.special:
+      case MissionCadence.seasonal:
+      case MissionCadence.university:
+        return ymd;
+    }
+  }
 
   static DateTime? _dueFor(MissionCadence cadence, DateTime now) {
     switch (cadence) {

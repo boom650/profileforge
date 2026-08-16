@@ -4,8 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:profileforge/core/navigation/app_router.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/localization/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:profileforge/features/notifications/notification_service.dart';
+import 'package:profileforge/features/notifications/application/notification_service.dart';
 
 /// ProfileForge — gamified admission-journey companion.
 Future<void> main() async {
@@ -38,19 +39,29 @@ class ProfileForgeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(themeModeProvider);
-    return MaterialApp.router(
-      title: 'ProfileForge',
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme(),
-      darkTheme: darkTheme(),
-      themeMode: toFlutterThemeMode(mode),
-      routerConfig: ref.watch(routerProvider),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en')],
+    return Builder(
+      builder: (context) {
+        final mq = MediaQuery.of(context);
+        return MediaQuery(
+          data:
+              mq.disableAnimations ? mq.copyWith(disableAnimations: true) : mq,
+          child: MaterialApp.router(
+            title: 'ProfileForge',
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme(),
+            darkTheme: darkTheme(),
+            themeMode: toFlutterThemeMode(mode),
+            routerConfig: ref.watch(routerProvider),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en'), Locale('zh')],
+          ),
+        );
+      },
     );
   }
 }

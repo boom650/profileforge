@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/challenges/data/challenge_repository.dart';
+import 'package:profileforge/features/challenges/domain/challenge_models.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 
 final challengeRepoProvider = Provider<ChallengeRepository>((ref) {
@@ -25,15 +26,15 @@ final createChallengeProvider = FutureProvider.family<FriendChallengeRow, ({Stri
   return challenge;
 });
 
-final resolveChallengeProvider = FutureProvider.family<String?, ({String profileId, String challengeId, int currentXp})>((ref, args) async {
+final resolveChallengeProvider = FutureProvider.family<ChallengeResolution?, ({String profileId, String challengeId, int currentXp})>((ref, args) async {
   final repo = ref.read(challengeRepoProvider);
   await repo.updateScore(args.challengeId, args.currentXp);
-  final winner = await repo.resolve(args.challengeId);
-  if (winner == args.profileId) {
+  final resolution = await repo.resolve(args.challengeId);
+  if (resolution?.challengerWon == true) {
     // Winner gets XP bonus
     await ref.read(addXpProvider.notifier).execute(args.profileId, 25, 'challenge_win');
   }
   ref.invalidate(activeChallengesProvider(args.profileId));
   ref.invalidate(challengeHistoryProvider(args.profileId));
-  return winner;
+  return resolution;
 });

@@ -15,6 +15,8 @@ import 'package:profileforge/features/streak/domain/streak_state.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
+import 'package:profileforge/features/leagues/application/league_providers.dart';
+import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
   return MissionRepository(ref.watch(appDatabaseProvider));
@@ -104,6 +106,20 @@ final completeMissionProvider = Provider.family<
   // Award gems (1 gem per 5 XP, min 2).
   final gems = (args.xp / 5).ceil().clamp(2, 50);
   await ref.read(walletRepositoryProvider).add(args.profileId, gems);
+  // Feed the weekly league ladder. Leagues used to be a phantom — recordXp
+  // had zero callers, so XP vanished. Never blocks the reward path.
+  try {
+    final leagueRepo = ref.read(leagueRepositoryProvider);
+    final me = await leagueRepo.mine(args.profileId, kActiveSeason);
+    final tier = me == null
+        ? LeagueTier.bronze
+        : leagueTierFromName(me.tier);
+    await leagueRepo.recordXp(args.profileId, kActiveSeason, tier, args.xp);
+    ref.invalidate(myLeagueProvider(args.profileId));
+    ref.invalidate(leagueStandingsProvider(args.profileId));
+  } catch (_) {
+    // Leagues are additive; never block the completion reward.
+  }
   // Completing a mission = today's streak activity. The habit loop must
   // actually run — not just a manual button (gauntlet R1: "a Habitica
   // shell without the habit"). Milestone events bubble up so the UI can
@@ -151,8 +167,19 @@ class GenerateMissionsNotifier extends FamilyAsyncNotifier<void, String> {
     await _generate();
   }
 
+  DateTime? _lastRegen;
+
   /// Force a fresh regeneration (refresh button / cadence rollover).
+  /// Rate-limited to once a minute — regeneration of a completed period is a
+  /// no-op anyway (static period-scoped ids never re-open completed rows), so
+  /// this guard only stops AI-quota burn from spamming refresh.
   Future<void> forceRegenerate() async {
+    final now = DateTime.now();
+    if (_lastRegen != null &&
+        now.difference(_lastRegen!) < const Duration(seconds: 60)) {
+      return;
+    }
+    _lastRegen = now;
     state = const AsyncLoading();
     await _generate();
     state = const AsyncData(null);

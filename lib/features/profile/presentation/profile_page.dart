@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:profileforge/features/profile/application/profile_providers.dart';
 import 'package:profileforge/features/profile/presentation/pdf_export.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 class ProfilePage extends ConsumerWidget {
   final String profileId;
@@ -57,7 +58,7 @@ class ProfilePage extends ConsumerWidget {
             const Text('Achievements',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ...p.achievements.map((a) => ListTile(
-                  leading: const Icon(Icons.check_circle, color: Colors.green),
+                  leading: const Icon(Icons.check_circle, color: Palette.success),
                   title: Text(a),
                 )),
             const SizedBox(height: 12),

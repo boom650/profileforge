@@ -45,7 +45,7 @@ class ImageCacheManager {
       // Expire after 7 days.
       final age = DateTime.now().difference(file.lastModifiedSync());
       if (age < _maxAgeCache) return file;
-      await file.delete().catchError((_) {});
+      await file.delete().catchError((_) => file);
     }
     // Download via Dart's HttpClient (no package needed).
     final http = HttpClient();
@@ -105,7 +105,7 @@ class ImageCacheManager {
   Future<void> removeFile(String url) async {
     final dir = await _cacheDir();
     final file = File('${dir.path}/${_fileKey(url)}');
-    if (await file.exists()) await file.delete().catchError((_) {});
+    if (await file.exists()) await file.delete().catchError((_) => file);
   }
 
   /// Get cached file size in bytes.
@@ -132,7 +132,7 @@ class ImageCacheManager {
     files.sort((a, b) => a.lastModifiedSync().compareTo(b.lastModifiedSync()));
     final toRemove = files.length - _maxNrOfCacheObjects;
     for (var i = 0; i < toRemove; i++) {
-      await files[i].delete().catchError((_) {});
+      await files[i].delete().catchError((_) => files[i]);
     }
   }
 }
@@ -190,7 +190,7 @@ class CachedNetworkImage extends StatelessWidget {
               Container(
                 width: width,
                 height: height,
-                color: const Color(0xFFF1F5F9),
+                color: const Color(0xFFF4ECE1),
                 child: Center(
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
@@ -207,10 +207,10 @@ class CachedNetworkImage extends StatelessWidget {
               Container(
                 width: width,
                 height: height,
-                color: const Color(0xFFF1F5F9),
+                color: const Color(0xFFF4ECE1),
                 child: const Icon(
                   Icons.error_outline,
-                  color: Color(0xFF94A3B8),
+                  color: Color(0xFF7A6A5F),
                 ),
               );
         },

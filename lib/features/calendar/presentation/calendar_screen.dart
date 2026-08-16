@@ -52,7 +52,7 @@ class CalendarScreen extends ConsumerWidget {
                         '${slot.start.hour}:00',
                         style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: Palette.textPrimary,
                         ),
                       ),

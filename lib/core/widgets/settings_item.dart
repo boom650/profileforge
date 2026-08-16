@@ -56,7 +56,7 @@ class SettingsItem extends StatelessWidget {
                 color: destructive
                     ? Palette.error.withValues(alpha: 0.1)
                     : Palette.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
                 icon,
@@ -73,7 +73,7 @@ class SettingsItem extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: enabled ? color : subColor,
@@ -83,7 +83,7 @@ class SettingsItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       subtitle!,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 12,
                         color: subColor,
                       ),
@@ -99,7 +99,7 @@ class SettingsItem extends StatelessWidget {
             else if (value != null)
               Text(
                 value!,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 14,
                   color: subColor,
                 ),
@@ -158,7 +158,7 @@ class SettingsToggle extends StatelessWidget {
               color: destructive
                   ? Palette.error.withValues(alpha: 0.1)
                   : Palette.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
               icon,
@@ -173,7 +173,7 @@ class SettingsToggle extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     color: color,
@@ -183,7 +183,7 @@ class SettingsToggle extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle!,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 12,
                       color: dark ? Palette.textTertiary : Palette.textSecondary,
                     ),
@@ -200,7 +200,7 @@ class SettingsToggle extends StatelessWidget {
               activeColor: Colors.white,
               activeTrackColor: Palette.primary,
               inactiveThumbColor: dark ? Palette.surface1 : Colors.white,
-              inactiveTrackColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+              inactiveTrackColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
             ),
           ),
         ],
@@ -231,7 +231,7 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
           child: Text(
             title.toUpperCase(),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -248,7 +248,7 @@ class SettingsSection extends StatelessWidget {
             border: Border.all(
               color: dark
                   ? Palette.border.withValues(alpha: 0.3)
-                  : const Color(0xFFE2E8F0),
+                  : const Color(0xFFEDE3D6),
             ),
           ),
           child: Column(
@@ -259,7 +259,7 @@ class SettingsSection extends StatelessWidget {
                   indent: 66,
                   color: dark
                       ? Palette.border.withValues(alpha: 0.3)
-                      : const Color(0xFFF1F5F9),
+                      : const Color(0xFFF4ECE1),
                 );
               }
               return children[i ~/ 2];

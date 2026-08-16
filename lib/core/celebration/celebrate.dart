@@ -3,6 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 
 /// Game-feel celebration helpers: confetti burst + floating "+XP" popup.
 /// No external deps — confetti is a custom [CustomPainter].
@@ -13,7 +16,7 @@ final _rand = math.Random();
 void celebrate(
   BuildContext context, {
   String? message,
-  Color color = const Color(0xFF58CC02),
+  Color color = Palette.primary,
 }) {
   final overlay = Overlay.of(context);
   late final OverlayEntry entry;
@@ -32,7 +35,7 @@ class _CelebrateLayer extends StatefulWidget {
   const _CelebrateLayer({
     required this.onDone,
     this.message,
-    this.color = const Color(0xFF58CC02),
+    this.color = Palette.primary,
   });
   final VoidCallback onDone;
   final String? message;
@@ -52,12 +55,12 @@ class _CelebrateLayerState extends State<_CelebrateLayer>
   void initState() {
     super.initState();
     const colors = [
-      Color(0xFF58CC02),
-      Color(0xFFFFC800),
-      Color(0xFF1CB0F6),
-      Color(0xFFFF4B4B),
-      Color(0xFFCE82FF),
-      Color(0xFFFF66C4),
+      Palette.primary,       // Poppy berry
+      Palette.warning,       // Warm amber
+      Palette.success,       // Habit sage
+      Color(0xFFE8719E),     // Poppy pink
+      Palette.primaryLight,  // Light berry
+      Color(0xFF8B7CD8),     // Soft violet
     ];
     for (var i = 0; i < 90; i++) {
       _pieces.add(_Confetto(
@@ -96,39 +99,46 @@ class _CelebrateLayerState extends State<_CelebrateLayer>
         ),
         if (widget.message != null)
           Center(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.4, end: 1.0),
-              duration: 500.ms,
-              curve: Curves.elasticOut,
-              builder: (_, v, __) => Opacity(
-                opacity: v.clamp(0.0, 1.0),
-                child: Transform.scale(
-                  scale: v,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: widget.color,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.25),
-                          blurRadius: 18,
-                          offset: const Offset(0, 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Percy(size: 88, pose: PlatypusPose.happy),
+                const SizedBox(height: 4),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.4, end: 1.0),
+                  duration: 500.ms,
+                  curve: Curves.elasticOut,
+                  builder: (_, v, __) => Opacity(
+                    opacity: v.clamp(0.0, 1.0),
+                    child: Transform.scale(
+                      scale: v,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: widget.color,
+                          borderRadius: BorderRadius.circular(9999),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.25),
+                              blurRadius: 18,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      widget.message!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
+                        child: Text(
+                          widget.message!,
+                          style: GoogleFonts.fredoka(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
       ],
@@ -250,7 +260,7 @@ class _XpPopupState extends State<_XpPopup>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFC800),
+                    color: Palette.warning,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -264,16 +274,16 @@ class _XpPopupState extends State<_XpPopup>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text('+${widget.xp} XP',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w900,
+                          style: GoogleFonts.fredoka(
+                              fontWeight: FontWeight.w600,
                               fontSize: 20,
                               color: Colors.white)),
                       if (widget.gems > 0) ...[
                         const SizedBox(width: 8),
                         const Icon(Icons.diamond, color: Colors.white, size: 18),
                         Text('+${widget.gems}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w900,
+                            style: GoogleFonts.fredoka(
+                                fontWeight: FontWeight.w600,
                                 fontSize: 18,
                                 color: Colors.white)),
                       ],

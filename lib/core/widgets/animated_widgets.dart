@@ -252,7 +252,7 @@ class _ShimmerState extends State<Shimmer>
   Widget build(BuildContext context) {
     final dark = isDark(context);
     final baseColor = widget.baseColor ??
-        (dark ? Palette.surface2 : const Color(0xFFE2E8F0));
+        (dark ? Palette.surface2 : const Color(0xFFEDE3D6));
     final highlightColor = widget.highlightColor ??
         (dark ? Palette.surface1 : Colors.white);
 

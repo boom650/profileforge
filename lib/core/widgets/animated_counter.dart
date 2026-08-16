@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
@@ -82,9 +81,9 @@ class _AnimatedCounterState extends State<AnimatedCounter>
         return Text(
           '$widget.prefix$displayValue$widget.suffix',
           style: widget.style ??
-              GoogleFonts.inter(
+              GoogleFonts.nunito(
                 fontSize: 32,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: Palette.textPrimary,
               ),
         );
@@ -154,9 +153,9 @@ class _ScoreAnimatedCounterState extends State<ScoreAnimatedCounter>
 
         return Text(
           '$score',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: widget.size,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             color: color,
           ),
         );
@@ -293,9 +292,9 @@ class _PulsingNumberState extends State<PulsingNumber>
       child: Text(
         '${widget.value}',
         style: widget.style ??
-            GoogleFonts.inter(
+            GoogleFonts.nunito(
               fontSize: 24,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: Palette.primary,
             ),
       ),

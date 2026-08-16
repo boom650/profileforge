@@ -16,6 +16,8 @@ class Profiles extends Table {
 
 /// XP ledger — every award is an append-only event; balance = latest balanceAfter.
 @DataClassName('XpEventRow')
+@TableIndex(name: 'xi_xp_events_profile', columns: {#profileId})
+@TableIndex(name: 'xi_xp_events_at', columns: {#at})
 class XpEvents extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get profileId => text()();
@@ -42,6 +44,7 @@ class Streaks extends Table {
 
 /// Unlocked cosmetic skins (reward layer, not gameplay).
 @DataClassName('SkinUnlock')
+@TableIndex(name: 'xi_skin_unlocks_profile', columns: {#profileId})
 class SkinUnlocks extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get profileId => text()();
@@ -51,6 +54,7 @@ class SkinUnlocks extends Table {
 
 /// Generated daily/weekly/monthly/special/seasonal missions.
 @DataClassName('MissionRow')
+@TableIndex(name: 'xi_missions_profile', columns: {#profileId})
 class Missions extends Table {
   TextColumn get id => text().withDefault(const Constant(''))();
   TextColumn get profileId => text().withDefault(const Constant(''))();

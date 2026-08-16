@@ -160,7 +160,7 @@ extension BuildContextExtensions on BuildContext {
     double? height,
     letterSpacing,
   }) {
-    return GoogleFonts.inter(
+    return GoogleFonts.nunito(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,

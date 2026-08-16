@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/ai/ai_provider.dart';
 import 'package:profileforge/core/ai/ai_service.dart';
+import 'package:profileforge/features/settings/application/settings_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// API Key Setup — Guided, visual setup experience for AI providers.
@@ -20,25 +22,23 @@ import 'package:profileforge/core/ai/ai_service.dart';
 /// - 09-comprehensive-data-privacy-security.md (secure key storage)
 /// - 10-cross-platform-responsive-design.md (responsive layout)
 /// ────────────────────────────────────────────────────────────────────────────
-class ApiKeySetupScreen extends StatefulWidget {
+class ApiKeySetupScreen extends ConsumerStatefulWidget {
   const ApiKeySetupScreen({super.key, this.onSetupComplete});
 
   final VoidCallback? onSetupComplete;
 
   @override
-  State<ApiKeySetupScreen> createState() => _ApiKeySetupScreenState();
+  ConsumerState<ApiKeySetupScreen> createState() => _ApiKeySetupScreenState();
 }
 
-class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
+class _ApiKeySetupScreenState extends ConsumerState<ApiKeySetupScreen>
     with TickerProviderStateMixin {
-  final _keyStore = AIKeyStore();
   final _ai = AIService();
   final _controllers = <AIProviderType, TextEditingController>{};
   final _testing = <AIProviderType, bool>{};
   final _testResults = <AIProviderType, bool?>{};
   final _showKeys = <AIProviderType, bool>{};
   late AnimationController _stepController;
-  int _currentStep = 0;
 
   @override
   void initState() {
@@ -65,8 +65,9 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
   }
 
   Future<void> _loadKeys() async {
+    final repo = ref.read(settingsRepositoryProvider);
     for (final p in AIProviders.fallbackChain) {
-      final key = await _keyStore.getKey(p.type);
+      final key = await repo.getApiKey(p.type);
       if (key != null && key.isNotEmpty) {
         _controllers[p.type]!.text = key;
         _testResults[p.type] = true; // Assume valid if stored
@@ -76,11 +77,12 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
   }
 
   Future<void> _saveKey(AIProviderType type) async {
+    final repo = ref.read(settingsRepositoryProvider);
     final key = _controllers[type]!.text.trim();
     if (key.isEmpty) {
-      await _keyStore.removeKey(type);
+      await repo.removeApiKey(type);
     } else {
-      await _keyStore.setKey(type, key);
+      await repo.setApiKey(type, key);
     }
     if (mounted) {
       setState(() {});
@@ -127,7 +129,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -136,8 +138,8 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -200,7 +202,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
             : Colors.white.withValues(alpha: 0.9),
         border: Border(
           bottom: BorderSide(
-            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -212,7 +214,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -225,7 +227,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
           const SizedBox(width: 12),
           Text(
             'Setup AI',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -276,7 +278,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                   children: [
                     Text(
                       'Connect Your AI',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -285,7 +287,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                     const SizedBox(height: 4),
                     Text(
                       '$activeCount provider${activeCount == 1 ? '' : 's'} connected',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 13,
                         color: Colors.white.withValues(alpha: 0.8),
                       ),
@@ -298,7 +300,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
           const SizedBox(height: 16),
           Text(
             'Add at least one API key to start chatting with your psychology-adapted AI mentor. Free options available.',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 14,
               color: Colors.white.withValues(alpha: 0.85),
               height: 1.5,
@@ -330,7 +332,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                   ? Palette.error
                   : dark
                       ? Palette.border.withValues(alpha: 0.4)
-                      : const Color(0xFFE2E8F0),
+                      : const Color(0xFFEDE3D6),
           width: result != null ? 2 : 1,
         ),
         boxShadow: result == true
@@ -373,7 +375,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                   children: [
                     Text(
                       provider.name,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -381,7 +383,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                     ),
                     Text(
                       provider.model,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 12,
                         color: Palette.textTertiary,
                       ),
@@ -411,7 +413,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
           // ── Description ──
           Text(
             _getProviderDescription(type),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 13,
               color: Palette.textSecondary,
               height: 1.4,
@@ -429,7 +431,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
             ),
             child: Text(
               _getProviderPricing(type),
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: _getProviderPricingColor(type),
@@ -442,27 +444,27 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
           // ── API Key Input ──
           Container(
             decoration: BoxDecoration(
-              color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+              color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: hasKey
                     ? Palette.primary.withValues(alpha: 0.3)
                     : dark
                         ? Palette.border.withValues(alpha: 0.3)
-                        : const Color(0xFFE2E8F0),
+                        : const Color(0xFFEDE3D6),
               ),
             ),
             child: TextField(
               controller: _controllers[type],
               obscureText: !showKey,
               obscuringCharacter: '•',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 13,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
               ),
               decoration: InputDecoration(
                 hintText: 'Paste your API key...',
-                hintStyle: GoogleFonts.inter(
+                hintStyle: GoogleFonts.nunito(
                   fontSize: 13,
                   color: Palette.textTertiary,
                 ),
@@ -517,7 +519,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                     height: 44,
                     decoration: BoxDecoration(
                       color: (testing || !hasKey)
-                          ? (dark ? Palette.surface2 : const Color(0xFFF1F5F9))
+                          ? (dark ? Palette.surface2 : const Color(0xFFF4ECE1))
                           : Palette.info.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
@@ -551,7 +553,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                                 const SizedBox(width: 6),
                                 Text(
                                   'Test',
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.nunito(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: (!hasKey)
@@ -579,7 +581,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                       gradient: hasKey ? Palette.gradientPrimary : null,
                       color: hasKey
                           ? null
-                          : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+                          : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: hasKey
                           ? [
@@ -603,7 +605,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                           const SizedBox(width: 6),
                           Text(
                             'Save',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.nunito(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: hasKey ? Colors.white : Palette.textTertiary,
@@ -643,7 +645,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                       result
                           ? 'Connection successful! This provider is ready.'
                           : 'Connection failed. Check your key and try again.',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 13,
                         color: result ? Palette.success : Palette.error,
                       ),
@@ -695,7 +697,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
               children: [
                 Text(
                   'Your keys are secure',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Palette.success,
@@ -704,7 +706,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
                 const SizedBox(height: 4),
                 Text(
                   'All API keys are stored locally on your device using encrypted storage. They are never sent to our servers.',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 12,
                     color: Palette.textSecondary,
                     height: 1.4,
@@ -746,7 +748,7 @@ class _ApiKeySetupScreenState extends State<ApiKeySetupScreen>
             children: [
               Text(
                 'Continue to Chat',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,

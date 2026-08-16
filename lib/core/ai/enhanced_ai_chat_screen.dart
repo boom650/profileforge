@@ -215,7 +215,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -224,10 +224,10 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFF8FAFC),
+                    const Color(0xFFFBF1E3),
+                    Palette.cream,
                     Colors.white
                   ],
           ),
@@ -286,7 +286,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
           bottom: BorderSide(
             color: dark
                 ? Palette.border.withValues(alpha: 0.3)
-                : const Color(0xFFE2E8F0),
+                : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -299,8 +299,8 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                borderRadius: BorderRadius.circular(9999),
               ),
               child: Icon(
                 Icons.arrow_back_ios_new,
@@ -317,7 +317,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
             height: 40,
             decoration: BoxDecoration(
               gradient: Palette.gradientPrimary,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: const Center(
               child: Icon(Icons.auto_awesome, size: 20, color: Colors.white),
@@ -330,7 +330,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
               children: [
                 Text(
                   'AI Mentor',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -338,7 +338,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                 ),
                 Text(
                   _hasProvider ? 'Psychology-adapted' : 'Not configured',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 12,
                     color:
                         _hasProvider ? Palette.success : Palette.textTertiary,
@@ -357,7 +357,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                 height: 36,
                 decoration: BoxDecoration(
                   color: Palette.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(9999),
                   border: Border.all(
                     color: Palette.primary.withValues(alpha: 0.3),
                   ),
@@ -382,8 +382,8 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                borderRadius: BorderRadius.circular(9999),
               ),
               child: Icon(
                 Icons.refresh,
@@ -427,7 +427,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
             const SizedBox(height: 24),
             Text(
               'AI Not Configured',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -437,7 +437,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
             Text(
               'Add an API key to start chatting with your psychology-adapted admissions mentor.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 14,
                 color: Palette.textSecondary,
                 height: 1.5,
@@ -451,7 +451,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
                   gradient: Palette.gradientPrimary,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(9999),
                   boxShadow: [
                     BoxShadow(
                       color: Palette.primary.withValues(alpha: 0.3),
@@ -467,7 +467,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                     const SizedBox(width: 8),
                     Text(
                       'Configure AI',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -502,14 +502,14 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                 color: dark
                     ? Palette.surface1.withValues(alpha: 0.6)
                     : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(9999),
                 border: Border.all(
                   color: Palette.primary.withValues(alpha: 0.3),
                 ),
               ),
               child: Text(
                 suggestion,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 13,
                   color: Palette.primary,
                   fontWeight: FontWeight.w500,
@@ -539,7 +539,7 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
           top: BorderSide(
             color: dark
                 ? Palette.border.withValues(alpha: 0.3)
-                : const Color(0xFFE2E8F0),
+                : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -551,10 +551,10 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                  color: dark ? Palette.border : const Color(0xFFEDE3D6),
                 ),
               ),
               child: TextField(
@@ -562,13 +562,13 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                 maxLines: null,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => _sendMessage(),
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 15,
                   color: dark ? Palette.textPrimary : Palette.textInverse,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Ask about essays, activities, study tips...',
-                  hintStyle: GoogleFonts.inter(
+                  hintStyle: GoogleFonts.nunito(
                     fontSize: 15,
                     color: Palette.textTertiary,
                   ),
@@ -595,9 +595,9 @@ class _EnhancedAIChatScreenState extends ConsumerState<EnhancedAIChatScreen>
                 color: _isGenerating
                     ? dark
                         ? Palette.surface2
-                        : const Color(0xFFE2E8F0)
+                        : const Color(0xFFEDE3D6)
                     : null,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(9999),
                 boxShadow: _isGenerating
                     ? null
                     : [
@@ -717,10 +717,10 @@ class _MessageBubbleState extends State<_MessageBubble> {
                             ? Palette.surface1
                             : Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
-                      bottomLeft: Radius.circular(isUser ? 18 : 4),
-                      bottomRight: Radius.circular(isUser ? 4 : 18),
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                      bottomLeft: Radius.circular(isUser ? 16 : 4),
+                      bottomRight: Radius.circular(isUser ? 4 : 16),
                     ),
                     border: isUser
                         ? null
@@ -729,7 +729,7 @@ class _MessageBubbleState extends State<_MessageBubble> {
                                 ? Palette.error.withValues(alpha: 0.3)
                                 : widget.dark
                                     ? Palette.border
-                                    : const Color(0xFFE2E8F0),
+                                    : const Color(0xFFEDE3D6),
                           ),
                     boxShadow: [
                       BoxShadow(
@@ -744,7 +744,7 @@ class _MessageBubbleState extends State<_MessageBubble> {
                     children: [
                       Text(
                         widget.message.content,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           fontSize: 14,
                           height: 1.6,
                           color: isUser
@@ -771,7 +771,7 @@ class _MessageBubbleState extends State<_MessageBubble> {
                             const SizedBox(width: 6),
                             Text(
                               'via ${widget.message.provider}',
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.nunito(
                                 fontSize: 10,
                                 color: widget.dark
                                     ? Palette.textTertiary
@@ -872,8 +872,8 @@ class _FeedbackButton extends StatelessWidget {
               ? Palette.primary.withValues(alpha: 0.15)
               : dark
                   ? Palette.surface2.withValues(alpha: 0.5)
-                  : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(8),
+                  : const Color(0xFFF4ECE1),
+          borderRadius: BorderRadius.circular(9999),
           border: Border.all(
             color: isActive
                 ? Palette.primary.withValues(alpha: 0.3)
@@ -920,9 +920,9 @@ class _TypingIndicator extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: dark ? Palette.surface1 : Colors.white,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                color: dark ? Palette.border : const Color(0xFFEDE3D6),
               ),
             ),
             child: Row(
@@ -1013,7 +1013,7 @@ class _ProfileInfoSheet extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         border: Border(
           top: BorderSide(
-            color: dark ? Palette.border : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -1025,8 +1025,8 @@ class _ProfileInfoSheet extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: dark ? Palette.surface3 : const Color(0xFFCBD5E1),
-              borderRadius: BorderRadius.circular(2),
+              color: dark ? Palette.surface3 : Palette.line,
+              borderRadius: BorderRadius.circular(9999),
             ),
           ),
 
@@ -1040,7 +1040,7 @@ class _ProfileInfoSheet extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     gradient: Palette.gradientPrimary,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Center(
                     child:
@@ -1054,7 +1054,7 @@ class _ProfileInfoSheet extends StatelessWidget {
                     children: [
                       Text(
                         'Your Psychology Profile',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color:
@@ -1063,7 +1063,7 @@ class _ProfileInfoSheet extends StatelessWidget {
                       ),
                       Text(
                         'How the AI adapts to you',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           fontSize: 13,
                           color: Palette.textSecondary,
                         ),
@@ -1077,8 +1077,8 @@ class _ProfileInfoSheet extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(8),
+                      color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                      borderRadius: BorderRadius.circular(9999),
                     ),
                     child: Icon(
                       Icons.close,
@@ -1107,7 +1107,7 @@ class _ProfileInfoSheet extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           'No profile yet',
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.nunito(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: dark
@@ -1119,7 +1119,7 @@ class _ProfileInfoSheet extends StatelessWidget {
                         Text(
                           'Complete the psychology onboarding\nto see your personality traits',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.nunito(
                             fontSize: 13,
                             color: Palette.textSecondary,
                           ),
@@ -1193,7 +1193,7 @@ class _TraitSection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -1211,14 +1211,14 @@ class _TraitSection extends StatelessWidget {
                   children: [
                     Text(
                       trait.$1,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 12,
                         color: Palette.textSecondary,
                       ),
                     ),
                     Text(
                       '${(trait.$2 * 100).round()}%',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: trait.$3,
@@ -1230,8 +1230,8 @@ class _TraitSection extends StatelessWidget {
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
-                    borderRadius: BorderRadius.circular(3),
+                    color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
+                    borderRadius: BorderRadius.circular(9999),
                   ),
                   child: FractionallySizedBox(
                     widthFactor: trait.$2.clamp(0.0, 1.0),
@@ -1241,7 +1241,7 @@ class _TraitSection extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [trait.$3, trait.$3.withValues(alpha: 0.7)],
                         ),
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: BorderRadius.circular(9999),
                       ),
                     ),
                   ),

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 /// AI-powered task recommendation engine (local, no API).
 class TaskRecommender {
   /// Generate personalized task recommendations based on profile.
@@ -12,7 +10,6 @@ class TaskRecommender {
     List<String> completedTasks = const [],
   }) {
     final tasks = <TaskRecommendation>[];
-    final rng = DateTime.now().millisecondsSinceEpoch;
 
     // Academic tasks
     if (interests.any((i) => ['Math', 'Physics', 'CS', 'Chemistry'].contains(i))) {

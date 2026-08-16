@@ -25,7 +25,6 @@ class PoppyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     if (compact) {
       return FilledButton.icon(
         onPressed: _onAction,
@@ -35,7 +34,7 @@ class PoppyButton extends StatelessWidget {
           backgroundColor: color ?? Palette.green,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
         ),
       );
     }
@@ -50,8 +49,8 @@ class PoppyButton extends StatelessWidget {
             backgroundColor: color ?? Palette.green,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3),
           ),
         ),
       );
@@ -64,8 +63,8 @@ class PoppyButton extends StatelessWidget {
           backgroundColor: color ?? Palette.green,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3),
         ),
         child: Text(label),
       ),
@@ -86,7 +85,7 @@ class SectionTitle extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w900)),
+                    ?.copyWith(fontWeight: FontWeight.w700)),
             const Spacer(),
             if (action != null) action!,
           ],
@@ -105,7 +104,7 @@ class PillarChip extends StatelessWidget {
       avatar: selected ? null : null,
       label: Text(pillar[0].toUpperCase() + pillar.substring(1),
           style: TextStyle(
-              color: selected ? Colors.white : c, fontWeight: FontWeight.w800)),
+              color: selected ? Colors.white : c, fontWeight: FontWeight.w700)),
       backgroundColor: selected ? c : c.withValues(alpha: 0.12),
       side: BorderSide.none,
       visualDensity: VisualDensity.compact,
@@ -131,7 +130,7 @@ class StatCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: c.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +139,7 @@ class StatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(value,
               style:
-                  const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                  const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
           const SizedBox(height: 2),
           Text(label,
               style: TextStyle(
@@ -187,7 +186,7 @@ class XpRing extends StatelessWidget {
             children: [
               Text(centerTop,
                   style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.w900)),
+                      fontSize: 22, fontWeight: FontWeight.w700)),
               Text(centerBottom,
                   style: TextStyle(
                       fontSize: 11, color: Theme.of(context).hintColor)),
@@ -207,13 +206,13 @@ class RarityBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
           color: rarityColor(rarity),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(9999),
         ),
         child: Text(rarity[0].toUpperCase() + rarity.substring(1),
             style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
                 letterSpacing: 0.5)),
       );
 }

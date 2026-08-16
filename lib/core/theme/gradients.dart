@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ProfileForge Gradients — Premium gradient backgrounds.
 ///
-/// All gradients follow the Lusion-inspired dark/glass aesthetic.
+/// All gradients follow the Warm Bloom aesthetic.
 /// Use with Container's gradient property or as backgrounds.
 /// ────────────────────────────────────────────────────────────────────────────
 
@@ -14,58 +15,58 @@ class PfGradients {
   // PAGE BACKGROUNDS
   // ════════════════════════════════════════════════════════════════════════════
 
-  /// Standard dark page background.
+  /// Standard dark page background (warm espresso).
   static const LinearGradient darkPage = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Color(0xFF0B1120),
-      Color(0xFF0F172A),
-      Color(0xFF000000),
+      Palette.surface0,
+      Palette.surface1,
+      Palette.black,
     ],
   );
 
-  /// Standard light page background.
+  /// Standard light page background (warm cream).
   static const LinearGradient lightPage = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Color(0xFFEEF2FF),
-      Color(0xFFF8FAFC),
-      Colors.white,
+      Color(0xFFFBF1E3),
+      Palette.cream,
+      Palette.creamCard,
     ],
   );
 
-  /// Deep space gradient — for hero sections.
+  /// Deep space gradient — for hero sections (warm cocoa).
   static const LinearGradient deepSpace = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF0B1120),
-      Color(0xFF1E1B4B),
-      Color(0xFF0F172A),
+      Palette.surface0,
+      Palette.surface2,
+      Palette.black,
     ],
   );
 
-  /// Ocean depth gradient.
+  /// Ocean depth gradient (warm teal).
   static const LinearGradient oceanDepth = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Color(0xFF0B1120),
-      Color(0xFF0C4A6E),
-      Color(0xFF0B1120),
+      Palette.surface0,
+      Palette.accentTeal,
+      Palette.surface0,
     ],
   );
 
-  /// Sunset gradient.
+  /// Sunset gradient (warm).
   static const LinearGradient sunset = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF7C3AED),
-      Color(0xFFEC4899),
-      Color(0xFFF97316),
+      Palette.accentViolet,
+      Palette.accentPink,
+      Palette.accentOrange,
     ],
   );
 
@@ -73,63 +74,63 @@ class PfGradients {
   // COMPONENT GRADIENTS
   // ════════════════════════════════════════════════════════════════════════════
 
-  /// Primary button/CTA gradient (violet → indigo).
+  /// Primary button/CTA gradient (berry → amber).
   static const LinearGradient primary = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF7C3AED),
-      Color(0xFF4F46E5),
+      Palette.primary,
+      Palette.accent,
     ],
   );
 
-  /// Secondary button gradient.
+  /// Secondary button gradient (warm espresso).
   static const LinearGradient secondary = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF1E1B4B),
-      Color(0xFF312E81),
+      Palette.surface2,
+      Palette.surface3,
     ],
   );
 
-  /// Success gradient.
+  /// Success gradient (habit sage).
   static const LinearGradient success = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF059669),
-      Color(0xFF10B981),
+      Color(0xFF3E8557),
+      Palette.success,
     ],
   );
 
-  /// Warning gradient.
+  /// Warning gradient (warm amber).
   static const LinearGradient warning = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFFD97706),
-      Color(0xFFF59E0B),
+      Color(0xFFD98B2B),
+      Palette.warning,
     ],
   );
 
-  /// Error gradient.
+  /// Error gradient (tomato).
   static const LinearGradient error = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFFDC2626),
-      Color(0xFFEF4444),
+      Color(0xFFB93A3A),
+      Palette.error,
     ],
   );
 
-  /// Info gradient.
+  /// Info gradient (warm sky).
   static const LinearGradient info = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF2563EB),
-      Color(0xFF3B82F6),
+      Color(0xFF3D7FBF),
+      Palette.info,
     ],
   );
 
@@ -185,20 +186,20 @@ class PfGradients {
       return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF059669), Color(0xFF10B981)],
+        colors: [Color(0xFF3E8557), Color(0xFF4FA36B)],
       );
     }
     if (score >= 60) {
       return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFFD97706), Color(0xFFF59E0B)],
+        colors: [Color(0xFFD98B2B), Color(0xFFF2A03D)],
       );
     }
     return const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [Color(0xFFDC2626), Color(0xFFEF4444)],
+      colors: [Color(0xFFB93A3A), Color(0xFFD64545)],
     );
   }
 

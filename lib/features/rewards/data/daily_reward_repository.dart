@@ -1,4 +1,5 @@
 import 'package:profileforge/core/data/app_database.dart';
+import 'package:profileforge/features/rewards/domain/daily_reward_models.dart';
 
 /// 7-day login-reward wheel state.
 class DailyRewardRepository {
@@ -6,8 +7,7 @@ class DailyRewardRepository {
   const DailyRewardRepository(this.db);
 
   /// Returns (day 1..7, canClaimToday, lastDayClaimed).
-  Future<({int day, bool canClaim, int lastDay})> status(
-      String profileId) async {
+  Future<DailyRewardStatus> status(String profileId) async {
     final row = await (db.select(db.dailyRewards)
           ..where((t) => t.profileId.equals(profileId)))
         .getSingleOrNull();
@@ -40,7 +40,7 @@ class DailyRewardRepository {
   Future<int> claim(String profileId) async {
     final s = await status(profileId);
     if (!s.canClaim) return 0;
-    final reward = rewardFor(s.day);
+    final reward = DailyRewardTier.gemsFor(s.day);
     final existing = await (db.select(db.dailyRewards)
           ..where((t) => t.profileId.equals(profileId)))
         .getSingleOrNull();
@@ -54,16 +54,4 @@ class DailyRewardRepository {
         );
     return reward;
   }
-
-  /// Gems awarded for a given wheel day.
-  static int rewardFor(int day) => switch (day) {
-        1 => 20,
-        2 => 30,
-        3 => 40,
-        4 => 50,
-        5 => 60,
-        6 => 80,
-        7 => 150,
-        _ => 20,
-      };
 }

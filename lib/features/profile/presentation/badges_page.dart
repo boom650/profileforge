@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/profile/application/profile_providers.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 /// Badges derived from achievements. Accessible grid.
 class BadgesPage extends ConsumerWidget {
@@ -37,7 +38,7 @@ class BadgesPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 40,
-                  color: earned ? Colors.deepPurple : Colors.grey),
+                  color: earned ? Colors.deepPurple : Palette.inkSoft),
               const SizedBox(height: 4),
               Text(label, textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 12)),

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -16,9 +15,7 @@ import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';
 import 'package:profileforge/features/profile/application/profile_score_loader.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
 import 'package:profileforge/features/missions/domain/mission_models.dart';
-import 'package:profileforge/features/missions/data/mission_repository.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
-import 'package:profileforge/core/navigation/app_router.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Profile Score Screen — Animated score display with breakdown.
@@ -66,7 +63,6 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   /// (millisecond ids would otherwise race past the open-mission check).
   bool _mintingGapMission = false;
   PsychologicalProfile? _loadedPsych;
-  bool _loaded = false;
   bool _isDemo = false;
 
   @override
@@ -127,7 +123,6 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
           aiInsights: aiInsights,
         );
         _loadedPsych = psychology;
-        _loaded = true;
         _isDemo = !hasRealGrades && widget.student == null;
       });
     }
@@ -137,23 +132,6 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
   /// (Delegates to the SHARED loader — every screen computes the SAME
   /// numbers; no per-screen divergent demo/preview data.)
   StudentData _studentFrom(OnboardingProfile o) => studentFromOnboarding(o);
-
-  /// Best-effort 0–4 grade point average from per-subject grades.
-  /// Handles letter grades (A, A-, B+) and supports an actual GPA override.
-  double? _gpaFromGrades(Map<String, String> grades) => gpaFromGrades(grades);
-
-  /// Best-effort scorer category classification from a free-form name.
-  /// (Not used directly anymore — scoring maps via the shared loader.)
-  bool _national(String? result) {
-    final r = (result ?? '').toLowerCase();
-    return r.contains('national') ||
-        r.contains('international') ||
-        r.contains('state') ||
-        r.contains('regional') ||
-        r.contains('gold') ||
-        r.contains('1st') ||
-        r.contains('winner');
-  }
 
   /// Demo fallback — ONLY used when there is genuinely no user data yet.
   /// (Delegates to the SHARED loader so every screen shows the SAME
@@ -167,13 +145,13 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
 
     if (score == null) {
       return Scaffold(
-        backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+        backgroundColor: dark ? Palette.black : Palette.cream,
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -182,10 +160,10 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFF8FAFC),
+                    const Color(0xFFFBF1E3),
+                    Palette.cream,
                     Colors.white
                   ],
           ),
@@ -271,7 +249,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
           bottom: BorderSide(
             color: dark
                 ? Palette.border.withValues(alpha: 0.3)
-                : const Color(0xFFE2E8F0),
+                : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -283,8 +261,8 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                borderRadius: BorderRadius.circular(9999),
               ),
               child: Icon(
                 Icons.arrow_back_ios_new,
@@ -299,7 +277,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
               children: [
                 Text(
                   'Profile Score',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -312,16 +290,16 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: Palette.accent.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(9999),
                       border: Border.all(
                         color: Palette.accent.withValues(alpha: 0.4),
                       ),
                     ),
                     child: Text(
                       'PREVIEW',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 10,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: 0.8,
                         color: Palette.accent,
                       ),
@@ -337,8 +315,8 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                borderRadius: BorderRadius.circular(9999),
               ),
               child: Icon(
                 Icons.refresh,
@@ -373,7 +351,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                   child: CircularProgressIndicator(
                     value: 1,
                     strokeWidth: 12,
-                    color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+                    color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
                   ),
                 ),
                 // Progress ring
@@ -393,16 +371,16 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                   children: [
                     Text(
                       '$animatedScore',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 56,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         color: score.tierColor,
                         height: 1,
                       ),
                     ),
                     Text(
                       'out of 100',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 14,
                         color: Palette.textSecondary,
                       ),
@@ -447,7 +425,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             const SizedBox(width: 10),
             Text(
               '${score.tierName} Tier',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: score.tierColor,
@@ -468,7 +446,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
         children: [
           Text(
             'Score Breakdown',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -511,7 +489,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             label: 'Psychology',
             value: score.psychologyScore,
             weight: '5%',
-            color: const Color(0xFF8B5CF6),
+            color: Palette.accent,
             dark: dark,
           ),
           const SizedBox(height: 16),
@@ -519,7 +497,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             label: 'Growth',
             value: score.growthScore,
             weight: '5%',
-            color: const Color(0xFF06B6D4),
+            color: Palette.accentTeal,
             dark: dark,
           ),
           const SizedBox(height: 16),
@@ -527,7 +505,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             label: 'AI Insights',
             value: score.aiScore,
             weight: '5%',
-            color: const Color(0xFFF59E0B),
+            color: Palette.accentYellow,
             dark: dark,
           ),
         ],
@@ -554,7 +532,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                       height: 28,
                       decoration: BoxDecoration(
                         color: Palette.success.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.trending_up,
@@ -565,7 +543,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                     const SizedBox(width: 8),
                     Text(
                       'Strengths',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Palette.success,
@@ -577,7 +555,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                 if (score.strengths.isEmpty)
                   Text(
                     'Complete more profile data to see strengths',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 12,
                       color: Palette.textTertiary,
                     ),
@@ -596,7 +574,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                             Expanded(
                               child: Text(
                                 s,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.nunito(
                                   fontSize: 12,
                                   color: dark
                                       ? Palette.textPrimary
@@ -628,7 +606,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                       height: 28,
                       decoration: BoxDecoration(
                         color: Palette.warning.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.lightbulb_outline,
@@ -639,7 +617,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                     const SizedBox(width: 8),
                     Text(
                       'Improve',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Palette.warning,
@@ -651,7 +629,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                 if (score.improvements.isEmpty)
                   Text(
                     'Looking good! Keep building your profile',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 12,
                       color: Palette.textTertiary,
                     ),
@@ -670,7 +648,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                             Expanded(
                               child: Text(
                                 s,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.nunito(
                                   fontSize: 12,
                                   color: dark
                                       ? Palette.textPrimary
@@ -714,7 +692,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                 height: 32,
                 decoration: BoxDecoration(
                   color: gap.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(gap.icon, size: 18, color: gap.color),
               ),
@@ -724,7 +702,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                   activeGapMission != null
                       ? 'Mission in progress'
                       : '${gap.label} is your biggest lever right now',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color:
@@ -739,7 +717,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
             activeGapMission != null
                 ? 'You already have an open mission for this gap. Complete it, then return here for your next lever.'
                 : 'A small, focused mission today compounds into a stronger application.',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 13,
               color: Palette.textSecondary,
               height: 1.4,
@@ -754,7 +732,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
               gradient: LinearGradient(
                 colors: [gap.color, gap.color.withValues(alpha: 0.6)],
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(9999),
               boxShadow: [
                 BoxShadow(
                   color: gap.color.withValues(alpha: 0.25),
@@ -776,7 +754,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
                   activeGapMission != null
                       ? 'Continue mission'
                       : 'Create a ${gap.label.toLowerCase()} mission',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -840,7 +818,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       _GapInfo(
         'Psychology',
         score.psychologyScore.toDouble(),
-        const Color(0xFF8B5CF6),
+        Palette.accent,
         Icons.psychology,
         MissionPillar.personal,
         'Strengthen your growth mindset: one 10-minute reflection on a past '
@@ -850,7 +828,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       _GapInfo(
         'Growth',
         score.growthScore.toDouble(),
-        const Color(0xFF06B6D4),
+        Palette.accentTeal,
         Icons.trending_up,
         MissionPillar.personal,
         'Record one improvement you made this week. Evidence of upward '
@@ -860,7 +838,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
       _GapInfo(
         'AI Insights',
         score.aiScore.toDouble(),
-        const Color(0xFFF59E0B),
+        Palette.accentYellow,
         Icons.auto_awesome,
         MissionPillar.research,
         'Act on one AI insight from your profile review. Insight without '
@@ -960,7 +938,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
         children: [
           Text(
             'Personality Profile',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -969,7 +947,7 @@ class _ProfileScoreScreenState extends ConsumerState<ProfileScoreScreen>
           const SizedBox(height: 8),
           Text(
             'How the AI adapts to your personality',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 13,
               color: Palette.textSecondary,
             ),
@@ -1048,7 +1026,7 @@ class _ScoreBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -1058,7 +1036,7 @@ class _ScoreBar extends StatelessWidget {
               children: [
                 Text(
                   '$value',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: color,
@@ -1070,11 +1048,11 @@ class _ScoreBar extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(9999),
                   ),
                   child: Text(
                     weight,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 10,
                       color: color,
                     ),
@@ -1088,8 +1066,8 @@ class _ScoreBar extends StatelessWidget {
         Container(
           height: 8,
           decoration: BoxDecoration(
-            color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
-            borderRadius: BorderRadius.circular(4),
+            color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
+            borderRadius: BorderRadius.circular(9999),
           ),
           child: FractionallySizedBox(
             widthFactor: (value / 100).clamp(0.0, 1.0),
@@ -1099,7 +1077,7 @@ class _ScoreBar extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [color, color.withValues(alpha: 0.7)],
                 ),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(9999),
               ),
             ),
           ),
@@ -1133,14 +1111,14 @@ class _TraitBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 12,
                 color: Palette.textSecondary,
               ),
             ),
             Text(
               '${(value * 100).round()}%',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: color,
@@ -1152,8 +1130,8 @@ class _TraitBar extends StatelessWidget {
         Container(
           height: 6,
           decoration: BoxDecoration(
-            color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
-            borderRadius: BorderRadius.circular(3),
+            color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
+            borderRadius: BorderRadius.circular(9999),
           ),
           child: FractionallySizedBox(
             widthFactor: value.clamp(0.0, 1.0),
@@ -1163,7 +1141,7 @@ class _TraitBar extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [color, color.withValues(alpha: 0.7)],
                 ),
-                borderRadius: BorderRadius.circular(3),
+                borderRadius: BorderRadius.circular(9999),
               ),
             ),
           ),

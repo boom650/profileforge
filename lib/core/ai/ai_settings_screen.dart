@@ -85,7 +85,7 @@ class _AISettingsScreenState extends State<AISettingsScreen> {
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       appBar: AppBar(
         title: const Text('AI Settings'),
         backgroundColor: Colors.transparent,
@@ -109,7 +109,7 @@ class _AISettingsScreenState extends State<AISettingsScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -146,7 +146,7 @@ class _AISettingsScreenState extends State<AISettingsScreen> {
                             ? Palette.error
                             : dark
                                 ? Palette.border
-                                : const Color(0xFFE2E8F0),
+                                : const Color(0xFFEDE3D6),
                   ),
                 ),
                 child: Column(
@@ -234,7 +234,7 @@ class _AISettingsScreenState extends State<AISettingsScreen> {
                               )
                             : null,
                         filled: true,
-                        fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                        fillColor: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,

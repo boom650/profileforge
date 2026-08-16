@@ -105,14 +105,14 @@ class _PremiumTextFieldState extends State<PremiumTextField>
       builder: (context, child) {
         return Container(
           decoration: BoxDecoration(
-            color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-            borderRadius: BorderRadius.circular(12),
+            color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: _isFocused
                   ? Palette.primary.withValues(alpha: 0.5 + _borderAnimation.value * 0.5)
                   : dark
                       ? Palette.border.withValues(alpha: 0.3)
-                      : const Color(0xFFE2E8F0),
+                      : const Color(0xFFEDE3D6),
               width: _isFocused ? 1.5 : 1,
             ),
             boxShadow: _isFocused
@@ -137,18 +137,18 @@ class _PremiumTextFieldState extends State<PremiumTextField>
             minLines: widget.minLines,
             enabled: widget.enabled,
             autofocus: widget.autofocus,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 15,
               color: dark ? Palette.textPrimary : Palette.textInverse,
             ),
             decoration: InputDecoration(
               hintText: widget.hintText,
               labelText: widget.labelText,
-              hintStyle: GoogleFonts.inter(
+              hintStyle: GoogleFonts.nunito(
                 fontSize: 15,
                 color: Palette.textTertiary,
               ),
-              labelStyle: GoogleFonts.inter(
+              labelStyle: GoogleFonts.nunito(
                 fontSize: 15,
                 color: _isFocused ? Palette.primary : Palette.textTertiary,
               ),
@@ -197,9 +197,9 @@ class PremiumSearchField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: dark ? Palette.surface1.withValues(alpha: 0.6) : Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border.withValues(alpha: 0.4) : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border.withValues(alpha: 0.4) : const Color(0xFFEDE3D6),
         ),
       ),
       child: TextField(
@@ -207,13 +207,13 @@ class PremiumSearchField extends StatelessWidget {
         autofocus: autofocus,
         onChanged: onChanged,
         onSubmitted: onSubmitted,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.nunito(
           fontSize: 15,
           color: dark ? Palette.textPrimary : Palette.textInverse,
         ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: GoogleFonts.inter(
+          hintStyle: GoogleFonts.nunito(
             fontSize: 15,
             color: Palette.textTertiary,
           ),
@@ -352,8 +352,8 @@ class _PremiumChipState extends State<PremiumChip>
                     ? selectedColor.withValues(alpha: 0.15)
                     : dark
                         ? Palette.surface2.withValues(alpha: 0.5)
-                        : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(20),
+                        : const Color(0xFFF4ECE1),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: widget.isSelected
                       ? selectedColor.withValues(alpha: 0.3)
@@ -375,7 +375,7 @@ class _PremiumChipState extends State<PremiumChip>
                   ],
                   Text(
                     widget.label,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: widget.isSelected

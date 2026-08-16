@@ -40,7 +40,7 @@ class PremiumTabBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: dark
             ? Palette.surface2.withValues(alpha: 0.5)
-            : const Color(0xFFF1F5F9),
+            : const Color(0xFFF4ECE1),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: LayoutBuilder(
@@ -94,7 +94,7 @@ class PremiumTabBar extends StatelessWidget {
                           children: [
                             Text(
                               tabs[i],
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.nunito(
                                 fontSize: 13,
                                 fontWeight:
                                     isSelected ? FontWeight.w600 : FontWeight.w500,
@@ -114,7 +114,7 @@ class PremiumTabBar extends StatelessWidget {
                                     horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: Palette.primary,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(9999),
                                 ),
                                 child: Text(
                                   '$badgeCount',
@@ -183,14 +183,14 @@ class PillTabBar extends StatelessWidget {
                       ? Palette.primary
                       : (dark
                           ? Palette.surface2.withValues(alpha: 0.5)
-                          : const Color(0xFFF1F5F9)),
+                          : const Color(0xFFF4ECE1)),
                   borderRadius: BorderRadius.circular(height / 2),
                   border: Border.all(
                     color: isSelected
                         ? Palette.primary
                         : (dark
                             ? Palette.border.withValues(alpha: 0.3)
-                            : const Color(0xFFE2E8F0)),
+                            : const Color(0xFFEDE3D6)),
                   ),
                 ),
                 child: Center(
@@ -251,7 +251,7 @@ class IconTabBar extends StatelessWidget {
               color: isSelected
                   ? Palette.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(9999),
             ),
             child: Row(
               children: [

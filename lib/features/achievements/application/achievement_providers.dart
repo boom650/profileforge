@@ -7,7 +7,6 @@ import 'package:profileforge/features/achievements/domain/achievement_defs.dart'
 import 'package:profileforge/features/xp/application/xp_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
-import 'package:profileforge/features/skins/domain/skin_definitions.dart';
 
 final achievementRepoProvider = Provider<AchievementRepository>((ref) {
   return AchievementRepository(ref.watch(appDatabaseProvider));

@@ -29,7 +29,6 @@ class PfAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = isDark(context);
     final bgColor = backgroundColor ?? Palette.primary;
     final txtColor = textColor ?? Colors.white;
     final initials = _getInitials(name);
@@ -72,7 +71,7 @@ class PfAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: size * 0.38,
             fontWeight: FontWeight.w700,
             color: txtColor,

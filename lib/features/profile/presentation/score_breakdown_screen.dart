@@ -1,9 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/score_widgets.dart';
 import 'package:profileforge/core/application/session_provider.dart';
@@ -104,8 +102,8 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -123,7 +121,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -318,7 +316,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -350,7 +348,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
                 '${(progress * 100).round()}',
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: category.color,
                 ),
               ),
@@ -362,7 +360,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 6,
-              backgroundColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+              backgroundColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
               valueColor: AlwaysStoppedAnimation(category.color),
             ),
           ),
@@ -419,7 +417,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -518,7 +516,7 @@ class _ScoreBreakdownScreenState extends ConsumerState<ScoreBreakdownScreen>
                 : Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
           ),
           child: Row(

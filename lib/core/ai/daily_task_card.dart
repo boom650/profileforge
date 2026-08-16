@@ -29,7 +29,7 @@ class DailyTaskCard extends StatelessWidget {
         gradient: LinearGradient(
           colors: dark
               ? [Palette.surface1, Palette.surface0]
-              : [Colors.white, const Color(0xFFF8FAFC)],
+              : [Colors.white, Palette.cream],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -133,7 +133,7 @@ class DailyTaskCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

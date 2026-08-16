@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/input_widgets.dart';
 
@@ -84,8 +83,8 @@ class _SearchScreenState extends State<SearchScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -103,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -130,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                            color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
@@ -244,7 +243,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         bottom: BorderSide(
                           color: dark
                               ? Palette.border.withValues(alpha: 0.3)
-                              : const Color(0xFFE2E8F0),
+                              : const Color(0xFFEDE3D6),
                         ),
                       ),
                     ),
@@ -350,7 +349,7 @@ class _SearchScreenState extends State<SearchScreen> {
               : Colors.white.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: dark ? Palette.border : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border : const Color(0xFFEDE3D6),
           ),
         ),
         child: Row(
@@ -390,7 +389,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(

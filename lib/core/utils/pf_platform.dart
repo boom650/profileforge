@@ -111,7 +111,7 @@ class PfPlatform {
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Color(0xFF0B1120),
+        systemNavigationBarColor: Color(0xFF1A0F0A),
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );

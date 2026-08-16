@@ -213,14 +213,16 @@ class MissionEngine {
 
   /// Generate daily missions — rotated by day of year for variety.
   List<Mission> generateDaily(String profileId) {
-    final dayOfYear = DateTime.now().difference(DateTime(DateTime.now().year)).inDays;
+    final now = DateTime.now();
+    final dayOfYear =
+        now.difference(DateTime(now.year)).inDays;
     final missions = <Mission>[];
     for (final pillar in MissionPillar.values) {
       final templates = _dailyTemplates[pillar]!;
       final idx = dayOfYear % templates.length;
       final t = templates[idx];
       missions.add(Mission(
-        id: 'd-${profileId}-${pillar.name}-${DateTime.now().day}',
+        id: 'd-${profileId}-${pillar.name}-${now.year}-$dayOfYear',
         profileId: profileId,
         title: t['title'] as String,
         description: t['desc'] as String,
@@ -228,7 +230,7 @@ class MissionEngine {
         pillar: pillar,
         xpReward: t['xp'] as int,
         gemReward: t['gems'] as int,
-        dueAt: DateTime.now().add(const Duration(days: 1)),
+        dueAt: now.add(const Duration(days: 1)),
         completed: false,
         target: 1,
       ));
@@ -238,13 +240,15 @@ class MissionEngine {
 
   /// Generate weekly missions — 5 random from the pool.
   List<Mission> generateWeekly(String profileId) {
-    final weekNum = DateTime.now().difference(DateTime(DateTime.now().year)).inDays ~/ 7;
+    final now = DateTime.now();
+    final weekNum =
+        now.difference(DateTime(now.year)).inDays ~/ 7;
     final missions = <Mission>[];
     for (var i = 0; i < 5; i++) {
       final idx = (weekNum + i) % _weeklyTemplates.length;
       final t = _weeklyTemplates[idx];
       missions.add(Mission(
-        id: 'w-${profileId}-$i-${DateTime.now().month}',
+        id: 'w-${profileId}-$i-${now.year}-$weekNum',
         profileId: profileId,
         title: t['title'] as String,
         description: t['desc'] as String,
@@ -252,7 +256,7 @@ class MissionEngine {
         pillar: t['pillar'] as MissionPillar,
         xpReward: t['xp'] as int,
         gemReward: t['gems'] as int,
-        dueAt: DateTime.now().add(const Duration(days: 7)),
+        dueAt: now.add(const Duration(days: 7)),
         completed: false,
         target: t['target'] as int,
       ));
@@ -262,13 +266,14 @@ class MissionEngine {
 
   /// Generate monthly missions — top 3 from the pool.
   List<Mission> generateMonthly(String profileId) {
-    final monthIdx = DateTime.now().month % _monthlyTemplates.length;
+    final now = DateTime.now();
+    final monthIdx = now.month % _monthlyTemplates.length;
     final missions = <Mission>[];
     for (var i = 0; i < 3; i++) {
       final idx = (monthIdx + i) % _monthlyTemplates.length;
       final t = _monthlyTemplates[idx];
       missions.add(Mission(
-        id: 'm-${profileId}-$i-${DateTime.now().month}',
+        id: 'm-${profileId}-$i-${now.year}-${now.month}',
         profileId: profileId,
         title: t['title'] as String,
         description: t['desc'] as String,
@@ -276,7 +281,7 @@ class MissionEngine {
         pillar: t['pillar'] as MissionPillar,
         xpReward: t['xp'] as int,
         gemReward: t['gems'] as int,
-        dueAt: DateTime(DateTime.now().year, DateTime.now().month + 1, 0),
+        dueAt: DateTime(now.year, now.month + 1, 0),
         completed: false,
         target: t['target'] as int,
       ));

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/features/challenges/application/challenge_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
@@ -119,14 +119,14 @@ class _ChallengesScreenState extends ConsumerState<ChallengesScreen> {
 
   void _resolve(FriendChallengeRow challenge) async {
     final xp = await ref.read(totalXpProvider(widget.profileId).future);
-    final winner = await ref.read(resolveChallengeProvider(
+    final resolution = await ref.read(resolveChallengeProvider(
       (profileId: widget.profileId, challengeId: challenge.id, currentXp: xp),
     ).future);
     if (!mounted) return;
-    final isWin = winner == widget.profileId;
+    final isWin = resolution?.challengerWon ?? false;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(isWin ? '🎉 You won the challenge! +25 bonus XP!' : '😔 The ghost opponent won this time. Try again!'),
-      backgroundColor: isWin ? Colors.green : Colors.orange,
+      backgroundColor: isWin ? Palette.success : Palette.accent,
     ));
   }
 }
@@ -204,9 +204,10 @@ class _HistoryTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 4),
       child: ListTile(
         dense: true,
-        leading: Text(won ? '🏆' : '💔', style: const TextStyle(fontSize: 20)),
+        leading: Icon(won ? Icons.emoji_events_rounded : Icons.cruelty_free_rounded,
+            size: 20, color: won ? Palette.warning : Palette.inkSoft),
         title: Text('Earn ${challenge.wagerXp} XP challenge', style: const TextStyle(fontSize: 14)),
-        subtitle: Text(won ? 'Won! +25 bonus XP' : 'Lost to ghost opponent', style: TextStyle(fontSize: 12, color: won ? Colors.green : Colors.orange)),
+        subtitle: Text(won ? 'Won! +25 bonus XP' : 'Lost to ghost opponent', style: TextStyle(fontSize: 12, color: won ? Palette.success : Palette.accent)),
         trailing: Text('${challenge.challengerScore} vs ${challenge.opponentScore}', style: theme.textTheme.bodySmall),
       ),
     );

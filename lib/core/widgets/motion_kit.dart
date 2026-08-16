@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/services.dart';
+import 'package:profileforge/core/accessibility/accessibility_utils.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -44,6 +45,15 @@ class _PressableScaleState extends State<PressableScale>
     duration: widget.duration,
     reverseDuration: widget.duration,
   );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final duration =
+        ReduceMotion.getAnimationDuration(context, widget.duration);
+    _c.duration = duration;
+    _c.reverseDuration = duration;
+  }
 
   @override
   void dispose() {
@@ -102,7 +112,18 @@ class _StreakFlameState extends State<StreakFlame>
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: 900.ms,
-  )..repeat(reverse: true);
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (ReduceMotion.isReduceMotion(context)) {
+      _c.stop();
+      _c.value = 0.5;
+    } else if (!_c.isAnimating) {
+      _c.repeat(reverse: true);
+    }
+  }
 
   @override
   void dispose() {
@@ -301,8 +322,20 @@ class _LevelUpLayerState extends State<_LevelUpLayer>
   @override
   void initState() {
     super.initState();
-    _c.forward();
     Future.delayed(1900.ms, widget.onDone);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final duration = ReduceMotion.getAnimationDuration(
+        context, const Duration(milliseconds: 1800));
+    _c.duration = duration;
+    if (ReduceMotion.isReduceMotion(context)) {
+      _c.value = 1.0;
+    } else if (!_c.isAnimating) {
+      _c.forward();
+    }
   }
 
   @override
@@ -353,7 +386,7 @@ class _LevelUpLayerState extends State<_LevelUpLayer>
                           'LEVEL UP!',
                           style: TextStyle(
                             fontSize: 30,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                             letterSpacing: 2,
                             color: Palette.warning,
                           ),
@@ -363,11 +396,11 @@ class _LevelUpLayerState extends State<_LevelUpLayer>
                           '${widget.level}',
                           style: const TextStyle(
                             fontSize: 72,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                             color: Colors.white,
                             shadows: [
                               Shadow(
-                                color: Color(0xFF58CC02),
+                                color: Palette.success,
                                 blurRadius: 24,
                               ),
                             ],
@@ -464,7 +497,7 @@ class XpPill extends StatelessWidget {
     super.key,
     required this.amount,
     this.gems,
-    this.color = const Color(0xFFFFC800),
+    this.color = Palette.warning,
   });
 
   final int amount;
@@ -477,7 +510,7 @@ class XpPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(9999),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.35),
@@ -493,7 +526,7 @@ class XpPill extends StatelessWidget {
             '+$amount',
             style: const TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
               fontSize: 15,
             ),
           ),
@@ -504,7 +537,7 @@ class XpPill extends StatelessWidget {
               '+$gems',
               style: const TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
             ),

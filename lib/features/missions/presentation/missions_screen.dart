@@ -30,8 +30,7 @@ class MissionsScreen extends ConsumerWidget {
     final priority = ref.watch(specialMissionsProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
-      bottomNavigationBar: _BottomNav(context, '/missions'),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -44,7 +43,7 @@ class MissionsScreen extends ConsumerWidget {
                     Text(
                       'Missions',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const Spacer(),
@@ -65,7 +64,7 @@ class MissionsScreen extends ConsumerWidget {
                         ref.invalidate(weeklyMissionsProvider(profileId));
                         ref.invalidate(monthlyMissionsProvider(profileId));
                         if (context.mounted) {
-                          celebrate(context, message: 'Refreshed! 🚀');
+                          celebrate(context, message: 'Refreshed!');
                         }
                       },
                       child: Container(
@@ -73,7 +72,7 @@ class MissionsScreen extends ConsumerWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           color:
-                              dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                              dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -102,11 +101,11 @@ class MissionsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        '🎯 Missions Hub',
+                        'Missions Hub',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -502,8 +501,8 @@ class _MissionCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Text(_pillarEmoji(pillar),
-                  style: const TextStyle(fontSize: 20)),
+              child: Icon(pillarIcon(pillar),
+                  size: 20, color: color),
             ),
           ),
           const SizedBox(width: 12),
@@ -589,7 +588,7 @@ class _MissionCard extends StatelessWidget {
                               'AI',
                               style: TextStyle(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                                 color: Palette.primary,
                               ),
                             ),
@@ -732,132 +731,6 @@ class _CompleteButtonState extends State<_CompleteButton>
             target: done ? 1 : 0,
           );
         },
-      ),
-    );
-  }
-}
-
-String _pillarEmoji(String pillar) {
-  switch (pillar.toLowerCase()) {
-    case 'academics':
-      return '📚';
-    case 'leadership':
-      return '👥';
-    case 'research':
-      return '🔬';
-    case 'creativity':
-      return '🎨';
-    case 'community':
-      return '🤝';
-    case 'service':
-      return '❤️';
-    case 'sports':
-      return '⚽';
-    default:
-      return '🎯';
-  }
-}
-
-/// Bottom navigation bar.
-Widget _BottomNav(BuildContext context, String current) {
-  final dark = isDark(context);
-  return Container(
-    decoration: BoxDecoration(
-      color: dark ? Palette.surface0 : Colors.white,
-      border: Border(
-        top: BorderSide(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
-          width: 1,
-        ),
-      ),
-    ),
-    child: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _NavItem(
-                icon: Icons.home_rounded,
-                label: 'Home',
-                isSelected: current == '/home',
-                onTap: () => context.go('/home')),
-            _NavItem(
-                icon: Icons.flag_rounded,
-                label: 'Missions',
-                isSelected: current == '/missions',
-                onTap: () => context.push('/missions')),
-            _NavItem(
-                icon: Icons.person_rounded,
-                label: 'Profile',
-                isSelected: current == '/profile',
-                onTap: () => context.push('/profile')),
-            _NavItem(
-                icon: Icons.diamond_rounded,
-                label: 'Shop',
-                isSelected: current == '/skins',
-                onTap: () => context.push('/skins')),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-/// Bottom nav item.
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = isDark(context);
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 64,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 2),
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? Palette.primary
-                  : (dark ? Palette.textTertiary : Palette.textTertiary),
-            ),
-            const SizedBox(height: 2),
-            NavPill(
-              selected: isSelected ? 1 : 0,
-              index: 0,
-              itemCount: 1,
-              height: 3,
-              width: 28,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected
-                    ? Palette.primary
-                    : (dark ? Palette.textTertiary : Palette.textTertiary),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

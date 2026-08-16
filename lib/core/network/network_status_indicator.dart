@@ -25,7 +25,6 @@ class NetworkStatusIndicator extends StatefulWidget {
 class _NetworkStatusIndicatorState extends State<NetworkStatusIndicator>
     with SingleTickerProviderStateMixin {
   late StreamSubscription<List<ConnectivityResult>> _subscription;
-  ConnectivityResult _status = ConnectivityResult.wifi;
   bool _isOffline = false;
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
@@ -77,7 +76,6 @@ class _NetworkStatusIndicatorState extends State<NetworkStatusIndicator>
   void _updateStatus(ConnectivityResult result) {
     final wasOffline = _isOffline;
     setState(() {
-      _status = result;
       _isOffline = result == ConnectivityResult.none;
     });
 
@@ -117,7 +115,7 @@ class _NetworkStatusIndicatorState extends State<NetworkStatusIndicator>
                     Expanded(
                       child: Text(
                         'No internet connection',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
@@ -136,7 +134,7 @@ class _NetworkStatusIndicatorState extends State<NetworkStatusIndicator>
                           ),
                           child: Text(
                             'Retry',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.nunito(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,

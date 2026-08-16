@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/features/xp/application/xp_providers.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
-import 'package:profileforge/features/timer/application/timer_providers.dart';
-import 'package:profileforge/features/achievements/application/achievement_providers.dart';
+import 'package:profileforge/features/share/application/share_providers.dart';
+import 'package:profileforge/features/share/domain/share_models.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 /// Screen to share your progress as an image/text card.
 class ShareProgressScreen extends ConsumerWidget {
@@ -14,10 +13,12 @@ class ShareProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final totalXpAsync = ref.watch(totalXpProvider(profileId));
-    final streakAsync = ref.watch(streakProvider(profileId));
-    final achCountAsync = ref.watch(achievementCountProvider(profileId));
-    final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
+    final snapshotAsync = ref.watch(shareSnapshotProvider(profileId));
+    final snapshot = snapshotAsync.valueOrNull;
+    final xp = snapshot?.xp ?? 0;
+    final streak = snapshot?.streak ?? 0;
+    final badges = snapshot?.badges ?? 0;
+    final focusMin = snapshot?.focusMinutes ?? 0;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Share Progress'), centerTitle: true, actions: [
@@ -41,7 +42,7 @@ class ShareProgressScreen extends ConsumerWidget {
                     colors: [theme.colorScheme.primary, theme.colorScheme.tertiary],
                   ),
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 20, offset: const Offset(0, 8))],
+                  boxShadow: [BoxShadow(color: Palette.ink.withValues(alpha: 0.26), blurRadius: 20, offset: const Offset(0, 8))],
                 ),
                 child: Column(
                   children: [
@@ -49,19 +50,20 @@ class ShareProgressScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('ProfileForge', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w300, fontSize: 12)),
-                        Text('🌟', style: TextStyle(fontSize: 24)),
+                        Icon(Icons.auto_awesome_rounded,
+                            size: 24, color: Colors.white70),
                       ],
                     ),
                     const SizedBox(height: 20),
                     Text('My Progress', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
-                    _ProgressRow(label: 'XP', value: totalXpAsync.valueOrNull?.toString() ?? '0', icon: '⭐'),
-                    const SizedBox(height: 8),
-                    _ProgressRow(label: 'Streak', value: '${streakAsync.valueOrNull?.current ?? 0} days', icon: '🔥'),
-                    const SizedBox(height: 8),
-                    _ProgressRow(label: 'Badges', value: achCountAsync.valueOrNull?.toString() ?? '0', icon: '🏆'),
-                    const SizedBox(height: 8),
-                    _ProgressRow(label: 'Focus', value: '${focusMinAsync.valueOrNull ?? 0} min', icon: '⏱️'),
+                    _ProgressRow(label: 'XP', value: '$xp', icon: Icons.star_rounded),
+                    const SizedBox(height: 6),
+                    _ProgressRow(label: 'Streak', value: '$streak days', icon: Icons.local_fire_department_rounded),
+                    const SizedBox(height: 6),
+                    _ProgressRow(label: 'Badges', value: '$badges', icon: Icons.emoji_events_rounded),
+                    const SizedBox(height: 6),
+                    _ProgressRow(label: 'Focus', value: '$focusMin min', icon: Icons.timer_outlined),
                     const SizedBox(height: 20),
                     Text('ProfileForge — Build your future', style: TextStyle(color: Colors.white54, fontSize: 10)),
                   ],
@@ -73,15 +75,11 @@ class ShareProgressScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  final text = '🌟 My ProfileForge Progress:\n'
-                      '⭐ XP: ${totalXpAsync.valueOrNull ?? 0}\n'
-                      '🔥 Streak: ${streakAsync.valueOrNull?.current ?? 0} days\n'
-                      '🏆 Badges: ${achCountAsync.valueOrNull ?? 0}\n'
-                      '⏱️ Focus: ${focusMinAsync.valueOrNull ?? 0} min\n'
-                      'Download ProfileForge and build YOUR future!';
+                  final text = (snapshot ?? const ShareSnapshot(xp: 0, streak: 0, badges: 0, focusMinutes: 0))
+                      .buildShareText();
                   Clipboard.setData(ClipboardData(text: text));
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('📋 Progress copied to clipboard!'),
+                    content: Text('Progress copied to clipboard!'),
                     duration: Duration(seconds: 2),
                   ));
                 },
@@ -100,7 +98,7 @@ class ShareProgressScreen extends ConsumerWidget {
 class _ProgressRow extends StatelessWidget {
   final String label;
   final String value;
-  final String icon;
+  final IconData icon;
   const _ProgressRow({required this.label, required this.value, required this.icon});
 
   @override
@@ -110,7 +108,7 @@ class _ProgressRow extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 18)),
+            Icon(icon, size: 18, color: Colors.white70),
             const SizedBox(width: 8),
             Text(label, style: const TextStyle(color: Colors.white70, fontSize: 14)),
           ],

@@ -86,7 +86,7 @@ class _ScoreCircleState extends State<ScoreCircle>
               progress: _animation.value,
               strokeWidth: widget.strokeWidth,
               gradient: widget.gradient,
-              backgroundColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+              backgroundColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
             ),
             child: Center(
               child: Column(
@@ -96,7 +96,7 @@ class _ScoreCircleState extends State<ScoreCircle>
                     '${widget.score}',
                     style: TextStyle(
                       fontSize: widget.size * 0.3,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: widget.tierColor ??
                           (dark ? Palette.textPrimary : Palette.textInverse),
                       height: 1,
@@ -205,7 +205,7 @@ class PersonalityRadar extends StatelessWidget {
           labels: labels,
           gradient: gradient,
           backgroundColor: dark ? Palette.surface1 : Colors.white,
-          gridColor: dark ? Palette.border : const Color(0xFFE2E8F0),
+          gridColor: dark ? Palette.border : const Color(0xFFEDE3D6),
           textColor: dark ? Palette.textSecondary : Palette.textTertiary,
           showLabels: showLabels,
         ),
@@ -371,7 +371,7 @@ class TierBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: tier.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(9999),
         border: Border.all(
           color: tier.withValues(alpha: 0.3),
         ),
@@ -431,7 +431,7 @@ class TraitBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: dark ? Palette.textSecondary : Palette.textTertiary,
@@ -439,7 +439,7 @@ class TraitBar extends StatelessWidget {
             ),
             Text(
               '${(value * 100).round()}%',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: color,
@@ -451,7 +451,7 @@ class TraitBar extends StatelessWidget {
         Container(
           height: height,
           decoration: BoxDecoration(
-            color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+            color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
             borderRadius: BorderRadius.circular(height / 2),
           ),
           child: FractionallySizedBox(
@@ -503,9 +503,9 @@ class InsightCard extends StatelessWidget {
         color: dark
             ? Palette.surface1.withValues(alpha: 0.7)
             : Colors.white.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
         boxShadow: [
           BoxShadow(
@@ -526,7 +526,7 @@ class InsightCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: gradient,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(9999),
                 ),
                 child: Icon(icon, size: 16, color: Colors.white),
               ),
@@ -534,7 +534,7 @@ class InsightCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -546,7 +546,7 @@ class InsightCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             insight,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 13,
               height: 1.5,
               color: dark ? Palette.textSecondary : Palette.textTertiary,
@@ -558,7 +558,7 @@ class InsightCard extends StatelessWidget {
               onTap: onAction,
               child: Text(
                 actionLabel!,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Palette.primary,
@@ -650,7 +650,7 @@ class _StreakFlameState extends State<StreakFlame>
                     '${widget.streak}',
                     style: TextStyle(
                       fontSize: widget.size * 0.2,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: Colors.white,
                       height: 1,
                     ),
@@ -690,7 +690,7 @@ class ScoreChangeIndicator extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(9999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -751,14 +751,14 @@ class ScoreMini extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             color: displayColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(9999),
           ),
           child: Center(
             child: Text(
               '$score',
               style: TextStyle(
                 fontSize: size * 0.35,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: displayColor,
               ),
             ),

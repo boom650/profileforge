@@ -2,21 +2,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/auth/application/auth_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// MagicLinkScreen — Email-based passwordless auth.
 /// Clean single-field input → send magic link → success state.
 /// ────────────────────────────────────────────────────────────────────────────
-class MagicLinkScreen extends StatefulWidget {
+class MagicLinkScreen extends ConsumerStatefulWidget {
   const MagicLinkScreen({super.key});
 
   @override
-  State<MagicLinkScreen> createState() => _MagicLinkScreenState();
+  ConsumerState<MagicLinkScreen> createState() => _MagicLinkScreenState();
 }
 
-class _MagicLinkScreenState extends State<MagicLinkScreen> {
+class _MagicLinkScreenState extends ConsumerState<MagicLinkScreen> {
   final _emailCtrl = TextEditingController();
   final _focusNode = FocusNode();
   bool _sent = false;
@@ -80,9 +81,8 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
 
   Future<void> _simulateVerify() async {
     // Simulate verification for demo.
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('pf_auth_token', 'demo-token');
-    await prefs.setString('pf_user_email', _emailCtrl.text.trim());
+    final repo = await ref.read(authRepositoryProvider.future);
+    await repo.signInWithEmail(_emailCtrl.text.trim());
     if (mounted) {
       context.go('/onboarding');
     }
@@ -109,7 +109,7 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
             end: Alignment.bottomCenter,
             colors: dark
                 ? [Palette.surface0, Palette.black]
-                : [const Color(0xFFF8FAFC), Colors.white],
+                : [Palette.cream, Colors.white],
           ),
         ),
         child: SafeArea(

@@ -7,7 +7,7 @@ class SyncEngine {
     if (local == null && remote == null) return fallback();
     if (remote == null) return localValue;
     if (local == null) return remoteValue;
-    return local!.isAfter(remote!) ? localValue : remoteValue;
+    return local.isAfter(remote) ? localValue : remoteValue;
   }
 
   /// Exponential backoff for a given attempt count (cap 5 min).

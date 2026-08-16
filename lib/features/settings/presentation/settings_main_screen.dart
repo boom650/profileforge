@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/glass_widgets.dart';
 
@@ -31,8 +30,8 @@ class SettingsMainScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -50,7 +49,7 @@ class SettingsMainScreen extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -346,7 +345,7 @@ class SettingsMainScreen extends StatelessWidget {
             return Divider(
               height: 1,
               indent: 52,
-              color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFEDE3D6),
             );
           }
 
@@ -375,7 +374,7 @@ class SettingsMainScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: item.isDestructive
                     ? Palette.error.withValues(alpha: 0.12)
-                    : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+                    : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(

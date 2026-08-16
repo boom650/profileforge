@@ -40,6 +40,8 @@ dependencies:
   intl: ^0.20.2
   # HTTP client (H9 backend)
   dio: ^5.4.3
+  # SHA-256 digest (certificate pinning)
+  crypto: ^3.0.7
   # PDF (offline export)
   pdf: ^3.11.1
   # Charts
@@ -60,6 +62,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   flutter_lints: ^4.0.0
   build_runner: ^2.4.11
   freezed: ^2.5.2
@@ -71,6 +75,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/audio/ambient/
     - assets/images/buddy/

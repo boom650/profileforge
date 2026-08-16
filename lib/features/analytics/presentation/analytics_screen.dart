@@ -4,9 +4,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
+import 'package:profileforge/features/analytics/application/analytics_providers.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
   final String profileId;
@@ -15,12 +15,8 @@ class AnalyticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dark = isDark(context);
-    final totalXpAsync = ref.watch(totalXpProvider(profileId));
-    final weeklyXpAsync = ref.watch(weeklyXpProvider(profileId));
-    final streakAsync = ref.watch(streakProvider(profileId));
-    final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
-    final todayFocusAsync = ref.watch(todayFocusMinutesProvider(profileId));
-    final sessionsAsync = ref.watch(focusSessionCountProvider(profileId));
+    final snapshotAsync = ref.watch(analyticsSnapshotProvider(profileId));
+    final snapshot = snapshotAsync.valueOrNull;
     final tagDataAsync = ref.watch(focusMinutesByTagProvider(profileId));
 
     return Scaffold(
@@ -32,12 +28,7 @@ class AnalyticsScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(totalXpProvider(profileId));
-          ref.invalidate(weeklyXpProvider(profileId));
-          ref.invalidate(streakProvider(profileId));
-          ref.invalidate(totalFocusMinutesProvider(profileId));
-          ref.invalidate(todayFocusMinutesProvider(profileId));
-          ref.invalidate(focusSessionCountProvider(profileId));
+          ref.invalidate(analyticsSnapshotProvider(profileId));
           ref.invalidate(focusMinutesByTagProvider(profileId));
         },
         child: SingleChildScrollView(
@@ -69,8 +60,9 @@ class AnalyticsScreen extends ConsumerWidget {
                         ],
                       ),
                       child: Center(
-                        child: Text('🔥', style: TextStyle(fontSize: 28)),
-                      ),
+                      child: const Icon(Icons.local_fire_department_rounded,
+                          size: 28, color: Palette.warning),
+                    ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -78,16 +70,16 @@ class AnalyticsScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${streakAsync.valueOrNull?.current ?? 0} day streak',
+                            '${snapshot?.streakDays ?? 0} day streak',
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                               color: Palette.textPrimary,
                               letterSpacing: -0.5,
                             ),
                           ),
                           Text(
-                            '${focusMinAsync.valueOrNull ?? 0} min total focus',
+                            '${snapshot?.focusMinutes ?? 0} min total focus',
                             style: TextStyle(
                               fontSize: 14,
                               color: Palette.textSecondary,
@@ -107,8 +99,8 @@ class AnalyticsScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: _StatTile(
-                      icon: '⭐', label: 'Total XP',
-                      value: '${totalXpAsync.valueOrNull ?? 0}',
+                      icon: Icons.star_rounded, label: 'Total XP',
+                      value: '${snapshot?.totalXp ?? 0}',
                       color: Palette.accentYellow,
                           dark: dark, index: 0,
                     ),
@@ -116,8 +108,8 @@ class AnalyticsScreen extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _StatTile(
-                      icon: '📈', label: 'Weekly',
-                      value: '${weeklyXpAsync.valueOrNull ?? 0}',
+                      icon: Icons.trending_up_rounded, label: 'Weekly',
+                      value: '${snapshot?.weeklyXp ?? 0}',
                       color: Palette.accentTeal,
                           dark: dark, index: 1,
                     ),
@@ -129,8 +121,8 @@ class AnalyticsScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: _StatTile(
-                      icon: '⏱️', label: 'Sessions',
-                      value: '${sessionsAsync.valueOrNull ?? 0}',
+                      icon: Icons.timer_outlined, label: 'Sessions',
+                      value: '${snapshot?.sessions ?? 0}',
                       color: Palette.accentBlue,
                           dark: dark, index: 2,
                     ),
@@ -138,8 +130,8 @@ class AnalyticsScreen extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _StatTile(
-                      icon: '📅', label: 'Today',
-                      value: '${todayFocusAsync.valueOrNull ?? 0} min',
+                      icon: Icons.calendar_today_rounded, label: 'Focus',
+                      value: '${snapshot?.focusMinutes ?? 0} min',
                       color: Palette.accentViolet,
                           dark: dark, index: 3,
                     ),
@@ -154,7 +146,7 @@ class AnalyticsScreen extends ConsumerWidget {
                 'Study by Subject',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: Palette.textPrimary,
                 ),
               ),
@@ -291,7 +283,7 @@ class AnalyticsScreen extends ConsumerWidget {
 }
 
 class _StatTile extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String label;
   final String value;
   final Color color;
@@ -313,13 +305,13 @@ class _StatTile extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       child: Column(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          Icon(icon, size: 24, color: color),
           const SizedBox(height: 6),
           Text(
             value,
             style: TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
               color: color,
             ),
           ),
@@ -378,7 +370,7 @@ class _XpHistorySection extends ConsumerWidget {
               'XP History (7 days)',
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: Palette.textPrimary,
               ),
             ),

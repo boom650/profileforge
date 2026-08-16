@@ -40,14 +40,14 @@ class PfChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? chipColor.withValues(alpha: 0.12)
-              : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+              : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
           borderRadius: BorderRadius.circular(_getBorderRadius()),
           border: Border.all(
             color: selected
                 ? chipColor.withValues(alpha: 0.3)
                 : (dark
                     ? Palette.border.withValues(alpha: 0.3)
-                    : const Color(0xFFE2E8F0)),
+                    : const Color(0xFFEDE3D6)),
           ),
         ),
         child: Row(
@@ -63,7 +63,7 @@ class PfChip extends StatelessWidget {
             ],
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: _getFontSize(),
                 fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                 color: selected
@@ -221,7 +221,7 @@ class PfTag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.nunito(
           fontSize: _getFontSize(),
           fontWeight: FontWeight.w600,
           color: tagTextColor,

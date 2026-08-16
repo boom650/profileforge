@@ -84,8 +84,8 @@ class _AppBottomSheet extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: dark
                       ? Palette.textTertiary.withValues(alpha: 0.3)
-                      : const Color(0xFFCBD5E1),
-                  borderRadius: BorderRadius.circular(2),
+                      : Palette.line,
+                  borderRadius: BorderRadius.circular(9999),
                 ),
               ),
             ),
@@ -99,7 +99,7 @@ class _AppBottomSheet extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title!,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -112,8 +112,8 @@ class _AppBottomSheet extends StatelessWidget {
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(8),
+                        color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                        borderRadius: BorderRadius.circular(9999),
                       ),
                       child: Icon(
                         Icons.close,
@@ -168,7 +168,7 @@ Future<bool> showConfirmationBottomSheet({
         ],
         Text(
           message,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             color: isDark(context) ? Palette.textSecondary : Palette.textTertiary,
             height: 1.5,
@@ -184,8 +184,8 @@ Future<bool> showConfirmationBottomSheet({
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: BoxDecoration(
-                    color: isDark(context) ? Palette.surface2 : const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(12),
+                    color: isDark(context) ? Palette.surface2 : const Color(0xFFF4ECE1),
+                    borderRadius: BorderRadius.circular(9999),
                   ),
                   child: Center(
                     child: Text(
@@ -211,7 +211,7 @@ Future<bool> showConfirmationBottomSheet({
                         ? null
                         : Palette.gradientPrimary,
                     color: confirmColor == Palette.error ? confirmColor : null,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(9999),
                   ),
                   child: Center(
                     child: Text(
@@ -261,7 +261,7 @@ Future<T?> showSelectionBottomSheet<T>({
                 bottom: BorderSide(
                   color: isDark(context)
                       ? Palette.border.withValues(alpha: 0.3)
-                      : const Color(0xFFE2E8F0),
+                      : const Color(0xFFEDE3D6),
                 ),
               ),
             ),

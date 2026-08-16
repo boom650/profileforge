@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:profileforge/features/xp/application/xp_providers.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
-import 'package:profileforge/features/timer/application/timer_providers.dart';
-import 'package:profileforge/features/quests/application/quest_providers.dart';
-import 'package:profileforge/features/achievements/application/achievement_providers.dart';
+import 'package:profileforge/features/summary/application/weekly_summary_providers.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 class WeeklySummaryScreen extends ConsumerWidget {
   final String profileId;
@@ -14,22 +11,14 @@ class WeeklySummaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final weeklyXpAsync = ref.watch(weeklyXpProvider(profileId));
-    final totalXpAsync = ref.watch(totalXpProvider(profileId));
-    final streakAsync = ref.watch(streakProvider(profileId));
-    final focusMinAsync = ref.watch(totalFocusMinutesProvider(profileId));
-    final sessionsAsync = ref.watch(focusSessionCountProvider(profileId));
-    final achCountAsync = ref.watch(achievementCountProvider(profileId));
+    final summaryAsync = ref.watch(weeklySummaryProvider(profileId));
+    final summary = summaryAsync.valueOrNull;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Weekly Summary'), centerTitle: true),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(weeklyXpProvider(profileId));
-          ref.invalidate(totalXpProvider(profileId));
-          ref.invalidate(totalFocusMinutesProvider(profileId));
-          ref.invalidate(focusSessionCountProvider(profileId));
-          ref.invalidate(achievementCountProvider(profileId));
+          ref.invalidate(weeklySummaryProvider(profileId));
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -46,7 +35,8 @@ class WeeklySummaryScreen extends ConsumerWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text('📊', style: TextStyle(fontSize: 48)),
+                    const Icon(Icons.insights_rounded,
+                        size: 48, color: Colors.white),
                     const SizedBox(height: 8),
                     Text('Your Week in Review', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: Colors.white)),
                     const SizedBox(height: 4),
@@ -65,25 +55,25 @@ class WeeklySummaryScreen extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          _StatItem(icon: '⭐', value: weeklyXpAsync.valueOrNull?.toString() ?? '0', label: 'XP This Week', color: Colors.amber),
+                          _StatItem(icon: Icons.star_rounded, value: summary?.weeklyXp.toString() ?? '0', label: 'XP This Week', color: Palette.warning),
                           const SizedBox(width: 16),
-                          _StatItem(icon: '🔥', value: '${streakAsync.valueOrNull?.current ?? 0}', label: 'Day Streak', color: Colors.orange),
+                          _StatItem(icon: Icons.local_fire_department_rounded, value: '${summary?.dayStreak ?? 0}', label: 'Day Streak', color: Palette.accent),
                         ],
                       ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          _StatItem(icon: '⌛', value: '${focusMinAsync.valueOrNull ?? 0}m', label: 'Focus Time', color: Colors.purple),
+                          _StatItem(icon: Icons.timer_outlined, value: '${summary?.focusMinutes ?? 0}m', label: 'Focus Time', color: Palette.accentViolet),
                           const SizedBox(width: 16),
-                          _StatItem(icon: '🎯', value: '${sessionsAsync.valueOrNull ?? 0}', label: 'Sessions Done', color: Colors.blue),
+                          _StatItem(icon: Icons.flag_rounded, value: '${summary?.focusSessions ?? 0}', label: 'Sessions Done', color: Palette.accentBlue),
                         ],
                       ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          _StatItem(icon: '🏆', value: '${achCountAsync.valueOrNull ?? 0}', label: 'Badges Earned', color: Colors.green),
+                          _StatItem(icon: Icons.emoji_events_rounded, value: '${summary?.badges ?? 0}', label: 'Badges Earned', color: Palette.success),
                           const SizedBox(width: 16),
-                          _StatItem(icon: '📈', value: '${totalXpAsync.valueOrNull ?? 0}', label: 'Total XP', color: Colors.teal),
+                          _StatItem(icon: Icons.trending_up_rounded, value: '${summary?.totalXp ?? 0}', label: 'Total XP', color: Palette.accentTeal),
                         ],
                       ),
                     ],
@@ -102,7 +92,8 @@ class WeeklySummaryScreen extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    const Text('💪', style: TextStyle(fontSize: 32)),
+                    const Icon(Icons.fitness_center_rounded,
+                        size: 32, color: Palette.primary),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -145,7 +136,7 @@ class WeeklySummaryScreen extends ConsumerWidget {
 }
 
 class _StatItem extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String value;
   final String label;
   final Color color;
@@ -157,7 +148,7 @@ class _StatItem extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          Icon(icon, size: 24, color: color),
           const SizedBox(height: 4),
           Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: color)),
           Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),

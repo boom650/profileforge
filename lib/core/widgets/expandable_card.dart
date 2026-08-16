@@ -172,7 +172,7 @@ class ExpandableFAQ extends StatelessWidget {
           margin: margin,
           header: Text(
             item.question,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: isDark(context)
@@ -182,7 +182,7 @@ class ExpandableFAQ extends StatelessWidget {
           ),
           body: Text(
             item.answer,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 14,
               color: isDark(context)
                   ? Palette.textSecondary

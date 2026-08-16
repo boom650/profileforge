@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/core/rate_app/rate_app_service.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
@@ -79,8 +78,8 @@ class AchievementsScreen extends ConsumerWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -98,7 +97,7 @@ class AchievementsScreen extends ConsumerWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -196,7 +195,7 @@ class AchievementsScreen extends ConsumerWidget {
           value,
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
         ),
@@ -256,7 +255,7 @@ class AchievementsScreen extends ConsumerWidget {
                 : Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
           ),
           child: Row(
@@ -352,12 +351,12 @@ class AchievementsScreen extends ConsumerWidget {
               ? badge.color.withValues(alpha: 0.08)
               : dark
                   ? Palette.surface2.withValues(alpha: 0.3)
-                  : const Color(0xFFF1F5F9).withValues(alpha: 0.5),
+                  : const Color(0xFFF4ECE1).withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: badge.unlocked
                 ? badge.color.withValues(alpha: 0.3)
-                : (dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0)),
+                : (dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFEDE3D6)),
           ),
         ),
         child: Column(
@@ -423,7 +422,7 @@ class AchievementsScreen extends ConsumerWidget {
                 : Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
           ),
           child: Column(
@@ -456,7 +455,7 @@ class AchievementsScreen extends ConsumerWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 6,
-                  backgroundColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+                  backgroundColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
                   valueColor: AlwaysStoppedAnimation(milestone.color),
                 ),
               ),

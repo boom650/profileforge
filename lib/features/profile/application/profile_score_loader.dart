@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/scoring/profile_scoring.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/onboarding/domain/onboarding_models.dart';

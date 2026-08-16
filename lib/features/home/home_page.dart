@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/core/widgets/motion_kit.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 import 'package:profileforge/features/leagues/application/league_providers.dart';
 import 'package:profileforge/features/leagues/domain/league_definitions.dart';
 import 'package:profileforge/features/missions/application/mission_providers.dart';
@@ -22,7 +24,7 @@ import 'package:profileforge/core/ai/ai_recommendation_service.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
-/// HomePage v2 — Premium Lusion-inspired layout.
+/// HomePage v2 — Premium Warm Bloom layout.
 /// Clean hierarchy: header → hero → daily focus → missions → progress → league.
 /// ────────────────────────────────────────────────────────────────────────────
 class HomePage extends ConsumerWidget {
@@ -61,15 +63,13 @@ class HomePage extends ConsumerWidget {
     });
 
     if (isLoading && totalXp == 0) {
-      return Scaffold(
-        bottomNavigationBar: _BottomNav(context, '/home'),
-        body: const Center(child: CircularProgressIndicator()),
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
-      bottomNavigationBar: _BottomNav(context, '/home'),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -79,26 +79,12 @@ class HomePage extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: Row(
                   children: [
-                    // Avatar.
+                    // Percy the platypus buddy.
                     GestureDetector(
                       onTap: () => context.push('/profile'),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          gradient: Palette.gradientPrimary,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'U',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
+                      child: const Percy(
+                        size: 46,
+                        semanticLabel: 'Percy the platypus, your buddy',
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -107,7 +93,7 @@ class HomePage extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hi $userName 👋',
+                            'Hi $userName',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -147,7 +133,7 @@ class HomePage extends ConsumerWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+                    colors: [Palette.primary, Palette.accent],
                   ),
                   child: Row(
                     children: [
@@ -223,10 +209,10 @@ class HomePage extends ConsumerWidget {
                           children: [
                             Text(
                               _levelTitle(level),
-                              style: const TextStyle(
+                              style: GoogleFonts.fredoka(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -240,7 +226,7 @@ class HomePage extends ConsumerWidget {
                             const SizedBox(height: 10),
                             // XP progress bar.
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(9999),
                               child: LinearProgressIndicator(
                                 value: xpInLevel / 100,
                                 minHeight: 6,
@@ -257,7 +243,7 @@ class HomePage extends ConsumerWidget {
                                   horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(9999),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -314,7 +300,8 @@ class HomePage extends ConsumerWidget {
                       ),
                       child: Row(
                         children: [
-                          const Text('🎁', style: TextStyle(fontSize: 28)),
+                          const Icon(Icons.card_giftcard_rounded,
+                              size: 28, color: Colors.white),
                           const SizedBox(width: 14),
                           Expanded(
                             child: Column(
@@ -375,7 +362,7 @@ class HomePage extends ConsumerWidget {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: _MissionCard(
-                          icon: _missionIcon(m.pillar),
+                          icon: pillarIcon(m.pillar),
                           title: m.title,
                           xpReward: m.xpReward,
                           pillar: m.pillar,
@@ -424,7 +411,7 @@ class HomePage extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   children: [
-                    Expanded(child: SectionTitle('🤖 AI Recommendations')),
+                    Expanded(child: SectionTitle('AI Recommendations')),
                     GestureDetector(
                       onTap: () => context.push('/enhanced-ai-chat'),
                       child: Container(
@@ -432,7 +419,7 @@ class HomePage extends ConsumerWidget {
                             horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           gradient: Palette.gradientPrimary,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(9999),
                         ),
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -469,7 +456,7 @@ class HomePage extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: SectionTitle('⚡ Quick Access'),
+                child: SectionTitle('Quick Access'),
               ),
             ),
             SliverToBoxAdapter(
@@ -482,7 +469,7 @@ class HomePage extends ConsumerWidget {
                         icon: Icons.psychology,
                         label: 'Personality',
                         subtitle: '5-min assessment',
-                        color: const Color(0xFF8B5CF6),
+                        color: Palette.accent,
                         onTap: () => context.push('/psychology-onboarding'),
                       ),
                     ),
@@ -572,7 +559,7 @@ class HomePage extends ConsumerWidget {
                           height: 48,
                           decoration: BoxDecoration(
                             color: tier.tierColor.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
                             child: Text(
@@ -632,27 +619,6 @@ class HomePage extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  String _missionIcon(String pillar) {
-    switch (pillar.toLowerCase()) {
-      case 'academics':
-        return '📚';
-      case 'leadership':
-        return '👥';
-      case 'research':
-        return '🔬';
-      case 'creativity':
-        return '🎨';
-      case 'community':
-        return '🤝';
-      case 'service':
-        return '❤️';
-      case 'sports':
-        return '⚽';
-      default:
-        return '🎯';
-    }
   }
 
   String _levelTitle(int level) {
@@ -722,7 +688,7 @@ class _StatBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: dark ? 0.15 : 0.1),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(9999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -752,7 +718,7 @@ class _MissionCard extends StatelessWidget {
     required this.pillar,
   });
 
-  final String icon;
+  final IconData icon;
   final String title;
   final int xpReward;
   final String pillar;
@@ -770,10 +736,10 @@ class _MissionCard extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Center(
-              child: Text(icon, style: const TextStyle(fontSize: 18)),
+              child: Icon(icon, size: 20, color: color),
             ),
           ),
           const SizedBox(width: 12),
@@ -792,7 +758,7 @@ class _MissionCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(9999),
             ),
             child: Text(
               '+$xpReward',
@@ -838,7 +804,7 @@ class _WeeklyHeatmap extends StatelessWidget {
               ? (xp >= 100 ? 1.0 : (xp >= 50 ? 0.8 : (xp >= 25 ? 0.55 : 0.3)))
               : 0.0;
           final base = intensity == 0.0
-              ? (dark ? Palette.surface3 : const Color(0xFFE2E8F0))
+              ? (dark ? Palette.surface3 : const Color(0xFFEDE3D6))
               : Palette.primary.withValues(alpha: 0.25 + intensity * 0.75);
 
           return Column(
@@ -857,7 +823,7 @@ class _WeeklyHeatmap extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: base,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(9999),
                   boxShadow: active
                       ? [
                           BoxShadow(
@@ -885,106 +851,6 @@ class _WeeklyHeatmap extends StatelessWidget {
             ],
           );
         }),
-      ),
-    );
-  }
-}
-
-/// Bottom navigation bar.
-Widget _BottomNav(BuildContext context, String current) {
-  final dark = isDark(context);
-  return Container(
-    decoration: BoxDecoration(
-      color: dark ? Palette.surface0 : Colors.white,
-      border: Border(
-        top: BorderSide(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
-          width: 1,
-        ),
-      ),
-    ),
-    child: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _NavItem(
-              icon: Icons.home_rounded,
-              label: 'Home',
-              isSelected: current == '/home',
-              onTap: () => context.go('/home'),
-            ),
-            _NavItem(
-              icon: Icons.flag_rounded,
-              label: 'Missions',
-              isSelected: current == '/missions',
-              onTap: () => context.push('/missions'),
-            ),
-            _NavItem(
-              icon: Icons.person_rounded,
-              label: 'Profile',
-              isSelected: current == '/profile',
-              onTap: () => context.push('/profile'),
-            ),
-            _NavItem(
-              icon: Icons.diamond_rounded,
-              label: 'Shop',
-              isSelected: current == '/skins',
-              onTap: () => context.push('/skins'),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-/// Bottom nav item.
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = isDark(context);
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 64,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? Palette.primary
-                  : (dark ? Palette.textTertiary : Palette.textTertiary),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected
-                    ? Palette.primary
-                    : (dark ? Palette.textTertiary : Palette.textTertiary),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -1100,7 +966,7 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                 backgroundColor: Palette.primary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(9999),
                 ),
               ),
             ),
@@ -1174,7 +1040,7 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: Palette.gradientPrimary,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.auto_awesome,
                     size: 18, color: Colors.white),
@@ -1228,10 +1094,10 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(12),
+                      color: dark ? Palette.surface2 : Palette.cream,
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                        color: dark ? Palette.border : const Color(0xFFEDE3D6),
                       ),
                     ),
                     child: Row(
@@ -1243,7 +1109,7 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                           decoration: BoxDecoration(
                             color: _categoryColor(task.category)
                                 .withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(9999),
                           ),
                           child: Text(
                             task.priorityLabel,
@@ -1289,7 +1155,7 @@ class _AIRecommendationsState extends ConsumerState<_AIRecommendations> {
                                   horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: Palette.primary.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(9999),
                               ),
                               child: Text(
                                 '${task.xp} XP',
@@ -1365,11 +1231,11 @@ class _QuickAccessCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: dark ? Palette.surface1.withValues(alpha: 0.6) : Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: dark
                 ? Palette.border.withValues(alpha: 0.4)
-                : const Color(0xFFE2E8F0),
+                : const Color(0xFFEDE3D6),
           ),
           boxShadow: [
             BoxShadow(
@@ -1387,7 +1253,7 @@ class _QuickAccessCard extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(icon, size: 20, color: color),
             ),

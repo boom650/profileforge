@@ -60,7 +60,7 @@ class OnboardingProgressTracker extends StatelessWidget {
                             : isUpcoming
                                 ? (dark
                                     ? Palette.surface2
-                                    : const Color(0xFFE2E8F0))
+                                    : const Color(0xFFEDE3D6))
                                 : progressColor,
                         borderRadius: BorderRadius.circular(height / 2),
                         boxShadow: isCurrent
@@ -108,7 +108,7 @@ class OnboardingProgressTracker extends StatelessWidget {
                             ? Border.all(
                                 color: dark
                                     ? Palette.surface2
-                                    : const Color(0xFFE2E8F0),
+                                    : const Color(0xFFEDE3D6),
                               )
                             : null,
                       ),
@@ -197,7 +197,7 @@ class CircularStepProgress extends StatelessWidget {
                           ? Palette.primary.withValues(alpha: 0.12)
                           : (dark
                               ? Palette.surface2
-                              : const Color(0xFFF1F5F9)),
+                              : const Color(0xFFF4ECE1)),
                   shape: BoxShape.circle,
                   border: isCurrent
                       ? Border.all(color: Palette.primary, width: 2)
@@ -230,7 +230,7 @@ class CircularStepProgress extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 4),
                   color: isCompleted
                       ? Palette.primary
-                      : (dark ? Palette.surface2 : const Color(0xFFE2E8F0)),
+                      : (dark ? Palette.surface2 : const Color(0xFFEDE3D6)),
                 ),
             ],
           ),
@@ -260,15 +260,15 @@ class AnimatedStepCounter extends StatelessWidget {
       children: [
         Text(
           '$current',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: Palette.primary,
           ),
         ),
         Text(
           ' / $total',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: dark ? Palette.textTertiary : Palette.textSecondary,

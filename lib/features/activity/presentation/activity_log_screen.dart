@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/application/session_provider.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/activity/application/activity_providers.dart';
+import 'package:profileforge/features/activity/domain/activity_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ActivityLogScreen — Timeline view of all user activities.
@@ -26,46 +25,12 @@ class ActivityLogScreen extends ConsumerStatefulWidget {
 class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
   ActivityType? _filter;
 
-  /// REAL activity stream — the XP ledger is the single source of truth.
-  /// Every XP event (mission, quest, focus session, login) becomes an
-  /// activity entry. Nothing is fabricated.
-  List<_Activity> _activitiesFromEvents(List<XpEventRow> events) {
-    return events.map((e) {
-      final (type, icon, color) = switch (e.source) {
-        'mission' => (ActivityType.scoreUpdate, Icons.task_alt, Palette.primary),
-        'quest' => (ActivityType.scoreUpdate, Icons.flag, Palette.success),
-        'focus' => (ActivityType.aiChat, Icons.timer, Palette.info),
-        'login' => (ActivityType.system, Icons.login, Palette.textTertiary),
-        _ => (ActivityType.system, Icons.bolt, Palette.textTertiary),
-      };
-      return _Activity(
-        type: type,
-        title: _titleFor(e.source),
-        description: '+${e.amount} XP · balance ${e.balanceAfter}',
-        timestamp: e.at,
-        icon: icon,
-        color: color,
-      );
-    }).toList();
-  }
-
-  String _titleFor(String source) {
-    return switch (source) {
-      'mission' => 'Mission Completed',
-      'quest' => 'Quest Completed',
-      'focus' => 'Focus Session Ended',
-      'login' => 'Daily Login',
-      _ => 'XP Earned',
-    };
-  }
-
-  List<_Activity> get _filteredActivities {
-    // Read the REAL ledger; empty history = honest empty state.
+  List<ActivityEntry> get _filteredActivities {
+    // Read the REAL ledger via the activity feed; empty history = honest
+    // empty state.
     final profileId = ref.watch(activeProfileIdProvider).valueOrNull ?? '';
-    final eventsAsync = ref.watch(xpHistoryProvider(profileId));
-    final all = eventsAsync.valueOrNull ?? const <XpEventRow>[];
-    final activities = _activitiesFromEvents(all)
-      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    final activitiesAsync = ref.watch(activityFeedProvider(profileId));
+    final activities = activitiesAsync.valueOrNull ?? const <ActivityEntry>[];
     if (_filter == null) return activities;
     return activities.where((a) => a.type == _filter).toList();
   }
@@ -76,7 +41,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     final filtered = _filteredActivities;
 
     // Group by date
-    final grouped = <String, List<_Activity>>{};
+    final grouped = <String, List<ActivityEntry>>{};
     for (final activity in filtered) {
       final key = _formatDate(activity.timestamp);
       grouped.putIfAbsent(key, () => []).add(activity);
@@ -91,8 +56,8 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -110,7 +75,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -194,7 +159,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
           decoration: BoxDecoration(
             color: isSelected
                 ? Palette.primary.withValues(alpha: 0.15)
-                : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+                : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
@@ -219,7 +184,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     );
   }
 
-  int _getGroupedItemCount(Map<String, List<_Activity>> grouped) {
+  int _getGroupedItemCount(Map<String, List<ActivityEntry>> grouped) {
     int count = 0;
     for (final entry in grouped.entries) {
       count += 1 + entry.value.length; // 1 for date header + items
@@ -227,7 +192,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     return count;
   }
 
-  Widget _buildTimelineItem(int index, Map<String, List<_Activity>> grouped, bool dark) {
+  Widget _buildTimelineItem(int index, Map<String, List<ActivityEntry>> grouped, bool dark) {
     int currentIndex = 0;
     for (final entry in grouped.entries) {
       if (currentIndex == index) {
@@ -257,7 +222,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildActivityEntry(_Activity activity, bool dark) {
+  Widget _buildActivityEntry(ActivityEntry activity, bool dark) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +245,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
                     width: 2,
                     color: dark
                         ? Palette.border.withValues(alpha: 0.3)
-                        : const Color(0xFFE2E8F0),
+                        : const Color(0xFFEDE3D6),
                   ),
                 ),
               ],
@@ -303,7 +268,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
                       : Colors.white.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                    color: dark ? Palette.border : const Color(0xFFEDE3D6),
                   ),
                 ),
                 child: Row(
@@ -399,7 +364,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     );
   }
 
-  void _showActivityDetail(_Activity activity, bool dark) {
+  void _showActivityDetail(ActivityEntry activity, bool dark) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -485,31 +450,4 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     ];
     return months[month];
   }
-}
-
-enum ActivityType {
-  scoreUpdate,
-  aiChat,
-  achievement,
-  profileEdit,
-  onboarding,
-  system,
-}
-
-class _Activity {
-  final ActivityType type;
-  final String title;
-  final String description;
-  final DateTime timestamp;
-  final IconData icon;
-  final Color color;
-
-  const _Activity({
-    required this.type,
-    required this.title,
-    required this.description,
-    required this.timestamp,
-    required this.icon,
-    required this.color,
-  });
 }

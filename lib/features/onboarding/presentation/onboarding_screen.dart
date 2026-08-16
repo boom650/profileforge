@@ -69,7 +69,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   // Step 3.5: Grades (subject → grade).
   final Map<String, String> _grades = {};
-  final Map<String, String> _gradeInput = {};
 
   // Step 3.6: Activities (extracurriculars).
   final List<String> _activities = [];
@@ -269,7 +268,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    final progress = (_step + 1) / _total;
 
     return Scaffold(
       body: Container(
@@ -280,8 +278,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -300,7 +298,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+                            color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(Icons.arrow_back_ios_new, size: 16),
@@ -501,14 +499,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     ? Palette.primary
                     : dark
                         ? Palette.surface2
-                        : const Color(0xFFF1F5F9),
+                        : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: selected
                       ? Palette.primary
                       : dark
                           ? Palette.border
-                          : const Color(0xFFE2E8F0),
+                          : const Color(0xFFEDE3D6),
                 ),
               ),
               child: Text(
@@ -562,14 +560,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ? Palette.primary
                         : dark
                             ? Palette.surface2
-                            : const Color(0xFFF1F5F9),
+                            : const Color(0xFFF4ECE1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: selected
                           ? Palette.primary
                           : dark
                               ? Palette.border
-                              : const Color(0xFFE2E8F0),
+                              : const Color(0xFFEDE3D6),
                     ),
                   ),
                   child: Text(
@@ -597,7 +595,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             decoration: InputDecoration(
               hintText: 'Why this school? One sentence…',
               filled: true,
-              fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+              fillColor: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide.none,
@@ -701,14 +699,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ? Palette.primary
                         : dark
                             ? Palette.surface2
-                            : const Color(0xFFF1F5F9),
+                            : const Color(0xFFF4ECE1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: selected
                           ? Palette.primary
                           : dark
                               ? Palette.border
-                              : const Color(0xFFE2E8F0),
+                              : const Color(0xFFEDE3D6),
                     ),
                   ),
                   child: Text(
@@ -803,7 +801,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: selected ? Palette.primary : dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                      color: selected ? Palette.primary : dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: selected ? Palette.primary : Colors.transparent,
@@ -857,14 +855,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ? Palette.primary
                         : dark
                             ? Palette.surface2
-                            : const Color(0xFFF1F5F9),
+                            : const Color(0xFFF4ECE1),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: selected
                           ? Palette.primary
                           : dark
                               ? Palette.border
-                              : const Color(0xFFE2E8F0),
+                              : const Color(0xFFEDE3D6),
                     ),
                   ),
                   child: Text(
@@ -903,7 +901,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...subjects.map((s) {
-            final grade = _grades[s] ?? '';
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
@@ -1272,7 +1269,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 child: SliderTheme(
                   data: SliderThemeData(
                     activeTrackColor: Palette.primary,
-                    inactiveTrackColor: dark ? Palette.surface3 : const Color(0xFFE2E8F0),
+                    inactiveTrackColor: dark ? Palette.surface3 : const Color(0xFFEDE3D6),
                     thumbColor: Palette.primary,
                     overlayColor: Palette.primary.withValues(alpha: 0.1),
                     trackHeight: 6,
@@ -1387,7 +1384,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Text(
               "You're all set!",
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                   ),
             ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
 
@@ -1412,7 +1409,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 color: dark ? Palette.surface1 : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                  color: dark ? Palette.border : const Color(0xFFEDE3D6),
                 ),
               ),
               child: Column(
@@ -1569,7 +1566,7 @@ class _GoalCard extends StatelessWidget {
                   : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? Palette.primary : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+            color: isSelected ? Palette.primary : (dark ? Palette.border : const Color(0xFFEDE3D6)),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -1579,7 +1576,7 @@ class _GoalCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: isSelected ? Palette.primary : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+                color: isSelected ? Palette.primary : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -1650,7 +1647,7 @@ class _PeakChip extends StatelessWidget {
           duration: 200.ms,
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: isSelected ? Palette.primary : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+            color: isSelected ? Palette.primary : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? Palette.primary : Colors.transparent,
@@ -1736,7 +1733,7 @@ class _Chip extends StatelessWidget {
       decoration: BoxDecoration(
         color: selected
             ? Palette.primary
-            : (dark ? Palette.surface2 : const Color(0xFFF1F5F9)),
+            : (dark ? Palette.surface2 : const Color(0xFFF4ECE1)),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: selected ? Palette.primary : Colors.transparent,
@@ -1765,7 +1762,6 @@ class _IconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = isDark(context);
     return Material(
       color: Palette.primary.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -1795,9 +1791,9 @@ class _AchievementTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
+        color: dark ? Palette.surface2 : Palette.cream,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+        border: Border.all(color: dark ? Palette.border : const Color(0xFFEDE3D6)),
       ),
       child: Row(
         children: [

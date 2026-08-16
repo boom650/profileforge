@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/core/accessibility/accessibility_utils.dart';
+import 'package:profileforge/core/audio/sound_service.dart';
+import 'package:profileforge/core/localization/app_localizations.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 import 'package:profileforge/features/achievements/application/achievement_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
 import 'package:profileforge/features/streak/domain/streak_state.dart';
@@ -34,11 +39,25 @@ class _StreakCardBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return MergeSemantics(
       child: Semantics(
         label: 'Current streak ${state.current} days, longest ${state.longest}',
-        child: Card(
-          elevation: 2,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: dark
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Palette.surface1, Palette.surface2],
+                  )
+                : Palette.gradientCard,
+            borderRadius: Clay.card,
+            boxShadow: [
+              dark ? Palette.clayShadowDark : Palette.clayShadow,
+              Palette.clayHighlight,
+            ],
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -46,31 +65,41 @@ class _StreakCardBody extends ConsumerWidget {
               children: [
                 Row(
                   children: [
+                    const Percy(size: 44, semanticLabel: 'Percy the platypus'),
+                    const SizedBox(width: 8),
                     Tooltip(
                       message: 'Your streak is burning bright',
                       child: const Icon(Icons.local_fire_department,
-                              color: Colors.orange, size: 32)
-                          .animate(onPlay: (c) => c.repeat())
-                          .shake(duration: 1200.ms),
+                              color: Palette.warning, size: 30)
+                          .animate(
+                        onPlay: (c) {
+                          if (!ReduceMotion.isReduceMotion(context)) {
+                            c.repeat();
+                          }
+                        },
+                      ).shake(duration: 1200.ms),
                     ),
                     const SizedBox(width: 8),
                     Text(state.current.toString(),
                         semanticsLabel: '${state.current} days',
                         style: theme.textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold)),
+                            ?.copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(width: 6),
-                    const Text('day streak', style: TextStyle(color: Colors.grey)),
+                    Text(AppLocalizations.of(context).streak,
+                        style: TextStyle(color: Palette.inkSoft)),
                     const Spacer(),
                     _RecoveryChips(state: state),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text('Longest: ${state.longest}', style: theme.textTheme.bodySmall),
+                Text('Longest: ${state.longest}',
+                    style: theme.textTheme.bodySmall),
                 const SizedBox(height: 12),
                 FilledButton.icon(
                   icon: const Icon(Icons.check_circle),
-                  label: const Text('Mark today done'),
+                  label: Text(AppLocalizations.of(context).markToday),
                   onPressed: () async {
+                    SoundService.instance.streak();
                     final event = await ref
                         .read(streakProvider(profileId).notifier)
                         .recordToday();
@@ -110,15 +139,14 @@ class _RecoveryChips extends StatelessWidget {
       children: [
         _chip(Icons.ac_unit, '${state.freezeTokens}', 'Freeze tokens',
             'Skip a day without breaking your streak'),
-        _chip(Icons.auto_awesome, '${state.weekendAmulets}', 'Weekend amulets',
-            'Protect weekend streaks'),
         _chip(Icons.forum, '${state.graceDaysUsed}', 'Grace days used',
             'Late-day grace already used'),
       ],
     );
   }
 
-  Widget _chip(IconData icon, String n, String label, String tooltip) => Tooltip(
+  Widget _chip(IconData icon, String n, String label, String tooltip) =>
+      Tooltip(
         message: tooltip,
         child: Semantics(
           label: '$label: $n',

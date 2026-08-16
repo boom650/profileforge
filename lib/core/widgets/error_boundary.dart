@@ -25,7 +25,6 @@ class AppErrorBoundary extends StatefulWidget {
 
 class _AppErrorBoundaryState extends State<AppErrorBoundary> {
   Object? _error;
-  StackTrace? _stackTrace;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +47,8 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -78,7 +77,7 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
                   // Title
                   Text(
                     'Something went wrong',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -90,7 +89,7 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
                   // Description
                   Text(
                     'An unexpected error occurred. Don\'t worry — this has been reported and we\'re working on fixing it.',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 14,
                       color: dark ? Palette.textSecondary : Palette.textTertiary,
                       height: 1.5,
@@ -110,13 +109,13 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
                         backgroundColor: Palette.primary,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(9999),
                         ),
                         elevation: 0,
                       ),
                       child: Text(
                         'Try Again',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
@@ -132,10 +131,10 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
                       decoration: BoxDecoration(
                         color: dark
                             ? Palette.surface2.withValues(alpha: 0.5)
-                            : const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(8),
+                            : Palette.cream,
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                          color: dark ? Palette.border : const Color(0xFFEDE3D6),
                         ),
                       ),
                       child: SelectableText(
@@ -158,7 +157,6 @@ class _AppErrorBoundaryState extends State<AppErrorBoundary> {
   void _retry() {
     setState(() {
       _error = null;
-      _stackTrace = null;
     });
   }
 }
@@ -182,7 +180,7 @@ class InlineErrorWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Palette.error.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Palette.error.withValues(alpha: 0.2),
         ),
@@ -198,7 +196,7 @@ class InlineErrorWidget extends StatelessWidget {
           Expanded(
             child: Text(
               message ?? 'Something went wrong',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 13,
                 color: dark ? Palette.textSecondary : Palette.textTertiary,
               ),
@@ -209,7 +207,7 @@ class InlineErrorWidget extends StatelessWidget {
               onPressed: onRetry,
               child: Text(
                 'Retry',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Palette.primary,

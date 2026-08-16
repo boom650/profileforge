@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -101,8 +100,8 @@ class _FeedbackButton extends StatelessWidget {
               ? color.withValues(alpha: 0.15)
               : dark
                   ? Palette.surface2.withValues(alpha: 0.5)
-                  : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(8),
+                  : const Color(0xFFF4ECE1),
+          borderRadius: BorderRadius.circular(9999),
           border: Border.all(
             color: isActive
                 ? color.withValues(alpha: 0.3)
@@ -145,7 +144,7 @@ class CopyButton extends StatelessWidget {
             content: Text('Copied to clipboard'),
             backgroundColor: Palette.success,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             duration: const Duration(seconds: 1),
           ),
         );
@@ -154,8 +153,8 @@ class CopyButton extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2.withValues(alpha: 0.5) : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(8),
+          color: dark ? Palette.surface2.withValues(alpha: 0.5) : const Color(0xFFF4ECE1),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Icon(
           Icons.copy,
@@ -191,7 +190,7 @@ class ShareButton extends StatelessWidget {
             content: Text('Share feature coming soon'),
             backgroundColor: Palette.info,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         );
       },
@@ -199,8 +198,8 @@ class ShareButton extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: dark ? Palette.surface2.withValues(alpha: 0.5) : const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(8),
+          color: dark ? Palette.surface2.withValues(alpha: 0.5) : const Color(0xFFF4ECE1),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Icon(
           Icons.share,

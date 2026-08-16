@@ -4,46 +4,58 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
-/// ProfileForge v2 — Lusion-inspired premium dark identity.
-/// Deep blue-black surfaces, electric blue + violet accents, glassmorphism.
-/// Kills the Duolingo green clone. This is a premium admission tool.
+/// ProfileForge v3 — "Warm Bloom" identity.
+/// Warm poppy clay canvas: cream not white, berry-amber accents, cosy surfaces,
+/// Fredoka display + Nunito body. See DESIGN.md for the full token spec.
 /// ────────────────────────────────────────────────────────────────────────────
 
-/// Brand palette — Lusion-inspired.
+/// Brand palette — Warm Bloom. All legacy alias names are preserved so
+/// existing screens keep compiling against the new warm values.
 class Palette {
   const Palette._();
 
-  // Core brand — electric blue family.
-  static const primary = Color(0xFF3B82F6);       // Electric blue
-  static const primaryLight = Color(0xFF60A5FA);   // Lighter blue
-  static const primaryDark = Color(0xFF2563EB);    // Deeper blue
-  static const primaryGlow = Color(0x403B82F6);    // Blue glow (25% opacity)
+  // Core brand — poppy berry.
+  static const primary = Color(0xFFE85D3D);       // Poppy berry
+  static const primaryLight = Color(0xFFF07A5C);  // Lighter berry
+  static const primaryDark = Color(0xFFC2421F);   // Deeper berry
+  static const primaryGlow = Color(0x33E85D3D);   // Berry glow (20%)
 
-  // Accent — violet family.
-  static const accent = Color(0xFF8B5CF6);         // Violet
-  static const accentLight = Color(0xFFA78BFA);    // Light violet
-  static const accentGlow = Color(0x408B5CF6);     // Violet glow
+  // Accent — warm amber (streaks, rewards).
+  static const accent = Color(0xFFF2A03D);        // Warm amber
+  static const accentLight = Color(0xFFF7B861);   // Lighter amber
+  static const accentGlow = Color(0x33F2A03D);    // Amber glow
 
-  // Semantic colors.
-  static const success = Color(0xFF10B981);        // Emerald
-  static const warning = Color(0xFFF59E0B);        // Gold/Amber
-  static const error = Color(0xFFEF4444);          // Red
-  static const info = Color(0xFF06B6D4);           // Cyan
+  // Semantic colors (quarantined to their meaning).
+  static const success = Color(0xFF4FA36B);       // Habit sage
+  static const warning = Color(0xFFF2A03D);       // Warm amber
+  static const error = Color(0xFFD64545);         // Tomato
+  static const info = Color(0xFF4C9BD6);          // Warm sky
 
-  // Surfaces — Linear-inspired dark with blue tint (never pure black).
-  static const black = Color(0xFF0A0A0B);          // Near-black (Linear-style)
-  static const surface0 = Color(0xFF0F1629);       // Deepest surface
-  static const surface1 = Color(0xFF151D33);       // Card surface
-  static const surface2 = Color(0xFF1C2541);       // Elevated surface
-  static const surface3 = Color(0xFF243052);       // Highest elevation
-  static const border = Color(0xFF1E293B);         // Subtle border
-  static const borderLight = Color(0xFF334155);    // Lighter border
+  // Surfaces — warm espresso ladder (dark mode), never blue-black.
+  static const black = Color(0xFF241813);         // Warm near-black
+  static const surface0 = Color(0xFF2B1D17);      // Deepest surface
+  static const surface1 = Color(0xFF35231B);      // Card surface
+  static const surface2 = Color(0xFF3F2A20);      // Elevated surface
+  static const surface3 = Color(0xFF4A3226);      // Highest elevation
+  static const border = Color(0xFF3F2A20);        // Subtle border
+  static const borderLight = Color(0xFF5C4637);   // Lighter border
 
-  // Text — high contrast on dark.
-  static const textPrimary = Color(0xFFF8FAFC);    // Almost white
-  static const textSecondary = Color(0xFF94A3B8);  // Muted
-  static const textTertiary = Color(0xFF64748B);   // Dimmer
-  static const textInverse = Color(0xFF0F172A);    // Dark on light
+  // Warm-light surfaces (light mode hero).
+  static const cream = Color(0xFFFDF8F0);         // Canvas — never pure white
+  static const creamCard = Color(0xFFFFFDF9);     // Cards, sheets, inputs
+  static const creamDeep = Color(0xFFF6EDDF);     // Nested / pressed surfaces
+  static const line = Color(0xFFEAD9C6);          // Warm hairline border
+
+  // Text — dark mode (warm off-white family).
+  static const textPrimary = Color(0xFFFFF3EA);
+  static const textSecondary = Color(0xFFD9C4B3);
+  static const textTertiary = Color(0xFFA89487);
+  static const textInverse = Color(0xFF2E1F1B);   // Warm ink on light
+
+  // Text — light mode (warm ink family).
+  static const ink = Color(0xFF2E1F1B);
+  static const inkSoft = Color(0xFF7A6A5F);
+  static const inkFaint = Color(0xFFA89487);
 
   // Gradient presets.
   static const gradientPrimary = LinearGradient(
@@ -58,136 +70,197 @@ class Palette {
     colors: [surface0, black],
   );
 
-  // ── Backward-compatible aliases (old Duolingo-green references) ──
-  // These map the old green/blue/red/yellow/purple/orange Palette names
-  // to the new Lusion-inspired palette so existing screens compile.
-  static const green = Color(0xFF22C55E);   // Success green
-  static const blue = primary;               // Electric blue
-  static const red = Color(0xFFEF4444);     // Error red
-  static const yellow = Color(0xFFFACC15);  // Warning gold
-  static const purple = accent;              // Violet accent
-  static const orange = Color(0xFFF97316);  // Orange
+  // ── Backward-compatible aliases (legacy screen references) ──
+  static const green = Color(0xFF4FA36B);   // Habit sage
+  static const blue = primary;               // Berry primary
+  static const red = Color(0xFFD64545);     // Tomato
+  static const yellow = Color(0xFFF2A03D);  // Warm amber
+  static const purple = accent;              // Amber accent
+  static const orange = Color(0xFFE85D3D);  // Berry
   static const gray = Palette.textSecondary;
-  static const pink = Color(0xFFEC4899);     // Pink
-  static const ink = Color(0xFF1E293B);       // Dark ink
-  static const inkSurface = Color(0xFF334155); // Ink surface
-  static const inkSurface2 = Color(0xFF475569); // Ink surface 2
+  static const pink = Color(0xFFE8719E);     // Poppy pink
+  static const inkSurface = Color(0xFF4A382C);   // Warm ink surface
+  static const inkSurface2 = Color(0xFF5C4637);  // Warm ink surface 2
 
   // Named accent colors for screen use.
-  static const accentViolet = Color(0xFF8B5CF6);
-  static const accentBlue = Color(0xFF3B82F6);
-  static const accentTeal = Color(0xFF14B8A6);
-  static const accentOrange = Color(0xFFF97316);
-  static const accentYellow = Color(0xFFFACC15);
-  static const accentPink = Color(0xFFEC4899);
-  static const accentCyan = Color(0xFF06B6D4);
+  static const accentViolet = Color(0xFF8B7CD8);
+  static const accentBlue = Color(0xFF4C9BD6);
+  static const accentTeal = Color(0xFF5FB3A0);
+  static const accentOrange = Color(0xFFE85D3D);
+  static const accentYellow = Color(0xFFF2A03D);
+  static const accentPink = Color(0xFFE8719E);
+  static const accentCyan = Color(0xFF4C9BD6);
 
-  static const textMuted = Color(0xFF64748B); // Dimmer muted text
+  static const textMuted = Color(0xFF7A6A5F); // Warm muted text
 
   static const gradientCard = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [surface1, surface2],
+    colors: [creamCard, creamDeep],
   );
 
   static const gradientGold = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFF59E0B), Color(0xFFF97316)],
+    colors: [Color(0xFFF2A03D), Color(0xFFE85D3D)],
+  );
+
+  /// Warm clay card shadow — outer soft + inner top highlight.
+  static const clayShadow = BoxShadow(
+    color: Color(0x2EE9A956), // rgba(233,169,86,.18)
+    blurRadius: 24,
+    offset: Offset(0, 8),
+  );
+
+  static const clayShadowDark = BoxShadow(
+    color: Color(0x4D000000), // heavy on dark
+    blurRadius: 24,
+    offset: Offset(0, 8),
+  );
+
+  /// Inset top highlight — the signature clay 'top lip' catch-light.
+  static const clayHighlight = BoxShadow(
+    color: Color(0x33FFFFFF), // white ~20%
+    blurRadius: 1,
+    spreadRadius: -1,
+    offset: Offset(0, -1),
   );
 }
 
-/// Pillar accent colors (missions, skins).
+/// Pillar accent colors (missions, skins) — warm-tinted.
 const Map<String, Color> kPillarColors = {
-  'academics': Color(0xFF3B82F6),   // Blue
-  'leadership': Color(0xFF10B981),  // Emerald
-  'research': Color(0xFF8B5CF6),    // Violet
-  'creativity': Color(0xFFEC4899),  // Pink
-  'community': Color(0xFFF97316),   // Orange
-  'service': Color(0xFFEF4444),     // Red
-  'sports': Color(0xFFF59E0B),      // Gold
-  'personal': Color(0xFF06B6D4),    // Cyan
-  'athletics': Color(0xFFEF4444),   // Red
-  'character': Color(0xFF3B82F6),   // Blue
-  'global': Color(0xFF8B5CF6),      // Violet
+  'academics': Color(0xFF4C9BD6),   // Berry-tinted blue
+  'leadership': Color(0xFF4FA36B),  // Sage
+  'research': Color(0xFF8B7CD8),    // Soft violet
+  'creativity': Color(0xFFE8719E),  // Poppy pink
+  'community': Color(0xFFF2A03D),   // Amber
+  'service': Color(0xFFD64545),     // Tomato
+  'sports': Color(0xFFE85D3D),      // Berry
+  'personal': Color(0xFF5FB3A0),    // Teal
+  'athletics': Color(0xFFD64545),   // Tomato
+  'character': Color(0xFF4C9BD6),   // Berry-tinted blue
+  'global': Color(0xFF8B7CD8),      // Soft violet
 };
 
-/// Rarity colors for skins / drops.
+/// Rarity colors for skins / drops — warm-tinted.
 const Map<String, Color> kRarityColors = {
-  'common': Color(0xFF64748B),     // Slate
-  'rare': Color(0xFF3B82F6),       // Blue
-  'epic': Color(0xFF8B5CF6),       // Violet
-  'legendary': Color(0xFFF59E0B),  // Gold
-  'mythic': Color(0xFFEF4444),     // Red
+  'common': Color(0xFFA89487),     // Warm taupe
+  'rare': Color(0xFF4C9BD6),       // Warm sky
+  'epic': Color(0xFF8B7CD8),       // Soft violet
+  'legendary': Color(0xFFF2A03D),  // Amber
+  'mythic': Color(0xFFE85D3D),     // Berry
 };
 
 Color pillarColor(String pillar) =>
     kPillarColors[pillar.toLowerCase()] ?? Palette.primary;
+
+/// Material icon for a mission pillar (used in place of decorative emoji).
+IconData pillarIcon(String pillar) {
+  switch (pillar.toLowerCase()) {
+    case 'academics':
+      return Icons.menu_book_rounded;
+    case 'leadership':
+      return Icons.groups_rounded;
+    case 'research':
+      return Icons.science_rounded;
+    case 'creativity':
+      return Icons.palette_rounded;
+    case 'community':
+      return Icons.volunteer_activism_rounded;
+    case 'service':
+      return Icons.favorite_rounded;
+    case 'sports':
+      return Icons.sports_soccer_rounded;
+    default:
+      return Icons.flag_rounded;
+  }
+}
 
 Color rarityColor(String rarity) =>
     kRarityColors[rarity.toLowerCase()] ?? Palette.primary;
 
 /// ── Typography ──────────────────────────────────────────────────────────────
 TextTheme _buildTextTheme(Brightness brightness) {
-  final base = GoogleFonts.interTextTheme(
+  // Display lane: Fredoka. Body lane: Nunito.
+  final fredoka = GoogleFonts.fredokaTextTheme(
     brightness == Brightness.dark
         ? ThemeData.dark().textTheme
         : ThemeData.light().textTheme,
   );
+  final base = GoogleFonts.nunitoTextTheme(fredoka);
 
   final Color textColor =
-      brightness == Brightness.dark ? Palette.textPrimary : Palette.textInverse;
-  final Color secondaryColor =
-      brightness == Brightness.dark ? Palette.textSecondary : Palette.textTertiary;
+      brightness == Brightness.dark ? Palette.textPrimary : Palette.ink;
+  final Color secondaryColor = brightness == Brightness.dark
+      ? Palette.textSecondary
+      : Palette.inkSoft;
+
+  const display = 'Fredoka';
 
   return base.copyWith(
     displayLarge: base.displayLarge?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w800,
-      letterSpacing: -1.5,
+      fontFamily: display,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.3,
       fontSize: 40,
+      height: 1.1,
     ),
     displayMedium: base.displayMedium?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w700,
-      letterSpacing: -1.0,
+      fontFamily: display,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.3,
       fontSize: 34,
+      height: 1.1,
     ),
     displaySmall: base.displaySmall?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w700,
-      letterSpacing: -0.5,
+      fontFamily: display,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.3,
       fontSize: 28,
+      height: 1.15,
     ),
     headlineLarge: base.headlineLarge?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w700,
-      letterSpacing: -0.5,
+      fontFamily: display,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.2,
       fontSize: 26,
+      height: 1.15,
     ),
     headlineMedium: base.headlineMedium?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w700,
+      fontFamily: display,
+      fontWeight: FontWeight.w600,
       fontSize: 22,
+      height: 1.2,
     ),
     headlineSmall: base.headlineSmall?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w600,
+      fontFamily: display,
+      fontWeight: FontWeight.w500,
       fontSize: 20,
+      height: 1.2,
     ),
     titleLarge: base.titleLarge?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w600,
+      fontFamily: display,
+      fontWeight: FontWeight.w500,
       fontSize: 18,
+      height: 1.2,
     ),
     titleMedium: base.titleMedium?.copyWith(
       color: textColor,
-      fontWeight: FontWeight.w600,
+      fontFamily: display,
+      fontWeight: FontWeight.w500,
       fontSize: 16,
+      height: 1.25,
     ),
     titleSmall: base.titleSmall?.copyWith(
       color: secondaryColor,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       fontSize: 14,
     ),
     bodyLarge: base.bodyLarge?.copyWith(
@@ -210,30 +283,37 @@ TextTheme _buildTextTheme(Brightness brightness) {
     ),
     labelLarge: base.labelLarge?.copyWith(
       color: textColor,
+      fontFamily: display,
       fontWeight: FontWeight.w600,
-      fontSize: 14,
-      letterSpacing: 0.5,
+      fontSize: 15,
+      letterSpacing: 0.2,
     ),
     labelMedium: base.labelMedium?.copyWith(
       color: secondaryColor,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       fontSize: 12,
     ),
     labelSmall: base.labelSmall?.copyWith(
       color: secondaryColor,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       fontSize: 11,
       letterSpacing: 0.5,
     ),
   );
 }
 
-/// ── Light Theme ─────────────────────────────────────────────────────────────
-ThemeData lightTheme() {
-  const surface = Color(0xFFF8FAFC);
-  const card = Colors.white;
-  const border = Color(0xFFE2E8F0);
+/// Clay shape — pill buttons, 24px cards, 16px nested surfaces.
+class Clay {
+  const Clay._();
 
+  static const card = BorderRadius.all(Radius.circular(24));
+  static const nested = BorderRadius.all(Radius.circular(16));
+  static const pill = BorderRadius.all(Radius.circular(9999));
+  static const field = BorderRadius.all(Radius.circular(16));
+}
+
+/// ── Light Theme (Warm Bloom hero) ─────────────────────────────────────────
+ThemeData lightTheme() {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -242,18 +322,19 @@ ThemeData lightTheme() {
       brightness: Brightness.light,
       primary: Palette.primary,
       secondary: Palette.accent,
-      surface: surface,
-      onSurface: Palette.textInverse,
+      surface: Palette.creamCard,
+      onSurface: Palette.ink,
       error: Palette.error,
+      outline: Palette.line,
     ),
-    scaffoldBackgroundColor: surface,
+    scaffoldBackgroundColor: Palette.cream,
     textTheme: _buildTextTheme(Brightness.light),
     cardTheme: CardThemeData(
       elevation: 0,
-      color: card,
+      color: Palette.creamCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: border, width: 1),
+        borderRadius: Clay.card,
+        side: const BorderSide(color: Palette.line, width: 2),
       ),
       margin: EdgeInsets.zero,
     ),
@@ -262,22 +343,22 @@ ThemeData lightTheme() {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      titleTextStyle: GoogleFonts.inter(
+      titleTextStyle: GoogleFonts.fredoka(
         fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: Palette.textInverse,
+        fontWeight: FontWeight.w600,
+        color: Palette.ink,
       ),
-      iconTheme: const IconThemeData(color: Palette.textInverse),
+      iconTheme: const IconThemeData(color: Palette.ink),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
+      backgroundColor: Palette.creamCard,
       selectedItemColor: Palette.primary,
-      unselectedItemColor: Palette.textTertiary,
+      unselectedItemColor: Palette.inkFaint,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,
       elevation: 0,
-      selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
-      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
+      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -285,11 +366,11 @@ ThemeData lightTheme() {
         foregroundColor: Colors.white,
         elevation: 0,
         shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           letterSpacing: 0.2,
         ),
       ),
@@ -298,75 +379,79 @@ ThemeData lightTheme() {
       style: FilledButton.styleFrom(
         backgroundColor: Palette.primary,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: Palette.primary,
-        side: const BorderSide(color: Palette.primary, width: 1.5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        foregroundColor: Palette.primaryDark,
+        side: const BorderSide(color: Palette.primary, width: 2),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 15,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
     chipTheme: ChipThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      side: const BorderSide(color: border),
-      backgroundColor: surface,
+      side: const BorderSide(color: Palette.line),
+      backgroundColor: Palette.creamDeep,
       selectedColor: Palette.primary,
       checkmarkColor: Colors.white,
       labelStyle: TextStyle(
-        color: Palette.textInverse,
-        fontWeight: FontWeight.w500,
+        color: Palette.ink,
+        fontWeight: FontWeight.w600,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: card,
+      fillColor: Palette.creamCard,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: border),
+        borderRadius: Clay.field,
+        borderSide: const BorderSide(color: Palette.line),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: border),
+        borderRadius: Clay.field,
+        borderSide: const BorderSide(color: Palette.line),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: Clay.field,
         borderSide: const BorderSide(color: Palette.primary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      hintStyle: GoogleFonts.inter(color: Palette.textTertiary, fontSize: 14),
+      hintStyle: GoogleFonts.nunito(color: Palette.inkFaint, fontSize: 14),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Palette.primary,
-      linearTrackColor: border,
+      linearTrackColor: Palette.line,
     ),
     dividerTheme: const DividerThemeData(
-      color: border,
+      color: Palette.line,
       thickness: 1,
       space: 0,
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: Palette.surface3,
-      contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: Palette.ink,
+      contentTextStyle: GoogleFonts.nunito(color: Palette.cream, fontSize: 14),
+      shape: const RoundedRectangleBorder(borderRadius: Clay.nested),
       behavior: SnackBarBehavior.floating,
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: Palette.creamCard,
+      shape: RoundedRectangleBorder(borderRadius: Clay.card),
     ),
   );
 }
 
-/// ── Dark Theme ──────────────────────────────────────────────────────────────
+/// ── Dark Theme (warm espresso) ─────────────────────────────────────────────
 ThemeData darkTheme() {
   return ThemeData(
     useMaterial3: true,
@@ -387,7 +472,7 @@ ThemeData darkTheme() {
       elevation: 0,
       color: Palette.surface1,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: Clay.card,
         side: const BorderSide(color: Palette.border, width: 1),
       ),
       margin: EdgeInsets.zero,
@@ -397,9 +482,9 @@ ThemeData darkTheme() {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      titleTextStyle: GoogleFonts.inter(
+      titleTextStyle: GoogleFonts.fredoka(
         fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: Palette.textPrimary,
       ),
       iconTheme: const IconThemeData(color: Palette.textPrimary),
@@ -411,8 +496,8 @@ ThemeData darkTheme() {
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,
       elevation: 0,
-      selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
-      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
+      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -420,11 +505,11 @@ ThemeData darkTheme() {
         foregroundColor: Colors.white,
         elevation: 0,
         shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           letterSpacing: 0.2,
         ),
       ),
@@ -433,28 +518,28 @@ ThemeData darkTheme() {
       style: FilledButton.styleFrom(
         backgroundColor: Palette.primary,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: Palette.primaryLight,
-        side: const BorderSide(color: Palette.primary, width: 1.5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        side: const BorderSide(color: Palette.primaryLight, width: 2),
+        shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           fontSize: 15,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
     chipTheme: ChipThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: const RoundedRectangleBorder(borderRadius: Clay.pill),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       side: const BorderSide(color: Palette.border),
       backgroundColor: Palette.surface2,
@@ -462,29 +547,29 @@ ThemeData darkTheme() {
       checkmarkColor: Colors.white,
       labelStyle: const TextStyle(
         color: Palette.textPrimary,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: Palette.surface1,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: Clay.field,
         borderSide: const BorderSide(color: Palette.border),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: Clay.field,
         borderSide: const BorderSide(color: Palette.border),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Palette.primary, width: 2),
+        borderRadius: Clay.field,
+        borderSide: const BorderSide(color: Palette.primaryLight, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      hintStyle: GoogleFonts.inter(color: Palette.textTertiary, fontSize: 14),
+      hintStyle: GoogleFonts.nunito(color: Palette.textTertiary, fontSize: 14),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Palette.primary,
+      color: Palette.primaryLight,
       linearTrackColor: Palette.surface3,
     ),
     dividerTheme: const DividerThemeData(
@@ -494,9 +579,14 @@ ThemeData darkTheme() {
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: Palette.surface3,
-      contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      contentTextStyle: GoogleFonts.nunito(
+          color: Palette.textPrimary, fontSize: 14),
+      shape: const RoundedRectangleBorder(borderRadius: Clay.nested),
       behavior: SnackBarBehavior.floating,
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: Palette.surface1,
+      shape: RoundedRectangleBorder(borderRadius: Clay.card),
     ),
   );
 }

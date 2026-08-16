@@ -13,6 +13,8 @@ import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/features/buddy/presentation/body_double_widget.dart';
 import 'package:profileforge/features/habits/application/timer_debt_listener.dart';
+import 'package:profileforge/features/habits/presentation/habit_debt_banner.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 
 class TimerScreen extends ConsumerStatefulWidget {
@@ -153,7 +155,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                             ),
                             SizedBox(width: 260, height: 260, child: CustomPaint(
                               painter: _CircleProgressPainter(progress: progress, color: timerState.isRunning
-                                  ? (timerState.isPaused ? Colors.orange : theme.colorScheme.primary)
+                                  ? (timerState.isPaused ? Palette.accent : theme.colorScheme.primary)
                                   : theme.colorScheme.primary.withValues(alpha: 0.3)),
                             )),
                             Column(
@@ -164,7 +166,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                                 ),
                                 if (timerState.label.isNotEmpty)
                                   Text(timerState.label, style: theme.textTheme.labelLarge?.copyWith(
-                                    color: timerState.isPaused ? Colors.orange : theme.colorScheme.primary)),
+                                    color: timerState.isPaused ? Palette.accent : theme.colorScheme.primary)),
                               ],
                             ),
                           ],
@@ -182,12 +184,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                     if (!timerState.isRunning && timerState.secondsRemaining == timerState.durationMinutes * 60)
                       PoppyButton(label: 'Start', icon: Icons.play_arrow_rounded, onPressed: () => notifier.start())
                     else if (timerState.isRunning && !timerState.isPaused)
-                      PoppyButton(label: 'Pause', icon: Icons.pause_rounded, color: Colors.orange, onPressed: () => notifier.pause())
+                      PoppyButton(label: 'Pause', icon: Icons.pause_rounded, color: Palette.accent, onPressed: () => notifier.pause())
                     else if (timerState.isPaused)
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         PoppyButton(label: 'Resume', icon: Icons.play_arrow_rounded, onPressed: () => notifier.resume()),
                         const SizedBox(width: 16),
-                        PoppyButton(label: 'Reset', icon: Icons.stop_rounded, color: Colors.red, onPressed: () => notifier.reset()),
+                        PoppyButton(label: 'Reset', icon: Icons.stop_rounded, color: Palette.error, onPressed: () => notifier.reset()),
                       ])
                     else
                       PoppyButton(label: 'Reset', icon: Icons.refresh_rounded, onPressed: () => notifier.reset()),
@@ -198,6 +200,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                 // Tag selector
                 _TagSelector(tags: _tags, selected: _selectedTag, onChanged: (t) => setState(() => _selectedTag = t)),
                 const SizedBox(height: 24),
+
+                // Outstanding XP debt (early stops / broken streaks)
+                HabitDebtBanner(profileId: widget.profileId),
 
                 // Recent sessions header
                 Row(children: [
@@ -294,16 +299,17 @@ class _CompletionOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(color: Colors.black54, child: Center(
+    return Material(color: Palette.ink.withValues(alpha: 0.54), child: Center(
       child: Container(
         margin: const EdgeInsets.all(32), padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(24)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Text('🎯', style: TextStyle(fontSize: 64)),
+          const Icon(Icons.check_circle_rounded,
+              size: 64, color: Palette.success),
           const SizedBox(height: 16),
-          Text('Session Complete!', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text('Session Complete!', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
-          Text('+$xp XP Earned', style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
+          Text('+$xp XP Earned', style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w600)),
           const SizedBox(height: 24),
           PoppyButton(label: 'Awesome!', onPressed: onDismiss),
         ]),

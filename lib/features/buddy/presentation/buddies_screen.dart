@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/buddy/application/buddy_providers.dart';
 
@@ -27,7 +26,6 @@ class BuddiesScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      bottomNavigationBar: appBottomNav(context, '/buddies'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -37,13 +35,13 @@ class BuddiesScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('🤝', style: TextStyle(fontSize: 32)),
+                Icon(Icons.handshake_rounded, size: 32, color: Palette.primary),
                 const SizedBox(height: 12),
                 Text(
                   'Accountability Partners',
                   style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     color: Palette.textPrimary,
                   ),
                 ),
@@ -69,7 +67,8 @@ class BuddiesScreen extends ConsumerWidget {
               border: Border.all(color: Palette.accentOrange),
               child: Row(
                 children: [
-                  Text('🔥', style: TextStyle(fontSize: 22)),
+                  Icon(Icons.local_fire_department_rounded,
+                      size: 22, color: Palette.accentOrange),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -95,7 +94,7 @@ class BuddiesScreen extends ConsumerWidget {
                 'Your Buddies',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: Palette.textPrimary,
                 ),
               ),
@@ -219,7 +218,6 @@ class BuddiesScreen extends ConsumerWidget {
 
   void _addBuddy(BuildContext context, WidgetRef ref) {
     final ctrl = TextEditingController();
-    final dark = isDark(context);
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -230,7 +228,7 @@ class BuddiesScreen extends ConsumerWidget {
         title: Text(
           'Add a buddy',
           style: TextStyle(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: Palette.textPrimary,
           ),
         ),
@@ -319,7 +317,7 @@ class _BuddyCard extends StatelessWidget {
                 initial,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   fontSize: 18,
                 ),
               ),
@@ -333,7 +331,7 @@ class _BuddyCard extends StatelessWidget {
                 Text(
                   buddyId,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     fontSize: 14,
                     color: Palette.textPrimary,
                   ),

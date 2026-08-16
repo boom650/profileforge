@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 part 'league_definitions.freezed.dart';
 
@@ -11,11 +12,11 @@ extension LeagueTierX on LeagueTier {
   String get label => tierLabel;
   Color get tierColor => switch (this) {
         LeagueTier.bronze => const Color(0xFFCD7F32),
-        LeagueTier.silver => const Color(0xFF9AA0A6),
-        LeagueTier.gold => const Color(0xFFFFC800),
-        LeagueTier.platinum => const Color(0xFF1CB0F6),
-        LeagueTier.diamond => const Color(0xFF58CC02),
-        LeagueTier.obsidian => const Color(0xFF37474F),
+        LeagueTier.silver => const Color(0xFFC9B9A4),
+        LeagueTier.gold => Palette.warning,
+        LeagueTier.platinum => const Color(0xFFEAD7AE),
+        LeagueTier.diamond => const Color(0xFFF2C1D6),
+        LeagueTier.obsidian => Palette.ink,
       };
   String get tierEmoji => switch (this) {
         LeagueTier.bronze => '🥉',
@@ -50,6 +51,12 @@ extension LeagueTierX on LeagueTier {
         LeagueTier.obsidian => LeagueTier.diamond,
       };
 }
+
+/// Resolve a persisted tier name to a [LeagueTier] (unknown → bronze).
+LeagueTier leagueTierFromName(String name) => LeagueTier.values.firstWhere(
+      (t) => t.name == name,
+      orElse: () => LeagueTier.bronze,
+    );
 
 /// Result of a weekly league resolution.
 @freezed

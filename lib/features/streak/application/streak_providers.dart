@@ -46,14 +46,6 @@ class StreakNotifier extends FamilyAsyncNotifier<StreakState, String> {
     return result.event;
   }
 
-  /// Spend a freeze token to protect the streak.
-  Future<void> spendFreeze() async {
-    final s = state.valueOrNull ?? const StreakState();
-    final next = _engine.spendFreeze(s);
-    await _repo.save(_profileId, next);
-    state = AsyncData(next);
-  }
-
   /// XP mirror for downstream consumers (leagues, skins).
   int get currentStreak => state.valueOrNull?.current ?? 0;
 }

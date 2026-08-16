@@ -136,7 +136,7 @@ class NotificationItem extends StatelessWidget {
             bottom: BorderSide(
               color: dark
                   ? Palette.border.withValues(alpha: 0.3)
-                  : const Color(0xFFF1F5F9),
+                  : const Color(0xFFF4ECE1),
             ),
           ),
         ),
@@ -150,7 +150,7 @@ class NotificationItem extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: Palette.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(icon, size: 18, color: Palette.primary),
               ),
@@ -177,7 +177,7 @@ class NotificationItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.nunito(
                             fontSize: 14,
                             fontWeight: isRead ? FontWeight.w500 : FontWeight.w600,
                             color: dark
@@ -193,7 +193,7 @@ class NotificationItem extends StatelessWidget {
                     body,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 13,
                       color: dark ? Palette.textSecondary : Palette.textTertiary,
                     ),
@@ -202,7 +202,7 @@ class NotificationItem extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       time!,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 11,
                         color: dark ? Palette.textTertiary : Palette.textSecondary,
                       ),

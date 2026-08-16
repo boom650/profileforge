@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:profileforge/features/settings/application/settings_providers.dart';
+import 'package:profileforge/features/settings/domain/settings_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// Unified Settings Screen — All app settings in one place.
@@ -29,46 +29,20 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  String _userName = '';
-  String _userEmail = '';
-  bool _notificationsEnabled = true;
-  bool _darkMode = true;
-  bool _hapticFeedback = true;
-  String _aiProvider = 'None';
-
   @override
   void initState() {
     super.initState();
-    _loadSettings();
   }
 
-  Future<void> _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _userName = prefs.getString('pf_user_name') ?? '';
-      _userEmail = prefs.getString('pf_user_email') ?? '';
-      _notificationsEnabled = prefs.getBool('pf_notifications') ?? true;
-      _darkMode = prefs.getBool('pf_dark_mode') ?? true;
-      _hapticFeedback = prefs.getBool('pf_haptic_feedback') ?? true;
-    });
-  }
-
-  Future<void> _saveSetting(String key, dynamic value) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (value is String) {
-      await prefs.setString(key, value);
-    } else if (value is bool) {
-      await prefs.setBool(key, value);
-    }
-  }
+  AppSettings get _settings =>
+      ref.watch(settingsProvider).valueOrNull ?? const AppSettings();
 
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    final mode = ref.watch(themeModeProvider);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -77,8 +51,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -101,14 +75,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         _SettingsTile(
                           icon: Icons.person,
                           title: 'Profile',
-                          subtitle: _userName.isNotEmpty ? _userName : 'Set your name',
+                          subtitle: _settings.userName.isNotEmpty ? _settings.userName : 'Set your name',
                           onTap: () => _showEditProfileSheet(dark),
                           dark: dark,
                         ),
                         _SettingsTile(
                           icon: Icons.email_outlined,
                           title: 'Email',
-                          subtitle: _userEmail.isNotEmpty ? _userEmail : 'Add email',
+                          subtitle: _settings.userEmail.isNotEmpty ? _settings.userEmail : 'Add email',
                           onTap: () => _showEditEmailSheet(dark),
                           dark: dark,
                         ),
@@ -165,22 +139,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         _SettingsSwitch(
                           icon: Icons.dark_mode,
                           title: 'Dark Mode',
-                          value: _darkMode,
+                          value: _settings.themeMode == ThemeModeOption.dark,
                           onChanged: (value) {
-                            setState(() => _darkMode = value);
-                            _saveSetting('pf_dark_mode', value);
-                            ref.read(themeModeProvider.notifier).set(
-                                value ? AppThemeMode.dark : AppThemeMode.light);
+                            // Persisted via the settings repository and
+                            // applied app-wide through the theme provider.
+                            ref
+                                .read(setThemeProvider.notifier)
+                                .execute(value
+                                    ? ThemeModeOption.dark
+                                    : ThemeModeOption.light);
                           },
                           dark: dark,
                         ),
                         _SettingsSwitch(
                           icon: Icons.vibration,
                           title: 'Haptic Feedback',
-                          value: _hapticFeedback,
+                          value: _settings.hapticFeedback,
                           onChanged: (value) {
-                            setState(() => _hapticFeedback = value);
-                            _saveSetting('pf_haptic_feedback', value);
+                            ref
+                                .read(settingsProvider.notifier)
+                                .setHapticFeedback(value);
                           },
                           dark: dark,
                         ),
@@ -198,10 +176,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         _SettingsSwitch(
                           icon: Icons.notifications,
                           title: 'Enable Notifications',
-                          value: _notificationsEnabled,
+                          value: _settings.notificationsEnabled,
                           onChanged: (value) {
-                            setState(() => _notificationsEnabled = value);
-                            _saveSetting('pf_notifications', value);
+                            ref
+                                .read(settingsProvider.notifier)
+                                .setNotificationsEnabled(value);
                           },
                           dark: dark,
                         ),
@@ -321,7 +300,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             : Colors.white.withValues(alpha: 0.9),
         border: Border(
           bottom: BorderSide(
-            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -333,7 +312,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -346,7 +325,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(width: 12),
           Text(
             'Settings',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -377,7 +356,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(width: 8),
             Text(
               title,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Palette.primary,
@@ -395,7 +374,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             border: Border.all(
               color: dark
                   ? Palette.border.withValues(alpha: 0.4)
-                  : const Color(0xFFE2E8F0),
+                  : const Color(0xFFEDE3D6),
             ),
           ),
           child: Column(
@@ -410,7 +389,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       indent: 52,
                       color: dark
                           ? Palette.border.withValues(alpha: 0.3)
-                          : const Color(0xFFF1F5F9),
+                          : const Color(0xFFF4ECE1),
                     ),
                 ],
               );
@@ -423,7 +402,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   /// ── Edit Profile Sheet ───────────────────────────────────────────────────
   void _showEditProfileSheet(bool dark) {
-    final controller = TextEditingController(text: _userName);
+    final controller = TextEditingController(text: _settings.userName);
 
     showModalBottomSheet(
       context: context,
@@ -446,7 +425,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           children: [
             Text(
               'Edit Name',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -459,14 +438,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               decoration: InputDecoration(
                 hintText: 'Your name',
                 filled: true,
-                fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                fillColor: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
               ),
             ),
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
-                await _saveSetting('pf_user_name', controller.text.trim());
-                setState(() => _userName = controller.text.trim());
+                await ref
+                    .read(settingsProvider.notifier)
+                    .setUserName(controller.text.trim());
                 if (mounted) Navigator.pop(context);
               },
               child: Container(
@@ -479,7 +459,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Center(
                   child: Text(
                     'Save',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -496,7 +476,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   /// ── Edit Email Sheet ─────────────────────────────────────────────────────
   void _showEditEmailSheet(bool dark) {
-    final controller = TextEditingController(text: _userEmail);
+    final controller = TextEditingController(text: _settings.userEmail);
 
     showModalBottomSheet(
       context: context,
@@ -519,7 +499,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           children: [
             Text(
               'Edit Email',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -532,14 +512,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               decoration: InputDecoration(
                 hintText: 'your@email.com',
                 filled: true,
-                fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                fillColor: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
               ),
             ),
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
-                await _saveSetting('pf_user_email', controller.text.trim());
-                setState(() => _userEmail = controller.text.trim());
+                await ref
+                    .read(settingsProvider.notifier)
+                    .setUserEmail(controller.text.trim());
                 if (mounted) Navigator.pop(context);
               },
               child: Container(
@@ -552,7 +533,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Center(
                   child: Text(
                     'Save',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -576,14 +557,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Clear All Data?',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
           ),
         ),
         content: Text(
           'This will remove all your profile data, settings, and AI configurations. This cannot be undone.',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             color: Palette.textSecondary,
           ),
@@ -593,13 +574,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: GoogleFonts.inter(color: Palette.textSecondary),
+              style: GoogleFonts.nunito(color: Palette.textSecondary),
             ),
           ),
           TextButton(
             onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.clear();
+              await ref.read(settingsRepositoryProvider).clearAll();
+              ref.invalidate(settingsProvider);
               if (mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -649,7 +630,7 @@ class _SettingsTile extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -665,7 +646,7 @@ class _SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -673,7 +654,7 @@ class _SettingsTile extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 12,
                       color: Palette.textTertiary,
                     ),
@@ -720,7 +701,7 @@ class _SettingsSwitch extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+              color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
@@ -733,7 +714,7 @@ class _SettingsSwitch extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: dark ? Palette.textPrimary : Palette.textInverse,

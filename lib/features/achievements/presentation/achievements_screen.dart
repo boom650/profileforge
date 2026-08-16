@@ -23,7 +23,7 @@ class AchievementsScreen extends ConsumerWidget {
     final unlockedAsync = ref.watch(unlockedAchievementIdsProvider(profileId));
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: defsAsync.when(
           data: (defs) => unlockedAsync.when(
@@ -43,7 +43,7 @@ class AchievementsScreen extends ConsumerWidget {
                           Text(
                             'Achievements',
                             style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const Spacer(),
@@ -53,7 +53,7 @@ class AchievementsScreen extends ConsumerWidget {
                               width: 36,
                               height: 36,
                               decoration: BoxDecoration(
-                                color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                                color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Icon(
@@ -81,7 +81,7 @@ class AchievementsScreen extends ConsumerWidget {
                             Text(
                               '$done / $total',
                               style: theme.textTheme.headlineLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                                 color: Colors.white,
                               ),
                             ),
@@ -191,7 +191,7 @@ class _BadgeCard extends StatelessWidget {
                   ? Palette.primary.withValues(alpha: 0.12)
                   : dark
                       ? Palette.surface3
-                      : const Color(0xFFE2E8F0),
+                      : const Color(0xFFEDE3D6),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Center(

@@ -1,13 +1,10 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/application/session_provider.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/rate_app/rate_app_service.dart';
 import 'package:profileforge/features/xp/application/xp_providers.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
+import 'package:profileforge/features/stats/application/stats_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// StatsOverviewScreen — Weekly/monthly analytics and insights.
@@ -35,8 +32,8 @@ class StatsOverviewScreen extends ConsumerWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -54,7 +51,7 @@ class StatsOverviewScreen extends ConsumerWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -125,13 +122,13 @@ class StatsOverviewScreen extends ConsumerWidget {
   }
 
   Widget _buildQuickStats(bool dark, WidgetRef ref, String? profileId) {
-    final streak = profileId == null
-        ? 0
-        : (ref.watch(streakProvider(profileId)).valueOrNull ?? 0);
-    final totalXp = profileId == null
-        ? 0
-        : (ref.watch(totalXpProvider(profileId)).valueOrNull ?? 0);
-    final chatCountAsync = RateAppService.instance.chatCount();
+    // Real aggregates from the stats repository (ledger-backed).
+    final stats = profileId == null
+        ? null
+        : (ref.watch(statsOverviewProvider(profileId)).valueOrNull);
+    final streak = stats?.dayStreak ?? 0;
+    final totalXp = stats?.totalXp ?? 0;
+    final chatCount = stats?.aiChats ?? 0;
     return Row(
       children: [
         _buildStatCard(
@@ -152,11 +149,7 @@ class StatsOverviewScreen extends ConsumerWidget {
         const SizedBox(width: 12),
         _buildStatCard(
           icon: Icons.auto_awesome,
-          value: FutureBuilder<int>(
-            future: chatCountAsync,
-            builder: (context, snap) =>
-                Text('${snap.data ?? 0}'),
-          ),
+          value: Text('$chatCount'),
           label: 'AI Chats',
           color: Palette.primary,
           dark: dark,
@@ -181,7 +174,7 @@ class StatsOverviewScreen extends ConsumerWidget {
               : Colors.white.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: dark ? Palette.border : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border : const Color(0xFFEDE3D6),
           ),
         ),
         child: Column(
@@ -191,7 +184,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             DefaultTextStyle(
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
               ),
               child: value,
@@ -240,7 +233,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -264,7 +257,7 @@ class StatsOverviewScreen extends ConsumerWidget {
                       color: activity > 0
                           ? Palette.primary
                               .withValues(alpha: 0.15 + intensity * 0.65)
-                          : (dark ? Palette.surface3 : const Color(0xFFE2E8F0)),
+                          : (dark ? Palette.surface3 : const Color(0xFFEDE3D6)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
@@ -325,7 +318,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -369,7 +362,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             '$weekTotal',
             style: TextStyle(
               fontSize: 36,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: dark ? Palette.textPrimary : Palette.textInverse,
             ),
           ),
@@ -410,13 +403,10 @@ class StatsOverviewScreen extends ConsumerWidget {
     // Honest analog: XP earned by source (real ledger). No time-tracking data
     // exists, so hours were hardcoded before — that fabricated "4.5h AI Chat"
     // numbers. Replace with real per-source XP share.
-    final history = profileId == null
-        ? const <XpEventRow>[]
-        : (ref.watch(xpHistoryProvider(profileId)).valueOrNull ?? const []);
-    final bySource = <String, int>{};
-    for (final e in history) {
-      bySource[e.source] = (bySource[e.source] ?? 0) + e.amount;
-    }
+    final bySource = profileId == null
+        ? const <String, int>{}
+        : (ref.watch(statsOverviewProvider(profileId)).valueOrNull?.xpBySource ??
+            const {});
     final sourceColors = <String, Color>{
       'mission': Palette.primary,
       'streak': Palette.success,
@@ -440,7 +430,7 @@ class StatsOverviewScreen extends ConsumerWidget {
               : Colors.white.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: dark ? Palette.border : const Color(0xFFE2E8F0),
+            color: dark ? Palette.border : const Color(0xFFEDE3D6),
           ),
         ),
         child: Text(
@@ -461,7 +451,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -527,7 +517,7 @@ class StatsOverviewScreen extends ConsumerWidget {
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(

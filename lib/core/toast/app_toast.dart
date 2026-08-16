@@ -227,7 +227,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                   Expanded(
                     child: Text(
                       widget.message,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: dark ? Palette.textPrimary : Palette.textInverse,

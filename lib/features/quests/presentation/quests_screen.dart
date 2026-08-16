@@ -6,6 +6,7 @@ import 'package:profileforge/features/quests/application/quest_providers.dart';
 import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/audio/sound_provider.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 
 class QuestsScreen extends ConsumerWidget {
   final String profileId;
@@ -85,12 +86,12 @@ class _QuestTile extends ConsumerWidget {
             color: quest.done ? theme.colorScheme.primaryContainer : theme.colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Center(child: quest.done ? const Icon(Icons.check_circle, color: Colors.green, size: 28) : const Text('🗺️', style: TextStyle(fontSize: 24))),
+          child: Center(child: quest.done ? const Icon(Icons.check_circle, color: Palette.success, size: 28) : const Icon(Icons.map_outlined, color: Palette.accent, size: 24)),
         ),
         title: Text(quest.title, style: TextStyle(fontWeight: FontWeight.w600, decoration: quest.done ? TextDecoration.lineThrough : null)),
         subtitle: quest.description.isNotEmpty ? Text(quest.description, maxLines: 1, overflow: TextOverflow.ellipsis) : null,
         trailing: quest.done
-            ? Icon(Icons.check, color: Colors.green.shade400)
+            ? Icon(Icons.check, color: Palette.success)
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

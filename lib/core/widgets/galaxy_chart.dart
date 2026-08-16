@@ -176,7 +176,7 @@ class GalaxyChart extends ConsumerWidget {
             _OrbitalPlanet(
               angle: data.streakProgress * math.pi * 2,
               radius: w * 0.25,
-              label: '🔥',
+              label: 'Streak',
               value: '${data.currentStreak}d',
               color: Palette.blue,
             ),
@@ -207,7 +207,7 @@ class GalaxyChart extends ConsumerWidget {
                   Text('${(data.overall * 100).toInt()}%',
                       style: TextStyle(
                         fontSize: w * 0.07,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
                       )),
                   Text('complete',
@@ -265,7 +265,7 @@ class _OrbitalPlanet extends StatelessWidget {
             children: [
               Text(value,
                   style: const TextStyle(
-                      fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white)),
+                      fontSize: 9, fontWeight: FontWeight.w700, color: Colors.white)),
               Text(label,
                   style: const TextStyle(
                       fontSize: 7, color: Colors.white70)),

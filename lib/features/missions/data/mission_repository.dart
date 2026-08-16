@@ -8,8 +8,15 @@ class MissionRepository {
 
   Future<void> upsertGenerated(List<Mission> missions) async {
     try {
+      if (missions.isEmpty) return;
+      // Mission ids are period-scoped (date/week/month). A row that already
+      // exists means that mission was already generated for the period —
+      // re-inserting it would reset a completed mission to open and reopen
+      // the reward farm (refresh → complete → refresh → infinite XP/gems).
+      final existingIds = await _existingIds(missions.first.profileId);
       for (final m in missions) {
-        await _db.into(_db.missions).insertOnConflictUpdate(MissionsCompanion(
+        if (existingIds.contains(m.id)) continue;
+        await _db.into(_db.missions).insert(MissionsCompanion(
               id: Value(m.id),
               profileId: Value(m.profileId),
               title: Value(m.title),
@@ -29,6 +36,14 @@ class MissionRepository {
       // TODO: enqueue to SyncOutbox for retry.
       rethrow;
     }
+  }
+
+  /// Every mission id already stored for a profile (open OR completed).
+  Future<Set<String>> _existingIds(String profileId) async {
+    final rows = await (_db.select(_db.missions)
+          ..where((t) => t.profileId.equals(profileId)))
+        .get();
+    return rows.map((r) => r.id).toSet();
   }
 
   Future<List<MissionRow>> listDue(String profileId, DateTime now) async {

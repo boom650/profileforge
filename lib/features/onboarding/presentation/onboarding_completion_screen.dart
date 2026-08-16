@@ -1,14 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/ai/psychological_profile.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:profileforge/core/widgets/score_widgets.dart';
-import 'package:profileforge/core/widgets/feedback_widgets.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -114,13 +112,13 @@ class _OnboardingCompletionScreenState
             end: Alignment.bottomCenter,
             colors: dark
                 ? [
-                    const Color(0xFF0B1120),
+                    const Color(0xFF1A0F0A),
                     Palette.surface0,
                     Palette.black,
                   ]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFF8FAFC),
+                    const Color(0xFFFBF1E3),
+                    Palette.cream,
                     Colors.white,
                   ],
           ),
@@ -233,9 +231,9 @@ class _OnboardingCompletionScreenState
             offset: Offset(0, 20 * (1 - _summaryController.value)),
             child: Text(
               'Profile Complete!',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 28,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
               ),
               textAlign: TextAlign.center,
@@ -256,7 +254,7 @@ class _OnboardingCompletionScreenState
             offset: Offset(0, 15 * (1 - _summaryController.value)),
             child: Text(
               'Your AI coach now understands your personality,\nstress response, and learning style.',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 14,
                 color: dark ? Palette.textSecondary : Palette.textTertiary,
                 height: 1.5,
@@ -288,7 +286,7 @@ class _OnboardingCompletionScreenState
                     : Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                  color: dark ? Palette.border : const Color(0xFFEDE3D6),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -539,7 +537,7 @@ class _OnboardingCompletionScreenState
               child: Center(
                 child: Text(
                   'Start Your Journey',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -572,9 +570,9 @@ class _ConfettiPainter extends CustomPainter {
       Palette.success,
       Palette.warning,
       Palette.info,
-      const Color(0xFF6C63FF),
-      const Color(0xFFFF6B6B),
-      const Color(0xFF4ECDC4),
+      Palette.accentViolet,
+      Palette.error,
+      Palette.accentTeal,
     ];
 
     for (int i = 0; i < 60; i++) {

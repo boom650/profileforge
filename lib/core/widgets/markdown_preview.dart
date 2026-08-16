@@ -30,7 +30,7 @@ class MarkdownPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = isDark(context);
     final baseStyle = textStyle ??
-        GoogleFonts.inter(
+        GoogleFonts.nunito(
           fontSize: 15,
           color: dark ? Palette.textPrimary : Palette.textInverse,
           height: 1.6,
@@ -142,7 +142,7 @@ class MarkdownPreview extends StatelessWidget {
         text,
         style: baseStyle.copyWith(
           fontSize: size,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w700,
           color: dark ? Palette.textPrimary : Palette.textInverse,
         ),
       ),
@@ -194,7 +194,7 @@ class MarkdownPreview extends StatelessWidget {
             color: Palette.primary,
             backgroundColor: dark
                 ? Palette.surface2.withValues(alpha: 0.5)
-                : const Color(0xFFF1F5F9),
+                : const Color(0xFFF4ECE1),
           ),
         ));
       } else if (match.group(6) != null) {
@@ -234,10 +234,10 @@ class MarkdownPreview extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: dark ? Palette.surface2 : const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
+        color: dark ? Palette.surface2 : Palette.cream,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Text(
@@ -334,7 +334,7 @@ class MarkdownPreview extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Container(
         height: 1,
-        color: dark ? Palette.border : const Color(0xFFE2E8F0),
+        color: dark ? Palette.border : const Color(0xFFEDE3D6),
       ),
     );
   }

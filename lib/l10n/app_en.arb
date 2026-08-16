@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "appName": "ProfileForge",
+  "markTodayDone": "Mark today done",
+  "dayStreak": "day streak",
+  "firstWin": "First win!",
+  "keepConsistency": "Keep going — consistency compounds.",
+  "noGuilt": "No guilt — growth is a path, not a streak.",
+  "@appName": {
+    "description": "The app display name"
+  },
+  "@keepConsistency": {
+    "description": "Progress-framing encouragement copy"
+  }
+}

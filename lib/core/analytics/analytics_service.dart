@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -160,8 +161,7 @@ class AnalyticsService {
   Future<void> _persistEvents() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final json = exportEvents();
-      // In production, save to file or send to server
+      await prefs.setString('pf_analytics_events', jsonEncode(exportEvents()));
     } catch (e) {
       // Silently fail
     }

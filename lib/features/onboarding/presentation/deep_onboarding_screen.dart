@@ -14,7 +14,6 @@ class DeepOnboardingScreen extends StatefulWidget {
 
 class _DeepOnboardingScreenState extends State<DeepOnboardingScreen> {
   int _step = 0;
-  final _prefs = const UserPreferences();
   final _liked = <String>{};
   final _disliked = <String>{};
   final _skills = <String>{};
@@ -61,7 +60,7 @@ class _DeepOnboardingScreenState extends State<DeepOnboardingScreen> {
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : Colors.white,
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: Column(
           children: [
@@ -83,7 +82,7 @@ class _DeepOnboardingScreenState extends State<DeepOnboardingScreen> {
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: (_step + 1) / 9,
-                        backgroundColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+                        backgroundColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
                         valueColor: AlwaysStoppedAnimation(Palette.primary),
                         minHeight: 6,
                       ),
@@ -121,7 +120,7 @@ class _DeepOnboardingScreenState extends State<DeepOnboardingScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
                     gradient: _canProceed() ? Palette.gradientPrimary : null,
-                    color: _canProceed() ? null : (dark ? Palette.surface2 : const Color(0xFFE2E8F0)),
+                    color: _canProceed() ? null : (dark ? Palette.surface2 : const Color(0xFFEDE3D6)),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Center(
@@ -265,7 +264,7 @@ class _ChipStep extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
           ),
         ),
@@ -312,12 +311,12 @@ class _ChipStep extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Palette.primary.withValues(alpha: 0.15)
-                      : (dark ? Palette.surface1 : const Color(0xFFF1F5F9)),
+                      : (dark ? Palette.surface1 : const Color(0xFFF4ECE1)),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: isSelected
                         ? Palette.primary
-                        : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+                        : (dark ? Palette.border : const Color(0xFFEDE3D6)),
                     width: isSelected ? 2 : 1,
                   ),
                 ),
@@ -367,7 +366,7 @@ class _SingleChipStep extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
           ),
         ),
@@ -391,12 +390,12 @@ class _SingleChipStep extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? Palette.primary.withValues(alpha: 0.15)
-                    : (dark ? Palette.surface1 : const Color(0xFFF1F5F9)),
+                    : (dark ? Palette.surface1 : const Color(0xFFF4ECE1)),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected
                       ? Palette.primary
-                      : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+                      : (dark ? Palette.border : const Color(0xFFEDE3D6)),
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -451,7 +450,7 @@ class _FreeTextStep extends StatelessWidget {
           'Tell us about yourself',
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
           ),
         ),
@@ -480,14 +479,14 @@ class _FreeTextStep extends StatelessWidget {
             hintText: 'e.g. "I built an app that helps my school manage events"',
             hintStyle: TextStyle(color: Palette.textTertiary),
             filled: true,
-            fillColor: dark ? Palette.surface1 : const Color(0xFFF1F5F9),
+            fillColor: dark ? Palette.surface1 : const Color(0xFFF4ECE1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFEDE3D6)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFEDE3D6)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -512,14 +511,14 @@ class _FreeTextStep extends StatelessWidget {
             hintText: 'e.g. "The kid who built a water purification system for rural villages"',
             hintStyle: TextStyle(color: Palette.textTertiary),
             filled: true,
-            fillColor: dark ? Palette.surface1 : const Color(0xFFF1F5F9),
+            fillColor: dark ? Palette.surface1 : const Color(0xFFF4ECE1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFEDE3D6)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFE2E8F0)),
+              borderSide: BorderSide(color: dark ? Palette.border : const Color(0xFFEDE3D6)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -20,7 +19,7 @@ import 'package:profileforge/core/ai/psychological_profile.dart';
 /// - Each question reveals personality traits
 /// - Animated character reacts to choices
 /// - Smooth transitions between steps
-/// - Premium Lusion-inspired dark theme
+/// - Premium Warm Bloom theme
 /// ────────────────────────────────────────────────────────────────────────────
 class PsychologyOnboardingScreen extends StatefulWidget {
   const PsychologyOnboardingScreen({super.key, this.onComplete});
@@ -165,7 +164,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -175,13 +174,13 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
             end: Alignment.bottomCenter,
             colors: dark
                 ? [
-                    const Color(0xFF0B1120),
+                    const Color(0xFF1A0F0A),
                     Palette.surface0,
                     Palette.black,
                   ]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFF8FAFC),
+                    const Color(0xFFFBF1E3),
+                    Palette.cream,
                     Colors.white,
                   ],
           ),
@@ -237,11 +236,11 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                   color: dark
                       ? Palette.surface2.withValues(alpha: 0.7)
                       : Colors.white.withValues(alpha: 0.8),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(9999),
                   border: Border.all(
                     color: dark
                         ? Palette.border.withValues(alpha: 0.5)
-                        : const Color(0xFFE2E8F0),
+                        : const Color(0xFFEDE3D6),
                   ),
                 ),
                 child: Icon(
@@ -272,8 +271,8 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                         ? Palette.primary
                         : dark
                             ? Palette.surface3
-                            : const Color(0xFFCBD5E1),
-                borderRadius: BorderRadius.circular(5),
+                            : Palette.line,
+                borderRadius: BorderRadius.circular(9999),
                 boxShadow: isActive
                     ? [
                         BoxShadow(
@@ -296,11 +295,11 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
               color: dark
                   ? Palette.surface2.withValues(alpha: 0.7)
                   : Colors.white.withValues(alpha: 0.8),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(9999),
             ),
             child: Text(
               '${_currentStep + 1}/$_totalSteps',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: Palette.primary,
@@ -372,7 +371,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
       case _MascotMood.excited:
         return Palette.warning;
       case _MascotMood.calm:
-        return const Color(0xFF06B6D4);
+        return Palette.accentTeal;
     }
   }
 
@@ -391,7 +390,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
   Widget _buildWorkStyleStep(bool dark) {
     final options = [
       _OptionData(
-        icon: '🧑‍💻',
+        icon: Icons.code_rounded,
         title: 'Solo Focus',
         subtitle: 'I do my best work alone, in my zone',
         value: 'solo',
@@ -399,7 +398,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.7, 'extraversion': 0.3},
       ),
       _OptionData(
-        icon: '🤝',
+        icon: Icons.handshake_rounded,
         title: 'Team Player',
         subtitle: 'I thrive with others, bouncing ideas',
         value: 'team',
@@ -407,7 +406,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'extraversion': 0.7, 'agreeableness': 0.7},
       ),
       _OptionData(
-        icon: '👑',
+        icon: Icons.workspace_premium_rounded,
         title: 'Leader',
         subtitle: 'I like to organize and drive outcomes',
         value: 'leader',
@@ -415,7 +414,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.8, 'extraversion': 0.6},
       ),
       _OptionData(
-        icon: '🔄',
+        icon: Icons.sync_rounded,
         title: 'Flexible',
         subtitle: 'Depends on the task and the people',
         value: 'flexible',
@@ -443,7 +442,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
   Widget _buildStressStep(bool dark) {
     final options = [
       _OptionData(
-        icon: '🧘',
+        icon: Icons.self_improvement_rounded,
         title: 'Stay Calm',
         subtitle: 'I breathe and think through it',
         value: 'calm',
@@ -451,7 +450,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'neuroticism': 0.2, 'conscientiousness': 0.6},
       ),
       _OptionData(
-        icon: '💪',
+        icon: Icons.fitness_center_rounded,
         title: 'Push Through',
         subtitle: 'I power through the pressure',
         value: 'push',
@@ -459,7 +458,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.8, 'selfEfficacy': 0.7},
       ),
       _OptionData(
-        icon: '📋',
+        icon: Icons.assignment_rounded,
         title: 'Make a Plan',
         subtitle: 'I break it down into pieces',
         value: 'plan',
@@ -467,7 +466,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.9, 'openness': 0.5},
       ),
       _OptionData(
-        icon: '🏃',
+        icon: Icons.directions_run_rounded,
         title: 'Take a Break',
         subtitle: 'I step away and come back fresh',
         value: 'break',
@@ -495,7 +494,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
   Widget _buildLearningStep(bool dark) {
     final options = [
       _OptionData(
-        icon: '👁️',
+        icon: Icons.visibility_rounded,
         title: 'Visual',
         subtitle: 'Charts, diagrams, videos — I see to understand',
         value: 'visual',
@@ -503,7 +502,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'openness': 0.7, 'competence': 0.6},
       ),
       _OptionData(
-        icon: '📖',
+        icon: Icons.menu_book_rounded,
         title: 'Reading',
         subtitle: 'Give me articles, books, written guides',
         value: 'reading',
@@ -511,7 +510,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.7, 'openness': 0.6},
       ),
       _OptionData(
-        icon: '🛠️',
+        icon: Icons.build_rounded,
         title: 'Hands-on',
         subtitle: 'I learn by doing, building, experimenting',
         value: 'hands_on',
@@ -519,7 +518,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'openness': 0.8, 'competence': 0.7},
       ),
       _OptionData(
-        icon: '💬',
+        icon: Icons.chat_bubble_rounded,
         title: 'Discussion',
         subtitle: 'I learn through conversation and debate',
         value: 'discussion',
@@ -547,7 +546,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
   Widget _buildMotivationStep(bool dark) {
     final options = [
       _OptionData(
-        icon: '🏆',
+        icon: Icons.emoji_events_rounded,
         title: 'Top University',
         subtitle: 'Aiming for the best, no matter what',
         value: 'achievement',
@@ -555,7 +554,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.8, 'selfEfficacy': 0.7},
       ),
       _OptionData(
-        icon: '🎯',
+        icon: Icons.flag_rounded,
         title: 'Best Fit',
         subtitle: 'Finding the right match for me',
         value: 'fit',
@@ -563,7 +562,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'openness': 0.7, 'autonomy': 0.8},
       ),
       _OptionData(
-        icon: '🌍',
+        icon: Icons.public_rounded,
         title: 'Global Impact',
         subtitle: 'Want to change the world someday',
         value: 'impact',
@@ -571,7 +570,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'agreeableness': 0.8, 'relatedness': 0.7},
       ),
       _OptionData(
-        icon: '📈',
+        icon: Icons.trending_up_rounded,
         title: 'Personal Growth',
         subtitle: 'Becoming the best version of myself',
         value: 'growth',
@@ -599,7 +598,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
   Widget _buildGrowthStep(bool dark) {
     final options = [
       _OptionData(
-        icon: '🔥',
+        icon: Icons.local_fire_department_rounded,
         title: 'Embrace Challenges',
         subtitle: 'Difficult = opportunity to grow',
         value: 'embrace',
@@ -607,7 +606,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'growthMindset': 0.9, 'selfEfficacy': 0.8},
       ),
       _OptionData(
-        icon: ' grit',
+        icon: Icons.bolt_rounded,
         title: 'Grit & Persistence',
         subtitle: 'I don\'t quit, even when it\'s hard',
         value: 'grit',
@@ -615,7 +614,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'conscientiousness': 0.9, 'selfEfficacy': 0.7},
       ),
       _OptionData(
-        icon: '🔄',
+        icon: Icons.sync_rounded,
         title: 'Learn from Failure',
         subtitle: 'Every setback is a setup for a comeback',
         value: 'failure',
@@ -623,7 +622,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
         traitUpdates: {'growthMindset': 0.8, 'neuroticism': 0.3},
       ),
       _OptionData(
-        icon: '📝',
+        icon: Icons.edit_note_rounded,
         title: 'Feedback is Gold',
         subtitle: 'I actively seek and apply feedback',
         value: 'feedback',
@@ -664,9 +663,9 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
           // Title
           Text(
             title,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.fredoka(
               fontSize: 28,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: dark ? Palette.textPrimary : Palette.textInverse,
               height: 1.2,
             ),
@@ -677,7 +676,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
           // Subtitle
           Text(
             subtitle,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 15,
               color: Palette.textSecondary,
               height: 1.4,
@@ -718,7 +717,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                               ? Palette.primary
                               : dark
                                   ? Palette.border.withValues(alpha: 0.4)
-                                  : const Color(0xFFE2E8F0),
+                                  : const Color(0xFFEDE3D6),
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: isSelected
@@ -730,11 +729,8 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                                 ),
                               ]
                             : [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.05),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
+                                Palette.clayShadow,
+                                Palette.clayHighlight,
                               ],
                       ),
                       child: Row(
@@ -748,14 +744,12 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                                   ? Palette.primary.withValues(alpha: 0.15)
                                   : dark
                                       ? Palette.surface2
-                                      : const Color(0xFFF1F5F9),
-                              borderRadius: BorderRadius.circular(12),
+                                      : const Color(0xFFF4ECE1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             child: Center(
-                              child: Text(
-                                option.icon,
-                                style: const TextStyle(fontSize: 22),
-                              ),
+                              child: Icon(option.icon,
+                                  size: 22, color: Palette.primary),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -767,7 +761,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                               children: [
                                 Text(
                                   option.title,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.nunito(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: isSelected
@@ -780,7 +774,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                                 const SizedBox(height: 2),
                                 Text(
                                   option.subtitle,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.nunito(
                                     fontSize: 13,
                                     color: Palette.textTertiary,
                                     height: 1.3,
@@ -841,7 +835,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
           top: BorderSide(
             color: dark
                 ? Palette.border.withValues(alpha: 0.3)
-                : const Color(0xFFE2E8F0),
+                : const Color(0xFFEDE3D6),
           ),
         ),
       ),
@@ -855,10 +849,10 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(14),
+                  color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                  borderRadius: BorderRadius.circular(9999),
                   border: Border.all(
-                    color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                    color: dark ? Palette.border : const Color(0xFFEDE3D6),
                   ),
                 ),
                 child: Icon(
@@ -886,8 +880,8 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                       ? null
                       : dark
                           ? Palette.surface2
-                          : const Color(0xFFE2E8F0),
-                  borderRadius: BorderRadius.circular(14),
+                          : const Color(0xFFEDE3D6),
+                  borderRadius: BorderRadius.circular(9999),
                   boxShadow: canProceed
                       ? [
                           BoxShadow(
@@ -906,7 +900,7 @@ class _PsychologyOnboardingScreenState extends State<PsychologyOnboardingScreen>
                         _currentStep == _totalSteps - 1
                             ? 'Complete'
                             : 'Continue',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.nunito(
                           color: canProceed
                               ? Colors.white
                               : Palette.textTertiary,
@@ -983,7 +977,7 @@ class _OptionData {
     required this.traitUpdates,
   });
 
-  final String icon;
+  final IconData icon;
   final String title;
   final String subtitle;
   final String value;

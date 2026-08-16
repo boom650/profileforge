@@ -61,7 +61,7 @@ class PfListTile extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: (iconColor ?? Palette.primary).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(
                   icon,
@@ -79,7 +79,7 @@ class PfListTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: enabled ? color : subColor,
@@ -89,7 +89,7 @@ class PfListTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       subtitle!,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.nunito(
                         fontSize: 12,
                         color: subColor,
                       ),
@@ -138,7 +138,7 @@ class PfDivider extends StatelessWidget {
       color: color ??
           (dark
               ? Palette.border.withValues(alpha: 0.3)
-              : const Color(0xFFF1F5F9)),
+              : const Color(0xFFF4ECE1)),
     );
   }
 }
@@ -169,7 +169,7 @@ class PfSectionHeader extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.nunito(
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
@@ -181,7 +181,7 @@ class PfSectionHeader extends StatelessWidget {
               onTap: onActionTap,
               child: Text(
                 action!,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Palette.primary,
@@ -237,7 +237,7 @@ class PfEmptyState extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               title,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -247,7 +247,7 @@ class PfEmptyState extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               subtitle,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 14,
                 color: dark ? Palette.textSecondary : Palette.textTertiary,
                 height: 1.5,
@@ -262,7 +262,7 @@ class PfEmptyState extends StatelessWidget {
                   backgroundColor: Palette.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(9999),
                   ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
@@ -271,7 +271,7 @@ class PfEmptyState extends StatelessWidget {
                 ),
                 child: Text(
                   actionLabel!,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.nunito(
                     fontWeight: FontWeight.w600,
                   ),
                 ),

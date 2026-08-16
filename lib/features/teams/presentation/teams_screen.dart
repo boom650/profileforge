@@ -33,13 +33,14 @@ class TeamsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('🚀', style: TextStyle(fontSize: 32)),
+                Icon(Icons.rocket_launch_rounded,
+                    size: 32, color: Palette.primary),
                 const SizedBox(height: 12),
                 Text(
                   'Study Squads',
                   style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     color: Palette.textPrimary,
                   ),
                 ),
@@ -66,7 +67,7 @@ class TeamsScreen extends ConsumerWidget {
                 'Your Teams',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: Palette.textPrimary,
                 ),
               ),
@@ -91,7 +92,8 @@ class TeamsScreen extends ConsumerWidget {
                       child: Center(
                         child: Column(
                           children: [
-                            Text('👥', style: TextStyle(fontSize: 40)),
+                            Icon(Icons.groups_rounded,
+                                size: 40, color: Palette.textTertiary),
                             const SizedBox(height: 12),
                             Text(
                               'No teams yet',
@@ -176,7 +178,6 @@ class TeamsScreen extends ConsumerWidget {
 
   void _createTeam(BuildContext context, WidgetRef ref) {
     final ctrl = TextEditingController();
-    final dark = isDark(context);
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -187,7 +188,7 @@ class TeamsScreen extends ConsumerWidget {
         title: Text(
           'New team',
           style: TextStyle(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: Palette.textPrimary,
           ),
         ),
@@ -269,7 +270,8 @@ class _TeamCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Center(
-              child: Text('👥', style: TextStyle(fontSize: 22)),
+              child: Icon(Icons.groups_rounded,
+                  size: 22, color: Palette.textTertiary),
             ),
           ),
           const SizedBox(width: 14),
@@ -280,7 +282,7 @@ class _TeamCard extends StatelessWidget {
                 Text(
                   team.name,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     fontSize: 15,
                     color: Palette.textPrimary,
                   ),
@@ -303,7 +305,8 @@ class _TeamCard extends StatelessWidget {
               color: Palette.accentYellow.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text('🏆', style: TextStyle(fontSize: 16)),
+            child: Icon(Icons.emoji_events_rounded,
+                size: 16, color: Palette.accentYellow),
           ),
         ],
       ),

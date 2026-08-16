@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/application/session_provider.dart';
+import 'package:profileforge/core/navigation/app_shell.dart';
 import 'package:profileforge/features/home/home_page.dart';
 import 'package:profileforge/features/missions/presentation/missions_screen.dart';
 import 'package:profileforge/features/leagues/presentation/leagues_screen.dart';
@@ -99,14 +100,34 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (c, s) => _fadePage(const AuthPromptScreen()),
       ),
 
-      // Main app routes (slide transitions).
-      _route('/home', (c, s) => HomePage(profileId: pid)),
-      _route('/missions', (c, s) => MissionsScreen(profileId: pid)),
-      _route('/leagues', (c, s) => LeaguesScreen(profileId: pid)),
-      _route('/buddies', (c, s) => BuddiesScreen(profileId: pid)),
-      _route('/skins', (c, s) => SkinsScreen(profileId: pid)),
+      // Primary tabs — live inside the IndexedStack shell (state kept alive).
+      StatefulShellRoute.indexedStack(
+        builder: (c, s, navigationShell) =>
+            AppShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(routes: [
+            _route('/home', (c, s) => HomePage(profileId: pid)),
+          ]),
+          StatefulShellBranch(routes: [
+            _route('/missions', (c, s) => MissionsScreen(profileId: pid)),
+          ]),
+          StatefulShellBranch(routes: [
+            _route('/leagues', (c, s) => LeaguesScreen(profileId: pid)),
+          ]),
+          StatefulShellBranch(routes: [
+            _route('/buddies', (c, s) => BuddiesScreen(profileId: pid)),
+          ]),
+          StatefulShellBranch(routes: [
+            _route('/skins', (c, s) => SkinsScreen(profileId: pid)),
+          ]),
+          StatefulShellBranch(routes: [
+            _route('/discover', (c, s) => DiscoverScreen(profileId: pid)),
+          ]),
+        ],
+      ),
+
+      // Secondary routes (slide transitions).
       _route('/teams', (c, s) => TeamsScreen(profileId: pid)),
-      _route('/discover', (c, s) => DiscoverScreen(profileId: pid)),
       _route('/rewards', (c, s) => RewardsScreen(profileId: pid)),
       _route('/profile', (c, s) => ProfileScreen(profileId: pid)),
       _route('/profile/edit', (c, s) => ProfilePage(profileId: pid)),

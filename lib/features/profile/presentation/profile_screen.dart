@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:profileforge/core/game/level.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
 import 'package:profileforge/features/streak/application/streak_providers.dart';
@@ -31,7 +32,7 @@ class ProfileScreen extends ConsumerWidget {
     final levelTitle = LevelEngine().titleFor(lv.level);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -44,7 +45,7 @@ class ProfileScreen extends ConsumerWidget {
                     Text(
                       'Profile',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const Spacer(),
@@ -53,8 +54,8 @@ class ProfileScreen extends ConsumerWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(10),
+                        color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
+                        borderRadius: BorderRadius.circular(9999),
                       ),
                       child: Icon(
                         Icons.settings_outlined,
@@ -83,14 +84,17 @@ class ProfileScreen extends ConsumerWidget {
                         height: 64,
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: Clay.card,
                           border: Border.all(
                             color: Colors.white.withValues(alpha: 0.3),
                             width: 2,
                           ),
                         ),
                         child: const Center(
-                          child: Text('🦉', style: TextStyle(fontSize: 32)),
+                          child: const Percy(
+                          size: 52,
+                          semanticLabel: 'Percy the platypus',
+                        ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -117,7 +121,7 @@ class ProfileScreen extends ConsumerWidget {
                             const SizedBox(height: 8),
                             // XP progress.
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(9999),
                               child: LinearProgressIndicator(
                                 value: lv.intoLevel / lv.levelSpan,
                                 minHeight: 6,
@@ -263,7 +267,7 @@ class ProfileScreen extends ConsumerWidget {
                   child: Text(
                     'ProfileForge builds your plan from real answers — no blind templates.',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.hintColor?.withValues(alpha: 0.6),
+                      color: theme.hintColor.withValues(alpha: 0.6),
                     ),
                   ),
                 ),
@@ -302,7 +306,7 @@ class _StatCard extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: Clay.nested,
             ),
             child: Icon(icon, color: color, size: 20),
           ),
@@ -314,7 +318,7 @@ class _StatCard extends StatelessWidget {
                 Text(
                   value,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     fontSize: 20,
                     color: dark ? Palette.textPrimary : Palette.textInverse,
                   ),
@@ -370,7 +374,7 @@ class _ThemeTile extends StatelessWidget {
           ? const Icon(Icons.check_circle, color: Palette.primary, size: 20)
           : null,
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: Clay.nested),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14),
     );
   }
@@ -422,7 +426,7 @@ class _SettingsTile extends StatelessWidget {
         color: dark ? Palette.textTertiary : Palette.textTertiary,
       ),
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: Clay.nested),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14),
     );
   }

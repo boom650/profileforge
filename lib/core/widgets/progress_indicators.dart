@@ -73,7 +73,7 @@ class _CircularScoreProgressState extends State<CircularScoreProgress>
     final dark = isDark(context);
     final color = widget.color ?? _getScoreColor(widget.value.round());
     final bgColor = widget.backgroundColor ??
-        (dark ? Palette.surface2 : const Color(0xFFE2E8F0));
+        (dark ? Palette.surface2 : const Color(0xFFEDE3D6));
 
     return SizedBox(
       width: widget.size,
@@ -92,9 +92,9 @@ class _CircularScoreProgressState extends State<CircularScoreProgress>
                 Center(
                   child: Text(
                     '${_animation.value.round()}',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.nunito(
                       fontSize: widget.size * 0.3,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: color,
                     ),
                   ),
@@ -204,7 +204,7 @@ class SteppedProgress extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isCompleted
                         ? progressColor
-                        : (dark ? Palette.surface2 : const Color(0xFFE2E8F0)),
+                        : (dark ? Palette.surface2 : const Color(0xFFEDE3D6)),
                     borderRadius: BorderRadius.circular(height / 2),
                     boxShadow: isCurrent
                         ? [
@@ -280,7 +280,7 @@ class LinearGradientProgress extends StatelessWidget {
                 height: height,
                 decoration: BoxDecoration(
                   color: backgroundColor ??
-                      (dark ? Palette.surface2 : const Color(0xFFE2E8F0)),
+                      (dark ? Palette.surface2 : const Color(0xFFEDE3D6)),
                 ),
               ),
               // Fill
@@ -325,7 +325,7 @@ class DotProgress extends StatelessWidget {
     final dark = isDark(context);
     final active = activeColor ?? Palette.primary;
     final inactive =
-        inactiveColor ?? (dark ? Palette.surface2 : const Color(0xFFE2E8F0));
+        inactiveColor ?? (dark ? Palette.surface2 : const Color(0xFFEDE3D6));
 
     return Row(
       mainAxisSize: MainAxisSize.min,

@@ -70,5 +70,4 @@ final seasonResetProvider = Provider.family<Future<LeagueResolution?>, String>(
   })(),
 );
 
-LeagueTier _tierOf(String s) =>
-    LeagueTier.values.firstWhere((t) => t.name == s, orElse: () => LeagueTier.bronze);
+LeagueTier _tierOf(String s) => leagueTierFromName(s);

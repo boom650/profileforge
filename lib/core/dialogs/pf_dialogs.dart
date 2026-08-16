@@ -30,7 +30,7 @@ class PfDialogs {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           title,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -38,7 +38,7 @@ class PfDialogs {
         ),
         content: Text(
           content,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             color: dark ? Palette.textSecondary : Palette.textTertiary,
             height: 1.5,
@@ -53,7 +53,7 @@ class PfDialogs {
               },
               child: Text(
                 cancelText,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   color: dark ? Palette.textSecondary : Palette.textTertiary,
                 ),
               ),
@@ -66,7 +66,7 @@ class PfDialogs {
               },
               child: Text(
                 confirmText,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontWeight: FontWeight.w600,
                   color: Palette.primary,
                 ),
@@ -95,7 +95,7 @@ class PfDialogs {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           title,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: dark ? Palette.textPrimary : Palette.textInverse,
@@ -103,7 +103,7 @@ class PfDialogs {
         ),
         content: Text(
           content,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.nunito(
             fontSize: 14,
             color: dark ? Palette.textSecondary : Palette.textTertiary,
             height: 1.5,
@@ -114,7 +114,7 @@ class PfDialogs {
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
               cancelText,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 color: dark ? Palette.textSecondary : Palette.textTertiary,
               ),
             ),
@@ -123,7 +123,7 @@ class PfDialogs {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               confirmText,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontWeight: FontWeight.w600,
                 color: confirmColor ?? Palette.primary,
               ),
@@ -184,7 +184,7 @@ class PfDialogs {
               const SizedBox(height: 16),
               Text(
                 message,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 14,
                   color: dark ? Palette.textSecondary : Palette.textTertiary,
                 ),

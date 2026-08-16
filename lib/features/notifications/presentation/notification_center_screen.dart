@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/application/session_provider.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/features/achievements/application/achievement_providers.dart';
-import 'package:profileforge/features/achievements/domain/achievement_defs.dart';
-import 'package:profileforge/features/streak/application/streak_providers.dart';
-import 'package:profileforge/features/xp/application/xp_providers.dart';
+import 'package:profileforge/features/notifications/application/notification_providers.dart';
+import 'package:profileforge/features/notifications/domain/notification_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// NotificationCenterScreen — View and manage notifications.
@@ -34,65 +30,15 @@ class _NotificationCenterScreenState
   final Set<String> _readIds = {};
   final Set<String> _deletedIds = {};
 
-  /// REAL notifications, derived live from app state.
-  List<_Notification> _buildNotifications() {
+  /// REAL notifications, derived live from app state via the repository.
+  List<AppNotification> get _notifications {
     final profileId = ref.watch(activeProfileIdProvider).valueOrNull ?? '';
-    final list = <_Notification>[];
-
-    // 1 — streak status (real).
-    final streak = ref.watch(streakProvider(profileId)).valueOrNull;
-    if (streak != null && streak.current > 0) {
-      list.add(_Notification(
-        id: 'streak',
-        title: 'Streak: ${streak.current} day${streak.current == 1 ? '' : 's'}',
-        message: streak.current >= 7
-            ? 'Outstanding — you are on a ${streak.current}-day streak. Keep it going!'
-            : streak.current == 1
-                ? 'Day 1 done — come back tomorrow to keep it alive.'
-                : 'You are ${streak.current} days strong. One more day!',
-        type: NotificationType.streak,
-        timestamp: streak.lastActiveDate ?? DateTime.now(),
-        isRead: _readIds.contains('streak'),
-      ));
-    }
-
-    // 2 — latest XP event (real ledger).
-    final events = ref.watch(xpHistoryProvider(profileId)).valueOrNull;
-    if (events != null && events.isNotEmpty) {
-      final e = events.first;
-      list.add(_Notification(
-        id: 'xp-${e.id}',
-        title: '+${e.amount} XP · ${e.source}',
-        message: 'Balance: ${e.balanceAfter} XP',
-        type: NotificationType.score,
-        timestamp: e.at,
-        isRead: _readIds.contains('xp-${e.id}'),
-      ));
-    }
-
-    // 3 — latest achievement (real unlocks × defs).
-    final unlocked =
-        ref.watch(unlockedAchievementIdsProvider(profileId)).valueOrNull;
-    if (unlocked != null && unlocked.isNotEmpty) {
-      final defs = ref.watch(achievementDefsProvider).valueOrNull ?? const <AchievementDef>[];
-      final last = defs.where((d) => unlocked.contains(d.id)).toList().reversed.firstOrNull;
-      if (last != null) {
-        list.add(_Notification(
-          id: 'achievement-${last.id}',
-          title: 'Achievement Unlocked',
-          message: '${last.name} — ${last.description}',
-          type: NotificationType.achievement,
-          timestamp: DateTime.now(),
-          isRead: _readIds.contains('achievement-${last.id}'),
-        ));
-      }
-    }
-
-    list.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    return list;
+    final base = ref.watch(notificationsProvider(profileId)).valueOrNull ??
+        const <AppNotification>[];
+    return [
+      for (final n in base) n.copyWith(isRead: _readIds.contains(n.id)),
+    ];
   }
-
-  List<_Notification> get _notifications => _buildNotifications();
 
   void _markAsRead(String id) {
     HapticFeedback.selectionClick();
@@ -113,7 +59,7 @@ class _NotificationCenterScreenState
     });
   }
 
-  List<_Notification> get _filteredNotifications {
+  List<AppNotification> get _filteredNotifications {
     final visible = _notifications.where((n) => !_deletedIds.contains(n.id));
     switch (_filter) {
       case NotificationFilter.all:
@@ -143,8 +89,8 @@ class _NotificationCenterScreenState
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -162,7 +108,7 @@ class _NotificationCenterScreenState
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -239,7 +185,7 @@ class _NotificationCenterScreenState
                                   ? Palette.primary.withValues(alpha: 0.15)
                                   : dark
                                       ? Palette.surface2.withValues(alpha: 0.5)
-                                      : const Color(0xFFF1F5F9),
+                                      : const Color(0xFFF4ECE1),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
                                 color: isSelected
@@ -310,7 +256,7 @@ class _NotificationCenterScreenState
     );
   }
 
-  Widget _buildNotificationItem(_Notification notification, bool dark) {
+  Widget _buildNotificationItem(AppNotification notification, bool dark) {
     final typeColor = _getTypeColor(notification.type);
 
     return GestureDetector(
@@ -331,7 +277,7 @@ class _NotificationCenterScreenState
             color: notification.isRead
                 ? (dark
                     ? Palette.border.withValues(alpha: 0.3)
-                    : const Color(0xFFE2E8F0))
+                    : const Color(0xFFEDE3D6))
                 : typeColor.withValues(alpha: 0.3),
           ),
         ),
@@ -488,46 +434,5 @@ class _NotificationCenterScreenState
     } else {
       return '${diff.inDays}d ago';
     }
-  }
-}
-
-enum NotificationFilter {
-  all('All'),
-  unread('Unread'),
-  achievements('Achievements'),
-  ai('AI');
-
-  const NotificationFilter(this.label);
-  final String label;
-}
-
-enum NotificationType { score, ai, achievement, streak, system }
-
-class _Notification {
-  final String id;
-  final String title;
-  final String message;
-  final NotificationType type;
-  final DateTime timestamp;
-  final bool isRead;
-
-  const _Notification({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.type,
-    required this.timestamp,
-    required this.isRead,
-  });
-
-  _Notification copyWith({bool? isRead}) {
-    return _Notification(
-      id: id,
-      title: title,
-      message: message,
-      type: type,
-      timestamp: timestamp,
-      isRead: isRead ?? this.isRead,
-    );
   }
 }

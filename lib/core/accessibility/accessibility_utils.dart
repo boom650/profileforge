@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
@@ -308,7 +307,6 @@ class _FocusIndicatorState extends State<FocusIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    final dark = isDark(context);
     final focusColor = widget.focusColor ?? Palette.primary;
 
     return Focus(

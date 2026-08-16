@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:crypto/crypto.dart' show sha256;
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Centralized API client for H9 backend sync (REST + future WebSocket).
@@ -12,6 +17,13 @@ class ApiClient {
   late final Dio dio = _build();
 
   static const _tokenKey = 'pf_auth_token';
+
+  /// Pinned SPKI/SHA-256 fingerprints for the H9 backend certificate chain
+  /// (TLS certificate pinning = MITM protection). Populated once the backend
+  /// certificate is known; an empty list disables pinning.
+  static const List<String> _trustedFingerprints = [
+    // TODO(h9): insert base64 SHA-256 fingerprint of the production leaf cert.
+  ];
 
   Dio _build() {
     final d = Dio(BaseOptions(
@@ -33,7 +45,25 @@ class ApiClient {
         return handler.next(error);
       },
     ));
+    if (d.httpClientAdapter is IOHttpClientAdapter) {
+      (d.httpClientAdapter as IOHttpClientAdapter).validateCertificate =
+          _validateCertificate;
+    }
     return d;
+  }
+
+  /// Rejects HTTPS connections whose leaf certificate SHA-256 fingerprint is
+  /// not in [_trustedFingerprints]. Fails closed when pinning is configured.
+  bool _validateCertificate(
+      X509Certificate? certificate, String host, int port) {
+    if (_trustedFingerprints.isEmpty) return true; // pinning not yet configured
+    if (certificate == null) return false;
+    final digest = sha256.convert(certificate.der);
+    final actual = base64Encode(digest.bytes);
+    for (final expected in _trustedFingerprints) {
+      if (actual == expected) return true;
+    }
+    return false;
   }
 
   Future<void> storeToken(String token) => _secure.write(key: _tokenKey, value: token);

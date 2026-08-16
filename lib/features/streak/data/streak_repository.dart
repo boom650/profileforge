@@ -22,7 +22,7 @@ class StreakRepository {
         weekendAmulets: row.weekendAmulets,
         recovered: row.recovered,
       );
-    } catch (e, st) {
+    } catch (e) {
       // Degrade gracefully: a corrupt/locked DB should not crash the streak card.
       // TODO: report to crash analytics.
       return const StreakState();

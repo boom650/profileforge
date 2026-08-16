@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/settings/application/settings_providers.dart';
+import 'package:profileforge/features/settings/domain/settings_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// ThemeSwitcher — Premium theme selection screen.
@@ -14,25 +15,21 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// - Haptic feedback on selection
 /// ────────────────────────────────────────────────────────────────────────────
 
-enum ThemeModeOption { system, light, dark }
-
-class ThemeSwitcher extends StatefulWidget {
+class ThemeSwitcher extends ConsumerStatefulWidget {
   const ThemeSwitcher({super.key});
 
   @override
-  State<ThemeSwitcher> createState() => _ThemeSwitcherState();
+  ConsumerState<ThemeSwitcher> createState() => _ThemeSwitcherState();
 }
 
-class _ThemeSwitcherState extends State<ThemeSwitcher>
+class _ThemeSwitcherState extends ConsumerState<ThemeSwitcher>
     with SingleTickerProviderStateMixin {
-  ThemeModeOption _currentMode = ThemeModeOption.system;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    _loadThemeMode();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -50,39 +47,19 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
     super.dispose();
   }
 
-  Future<void> _loadThemeMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final mode = prefs.getString('pf_theme_mode') ?? 'system';
-    setState(() {
-      _currentMode = ThemeModeOption.values.firstWhere(
-        (e) => e.name == mode,
-        orElse: () => ThemeModeOption.system,
-      );
-    });
-  }
-
   Future<void> _setThemeMode(ThemeModeOption mode) async {
     HapticFeedback.selectionClick();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('pf_theme_mode', mode.name);
-    setState(() => _currentMode = mode);
-
-    // Rebuild app with new theme
-    if (mounted) {
-      // This triggers a rebuild of the entire app
-      MyApp.of(context)?.setThemeMode(_mapMode(mode));
-    }
+    // Persist via the settings repository + apply the app-wide theme.
+    await ref.read(setThemeProvider.notifier).execute(mode);
+    if (mounted) setState(() {});
   }
 
-  ThemeMode _mapMode(ThemeModeOption option) {
-    switch (option) {
-      case ThemeModeOption.system:
-        return ThemeMode.system;
-      case ThemeModeOption.light:
-        return ThemeMode.light;
-      case ThemeModeOption.dark:
-        return ThemeMode.dark;
-    }
+  ThemeModeOption get _currentMode {
+    return ref
+            .watch(settingsProvider)
+            .valueOrNull
+            ?.themeMode ??
+        ThemeModeOption.system;
   }
 
   @override
@@ -98,8 +75,8 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -117,7 +94,7 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -198,7 +175,7 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
                         : Colors.white.withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                      color: dark ? Palette.border : const Color(0xFFEDE3D6),
                     ),
                   ),
                   child: Row(
@@ -257,7 +234,7 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
                 ? Palette.primary.withValues(alpha: 0.5)
                 : dark
                     ? Palette.border
-                    : const Color(0xFFE2E8F0),
+                    : const Color(0xFFEDE3D6),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
@@ -281,7 +258,7 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
                     ? Palette.primary.withValues(alpha: 0.15)
                     : dark
                         ? Palette.surface2
-                        : const Color(0xFFF1F5F9),
+                        : const Color(0xFFF4ECE1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -361,7 +338,7 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: const Color(0xFFEDE3D6)),
       ),
     );
   }
@@ -377,10 +354,4 @@ class _ThemeSwitcherState extends State<ThemeSwitcher>
       ),
     );
   }
-}
-
-/// Placeholder for MyApp — will be replaced with actual app reference.
-class MyApp {
-  static MyApp? of(BuildContext context) => null;
-  void setThemeMode(ThemeMode mode) {}
 }

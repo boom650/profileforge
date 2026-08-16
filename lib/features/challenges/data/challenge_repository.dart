@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:drift/drift.dart';
 import 'package:profileforge/core/data/app_database.dart';
-import 'package:profileforge/core/data/tables.dart';
+import 'package:profileforge/features/challenges/domain/challenge_models.dart';
 
 class ChallengeRepository {
   final AppDatabase _db;
@@ -18,12 +18,12 @@ class ChallengeRepository {
       profileId: Value(profileId),
       opponentId: const Value('ghost'),
       wagerXp: Value(wagerXp),
-      status: const Value('active'),
+      status: Value(ChallengeStatus.active.dbValue),
       expiresAt: Value(now.add(Duration(days: days))),
     ));
     return FriendChallengeRow(
       id: id, profileId: profileId, opponentId: 'ghost',
-      wagerXp: wagerXp, status: 'active', expiresAt: now.add(Duration(days: days)),
+      wagerXp: wagerXp, status: ChallengeStatus.active.dbValue, expiresAt: now.add(Duration(days: days)),
       challengerScore: 0, opponentScore: 0, winnerId: '',
     );
   }
@@ -33,7 +33,7 @@ class ChallengeRepository {
     return (_db.select(_db.friendChallenges)
           ..where((t) =>
               (t.profileId.equals(profileId) | t.opponentId.equals(profileId)) &
-              t.status.equals('active') &
+              t.status.equals(ChallengeStatus.active.dbValue) &
               t.expiresAt.isBiggerThanValue(now))
           ..orderBy([(t) => OrderingTerm.desc(t.expiresAt)]))
         .get();
@@ -55,29 +55,32 @@ class ChallengeRepository {
   }
 
   /// Resolve challenge: determine winner, mark completed.
-  Future<String?> resolve(String challengeId) async {
+  Future<ChallengeResolution?> resolve(String challengeId) async {
     final row = await (_db.select(_db.friendChallenges)
           ..where((t) => t.id.equals(challengeId)))
         .getSingleOrNull();
     if (row == null) return null;
-    if (row.status != 'active') return row.winnerId;
+    if (ChallengeStatus.fromDb(row.status) != ChallengeStatus.active) {
+      return null;
+    }
 
     // Ghost opponent gets a random score between 30-100% of wager
     final ghostScore = (row.wagerXp * (0.3 + _rng.nextDouble() * 0.7)).round();
-    String winnerId;
-    if (row.challengerScore >= ghostScore) {
-      winnerId = row.profileId;
-    } else {
-      winnerId = row.opponentId;
-    }
+    final challengerWon = row.challengerScore >= ghostScore;
+    final winnerId = challengerWon ? row.profileId : row.opponentId;
 
     await (_db.update(_db.friendChallenges)
           ..where((t) => t.id.equals(challengeId)))
         .write(FriendChallengesCompanion(
-          status: const Value('completed'),
+          status: Value(ChallengeStatus.completed.dbValue),
           opponentScore: Value(ghostScore),
           winnerId: Value(winnerId),
         ));
-    return winnerId;
+    return ChallengeResolution(
+      winnerId: winnerId,
+      challengerWon: challengerWon,
+      challengerScore: row.challengerScore,
+      opponentScore: ghostScore,
+    );
   }
 }

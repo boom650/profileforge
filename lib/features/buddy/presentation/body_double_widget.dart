@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/features/timer/application/timer_providers.dart';
 
@@ -38,23 +39,24 @@ class _BuddyVisual extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String emoji;
+    final IconData icon;
     switch (state) {
-      case BuddyState.focusing: emoji = '✍️'; break;
-      case BuddyState.paused: emoji = '☕'; break;
-      case BuddyState.success: emoji = '🎉'; break;
-      case BuddyState.sad: emoji = '😢'; break;
-      case BuddyState.idle: emoji = '👋'; break;
+      case BuddyState.focusing: icon = Icons.edit_rounded; break;
+      case BuddyState.paused: icon = Icons.local_cafe_rounded; break;
+      case BuddyState.success: icon = Icons.celebration_rounded; break;
+      case BuddyState.sad: icon = Icons.sentiment_dissatisfied_rounded; break;
+      case BuddyState.idle: icon = Icons.waving_hand_rounded; break;
     }
 
     return Container(
       width: 80, height: 80,
       decoration: BoxDecoration(
-        color: Colors.blue.withValues(alpha: 0.1),
+        color: Palette.accentBlue.withValues(alpha: 0.1),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.blue.withValues(alpha: 0.3), width: 2),
+        border: Border.all(color: Palette.accentBlue.withValues(alpha: 0.3), width: 2),
       ),
-      child: Center(child: Text(emoji, style: const TextStyle(fontSize: 40))),
+      child: Center(
+          child: Icon(icon, size: 40, color: Palette.accentBlue)),
     ).animate(target: state == BuddyState.focusing ? 1 : 0)
      .shimmer(duration: 2.seconds)
      .shake(duration: 1.seconds);
@@ -77,7 +79,7 @@ class _BuddySpeech extends StatelessWidget {
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: Palette.ink.withValues(alpha: 0.54), borderRadius: BorderRadius.circular(12)),
       child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 11)),
     );
   }

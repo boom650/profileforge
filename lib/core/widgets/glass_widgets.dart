@@ -18,7 +18,7 @@ class GlassContainer extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(16),
     this.margin,
-    this.borderRadius = 16,
+    this.borderRadius = Clay.card,
     this.opacity = 0.1,
     this.blurSigma = 10,
     this.border,
@@ -29,7 +29,7 @@ class GlassContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets? margin;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final double opacity;
   final double blurSigma;
   final Border? border;
@@ -43,7 +43,7 @@ class GlassContainer extends StatelessWidget {
     return Container(
       margin: margin,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: borderRadius,
         gradient: gradient ??
             LinearGradient(
               begin: Alignment.topLeft,
@@ -54,30 +54,25 @@ class GlassContainer extends StatelessWidget {
                       Palette.surface2.withValues(alpha: opacity * 0.8),
                     ]
                   : [
-                      Colors.white.withValues(alpha: opacity),
-                      Colors.white.withValues(alpha: opacity * 0.9),
+                      Palette.creamCard.withValues(alpha: opacity),
+                      Palette.creamDeep.withValues(alpha: opacity * 0.9),
                     ],
             ),
         border: border ??
             Border.all(
               color: dark
                   ? Palette.border.withValues(alpha: 0.5)
-                  : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
+                  : Palette.line.withValues(alpha: 0.6),
               width: 1,
             ),
         boxShadow: boxShadow ??
             [
-              BoxShadow(
-                color: dark
-                    ? Colors.black.withValues(alpha: 0.3)
-                    : Colors.black.withValues(alpha: 0.05),
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
+              dark ? Palette.clayShadowDark : Palette.clayShadow,
+              Palette.clayHighlight,
             ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: borderRadius,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
           child: Padding(
@@ -97,14 +92,14 @@ class GlassButton extends StatefulWidget {
     required this.onTap,
     required this.child,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    this.borderRadius = 12,
+    this.borderRadius = Clay.pill,
     this.border,
   });
 
   final VoidCallback onTap;
   final Widget child;
   final EdgeInsets padding;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final Border? border;
 
   @override
@@ -207,26 +202,34 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
               bottom: BorderSide(
                 color: dark
                     ? Palette.border.withValues(alpha: 0.3)
-                    : const Color(0xFFE2E8F0),
+                    : const Color(0xFFEDE3D6),
               ),
             ),
           ),
           child: Row(
             children: [
               if (showBack && canPop)
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 16,
-                      color: dark ? Palette.textPrimary : Palette.textInverse,
+                Tooltip(
+                  message: 'Back',
+                  child: Semantics(
+                    button: true,
+                    label: 'Back',
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: dark ? Palette.surface2 : Palette.creamDeep,
+                          borderRadius: Clay.pill,
+                        ),
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          size: 16,
+                          color:
+                              dark ? Palette.textPrimary : Palette.textInverse,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -258,13 +261,13 @@ class GlassCardSimple extends StatelessWidget {
     required this.child,
     this.onTap,
     this.padding = const EdgeInsets.all(16),
-    this.borderRadius = 16,
+    this.borderRadius = Clay.card,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final EdgeInsets padding;
-  final double borderRadius;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {

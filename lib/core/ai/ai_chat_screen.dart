@@ -106,7 +106,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
     final dark = isDark(context);
 
     return Scaffold(
-      backgroundColor: dark ? Palette.black : const Color(0xFFF8FAFC),
+      backgroundColor: dark ? Palette.black : Palette.cream,
       appBar: AppBar(
         title: Row(
           children: [
@@ -209,7 +209,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                     color: dark ? Palette.surface0 : Colors.white,
                     border: Border(
                       top: BorderSide(
-                        color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                        color: dark ? Palette.border : const Color(0xFFEDE3D6),
                       ),
                     ),
                   ),
@@ -232,7 +232,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                                 color: dark ? Palette.textTertiary : Palette.textSecondary,
                               ),
                               filled: true,
-                              fillColor: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                              fillColor: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
@@ -329,7 +329,7 @@ class _ChatBubbleWidget extends StatelessWidget {
                 border: isUser
                     ? null
                     : Border.all(
-                        color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                        color: dark ? Palette.border : const Color(0xFFEDE3D6),
                       ),
               ),
               child: Column(
@@ -393,7 +393,7 @@ class _TypingIndicator extends StatelessWidget {
               color: dark ? Palette.surface1 : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: dark ? Palette.border : const Color(0xFFE2E8F0),
+                color: dark ? Palette.border : const Color(0xFFEDE3D6),
               ),
             ),
             child: Row(

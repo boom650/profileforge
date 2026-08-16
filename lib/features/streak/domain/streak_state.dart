@@ -95,9 +95,33 @@ class StreakEngine {
   }
 
   /// Explicitly spend a freeze token to preserve the streak through a gap.
+  /// Consumption is honored BEFORE a gap resolves, so the streak survives.
+  /// It happens — one missed day never wipes out a streak you worked for.
   StreakState spendFreeze(StreakState s) {
     if (s.freezeTokens <= 0) return s;
     return s.copyWith(freezeTokens: s.freezeTokens - 1);
+  }
+
+  /// Freeze the streak through [now] using a [FreezeToken]. Marks the day as
+  /// active without incrementing, so the chain is preserved on the next
+  /// [recordActivity]. Returns the same state when no token is available
+  /// (callers decide the humane fallback: none, it just counts a miss).
+  ({StreakState state, StreakEvent event}) freezeStreak(
+    StreakState s,
+    DateTime now,
+    FreezeToken token,
+  ) {
+    if (s.freezeTokens <= 0) {
+      return (state: s, event: const StreakEvent.broken());
+    }
+    return (
+      state: s.copyWith(
+        freezeTokens: s.freezeTokens - 1,
+        lastActiveDate: now,
+        recovered: false,
+      ),
+      event: const StreakEvent.amulet(),
+    );
   }
 }
 
@@ -108,4 +132,15 @@ class StreakEvent with _$StreakEvent {
   const factory StreakEvent.grace() = _Grace;
   const factory StreakEvent.amulet() = _Amulet;
   const factory StreakEvent.broken() = _Broken;
+}
+
+/// A spendable streak-freeze insurance token. Issued on milestones and
+/// consumed via [StreakEngine.freezeStreak] to preserve the active streak
+/// through a missed day — humane recovery, no guilt spiral.
+@immutable
+class FreezeToken {
+  const FreezeToken({required this.issuedAt});
+
+  /// When the token was earned (used for display + expiry decisions).
+  final DateTime issuedAt;
 }

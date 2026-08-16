@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/core/widgets/animated_widgets.dart';
-import 'package:profileforge/core/widgets/glass_widgets.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// OnboardingIntroScreen — Premium intro/welcome before questionnaire.
@@ -88,8 +86,8 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: Stack(
@@ -201,11 +199,7 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
                             _currentPage < _pages.length - 1
                                 ? 'Next'
                                 : 'Get Started',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                           ),
                         ),
                       ).animate().fadeIn(delay: 300.ms),
@@ -243,7 +237,7 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // ── Icon ──
+          // ── Icon / Percy ──
           Container(
             width: 120,
             height: 120,
@@ -251,11 +245,13 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
               color: page.color.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              page.icon,
-              size: 56,
-              color: page.color,
-            ),
+            child: _currentPage == 0
+                ? const Percy(size: 84, semanticLabel: 'Percy the platypus')
+                : Icon(
+                    page.icon,
+                    size: 56,
+                    color: page.color,
+                  ),
           ).animate().fadeIn(duration: 400.ms).scale(
                 begin: const Offset(0.5, 0.5),
                 duration: 400.ms,
@@ -266,12 +262,9 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
           Text(
             page.title,
             textAlign: TextAlign.center,
-            style: GoogleFonts.inter(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: dark ? Palette.textPrimary : Palette.textInverse,
-              height: 1.2,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: dark ? Palette.textPrimary : Palette.ink,
+                ),
           ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2),
           const SizedBox(height: 16),
 
@@ -279,9 +272,8 @@ class _OnboardingIntroScreenState extends State<OnboardingIntroScreen>
           Text(
             page.subtitle,
             textAlign: TextAlign.center,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: dark ? Palette.textSecondary : Palette.textTertiary,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: dark ? Palette.textSecondary : Palette.inkSoft,
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2),

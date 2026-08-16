@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// ────────────────────────────────────────────────────────────────────────────
 /// Psychological Profile — The core data model that drives AI adaptation.
 /// Based on Big Five (OCEAN), Self-Determination Theory (SDT), and

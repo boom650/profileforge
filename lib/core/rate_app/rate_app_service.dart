@@ -208,7 +208,7 @@ class _RateAppDialogState extends State<_RateAppDialog>
               // Title
               Text(
                 'Enjoying ProfileForge?',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: widget.dark ? Palette.textPrimary : Palette.textInverse,
@@ -220,7 +220,7 @@ class _RateAppDialogState extends State<_RateAppDialog>
               Text(
                 'Your rating helps us improve the app for everyone.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.nunito(
                   fontSize: 14,
                   color: widget.dark ? Palette.textSecondary : Palette.textTertiary,
                 ),

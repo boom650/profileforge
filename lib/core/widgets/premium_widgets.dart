@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// GlassCard — Glassmorphism card with backdrop blur.
@@ -12,7 +13,7 @@ class GlassCard extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(16),
     this.margin,
-    this.borderRadius = 20,
+    this.borderRadius = Clay.card,
     this.opacity = 0.7,
     this.border,
     this.gradient,
@@ -22,7 +23,7 @@ class GlassCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets? margin;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final double opacity;
   final Border? border;
   final Gradient? gradient;
@@ -37,7 +38,7 @@ class GlassCard extends StatelessWidget {
       child: Container(
         margin: margin,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: borderRadius,
           gradient: gradient ??
               LinearGradient(
                 begin: Alignment.topLeft,
@@ -48,29 +49,24 @@ class GlassCard extends StatelessWidget {
                         Palette.surface2.withValues(alpha: opacity * 0.8),
                       ]
                     : [
-                        Colors.white.withValues(alpha: opacity),
-                        Colors.white.withValues(alpha: opacity * 0.9),
+                        Palette.creamCard.withValues(alpha: opacity),
+                        Palette.creamDeep.withValues(alpha: opacity * 0.9),
                       ],
               ),
           border: border ??
               Border.all(
                 color: dark
                     ? Palette.border.withValues(alpha: 0.5)
-                    : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
+                    : Palette.line.withValues(alpha: 0.6),
                 width: 1,
               ),
           boxShadow: [
-            BoxShadow(
-              color: dark
-                  ? Colors.black.withValues(alpha: 0.3)
-                  : Colors.black.withValues(alpha: 0.05),
-              blurRadius: 20,
-              offset: const Offset(0, 4),
-            ),
+            dark ? Palette.clayShadowDark : Palette.clayShadow,
+            Palette.clayHighlight,
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: borderRadius,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Padding(
@@ -95,7 +91,7 @@ class GradientButton extends StatelessWidget {
     this.icon,
     this.gradient = Palette.gradientPrimary,
     this.height = 56,
-    this.borderRadius = 14,
+    this.borderRadius = Clay.pill,
     this.textStyle,
     this.enabled = true,
   });
@@ -105,7 +101,7 @@ class GradientButton extends StatelessWidget {
   final IconData? icon;
   final Gradient gradient;
   final double height;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final TextStyle? textStyle;
   final bool enabled;
 
@@ -119,7 +115,7 @@ class GradientButton extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: enabled ? gradient : null,
           color: enabled ? null : Palette.textTertiary.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: borderRadius,
           boxShadow: enabled
               ? [
                   BoxShadow(
@@ -217,7 +213,7 @@ class XpRing extends StatelessWidget {
                   centerTop!,
                   style: TextStyle(
                     fontSize: size * 0.28,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     color: color,
                     height: 1,
                   ),
@@ -249,13 +245,13 @@ class GradientBanner extends StatelessWidget {
     required this.child,
     this.gradient = Palette.gradientPrimary,
     this.padding = const EdgeInsets.all(20),
-    this.borderRadius = 20,
+    this.borderRadius = Clay.card,
   });
 
   final Widget child;
   final Gradient gradient;
   final EdgeInsets padding;
-  final double borderRadius;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +260,7 @@ class GradientBanner extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
             color: Palette.primary.withValues(alpha: 0.25),
@@ -286,38 +282,44 @@ class GlassIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onTap,
-    this.size = 40,
+    this.size = 44,
     this.color,
+    this.semanticLabel,
   });
 
   final IconData icon;
   final VoidCallback? onTap;
   final double size;
   final Color? color;
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: dark
-              ? Palette.surface2.withValues(alpha: 0.7)
-              : Colors.white.withValues(alpha: 0.8),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
             color: dark
-                ? Palette.border.withValues(alpha: 0.5)
-                : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
+                ? Palette.surface2.withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(9999),
+            border: Border.all(
+              color: dark
+                  ? Palette.border.withValues(alpha: 0.5)
+                  : const Color(0xFFEDE3D6).withValues(alpha: 0.5),
+            ),
           ),
-        ),
-        child: Icon(
-          icon,
-          size: size * 0.5,
-          color: color ?? (dark ? Palette.textPrimary : Palette.primary),
+          child: Icon(
+            icon,
+            size: size * 0.5,
+            color: color ?? (dark ? Palette.textPrimary : Palette.primary),
+          ),
         ),
       ),
     );
@@ -360,12 +362,12 @@ class SkeletonLoader extends StatelessWidget {
     super.key,
     this.width,
     this.height = 16,
-    this.borderRadius = 8,
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
   });
 
   final double? width;
   final double height;
-  final double borderRadius;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -374,8 +376,8 @@ class SkeletonLoader extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
-        borderRadius: BorderRadius.circular(borderRadius),
+        color: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
+        borderRadius: borderRadius,
       ),
     );
   }
@@ -409,14 +411,9 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Palette.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 36, color: Palette.primary),
+            Percy(
+              size: 88,
+              semanticLabel: 'Percy the platypus',
             ),
             const SizedBox(height: 20),
             Text(

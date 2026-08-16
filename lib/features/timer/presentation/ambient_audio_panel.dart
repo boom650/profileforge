@@ -10,15 +10,31 @@ import 'package:profileforge/core/theme/app_theme.dart';
 /// ────────────────────────────────────────────────────────────────────────────
 
 enum AmbientSound {
-  lofi('Lo-fi Beats', '🎧', 'assets/audio/ambient/lofi.wav'),
-  rain('Rainy Day', '🌧️', 'assets/audio/ambient/rain.wav'),
-  library('Library', '📚', 'assets/audio/ambient/library.wav'),
-  coffee('Coffee Shop', '☕', 'assets/audio/ambient/coffee_shop.wav');
+  lofi(
+    'Lo-fi Beats',
+    Icons.headphones,
+    'assets/audio/ambient/lofi.wav',
+  ),
+  rain(
+    'Rainy Day',
+    Icons.water_drop,
+    'assets/audio/ambient/rain.wav',
+  ),
+  library(
+    'Library',
+    Icons.auto_stories,
+    'assets/audio/ambient/library.wav',
+  ),
+  coffee(
+    'Coffee Shop',
+    Icons.local_cafe,
+    'assets/audio/ambient/coffee_shop.wav',
+  );
 
   final String label;
-  final String emoji;
+  final IconData icon;
   final String assetPath;
-  const AmbientSound(this.label, this.emoji, this.assetPath);
+  const AmbientSound(this.label, this.icon, this.assetPath);
 }
 
 class AudioPlayerService extends ChangeNotifier {
@@ -162,7 +178,9 @@ class AmbientAudioPanel extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(sound.emoji, style: const TextStyle(fontSize: 18)),
+                      Icon(sound.icon,
+                          size: 18,
+                          color: selected ? Palette.green : Palette.inkSoft),
                       const SizedBox(width: 6),
                       Text(sound.label,
                           style: TextStyle(

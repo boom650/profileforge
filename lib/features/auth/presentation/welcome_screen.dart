@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/features/auth/application/auth_providers.dart';
+import 'package:profileforge/features/auth/domain/auth_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// WelcomeScreen — First-time user experience.
 /// Full-screen hero with auth options. Duolingo-inspired simplicity.
 /// ────────────────────────────────────────────────────────────────────────────
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
 
-  Future<void> _continueAsGuest(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('pf_is_guest', true);
+  Future<void> _continueAsGuest(BuildContext context, WidgetRef ref) async {
+    final status = await ref.read(authStatusProvider.future);
+    if (status != AuthStatus.guest) {
+      final repo = await ref.read(authRepositoryProvider.future);
+      await repo.continueAsGuest();
+    }
     if (context.mounted) {
       context.go('/onboarding');
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final dark = isDark(context);
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Container(
@@ -35,13 +39,13 @@ class WelcomeScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: dark
                 ? [
-                    const Color(0xFF0B1120),
+                    const Color(0xFF1A0F0A),
                     Palette.surface0,
                     Palette.black,
                   ]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFF8FAFC),
+                    const Color(0xFFFBF1E3),
+                    Palette.cream,
                     Colors.white,
                   ],
           ),
@@ -61,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                 'Build Your\nDream Profile',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   height: 1.1,
                   letterSpacing: -0.5,
                 ),
@@ -153,7 +157,7 @@ class WelcomeScreen extends StatelessWidget {
 
                     // Guest / skip.
                     TextButton(
-                      onPressed: () => _continueAsGuest(context),
+                      onPressed: () => _continueAsGuest(context, ref),
                       child: Text(
                         'Maybe later',
                         style: TextStyle(
@@ -175,7 +179,7 @@ class WelcomeScreen extends StatelessWidget {
                   'By continuing, you agree to our Terms of Service and Privacy Policy',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.hintColor?.withValues(alpha: 0.6),
+                    color: theme.hintColor.withValues(alpha: 0.6),
                     fontSize: 11,
                   ),
                 ),
@@ -309,7 +313,7 @@ class _AuthButton extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             backgroundColor: dark ? Palette.surface1 : Colors.white,
             side: BorderSide(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -337,7 +341,7 @@ class _AuthButton extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             backgroundColor: dark ? Palette.surface1 : Colors.white,
             side: BorderSide(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -346,7 +350,7 @@ class _AuthButton extends StatelessWidget {
           icon: Icon(
             Icons.apple,
             size: 22,
-            color: dark ? Colors.white : Colors.black,
+            color: dark ? Colors.white : Palette.ink,
           ),
           label: Text(
             label,

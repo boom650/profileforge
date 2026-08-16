@@ -1,22 +1,27 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:profileforge/core/localization/app_localizations.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
+import 'package:profileforge/core/widgets/platypus.dart';
+import 'package:profileforge/features/splash/application/splash_providers.dart';
+import 'package:profileforge/features/splash/domain/splash_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// SplashScreen — Animated brand reveal with auto-navigation.
-/// Shows logo + tagline, then routes to auth gate or home.
+/// Shows logo + tagline, then routes to auth gate or home based on the real
+/// first-run status (splashStatusProvider).
 /// ────────────────────────────────────────────────────────────────────────────
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _navigated = false;
@@ -37,21 +42,21 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted || _navigated) return;
     _navigated = true;
 
-    final prefs = await SharedPreferences.getInstance();
-    final hasOnboarded = prefs.getBool('pf_onboarded') ?? false;
-    final hasAuth = prefs.getString('pf_auth_token') != null;
+    // Real first-run status from SharedPreferences via the repository.
+    final status = await ref.read(splashStatusProvider.future);
 
     if (!mounted) return;
 
-    if (hasOnboarded && hasAuth) {
-      // Fully set up → go to home.
-      context.go('/home');
-    } else if (hasOnboarded && !hasAuth) {
-      // Onboarded but not signed up → show auth prompt.
-      context.go('/auth-prompt');
-    } else {
-      // New user → start onboarding (Duolingo model: invest first, auth later).
-      context.go('/onboarding');
+    switch (status) {
+      case SplashStatus.fullySetUp:
+        // Fully set up → go to home.
+        context.go('/home');
+      case SplashStatus.needsAuth:
+        // Onboarded but not signed up → show auth prompt.
+        context.go('/auth-prompt');
+      case SplashStatus.newUser:
+        // New user → start onboarding (Duolingo model: invest first, auth later).
+        context.go('/onboarding');
     }
   }
 
@@ -75,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
             end: Alignment.bottomCenter,
             colors: dark
                 ? [Palette.surface0, Palette.black]
-                : [const Color(0xFFF0F4FF), Colors.white],
+                : [const Color(0xFFFBF1E3), Palette.cream],
           ),
         ),
         child: SafeArea(
@@ -99,15 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
                 child: const Center(
-                  child: Text(
-                    'PF',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -1,
-                    ),
-                  ),
+                  child: Percy(size: 64, semanticLabel: 'ProfileForge'),
                 ),
               )
                   .animate()
@@ -123,10 +120,10 @@ class _SplashScreenState extends State<SplashScreen>
 
               // App name.
               Text(
-                'ProfileForge',
+                AppLocalizations.of(context).appName,
                 style: TextStyle(
                   fontSize: 32,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: -0.5,
                   color: dark ? Palette.textPrimary : Palette.textInverse,
                 ),

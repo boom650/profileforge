@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
 
@@ -81,13 +80,6 @@ class _TutorialOverlayState extends State<TutorialOverlay>
     }
   }
 
-  void _previousStep() {
-    HapticFeedback.selectionClick();
-    if (_currentStep > 0) {
-      setState(() => _currentStep--);
-    }
-  }
-
   Future<void> _completeTutorial() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('pf_tutorial_completed', true);
@@ -114,7 +106,6 @@ class _TutorialOverlayState extends State<TutorialOverlay>
   Widget _buildOverlay() {
     final step = widget.steps[_currentStep];
     final dark = isDark(context);
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return AnimatedBuilder(

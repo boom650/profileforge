@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:profileforge/core/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:profileforge/features/geo/application/geo_providers.dart';
 
@@ -46,8 +47,8 @@ class GeoScreen extends ConsumerWidget {
                     trailing: Tooltip(
                       message: o.verified ? 'Verified opportunity' : 'Unverified — verify before applying',
                       child: o.verified
-                          ? const Icon(Icons.verified, color: Colors.green)
-                          : const Icon(Icons.pending, color: Colors.orange),
+                          ? const Icon(Icons.verified, color: Palette.success)
+                          : const Icon(Icons.pending, color: Palette.accent),
                     ),
                   ),
                 ).animate().fadeIn(delay: (i * 40).ms).slideX(begin: 0.1);

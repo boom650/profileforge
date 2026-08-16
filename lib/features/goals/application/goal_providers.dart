@@ -1,14 +1,13 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:profileforge/core/data/app_database.dart';
 import 'package:profileforge/core/data/app_database_provider.dart';
 import 'package:profileforge/features/goals/data/goal_repository.dart';
+import 'package:profileforge/features/goals/domain/goal_models.dart';
 
 final goalRepoProvider = Provider<GoalRepository>((ref) {
   return GoalRepository(ref.watch(appDatabaseProvider));
 });
 
-final userGoalProvider = FutureProvider.family<UserGoalRow?, String>((ref, profileId) async {
+final userGoalProvider = FutureProvider.family<UserGoal?, String>((ref, profileId) async {
   final repo = ref.read(goalRepoProvider);
   return repo.get(profileId);
 });

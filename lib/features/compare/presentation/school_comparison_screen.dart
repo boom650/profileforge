@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:profileforge/core/application/session_provider.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/features/onboarding/application/onboarding_providers.dart';
-import 'package:profileforge/features/profile/application/profile_score_loader.dart';
+import 'package:profileforge/features/compare/application/comparison_providers.dart';
+import 'package:profileforge/features/compare/domain/comparison_models.dart';
 
 /// ────────────────────────────────────────────────────────────────────────────
 /// SchoolComparisonScreen — Compare your profile against target schools.
@@ -25,84 +23,9 @@ class SchoolComparisonScreen extends ConsumerStatefulWidget {
 }
 
 class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen> {
-  final List<_School> _selectedSchools = [];
+  final List<School> _selectedSchools = [];
 
-  /// The user's REAL GPA from their onboarding grades — the "You" column
-  /// is data, not a hardcoded 3.95. SAT/ACT are not collected by the app,
-  /// so they render '—' instead of invented scores.
-  double? get _userGpa {
-    final profileId = ref.read(activeProfileIdProvider).valueOrNull;
-    if (profileId == null) return null;
-    final onboarding =
-        ref.read(onboardingProvider(profileId)).valueOrNull;
-    if (onboarding == null) return null;
-    return gpaFromGrades(onboarding.grades);
-  }
-
-  final List<_School> _allSchools = const [
-    _School(
-      name: 'MIT',
-      logo: Icons.school,
-      acceptanceRate: 4,
-      avgGPA: 4.17,
-      avgSAT: 1545,
-      avgACT: 35,
-      color: Color(0xFFA31F34),
-      strengths: ['STEM', 'Research', 'Innovation'],
-    ),
-    _School(
-      name: 'Stanford',
-      logo: Icons.school,
-      acceptanceRate: 4,
-      avgGPA: 4.18,
-      avgSAT: 1550,
-      avgACT: 35,
-      color: Color(0xFF8C1515),
-      strengths: ['Entrepreneurship', 'Liberal Arts', 'Tech'],
-    ),
-    _School(
-      name: 'Harvard',
-      logo: Icons.school,
-      acceptanceRate: 3,
-      avgGPA: 4.2,
-      avgSAT: 1555,
-      avgACT: 35,
-      color: Color(0xFFA51C30),
-      strengths: ['Research', 'Networking', 'Prestige'],
-    ),
-    _School(
-      name: 'Caltech',
-      logo: Icons.school,
-      acceptanceRate: 3,
-      avgGPA: 4.19,
-      avgSAT: 1560,
-      avgACT: 36,
-      color: Color(0xFFFF6C0C),
-      strengths: ['STEM', 'Research', 'Small Classes'],
-    ),
-    _School(
-      name: 'UC Berkeley',
-      logo: Icons.school,
-      acceptanceRate: 12,
-      avgGPA: 4.15,
-      avgSAT: 1480,
-      avgACT: 33,
-      color: Color(0xFF003262),
-      strengths: ['Value', 'Research', 'Diversity'],
-    ),
-    _School(
-      name: 'Columbia',
-      logo: Icons.school,
-      acceptanceRate: 4,
-      avgGPA: 4.16,
-      avgSAT: 1545,
-      avgACT: 35,
-      color: Color(0xFFB9D9EB),
-      strengths: ['Core Curriculum', 'NYC', 'Writing'],
-    ),
-  ];
-
-  void _toggleSchool(_School school) {
+  void _toggleSchool(School school) {
     HapticFeedback.selectionClick();
     setState(() {
       if (_selectedSchools.contains(school)) {
@@ -118,6 +41,9 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
+    final comparison = ref.watch(comparisonProvider).valueOrNull ??
+        const ComparisonResult(userGpa: null, matches: []);
+    final allSchools = comparison.schools;
 
     return Scaffold(
       body: Container(
@@ -128,8 +54,8 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? [const Color(0xFF0B1120), Palette.surface0, Palette.black]
-                : [const Color(0xFFEEF2FF), const Color(0xFFF8FAFC), Colors.white],
+                ? [const Color(0xFF1A0F0A), Palette.surface0, Palette.black]
+                : [const Color(0xFFFBF1E3), Palette.cream, Palette.creamCard],
           ),
         ),
         child: SafeArea(
@@ -147,7 +73,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: dark ? Palette.surface2 : const Color(0xFFF1F5F9),
+                          color: dark ? Palette.surface2 : const Color(0xFFF4ECE1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -190,8 +116,8 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
               // ── Content ──
               Expanded(
                 child: _selectedSchools.isEmpty
-                    ? _buildSchoolSelector(dark)
-                    : _buildComparisonView(dark),
+                    ? _buildSchoolSelector(dark, allSchools)
+                    : _buildComparisonView(dark, comparison),
               ),
             ],
           ),
@@ -200,7 +126,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
     );
   }
 
-  Widget _buildSchoolSelector(bool dark) {
+  Widget _buildSchoolSelector(bool dark, List<School> allSchools) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -216,9 +142,9 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
-              itemCount: _allSchools.length,
+              itemCount: allSchools.length,
               itemBuilder: (context, index) {
-                final school = _allSchools[index];
+                final school = allSchools[index];
                 final isSelected = _selectedSchools.contains(school);
 
                 return GestureDetector(
@@ -236,7 +162,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                       border: Border.all(
                         color: isSelected
                             ? school.color.withValues(alpha: 0.5)
-                            : (dark ? Palette.border : const Color(0xFFE2E8F0)),
+                            : (dark ? Palette.border : const Color(0xFFEDE3D6)),
                       ),
                     ),
                     child: Row(
@@ -291,7 +217,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
     );
   }
 
-  Widget _buildComparisonView(bool dark) {
+  Widget _buildComparisonView(bool dark, ComparisonResult comparison) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -313,20 +239,20 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
           // ── Comparison Table ──
           _buildSectionTitle('Your Stats vs. School Averages', dark),
           const SizedBox(height: 12),
-          _buildComparisonTable(dark),
+          _buildComparisonTable(dark, comparison),
           const SizedBox(height: 24),
 
           // ── Fit Analysis ──
           _buildSectionTitle('Fit Analysis', dark),
           const SizedBox(height: 12),
-          _buildFitAnalysis(dark),
+          _buildFitAnalysis(dark, comparison),
           const SizedBox(height: 32),
         ],
       ),
     );
   }
 
-  Widget _buildSchoolCard(_School school, bool dark) {
+  Widget _buildSchoolCard(School school, bool dark) {
     return Container(
       width: 140,
       margin: const EdgeInsets.only(right: 12),
@@ -360,6 +286,14 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
               color: dark ? Palette.textPrimary : Palette.textInverse,
             ),
           ),
+          const SizedBox(height: 2),
+          Text(
+            school.strengths.take(2).join(' · '),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 9, color: school.color),
+          ),
           const SizedBox(height: 4),
           Text(
             '${school.acceptanceRate}% admit',
@@ -384,10 +318,10 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
     );
   }
 
-  Widget _buildComparisonTable(bool dark) {
+  Widget _buildComparisonTable(bool dark, ComparisonResult comparison) {
     // The "You" column uses the user's REAL onboarding GPA.
     // SAT/ACT are not collected → honest '—' (never fabricated).
-    final userGpa = _userGpa;
+    final userGpa = comparison.userGpa;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -397,7 +331,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
             : Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: dark ? Palette.border : const Color(0xFFE2E8F0),
+          color: dark ? Palette.border : const Color(0xFFEDE3D6),
         ),
       ),
       child: Column(
@@ -409,7 +343,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
             isHeader: true,
             dark: dark,
           ),
-          Divider(color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFE2E8F0)),
+          Divider(color: dark ? Palette.border.withValues(alpha: 0.3) : const Color(0xFFEDE3D6)),
           _buildTableRow(
             'GPA',
             [
@@ -481,10 +415,10 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
     );
   }
 
-  Widget _buildFitAnalysis(bool dark) {
+  Widget _buildFitAnalysis(bool dark, ComparisonResult comparison) {
     return Column(
       children: _selectedSchools.map((school) {
-        final matchPercent = _calculateMatch(school);
+        final matchPercent = comparison.matchFor(school) ?? 0;
 
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -495,7 +429,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                 : Colors.white.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: dark ? Palette.border : const Color(0xFFE2E8F0),
+              color: dark ? Palette.border : const Color(0xFFEDE3D6),
             ),
           ),
           child: Row(
@@ -528,7 +462,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                       child: LinearProgressIndicator(
                         value: matchPercent / 100,
                         minHeight: 6,
-                        backgroundColor: dark ? Palette.surface2 : const Color(0xFFE2E8F0),
+                        backgroundColor: dark ? Palette.surface2 : const Color(0xFFEDE3D6),
                         valueColor: AlwaysStoppedAnimation(
                           matchPercent >= 80
                               ? Palette.success
@@ -546,7 +480,7 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                 '$matchPercent%',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: matchPercent >= 80
                       ? Palette.success
                       : matchPercent >= 60
@@ -554,42 +488,10 @@ class _SchoolComparisonScreenState extends ConsumerState<SchoolComparisonScreen>
                           : Palette.error,
                 ),
               ),
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  /// Match % from REAL data only. SAT/ACT are not collected → GPA-only
-  /// match (never fabricate scores the app doesn't have).
-  int _calculateMatch(_School school) {
-    final userGpa = _userGpa;
-    if (userGpa == null) return 0;
-
-    final gpaMatch = (userGpa / school.avgGPA * 100).clamp(0, 100);
-    return gpaMatch.round();
-  }
-}
-
-class _School {
-  final String name;
-  final IconData logo;
-  final int acceptanceRate;
-  final double avgGPA;
-  final int avgSAT;
-  final int avgACT;
-  final Color color;
-  final List<String> strengths;
-
-  const _School({
-    required this.name,
-    required this.logo,
-    required this.acceptanceRate,
-    required this.avgGPA,
-    required this.avgSAT,
-    required this.avgACT,
-    required this.color,
-    required this.strengths,
-  });
-}
+],
+           ),
+         );
+       }).toList(),
+     );
+   }
+ }

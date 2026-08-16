@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,11 +5,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:profileforge/core/audio/sound_service.dart';
 import 'package:profileforge/core/celebration/celebrate.dart';
 import 'package:profileforge/core/theme/app_theme.dart';
-import 'package:profileforge/core/widgets/poppy.dart';
 import 'package:profileforge/core/widgets/premium_widgets.dart';
 import 'package:profileforge/features/skins/application/skin_providers.dart';
 import 'package:profileforge/features/skins/domain/skin_definitions.dart';
 import 'package:profileforge/features/wallet/application/wallet_providers.dart';
+import 'package:profileforge/features/wallet/presentation/wallet_panel.dart';
 
 class SkinsScreen extends ConsumerWidget {
   const SkinsScreen({super.key, required this.profileId});
@@ -31,65 +30,14 @@ class SkinsScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      bottomNavigationBar: appBottomNav(context, '/skins'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Gem balance hero card
-          GlassCard(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [
-                        Palette.accentBlue,
-                        Palette.accentViolet,
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Palette.accentViolet.withValues(alpha: 0.4),
-                        blurRadius: 20,
-                        spreadRadius: -4,
-                      ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: Text('💎', style: TextStyle(fontSize: 26)),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$gems',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w900,
-                          color: Palette.textPrimary,
-                          letterSpacing: -1,
-                        ),
-                      ),
-                      Text(
-                        'gems available · ${unlocked.length}/${kSkins.length} unlocked',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Palette.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ).animate().fadeIn().slideY(begin: 0.1),
+          GemWalletPanel(
+            profileId: profileId,
+            subtitle: 'gems available · ${unlocked.length}/${kSkins.length} unlocked',
+          ),
 
           const SizedBox(height: 24),
 
@@ -98,7 +46,7 @@ class SkinsScreen extends ConsumerWidget {
             'Collection',
             style: TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: Palette.textPrimary,
             ),
           ),
@@ -169,7 +117,7 @@ class SkinsScreen extends ConsumerWidget {
                         ),
                         title: Text(
                           'Buy ${skin.name}?',
-                          style: const TextStyle(fontWeight: FontWeight.w800),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         content: Text(
                           'This costs $cost 💎. You have $gems 💎. '
@@ -231,7 +179,8 @@ class SkinsScreen extends ConsumerWidget {
             opacity: 0.05,
             child: Row(
               children: [
-                Text('💡', style: TextStyle(fontSize: 20)),
+                Icon(Icons.tips_and_updates_rounded,
+                    size: 20, color: Palette.accentYellow),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -328,7 +277,7 @@ class _SkinCard extends StatelessWidget {
           Text(
             skin.name,
             style: TextStyle(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               fontSize: 13,
               color: Palette.textPrimary,
             ),
@@ -349,7 +298,7 @@ class _SkinCard extends StatelessWidget {
               skin.rarity.name.toUpperCase(),
               style: TextStyle(
                 fontSize: 9,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
                 color: rarity,
                 letterSpacing: 0.5,
               ),
@@ -384,7 +333,7 @@ class _SkinCard extends StatelessWidget {
                 'Equipped',
                 style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   fontSize: 11,
                 ),
               ),
@@ -492,13 +441,14 @@ class _GemBtn extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('💎', style: TextStyle(fontSize: 11)),
+              const Icon(Icons.diamond_rounded,
+                  size: 11, color: Colors.white),
               const SizedBox(width: 4),
               Text(
                 '$cost',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   fontSize: 11,
                 ),
               ),
