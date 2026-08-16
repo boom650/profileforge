@@ -50,6 +50,12 @@ jobs:
               sed -i "s#</manifest>#  <uses-permission android:name='android.permission.$perm'/>\\\\n</manifest>#" "$MAN"
           done
 
+      - name: Brand app label
+        run: |
+          MAN=android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="profileforge"/android:label="ProfileForge"/' "$MAN"
+          grep 'android:label' "$MAN"
+
       - name: Enable core library desugaring
         run: |
           python3 << 'PYEOF'
@@ -65,6 +71,9 @@ jobs:
       - name: Pub get
         run: flutter pub get
 
+      - name: Generate launcher icons
+        run: dart run flutter_launcher_icons
+
       - name: Generate code (freezed + drift)
         run: dart run build_runner build --delete-conflicting-outputs
 
@@ -76,7 +85,7 @@ jobs:
 
       - name: Golden tests
         run: |
-          if [ -d test/golden ]; then flutter test test/golden; else echo "no golden tests yet"; fi
+          if [ -f test/golden_test.dart ]; then flutter test test/golden_test.dart; else echo "no golden tests yet"; fi
 
       - name: Integration tests
         run: |
@@ -125,6 +134,12 @@ jobs:
               sed -i "s#</manifest>#  <uses-permission android:name='android.permission.$perm'/>\\\\n</manifest>#" "$MAN"
           done
 
+      - name: Brand app label
+        run: |
+          MAN=android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="profileforge"/android:label="ProfileForge"/' "$MAN"
+          grep 'android:label' "$MAN"
+
       - name: Enable core library desugaring
         run: |
           python3 << 'PYEOF'
@@ -139,6 +154,9 @@ jobs:
 
       - name: Pub get
         run: flutter pub get
+
+      - name: Generate launcher icons
+        run: dart run flutter_launcher_icons
 
       - name: Generate code (freezed + drift)
         run: dart run build_runner build --delete-conflicting-outputs
